@@ -3,10 +3,11 @@
 ## Overview
 
 **Author**: Supersonic Playground  
-**Website**: [https://www.supersonicplayground.com](https://www.supersonicplayground.com)  
-**Version**: 1.4.3
+**Website**: [https://www.supersonicplayground.com](https://www.supersonicplayground.com)
+**Developer**: Levon Gravett
+**Version**: 1.4.4
 
-A comprehensive WordPress plugin that provides seamless integration between WordPress and DTR Workbooks CRM. This plugin enables automatic user registration, CRM data synchronization, and advanced field mapping with robust error handling and debugging capabilities.
+A comprehensive WordPress plugin that provides seamless integration between WordPress and Workbooks CRM. This plugin enables automatic user registration, CRM data synchronization, and advanced field mapping with robust error handling and debugging capabilities.
 
 ## Key Features
 
@@ -21,7 +22,7 @@ A comprehensive WordPress plugin that provides seamless integration between Word
 - **Automatic User Creation**: Seamlessly create WordPress users from form submissions
 - **CRM Record Creation**: Automatically generate corresponding Workbooks person records
 - **Field Mapping**: Complete mapping of all form fields to CRM equivalents including:
-  - Personal titles (Dr., Mr., Mrs., Ms., Prof., etc.)
+  - Personal person details
   - Contact information (name, email, telephone, address)
   - Employment details with editable employer names
   - Marketing preferences and subscription settings
