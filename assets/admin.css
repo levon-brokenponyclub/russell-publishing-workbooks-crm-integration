@@ -1,0 +1,711 @@
+/* DTR Workbooks CRM Integration - Admin Styles */
+.wrap.workbooks-crm {
+    max-width: 1200px;
+    margin: 20px auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Tabs */
+.nav-tab-wrapper {
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+    padding-bottom: 0;
+}
+
+.nav-tab {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-bottom: none;
+    margin-right: 5px;
+    padding: 10px 20px;
+    border-radius: 4px 4px 0 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+    transition: all 0.2s ease;
+}
+
+.nav-tab:hover {
+    background: #e9ecef;
+    color: #0073aa;
+}
+
+.nav-tab.nav-tab-active {
+    background: #ffffff;
+    border-bottom: 1px solid #ffffff;
+    color: #0073aa;
+    font-weight: 600;
+}
+
+/* Tab Content */
+.workbooks-tab-content {
+    background: #ffffff;
+    /* padding: 20px; */
+    /* border: 1px solid #e0e0e0; */
+    /* border-radius: 4px; */
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); */
+}
+
+/* Headings */
+.workbooks-tab-content h1,
+.workbooks-tab-content h2,
+.workbooks-tab-content h3 {
+    color: #1d2327;
+    margin-top: 0;
+    font-weight: 600;
+}
+
+.workbooks-tab-content h2 {
+    font-size: 1.5em;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+/* Forms */
+.workbooks-tab-content .form-table {
+    margin-bottom: 20px;
+}
+
+.workbooks-tab-content .form-table th {
+    font-weight: 500;
+    color: #1d2327;
+    padding: 15px 10px 15px 0;
+}
+
+.workbooks-tab-content .form-table td {
+    padding: 15px 0;
+}
+
+.workbooks-tab-content .form-table input[type="text"],
+.workbooks-tab-content .form-table input[type="url"],
+.workbooks-tab-content .form-table input[type="email"],
+.workbooks-tab-content .form-table input[type="password"],
+.workbooks-tab-content .form-table select,
+.workbooks-tab-content .form-table textarea {
+    height: 36px !important;
+    padding: 0 12px !important;
+    border: 1px solid #dcdcde !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+    transition: border-color 0.2s ease !important;
+    background: #ffffff !important;
+    width: 100% !important;
+    max-width: 400px !important;
+    box-sizing: border-box;
+}
+
+.workbooks-tab-content .form-table textarea {
+    height: auto !important;
+    padding: 8px 12px !important;
+    min-height: 80px !important;
+}
+
+/* Form table alignment improvements */
+.workbooks-tab-content .form-table th {
+    font-weight: 500 !important;
+    color: #2e2e2e !important;
+    padding: 15px 10px 15px 0 !important;
+    vertical-align: middle !important;
+    width: 150px;
+}
+
+.workbooks-tab-content .form-table td {
+    padding: 15px 0 !important;
+    vertical-align: middle !important;
+}
+
+/* Buttons */
+.workbooks-tab-content .button {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.workbooks-tab-content .button-primary {
+    background: #0073aa;
+    border-color: #0073aa;
+    color: #ffffff;
+}
+
+.workbooks-tab-content .button-primary:hover {
+    background: #005b87;
+    border-color: #005b87;
+}
+
+.workbooks-tab-content .button-secondary,
+.workbooks-tab-content .button.delete,
+.workbooks-tab-content .button.small {
+    background: #f8f9fa;
+    border-color: #dcdcde;
+    color: #1d2327;
+}
+
+.workbooks-tab-content .button-secondary:hover,
+.workbooks-tab-content .button.delete:hover,
+.workbooks-tab-content .button.small:hover {
+    background: #e9ecef;
+    border-color: #c3c4c7;
+}
+
+.workbooks-tab-content .button:disabled {
+    background: #e9ecef !important;
+    border-color: #dcdcde !important;
+    color: #6b7280 !important;
+    cursor: not-allowed;
+}
+
+/* Tables */
+.workbooks-tab-content .wp-list-table {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.workbooks-tab-content .wp-list-table th {
+    background: #f8f9fa;
+    font-weight: 500;
+    padding: 12px;
+    color: #1d2327;
+}
+
+.workbooks-tab-content .wp-list-table td {
+    padding: 12px;
+    vertical-align: middle;
+}
+
+.workbooks-admin-container {
+    gap:0 !Important;
+}
+
+.workbooks-tab-content .wp-list-table tr:hover {
+    background: #f6f7f7;
+}
+
+.workbooks-vertical-tabs {
+    background: #f8f9fa !important;
+    border:0 !important; 
+}
+
+.workbooks-content-area {
+    border-radius:0 6px 6px 0 !important;
+    padding:25px;
+}
+
+/* Employers Tab */
+#employers-sync-progress {
+    margin-bottom: 20px;
+}
+
+#employers-progress-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: #e9ecef;
+}
+
+#employers-progress-text {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 5px;
+}
+
+#employer-search {
+    padding: 8px;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+    font-size: 14px;
+    max-width: 300px;
+}
+
+#employer-search:focus {
+    border-color: #0073aa;
+    box-shadow: 0 0 0 1px #0073aa;
+}
+
+/* Notices */
+.workbooks-tab-content .notice {
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.workbooks-tab-content .notice-success {
+    background: #f0fff4;
+    border-left: 4px solid #10b981;
+}
+
+.workbooks-tab-content .notice-error {
+    background: #fef2f2;
+    border-left: 4px solid #ef4444;
+}
+
+/* TOI Mapping Table */
+.toi-mapping-table th,
+.toi-mapping-table td {
+    padding: 12px;
+}
+
+.toi-mapping-table .toi-field-name {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.toi-mapping-table .aoi-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.toi-mapping-table .aoi-badge {
+    background: #0073aa;
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.toi-mapping-table .no-mapping {
+    color: #9ca3af;
+    font-style: italic;
+}
+
+/* Webinar Form */
+#webinar-registration-form {
+    max-width: 600px;
+}
+
+#event-fetch-response {
+    font-size: 13px;
+    color: #6b7280;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+#acf-info {
+    background: #eff6ff;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+#webinar-response {
+    font-size: 13px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* Modern Button System - Override existing styles */
+.workbooks-tab-content .button,
+.workbooks-tab-content .button-primary,
+.workbooks-tab-content .button-secondary,
+.workbooks-tab-content .button.delete,
+.workbooks-tab-content .button.small,
+#workbooks_update_user_form .button {
+    height: 36px;
+    padding: 0 16px !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-width: 1px;
+    border-style: solid;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+/* Primary Button - #871f80 background */
+.workbooks-tab-content .button-primary,
+#workbooks_update_user_form .button-primary {
+    background-color: #871f80 !important;
+    border-color: #871f80 !important;
+    color: #ffffff !important;
+}
+
+.workbooks-tab-content .button-primary:hover,
+#workbooks_update_user_form .button-primary:hover {
+    background-color: #6d1966 !important;
+    border-color: #6d1966 !important;
+    color: #ffffff !important;
+}
+
+/* Secondary Button - Transparent with #871f80 border */
+.workbooks-tab-content .button-secondary,
+#workbooks_update_user_form .button-secondary {
+    background-color: transparent !important;
+    border-color: #871f80 !important;
+    color: #871f80 !important;
+}
+
+.workbooks-tab-content .button-secondary:hover,
+#workbooks_update_user_form .button-secondary:hover {
+    background-color: rgba(135, 31, 128, 0.05) !important;
+    border-color: #6d1966 !important;
+    color: #6d1966 !important;
+}
+
+/* Tertiary Button - #f0f2f4 background */
+.workbooks-tab-content .button:not(.button-primary):not(.button-secondary):not(.delete),
+.workbooks-tab-content .button.small,
+#workbooks_update_user_form .button:not(.button-primary):not(.button-secondary) {
+    background-color: #f0f2f4 !important;
+    border-color: #f0f2f4 !important;
+    color: #2e2e2e !important;
+}
+
+.workbooks-tab-content .button:not(.button-primary):not(.button-secondary):not(.delete):hover,
+.workbooks-tab-content .button.small:hover,
+#workbooks_update_user_form .button:not(.button-primary):not(.button-secondary):hover {
+    background-color: #e6e9ec !important;
+    border-color: #e6e9ec !important;
+    color: #1a1a1a !important;
+}
+
+/* Delete Button - Red styling */
+.workbooks-tab-content .button.delete {
+    background-color: transparent !important;
+    border-color: #dc3545 !important;
+    color: #dc3545 !important;
+}
+
+.workbooks-tab-content .button.delete:hover {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: #ffffff !important;
+}
+
+/* Update Active Tab Color */
+.workbooks-vertical-tabs .nav-tab.nav-tab-active {
+    background: #871f80 !important;
+    border-left: 4px solid #6d1966 !important;
+    color: #ffffff !important;
+}
+
+.workbooks-vertical-tabs .nav-tab:hover:not(.nav-tab-active) {
+    background: rgba(135, 31, 128, 0.05) !important;
+    color: #871f80 !important;
+}
+
+/* Update Form Focus Colors */
+.workbooks-tab-content .form-table input:focus,
+.workbooks-tab-content .form-table select:focus,
+.workbooks-tab-content .form-table textarea:focus,
+#employer-search:focus {
+    border-color: #871f80 !important;
+    box-shadow: 0 0 0 2px rgba(135, 31, 128, 0.1) !important;
+}
+
+/* Update AOI Badge Colors */
+.toi-mapping-table .aoi-badge,
+.aoi-badge {
+    background: #871f80 !important;
+    color: #ffffff !important;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Update Progress Bar */
+#employers-progress-bar::-webkit-progress-value {
+    background: linear-gradient(90deg, #871f80, #a52a94);
+    border-radius: 4px;
+}
+
+#employers-progress-bar::-moz-progress-bar {
+    background: linear-gradient(90deg, #871f80, #a52a94);
+    border-radius: 4px;
+}
+
+/* Workbooks Update User Form - Two Column Layout */
+#workbooks_update_user_form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    max-width: 1000px;
+    margin: 20px 0;
+}
+
+#workbooks_update_user_form .form-column {
+    background: #ffffff;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+#workbooks_update_user_form .form-column h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #871f80;
+    color: #1d2327;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#workbooks_update_user_form p {
+    margin-bottom: 15px;
+}
+
+#workbooks_update_user_form label {
+    display: block;
+    font-weight: 500;
+    color: #2e2e2e;
+    margin-bottom: 5px;
+}
+
+#workbooks_update_user_form input[type="text"],
+#workbooks_update_user_form input[type="email"],
+#workbooks_update_user_form input[type="tel"],
+#workbooks_update_user_form select,
+#workbooks_update_user_form textarea {
+    width: 100%;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: border-color 0.2s ease;
+    background: #ffffff;
+}
+
+#workbooks_update_user_form textarea {
+    height: auto;
+    padding: 8px 12px;
+    min-height: 80px;
+}
+
+#workbooks_update_user_form input:focus,
+#workbooks_update_user_form select:focus,
+#workbooks_update_user_form textarea:focus {
+    border-color: #871f80;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(135, 31, 128, 0.1);
+}
+
+#workbooks_update_user_form fieldset {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+#workbooks_update_user_form legend {
+    font-weight: 600;
+    color: #2e2e2e;
+    padding: 0 10px;
+}
+
+#workbooks_update_user_form fieldset label {
+    font-weight: normal;
+    margin-bottom: 8px;
+}
+
+/* Enhanced Form Table Styling - Consistent sizing and alignment */
+.workbooks-tab-content .form-table input[type="text"],
+.workbooks-tab-content .form-table input[type="url"],
+.workbooks-tab-content .form-table input[type="email"],
+.workbooks-tab-content .form-table input[type="password"],
+.workbooks-tab-content .form-table select,
+.workbooks-tab-content .form-table textarea {
+    height: 36px !important;
+    padding: 0 12px !important;
+    border: 1px solid #dcdcde !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+    transition: border-color 0.2s ease !important;
+    background: #ffffff !important;
+    width: 100% !important;
+    max-width: 400px !important;
+    box-sizing: border-box;
+}
+
+.workbooks-tab-content .form-table textarea {
+    height: auto !important;
+    padding: 8px 12px !important;
+    min-height: 80px !important;
+}
+
+/* Form table alignment improvements */
+.workbooks-tab-content .form-table th {
+    font-weight: 500 !important;
+    color: #2e2e2e !important;
+    padding: 15px 10px 15px 0 !important;
+    vertical-align: middle !important;
+    width: 150px;
+}
+
+.workbooks-tab-content .form-table td {
+    padding: 15px 0 !important;
+    vertical-align: middle !important;
+}
+
+/* Settings form specific styling */
+#workbooks-settings-content .form-table {
+    margin-bottom: 0;
+}
+
+/* Submit button container with connection test */
+#workbooks-settings-content .submit {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0 0 0;
+    padding: 20px 0 0 0;
+    border-top: 1px solid #e0e0e0;
+}
+
+#workbooks-settings-content .submit .button {
+    margin: 0;
+}
+
+/* API Status Indicator */
+.workbooks-api-status {
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.workbooks-status-pill {
+    background: #10b981;
+    color: #ffffff;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.workbooks-status-pill.disconnected {
+    background: #ef4444;
+}
+
+.workbooks-status-pill.testing {
+    background: #f59e0b;
+}
+
+.workbooks-status-pill::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.8;
+}
+
+/* Remove focus states from nav tabs */
+.nav-tab:focus,
+.nav-tab:active,
+.workbooks-vertical-tabs .nav-tab:focus,
+.workbooks-vertical-tabs .nav-tab:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Enhanced form input consistency across all forms */
+#workbooks_update_user_form input[type="text"],
+#workbooks_update_user_form input[type="email"],
+#workbooks_update_user_form input[type="tel"],
+#workbooks_update_user_form select,
+#workbooks_update_user_form textarea,
+#webinar-registration-form input[type="text"],
+#webinar-registration-form input[type="email"],
+#webinar-registration-form select,
+#webinar-registration-form textarea,
+#employer-search {
+    height: 36px !important;
+    padding: 0 12px !important;
+    border: 1px solid #dcdcde !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    transition: border-color 0.2s ease !important;
+    background: #ffffff !important;
+    box-sizing: border-box;
+}
+
+#workbooks_update_user_form textarea,
+#webinar-registration-form textarea {
+    height: auto !important;
+    padding: 8px 12px !important;
+    min-height: 80px !important;
+}
+
+/* Test result styling */
+#workbooks_test_result {
+    margin-top: 0;
+    padding: 10px 0;
+    font-size: 13px;
+}
+
+/* Consistent label styling */
+.workbooks-tab-content label,
+#workbooks_update_user_form label,
+#webinar-registration-form label {
+    font-weight: 500;
+    color: #2e2e2e;
+    margin-bottom: 5px;
+}
+
+/* Form description text */
+.workbooks-tab-content .form-table .description {
+    color: #6b7280;
+    font-size: 12px;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+/* Ensure consistent button alignment in all forms */
+.workbooks-tab-content .submit,
+#workbooks_update_user_form .submit,
+#webinar-registration-form .submit {
+    margin-top: 20px;
+    padding-top: 15px;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 782px) {
+    #workbooks-settings-content .submit {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .workbooks-api-status {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+    
+    .workbooks-tab-content .form-table th,
+    .workbooks-tab-content .form-table td {
+        display: block;
+        width: 100%;
+        padding: 8px 0;
+    }
+    
+    .workbooks-tab-content .form-table th {
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    
+    .workbooks-tab-content .form-table input[type="text"],
+    .workbooks-tab-content .form-table input[type="url"],
+    .workbooks-tab-content .form-table input[type="email"],
+    .workbooks-tab-content .form-table select,
+    .workbooks-tab-content .form-table textarea {
+        max-width: 100% !important;
+    }
+}

@@ -1,0 +1,137 @@
+/* Side-by-side layout for shortcodes */
+.dtr-custom-checkbox-form {
+    padding: 2rem;
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+}
+
+
+.dtr-custom-checkbox-form legend {
+	text-align:left;
+	margin-bottom:30px;
+	font-weight:600;
+}
+
+body .dtr-shortcode-row.dtr-shortcode-row.dtr-shortcode-row {
+    display: flex !important;
+    gap: 2rem !important;
+    margin-bottom: 2rem !important;
+}
+body .dtr-shortcode-col.dtr-shortcode-col.dtr-shortcode-col {
+    flex: 1 1 50% !important;
+    max-width: 50% !important;
+}
+
+/* Custom toggle checkbox styles (from CodePen, scoped for DTR) */
+body .dtr.subscription.list.dtr.subscription.list.dtr.subscription.list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    margin-bottom:35px !important
+}
+body .dtr.subscription.list .list-item.list-item.list-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+}
+
+body .check.check.check {
+    position: relative !important;
+    background: linear-gradient(90deg, #f19af3, #f099b5) !important;
+    line-height: 0 !important;
+    perspective: 400px !important;
+    display: inline-block !important;
+}
+body .check input[type="checkbox"],
+body .check label,
+body .check.check {
+    -webkit-appearance: none !important;
+       -moz-appearance: none !important;
+            appearance: none !important;
+    display: inline-block !important;
+    border-radius: 24px !important;
+    border: 0 !important;
+    transition: .35s ease-in-out !important;
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+}
+body .check label {
+    width: 2.8rem !important;
+    height: 28px !important;
+    background: #d7d7d7 !important;
+    overflow: hidden !important;
+    display: inline-block !important;
+    position: relative !important;
+}
+body .check input[type="checkbox"] {
+    position: absolute !important;
+    z-index: 1 !important;
+    width: 20px !important;
+    height: 20px !important;
+    top: 0.5px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    left: 4px !important;
+        background: linear-gradient(45deg, #dedede, #ffffff);
+    box-shadow: 0 4px 5px rgba(0,0,0,0.3) !important;
+    outline: none;
+}
+body .check input[type="checkbox"]:checked {
+    left: 1.45rem !important;
+}
+body .check input[type="checkbox"]:checked + label {
+    background: transparent !important;
+}
+body .check label::before,
+body .check label::after {
+    content: "· ·" !important;
+    position: absolute !important;
+    overflow: hidden !important;
+    left: .15rem !important;
+    top: .5rem !important;
+    height: 24px !important;
+    letter-spacing: -.04rem !important;
+    color: #9b9b9b !important;
+    z-index: 2 !important;
+    font-size: .6rem !important;
+    border-radius: 0 !important;
+    transform-origin: 0 0 -.5rem !important;
+    -webkit-backface-visibility: hidden !important;
+            backface-visibility: hidden !important;
+}
+body .check label::after {
+    content: "●" !important;
+    top: .65rem !important;
+    left: .3rem !important;
+    height: .24px !important;
+    width: .35rem !important;
+    font-size: .2rem !important;
+    transform-origin: 0 0 -.4rem !important;
+}
+body .check input[type="checkbox"]:checked + label::before,
+body .check input[type="checkbox"]:checked + label::after {
+    left: 1.55rem !important;
+    top: .4rem !important;
+    line-height: .24px !important;
+    transform: rotateY(360deg) !important;
+}
+body .check input[type="checkbox"]:checked + label::after {
+    height: .16rem !important;
+    top: .55rem !important;
+    left: 1.6rem !important;
+    font-size: .6rem !important;
+    line-height: 0 !important;
+}
+body .check-label-text.check-label-text.check-label-text {
+    margin-left: 0.75rem !important;
+    font-size: 18px !important;
+    vertical-align: middle !important;
+}
+
+body .check label::before,
+body .check label::after {
+    display: none !important;
+}
