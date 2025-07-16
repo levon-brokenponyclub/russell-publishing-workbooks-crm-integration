@@ -139,7 +139,7 @@ function dtr_ajax_get_workbooks_titles() {
 }
 // (Reverted) No Ninja Forms submission payload adjustment
 
-// Add admin menu page only (no submenu)
+// Add admin menu page with gated content submenus
 add_action('admin_menu', function() {
     // Top-level menu
     add_menu_page(
@@ -151,11 +151,68 @@ add_action('admin_menu', function() {
         'dashicons-admin-network',
         25
     );
+    
+    // Gated Content submenu
+    add_submenu_page(
+        'workbooks-crm-settings',
+        'Gated Content',
+        'Gated Content',
+        'manage_options',
+        'workbooks-gated-content',
+        'workbooks_gated_content_main_page'
+    );
+    
+    // Gated Content sub-pages
+    add_submenu_page(
+        'workbooks-crm-settings',
+        'Articles',
+        '↳ Articles',
+        'manage_options',
+        'workbooks-gated-articles',
+        'workbooks_gated_articles_page'
+    );
+    
+    add_submenu_page(
+        'workbooks-crm-settings',
+        'Whitepapers',
+        '↳ Whitepapers',
+        'manage_options',
+        'workbooks-gated-whitepapers',
+        'workbooks_gated_whitepapers_page'
+    );
+    
+    add_submenu_page(
+        'workbooks-crm-settings',
+        'News',
+        '↳ News',
+        'manage_options',
+        'workbooks-gated-news',
+        'workbooks_gated_news_page'
+    );
+    
+    add_submenu_page(
+        'workbooks-crm-settings',
+        'Events',
+        '↳ Events',
+        'manage_options',
+        'workbooks-gated-events',
+        'workbooks_gated_events_page'
+    );
 });
 
-// Enqueue admin scripts and styles for AJAX and UI (only on main settings page)
+// Enqueue admin scripts and styles for AJAX and UI (only on workbooks pages)
 add_action('admin_enqueue_scripts', function($hook) {
-    if ($hook !== 'toplevel_page_workbooks-crm-settings') return;
+    // Include all workbooks pages
+    $workbooks_pages = [
+        'toplevel_page_workbooks-crm-settings',
+        'workbooks-crm_page_workbooks-gated-content',
+        'workbooks-crm_page_workbooks-gated-articles',
+        'workbooks-crm_page_workbooks-gated-whitepapers',
+        'workbooks-crm_page_workbooks-gated-news',
+        'workbooks-crm_page_workbooks-gated-events'
+    ];
+    
+    if (!in_array($hook, $workbooks_pages)) return;
     
     // Enqueue admin CSS
     wp_enqueue_style('workbooks-admin-css', plugin_dir_url(__FILE__) . 'assets/admin.css', [], null);
@@ -317,9 +374,13 @@ function workbooks_crm_settings_page() {
         <h1>Workbooks CRM API Key Integration</h1>
         <div class="workbooks-admin-container">
             <nav class="workbooks-vertical-tabs">
-                <a href="#" class="nav-tab nav-tab-active" id="workbooks-settings-tab">Settings</a>
+                <a href="#" class="nav-tab" id="workbooks-settings-tab">Settings</a>
                 <a href="#" class="nav-tab" id="workbooks-person-tab">Person Record</a>
-                <a href="#" class="nav-tab" id="workbooks-gated-content-tab">Gated Content</a>
+                <a href="#" class="nav-tab nav-tab-active" id="workbooks-gated-content-tab">Gated Content</a>
+                <a href="#" class="nav-tab" id="workbooks-gated-articles-tab" style="padding-left: 25px;">↳ Articles</a>
+                <a href="#" class="nav-tab" id="workbooks-gated-whitepapers-tab" style="padding-left: 25px;">↳ Whitepapers</a>
+                <a href="#" class="nav-tab" id="workbooks-gated-news-tab" style="padding-left: 25px;">↳ News</a>
+                <a href="#" class="nav-tab" id="workbooks-gated-events-tab" style="padding-left: 25px;">↳ Events</a>
                 <a href="#" class="nav-tab" id="workbooks-webinar-tab">Webinar Registration</a>
                 <a href="#" class="nav-tab" id="workbooks-membership-tab">Membership Sign Up</a>
                 <a href="#" class="nav-tab" id="workbooks-employers-tab">Employers</a>
@@ -328,7 +389,7 @@ function workbooks_crm_settings_page() {
             </nav>
             <div class="workbooks-content-area">
                 <!-- Settings Tab -->
-                <div id="workbooks-settings-content" class="workbooks-tab-content active">
+                <div id="workbooks-settings-content" class="workbooks-tab-content">
                 <h2>Workbooks CRM Settings</h2>
                 <form method="post" action="options.php">
                     <input type="hidden" name="option_page" value="workbooks_crm_options">
@@ -605,13 +666,68 @@ function workbooks_crm_settings_page() {
                     </form>
                 </div>
                 <!-- Gated Content Tab -->
-                <div id="workbooks-gated-content" class="workbooks-tab-content">
+                <div id="workbooks-gated-content" class="workbooks-tab-content active">
                     <?php
                         $gated_content_file = WORKBOOKS_NF_PATH . 'admin/gated-content.php';
                         if (file_exists($gated_content_file)) {
                             include $gated_content_file;
                         } else {
                             echo '<p><em>Gated content admin file not found.</em></p>';
+                        }
+                    ?>
+                </div>
+                <!-- Gated Articles Tab -->
+                <div id="workbooks-gated-articles-content" class="workbooks-tab-content">
+                    <?php
+                        $gated_articles_file = WORKBOOKS_NF_PATH . 'admin/gated-content-single.php';
+                        if (file_exists($gated_articles_file)) {
+                            // Set the post type for articles
+                            $current_post_type = 'articles';
+                            include $gated_articles_file;
+                        } else {
+                            echo '<p><em>Gated articles admin file not found.</em></p>';
+                        }
+                    ?>
+                </div>
+                
+                <!-- Gated Whitepapers Tab -->
+                <div id="workbooks-gated-whitepapers-content" class="workbooks-tab-content">
+                    <?php
+                        $gated_whitepapers_file = WORKBOOKS_NF_PATH . 'admin/gated-content-single.php';
+                        if (file_exists($gated_whitepapers_file)) {
+                            // Set the post type for whitepapers
+                            $current_post_type = 'whitepapers';
+                            include $gated_whitepapers_file;
+                        } else {
+                            echo '<p><em>Gated whitepapers admin file not found.</em></p>';
+                        }
+                    ?>
+                </div>
+                
+                <!-- Gated News Tab -->
+                <div id="workbooks-gated-news-content" class="workbooks-tab-content">
+                    <?php
+                        $gated_news_file = WORKBOOKS_NF_PATH . 'admin/gated-content-single.php';
+                        if (file_exists($gated_news_file)) {
+                            // Set the post type for news
+                            $current_post_type = 'news';
+                            include $gated_news_file;
+                        } else {
+                            echo '<p><em>Gated news admin file not found.</em></p>';
+                        }
+                    ?>
+                </div>
+                
+                <!-- Gated Events Tab -->
+                <div id="workbooks-gated-events-content" class="workbooks-tab-content">
+                    <?php
+                        $gated_events_file = WORKBOOKS_NF_PATH . 'admin/gated-content-single.php';
+                        if (file_exists($gated_events_file)) {
+                            // Set the post type for events
+                            $current_post_type = 'events';
+                            include $gated_events_file;
+                        } else {
+                            echo '<p><em>Gated events admin file not found.</em></p>';
                         }
                     ?>
                 </div>
@@ -1114,34 +1230,62 @@ function workbooks_crm_settings_page() {
         <!-- Tab UI Script -->
         <script>
         jQuery(document).ready(function($) {
+            console.log('Workbooks admin page JavaScript loaded');
+            
             $('.nav-tab').click(function(e) {
                 e.preventDefault();
+                console.log('Tab clicked:', $(this).attr('id'));
+                
                 $('.nav-tab').removeClass('nav-tab-active');
                 $(this).addClass('nav-tab-active');
                 $('.workbooks-tab-content').removeClass('active');
 
-                if ($(this).attr('id') === 'workbooks-settings-tab') {
-                    $('#workbooks-settings-content').addClass('active');
-                } else if ($(this).attr('id') === 'workbooks-person-tab') {
-                    $('#workbooks-person-content').addClass('active');
+                var tabId = $(this).attr('id');
+                var contentId = '';
+                
+                if (tabId === 'workbooks-settings-tab') {
+                    contentId = 'workbooks-settings-content';
+                } else if (tabId === 'workbooks-person-tab') {
+                    contentId = 'workbooks-person-content';
                     fetchOrganisations();
-                } else if ($(this).attr('id') === 'workbooks-gated-content-tab') {
-                    $('#workbooks-gated-content').addClass('active');
-                } else if ($(this).attr('id') === 'workbooks-webinar-tab') {
-                    $('#workbooks-webinar-content').addClass('active');
-                } else if ($(this).attr('id') === 'workbooks-membership-tab') {
-                    $('#workbooks-membership-content').addClass('active');
-                } else if ($(this).attr('id') === 'workbooks-employers-tab') {
-                    $('#workbooks-employers-content').addClass('active');
-                } else if ($(this).attr('id') === 'workbooks-ninja-users-tab') {
-                    $('#workbooks-ninja-users-content').addClass('active');
-                } else if ($(this).attr('id') === 'workbooks-topics-tab') {
-                    $('#workbooks-topics-content').addClass('active');
+                } else if (tabId === 'workbooks-gated-content-tab') {
+                    contentId = 'workbooks-gated-content';
+                } else if (tabId === 'workbooks-gated-articles-tab') {
+                    contentId = 'workbooks-gated-articles-content';
+                } else if (tabId === 'workbooks-gated-whitepapers-tab') {
+                    contentId = 'workbooks-gated-whitepapers-content';
+                } else if (tabId === 'workbooks-gated-news-tab') {
+                    contentId = 'workbooks-gated-news-content';
+                } else if (tabId === 'workbooks-gated-events-tab') {
+                    contentId = 'workbooks-gated-events-content';
+                } else if (tabId === 'workbooks-webinar-tab') {
+                    contentId = 'workbooks-webinar-content';
+                } else if (tabId === 'workbooks-membership-tab') {
+                    contentId = 'workbooks-membership-content';
+                } else if (tabId === 'workbooks-employers-tab') {
+                    contentId = 'workbooks-employers-content';
+                } else if (tabId === 'workbooks-ninja-users-tab') {
+                    contentId = 'workbooks-ninja-users-content';
+                } else if (tabId === 'workbooks-topics-tab') {
+                    contentId = 'workbooks-topics-content';
+                }
+                
+                if (contentId) {
+                    console.log('Showing content:', contentId);
+                    $('#' + contentId).addClass('active');
+                } else {
+                    console.error('No content ID found for tab:', tabId);
                 }
             });
 
             // Fetch organisations for Person Record tab
             function fetchOrganisations() {
+                console.log('Fetching organisations');
+                if (typeof workbooks_ajax === 'undefined') {
+                    console.log('workbooks_ajax not available');
+                    return;
+                }
+                
                 $('#employer-loading').show();
                 $.getJSON(workbooks_ajax.plugin_url + 'employers.json', function(data) {
                     var $select = $('#employer');
@@ -1151,11 +1295,6 @@ function workbooks_crm_settings_page() {
                         $.each(data, function(index, org) {
                             $select.append('<option value="' + org.name + '">' + org.name + '</option>');
                         });
-                        // Set the saved value if it exists
-                        var savedEmployer = <?php echo json_encode(esc_attr(get_field_value($person ?? [], 'employer_name', get_current_user_id(), 'employer_name'))); ?>;
-                        if (savedEmployer) {
-                            $select.val(savedEmployer);
-                        }
                     } else {
                         console.error('Invalid or empty employers.json data');
                         fetchOrganisationsFromAjax();
@@ -1180,11 +1319,6 @@ function workbooks_crm_settings_page() {
                         $.each(response.data, function(index, org) {
                             $select.append('<option value="' + org.name + '">' + org.name + '</option>');
                         });
-                        // Set the saved value if it exists
-                        var savedEmployer = <?php echo json_encode(esc_attr(get_field_value($person ?? [], 'employer_name', get_current_user_id(), 'employer_name'))); ?>;
-                        if (savedEmployer) {
-                            $select.val(savedEmployer);
-                        }
                     } else {
                         console.error('Error loading organisations:', response.data);
                         $select.append('<option value="">No employers found</option>');
@@ -1751,5 +1885,102 @@ if (file_exists(WORKBOOKS_NF_PATH . 'includes/ninjaforms-workbooks-integration.p
 // Temporarily disable the old nf-user-register.php to prevent conflicts
 require_once WORKBOOKS_NF_PATH . 'includes/nf-user-register.php';
 require_once WORKBOOKS_NF_PATH . 'includes/workbooks-user-sync.php';
+
+// Gated Content page functions
+function workbooks_gated_content_main_page() {
+    ?>
+    <div class="wrap">
+        <h1>Gated Content Management</h1>
+        <p>Manage gated content settings for different post types. Use the submenu items to configure individual post types.</p>
+        
+        <div class="workbooks-gated-overview">
+            <h2>Overview</h2>
+            <div class="gated-stats">
+                <?php
+                $post_types = ['articles', 'whitepapers', 'news', 'events'];
+                foreach ($post_types as $post_type) {
+                    $posts = get_posts([
+                        'post_type' => $post_type,
+                        'posts_per_page' => -1,
+                        'post_status' => 'publish',
+                        'meta_query' => [
+                            [
+                                'key' => 'gate_content',
+                                'value' => '1',
+                                'compare' => '='
+                            ]
+                        ]
+                    ]);
+                    $count = count($posts);
+                    $total = wp_count_posts($post_type)->publish;
+                    
+                    echo '<div class="stat-box">';
+                    echo '<h3>' . ucfirst($post_type) . '</h3>';
+                    echo '<p><strong>' . $count . '</strong> gated out of <strong>' . $total . '</strong> total</p>';
+                    echo '<a href="admin.php?page=workbooks-gated-' . $post_type . '" class="button">Manage ' . ucfirst($post_type) . '</a>';
+                    echo '</div>';
+                }
+                ?>
+            </div>
+        </div>
+        
+        <style>
+        .gated-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .stat-box {
+            background: #fff;
+            border: 1px solid #ccd0d4;
+            border-radius: 4px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-box h3 {
+            margin-top: 0;
+            color: #23282d;
+        }
+        .stat-box p {
+            font-size: 16px;
+            margin: 15px 0;
+        }
+        </style>
+    </div>
+    <?php
+}
+
+function workbooks_gated_articles_page() {
+    workbooks_render_gated_content_page('articles');
+}
+
+function workbooks_gated_whitepapers_page() {
+    workbooks_render_gated_content_page('whitepapers');
+}
+
+function workbooks_gated_news_page() {
+    workbooks_render_gated_content_page('news');
+}
+
+function workbooks_gated_events_page() {
+    workbooks_render_gated_content_page('events');
+}
+
+function workbooks_render_gated_content_page($current_post_type) {
+    ?>
+    <div class="wrap">
+        <h1><?php echo ucfirst($current_post_type); ?> Gated Content</h1>
+        <?php
+        // Include the single post type template
+        if (file_exists(WORKBOOKS_NF_PATH . 'admin/gated-content-single.php')) {
+            include WORKBOOKS_NF_PATH . 'admin/gated-content-single.php';
+        } else {
+            echo '<p>Gated content template not found.</p>';
+        }
+        ?>
+    </div>
+    <?php
+}
 
 ?>
