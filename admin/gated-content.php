@@ -41,7 +41,7 @@ foreach ($post_types as $post_type) {
                 <div class="stats-numbers">
                     <div class="stat-item">
                         <span class="stat-number"><?php echo $content_stats[$post_type]['total']; ?></span>
-                        <span class="stat-label">Total Published</span>
+                        <span class="stat-label">Total</span>
                     </div>
                     <div class="stat-item gated">
                         <span class="stat-number"><?php echo $content_stats[$post_type]['gated']; ?></span>
@@ -49,7 +49,7 @@ foreach ($post_types as $post_type) {
                     </div>
                     <div class="stat-item open">
                         <span class="stat-number"><?php echo $content_stats[$post_type]['open']; ?></span>
-                        <span class="stat-label">Open Access</span>
+                        <span class="stat-label">Open</span>
                     </div>
                 </div>
                 <div class="stats-actions">
@@ -70,7 +70,7 @@ foreach ($post_types as $post_type) {
         </div>
     </div>
 
-    <div class="recent-activity" id="recent-gated-activity">
+    <!-- <div class="recent-activity" id="recent-gated-activity">
         <h3>Recently Configured Gated Content</h3>
         <div class="activity-list">
             <?php
@@ -121,11 +121,11 @@ foreach ($post_types as $post_type) {
                 <p class="no-activity">No gated content configured yet. Use the buttons above to start managing access control.</p>
             <?php endif; ?>
         </div>
-    </div>
+    </div> -->
 </div>
 
 <!-- Content Management Sections - Unified for All Content Types -->
-<div class="gated-content-unified-management" style="margin-top: 30px;">
+<!-- <div class="gated-content-unified-management" style="margin-top: 30px;">
     <h3>Manage All Content Types</h3>
     <p>Configure gated content settings for Articles, Whitepapers, News, and Events. All content types use the same access control system based on Topics of Interest (TOI) and Areas of Interest (AOI).</p>
     
@@ -318,7 +318,7 @@ foreach ($post_types as $post_type) {
             </div>
         <?php endforeach; ?>
     </div>
-</div>
+</div> -->
 
 <style>
 /* Gated Content Overview Styles */

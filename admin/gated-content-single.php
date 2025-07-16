@@ -1,6 +1,8 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
+// Include gated preview content shortcode
+
 // Get the current post type from the calling function
 $post_type = isset($current_post_type) ? $current_post_type : 'articles';
 
@@ -36,6 +38,16 @@ $post_type_singular = $post_type_object ? $post_type_object->labels->singular_na
 ?>
 
 <style>
+.wrap {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    padding: 20px;
+    min-height: 600px;
+}
+
 .gated-content-header {
     display: flex;
     justify-content: space-between;
@@ -357,30 +369,14 @@ $post_type_singular = $post_type_object ? $post_type_object->labels->singular_na
                         <td>
                             <table class="form-table" style="margin: 0;">
                                 <tr>
-                                    <td style="width: 50%; padding-right: 10px;">
-                                        <label for="<?php echo $post_type; ?>-preview-button-text">Button Text</label>
-                                        <input type="text" id="<?php echo $post_type; ?>-preview-button-text" name="preview_button_text" class="regular-text" placeholder="e.g., Request Access, Learn More">
-                                    </td>
-                                    <td style="width: 50%; padding-left: 10px;">
-                                        <label for="<?php echo $post_type; ?>-preview-button-url">Button URL</label>
-                                        <input type="url" id="<?php echo $post_type; ?>-preview-button-url" name="preview_button_url" class="regular-text" placeholder="https://example.com/contact">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <label for="<?php echo $post_type; ?>-preview-button-style">Button Style</label>
-                                        <select id="<?php echo $post_type; ?>-preview-button-style" name="preview_button_style">
-                                            <option value="primary">Primary (Blue)</option>
-                                            <option value="secondary">Secondary (Gray)</option>
-                                            <option value="success">Success (Green)</option>
-                                            <option value="warning">Warning (Orange)</option>
-                                            <option value="danger">Danger (Red)</option>
-                                            <option value="link">Link Style</option>
-                                        </select>
-                                    </td>
+    <td style="width: 50%; padding-right: 10px;">
+        <input type="text" id="<?php echo $post_type; ?>-preview-button-text" name="preview_button_text" class="regular-text" placeholder="Button Text" autocomplete="off">
+    </td>
+    <td style="width: 50%; padding-left: 10px;">
+        <input type="text" id="<?php echo $post_type; ?>-preview-button-url" name="preview_button_url" class="regular-text" placeholder="URL: https://example.com/contact" autocomplete="off">
+    </td>
                                 </tr>
                             </table>
-                            <p class="description">Add a call-to-action button to encourage user engagement</p>
                         </td>
                     </tr>
                 </table>
@@ -422,22 +418,22 @@ $post_type_singular = $post_type_object ? $post_type_object->labels->singular_na
                             <label for="<?php echo $post_type; ?>-ninja-form">Access Request Form</label>
                         </th>
                         <td>
-                            <select id="<?php echo $post_type; ?>-ninja-form" name="ninja_form_id">
-                                <option value="24" selected>Ninja Form ID 24 (Default Gated Content Form)</option>
-                            </select>
-                            <p class="description">Form that will be displayed for users to request access</p>
-                            <p class="ninja-form-note">
-                                <strong>Note:</strong> Using Ninja Form ID 24 as the default gated content form. Forms can be managed and configured with repeater fields in the 
-                                <a href="<?php echo admin_url('admin.php?page=ninja-forms'); ?>" target="_blank">Ninja Forms settings</a>
-                            </p>
+<select id="<?php echo $post_type; ?>-ninja-form" name="ninja_form_id" disabled>
+    <option value="29" selected>Ninja Form ID 29 (Request Access Form)</option>
+</select>
+<input type="hidden" name="ninja_form_id" value="29">
+<p class="description">Form that will be displayed for users to request access</p>
+<p class="ninja-form-note">
+    <strong>Note:</strong> This page always uses <code>[ninja_form id='29']</code> for the request access form. To change the form, update Ninja Form ID 29 in <a href="<?php echo admin_url('admin.php?page=ninja-forms'); ?>" target="_blank">Ninja Forms settings</a>.
+</p>
                         </td>
                     </tr>
                 </table>
             </div>
             
             <p class="submit">
-                <button type="submit" class="button button-primary">Save Gated Content Settings</button>
-                <button type="button" class="button button-secondary clear-settings">Clear Settings</button>
+                <button type="submit" class="workbooks-tab-content button button-primary">Save Gated Content Settings</button>
+                <button type="button" class="workbooks-tab-content button button-secondary clear-settings">Clear Settings</button>
             </p>
         </div>
     </form>
@@ -553,29 +549,48 @@ jQuery(document).ready(function($) {
     // Form submission
     $('.gated-content-form').on('submit', function(e) {
         e.preventDefault();
-        
+
         var $form = $(this);
         var postId = $form.find('.post-select').val();
         var gateContent = $form.find('[name="gate_content"]').is(':checked');
-        
+
         if (!postId) {
             alert('Please select a post first.');
             return;
         }
-        
+
+        // Get TinyMCE content for preview_text
+        var previewText;
+        if (typeof tinymce !== 'undefined') {
+            var editor = tinymce.get(currentPostType + '-preview-text');
+            if (editor) {
+                previewText = editor.getContent();
+            } else {
+                previewText = $form.find('[name="preview_text"]').val();
+            }
+        } else {
+            previewText = $form.find('[name="preview_text"]').val();
+        }
+
         var formData = {
             action: 'save_gated_content_settings',
             nonce: '<?php echo wp_create_nonce("gated_content_nonce"); ?>',
             post_id: postId,
             post_type: currentPostType,
             gate_content: gateContent ? 1 : 0,
-            preview_text: $form.find('[name="preview_text"]').val(),
+            preview_text: previewText,
+            preview_image: $form.find('[name="preview_image"]').val(),
+            preview_video: $form.find('[name="preview_video"]').val(),
+            preview_gallery: $form.find('[name="preview_gallery"]').val(),
+            preview_button_text: $form.find('[name="preview_button_text"]').val(),
+            preview_button_url: $form.find('[name="preview_button_url"]').val(),
+            preview_button_style: $form.find('[name="preview_button_style"]').val(),
             workbooks_reference: $form.find('[name="workbooks_reference"]').val(),
             campaign_reference: $form.find('[name="campaign_reference"]').val(),
             redirect_url: $form.find('[name="redirect_url"]').val(),
             ninja_form_id: $form.find('[name="ninja_form_id"]').val()
         };
-        
+
         $.post(ajaxurl, formData, function(response) {
             if (response.success) {
                 alert('Gated content settings saved successfully!');
@@ -646,6 +661,16 @@ jQuery(document).ready(function($) {
                 }
             });
         }
+    });
+
+    $(document).on('click', '.edit-gated-content', function(e) {
+        e.preventDefault();
+        var postId = $(this).data('post-id');
+        var $select = $('#' + currentPostType + '-post-select');
+        $select.val(postId).trigger('change');
+        $('html, body').animate({
+            scrollTop: $('.gated-content-form-container').offset().top
+        }, 300);
     });
 
     function updatePostSelectCount($element, visible, total, postType) {
@@ -720,21 +745,70 @@ jQuery(document).ready(function($) {
             html += '<th>Form</th>';
             html += '<th class="actions">Actions</th>';
             html += '</tr></thead><tbody>';
-            
             content.forEach(function(item) {
                 html += '<tr>';
                 html += '<td><strong>' + item.title + '</strong></td>';
                 html += '<td>' + (item.workbooks_reference || '-') + '</td>';
                 html += '<td>' + (item.campaign_reference ? 'CAMP-' + item.campaign_reference : '-') + '</td>';
-                html += '<td>' + (item.ninja_form_title || '-') + '</td>';
-                html += '<td class="actions">';
-                html += '<a href="' + item.edit_url + '" class="button button-small">Edit</a>';
-                html += '<button type="button" class="button button-small remove-gated-content" data-post-id="' + item.post_id + '" data-post-title="' + item.title + '">Remove</button>';
+                html += '<td>Request Access Form</td>';
+                html += '<td class="actions" style="padding:0;">';
+                html += '<div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin:10px 0;">';
+                html += '<button type="button" class="workbooks-tab-content button button-primary button-small edit-gated-content" data-post-id="' + item.post_id + '" style="margin-right:auto;">Edit</button>';
+                html += '<button type="button" class="workbooks-tab-content button button-tertiary button-small view-shortcode" data-post-id="' + item.post_id + '" data-title="' + item.title.replace(/'/g, '&apos;') + '">Shortcode</button>';
+                html += '<button type="button" class="workbooks-tab-content button button-secondary button-small remove-gated-content" data-post-id="' + item.post_id + '" data-post-title="' + item.title + '" >Remove</button>';
+                html += '</div>';
                 html += '</td>';
                 html += '</tr>';
             });
-            
             html += '</tbody></table>';
+            html += '<div id="shortcode-info-container" style="display:none; margin-top:20px;"></div>';
+    // View Shortcode button handler
+    $(document).on('click', '.view-shortcode', function(e) {
+        e.preventDefault();
+        var postId = $(this).data('post-id');
+        var $container = $('#shortcode-info-container');
+        $container.html('<div class="loading">Loading shortcode info...</div>').show();
+        // Fetch all meta for this post via AJAX
+        $.post(ajaxurl, {
+            action: 'load_gated_content_settings',
+            nonce: '<?php echo wp_create_nonce("gated_content_nonce"); ?>',
+            post_id: postId
+        }, function(response) {
+            if (response.success && response.data) {
+                var d = response.data;
+                var shortcode = '[gated_preview_content post_id="' + postId + '"]';
+                var infoHtml = '<div style="background:#f9f9f9; border:1px solid #ccc; padding:20px; border-radius:4px;">';
+                infoHtml += '<h4>Shortcode</h4>';
+                infoHtml += '<pre style="background:#eee; padding:10px; border-radius:3px;">' + shortcode + '</pre>';
+                infoHtml += '<h4>Shortcode Data</h4>';
+                infoHtml += '<ul style="list-style:disc inside;">';
+                infoHtml += '<li><strong>Title:</strong> ' + (d.post_title || '-') + '</li>';
+                infoHtml += '<li><strong>Preview Text:</strong> ' + (d.preview_text || '-') + '</li>';
+                infoHtml += '<li><strong>Preview Image:</strong> ' + (d.preview_image || '-') + '</li>';
+                infoHtml += '<li><strong>Preview Video:</strong> ' + (d.preview_video || '-') + '</li>';
+                infoHtml += '<li><strong>Preview Gallery:</strong> ' + (d.preview_gallery || '-') + '</li>';
+                infoHtml += '<li><strong>Button Text:</strong> ' + (d.preview_button_text || '-') + '</li>';
+                infoHtml += '<li><strong>Button URL:</strong> ' + (d.preview_button_url || '-') + '</li>';
+                infoHtml += '<li><strong>Button Style:</strong> ' + (d.preview_button_style || '-') + '</li>';
+                infoHtml += '<li><strong>Workbooks Reference:</strong> ' + (d.workbooks_reference || '-') + '</li>';
+                infoHtml += '<li><strong>Campaign Reference:</strong> ' + (d.campaign_reference || '-') + '</li>';
+                infoHtml += '<li><strong>Redirect URL:</strong> ' + (d.redirect_url || '-') + '</li>';
+                infoHtml += '<li><strong>Ninja Form ID:</strong> ' + (d.ninja_form_id || '-') + '</li>';
+                infoHtml += '</ul>';
+                infoHtml += '<button type="button" class="button close-shortcode-info" style="margin-top:10px;">Close</button>';
+                infoHtml += '</div>';
+                $container.html(infoHtml).show();
+                $('html, body').animate({ scrollTop: $container.offset().top - 100 }, 300);
+            } else {
+                $container.html('<div class="loading">Error loading shortcode info.</div>').show();
+            }
+        });
+    });
+
+    // Close Shortcode Info
+    $(document).on('click', '.close-shortcode-info', function() {
+        $('#shortcode-info-container').hide().empty();
+    });
         } else if ($('#gated-content-search').val()) {
             html = '<p class="no-gated-content">No ' + getPostTypeLabel(currentPostType) + ' found matching your search criteria.</p>';
         } else {
@@ -771,19 +845,29 @@ jQuery(document).ready(function($) {
                 var data = response.data;
                 var $gateCheckbox = $('#' + postType + '-gate-content');
                 var $gatedSettings = $('#' + postType + '-gated-settings');
-                
+
                 // Set gate content checkbox
                 $gateCheckbox.prop('checked', data.gate_content == '1');
-                
+
                 // Show/hide gated settings based on checkbox
                 if (data.gate_content == '1') {
                     $gatedSettings.show();
                 } else {
                     $gatedSettings.hide();
                 }
-                
+
                 // Populate form fields
-                $('#' + postType + '-preview-text').val(data.preview_text || '');
+                // Set TinyMCE content for preview_text
+                if (typeof tinymce !== 'undefined') {
+                    var editor = tinymce.get(postType + '-preview-text');
+                    if (editor) {
+                        editor.setContent(data.preview_text || '');
+                    } else {
+                        $('#' + postType + '-preview-text').val(data.preview_text || '');
+                    }
+                } else {
+                    $('#' + postType + '-preview-text').val(data.preview_text || '');
+                }
                 $('#' + postType + '-workbooks-ref').val(data.workbooks_reference || '');
                 $('#' + postType + '-campaign-ref').val(data.campaign_reference || '');
                 $('#' + postType + '-redirect-url').val(data.redirect_url || '');

@@ -40,6 +40,8 @@ if (file_exists(WORKBOOKS_NF_PATH . 'includes/user-meta-fields.php')) {
 if (file_exists(WORKBOOKS_NF_PATH . 'includes/workbooks-employer-sync.php')) {
     require_once WORKBOOKS_NF_PATH . 'includes/workbooks-employer-sync.php';
 }
+// Load AJAX handlers for gated content
+require_once WORKBOOKS_NF_PATH . 'admin/gated-content-ajax.php';
 
 // Get WorkbooksApi instance (API Key only)
 function get_workbooks_instance() {
@@ -367,29 +369,48 @@ function workbooks_crm_settings_page() {
         display: none;
     }
     .workbooks-tab-content.active {
-        display: block;
+        display: block !important;
     }
     </style>
     <div class="wrap">
         <h1>Workbooks CRM API Key Integration</h1>
         <div class="workbooks-admin-container">
             <nav class="workbooks-vertical-tabs">
-                <a href="#" class="nav-tab" id="workbooks-settings-tab">Settings</a>
+                <a href="#" class="nav-tab nav-tab-active" id="workbooks-settings-tab">Settings</a>
                 <a href="#" class="nav-tab" id="workbooks-person-tab">Person Record</a>
-                <a href="#" class="nav-tab nav-tab-active" id="workbooks-gated-content-tab">Gated Content</a>
-                <a href="#" class="nav-tab" id="workbooks-gated-articles-tab" style="padding-left: 25px;">↳ Articles</a>
+                <a href="#" class="nav-tab" id="workbooks-gated-content-tab">Gated Content</a>
+                <!--  <a href="#" class="nav-tab" id="workbooks-gated-articles-tab" style="padding-left: 25px;">↳ Articles</a>
                 <a href="#" class="nav-tab" id="workbooks-gated-whitepapers-tab" style="padding-left: 25px;">↳ Whitepapers</a>
                 <a href="#" class="nav-tab" id="workbooks-gated-news-tab" style="padding-left: 25px;">↳ News</a>
-                <a href="#" class="nav-tab" id="workbooks-gated-events-tab" style="padding-left: 25px;">↳ Events</a>
+                <a href="#" class="nav-tab" id="workbooks-gated-events-tab" style="padding-left: 25px;">↳ Events</a> -->
                 <a href="#" class="nav-tab" id="workbooks-webinar-tab">Webinar Registration</a>
                 <a href="#" class="nav-tab" id="workbooks-membership-tab">Membership Sign Up</a>
                 <a href="#" class="nav-tab" id="workbooks-employers-tab">Employers</a>
                 <a href="#" class="nav-tab" id="workbooks-ninja-users-tab">Ninja Form Users</a>
                 <a href="#" class="nav-tab" id="workbooks-topics-tab">Topics of Interest</a>
             </nav>
+            <script>
+            jQuery(document).ready(function($) {
+                $('.workbooks-vertical-tabs .nav-tab').on('click', function(e) {
+                    e.preventDefault();
+                    var tabId = $(this).attr('id');
+                    // Remove active from all tabs
+                    $('.workbooks-vertical-tabs .nav-tab').removeClass('nav-tab-active');
+                    $(this).addClass('nav-tab-active');
+                    // Hide all tab contents
+                    $('.workbooks-content-area .workbooks-tab-content').removeClass('active').hide();
+                    // Show the selected tab content
+                    var contentId = tabId.replace('-tab', '-content');
+                    $('#' + contentId).addClass('active').show();
+                });
+                // Ensure only the first tab is visible on load
+                $('.workbooks-content-area .workbooks-tab-content').hide();
+                $('#workbooks-settings-content').addClass('active').show();
+            });
+            </script>
             <div class="workbooks-content-area">
                 <!-- Settings Tab -->
-                <div id="workbooks-settings-content" class="workbooks-tab-content">
+                <div id="workbooks-settings-content" class="workbooks-tab-content active">
                 <h2>Workbooks CRM Settings</h2>
                 <form method="post" action="options.php">
                     <input type="hidden" name="option_page" value="workbooks_crm_options">
@@ -666,7 +687,7 @@ function workbooks_crm_settings_page() {
                     </form>
                 </div>
                 <!-- Gated Content Tab -->
-                <div id="workbooks-gated-content" class="workbooks-tab-content active">
+                <div id="workbooks-gated-content" class="workbooks-tab-content">
                     <?php
                         $gated_content_file = WORKBOOKS_NF_PATH . 'admin/gated-content.php';
                         if (file_exists($gated_content_file)) {
@@ -1969,8 +1990,8 @@ function workbooks_gated_events_page() {
 
 function workbooks_render_gated_content_page($current_post_type) {
     ?>
-    <div class="wrap">
-        <h1><?php echo ucfirst($current_post_type); ?> Gated Content</h1>
+    <div class="wrap workbooks-tab-content">
+        <h2 class="workbooks-tab-content"><?php echo ucfirst($current_post_type); ?> Gated Content</h2>
         <?php
         // Include the single post type template
         if (file_exists(WORKBOOKS_NF_PATH . 'admin/gated-content-single.php')) {
@@ -1982,5 +2003,22 @@ function workbooks_render_gated_content_page($current_post_type) {
     </div>
     <?php
 }
+
+// Enqueue admin JS for gated content articles page only
+add_action('admin_enqueue_scripts', function($hook) {
+    if (isset($_GET['page']) && $_GET['page'] === 'workbooks-gated-articles') {
+        wp_enqueue_script(
+            'gated-content-admin',
+            plugins_url('admin/gated-content-admin.js', __FILE__),
+            array('jquery'),
+            null,
+            true
+        );
+        wp_localize_script('gated-content-admin', 'gatedContentNonce', array(
+            'nonce' => wp_create_nonce('gated_content_nonce')
+        ));
+    }
+});
+
 
 ?>

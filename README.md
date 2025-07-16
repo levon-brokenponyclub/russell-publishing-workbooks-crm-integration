@@ -1,10 +1,9 @@
-# DTR - Workbooks CRM API Integration
+# Workbooks CRM API Integration
 
 ## Overview
 
-**Author**: Supersonic Playground  
-**Website**: [https://www.supersonicplayground.com](https://www.supersonicplayground.com)
-**Developer**: Levon Gravett
+**Author**: Levon Gravett  
+**Developed For**: [https://www.supersonicplayground.com](https://www.supersonicplayground.com)  
 **Version**: 1.4.4
 
 A comprehensive WordPress plugin that provides seamless integration between WordPress and Workbooks CRM. This plugin enables automatic user registration, CRM data synchronization, and advanced field mapping with robust error handling and debugging capabilities.
@@ -47,11 +46,20 @@ A comprehensive WordPress plugin that provides seamless integration between Word
 - **Speaker Questions**: Optional speaker question submission with registrations
 - **Sponsor Opt-in**: Configurable sponsor information opt-in functionality
 
-### 🎨 **Modern Admin Interface**
-- **Vertical Tab Layout**: Intuitive vertical tab navigation for better user experience
-- **Real-time Testing**: Built-in connection testing and validation tools
-- **User Management**: Comprehensive user listing with Workbooks ID management
-- **Debug Dashboard**: Centralized debugging and monitoring interface
+
+### 🔒 **Gated Content & Article Previews**
+- **Plugin-Based Gating System**: All article gating logic is now handled by the plugin, with no reliance on ACF fields.
+- **Shortcode for Gated Content**: Use `[gated_preview_content id="123"]` or `[gated_preview_content post_id="123"]` to display preview/full content based on user login and gating status.
+- **Preview & Full Content Logic**: Unregistered users see only the preview text; registered users see the full article content.
+- **Admin UI for Gated Content**: Modern admin interface for managing all gated content fields, including preview text, images, video, gallery, CTA button, and Workbooks integration fields.
+- **Dynamic List & Search**: Easily search, filter, and manage all gated articles from a single admin screen.
+- **View Shortcode Button**: Instantly view the shortcode and all associated data for any gated article in the admin UI.
+- **Debug Output & Logging**: Built-in debug output and logging for troubleshooting shortcode rendering and gating logic.
+- **No ACF Required**: All gating fields are stored as post meta and managed via the plugin interface.
+- **Vertical Tab Layout**: Intuitive vertical tab navigation for better user experience (admin UI).
+- **Real-time Testing**: Built-in connection testing and validation tools.
+- **User Management**: Comprehensive user listing with Workbooks ID management.
+- **Debug Dashboard**: Centralized debugging and monitoring interface.
 
 ## Installation & Setup
 
@@ -187,7 +195,7 @@ Configure your Ninja Forms with the following field names for automatic mapping:
 - **Email**: `email`
 - **Employer**: `employer_name`
 - **Job Title**: `job_title`
-- **Marketing Preferences**: `cf_person_dtr_*`
+- **Marketing Preferences**: `cf_person_marketing_*` (customize as needed)
 - **Topics of Interest**: Use predefined TOI options
 
 #### Registration Process
@@ -204,7 +212,7 @@ Configure your Ninja Forms with the following field names for automatic mapping:
 - **Personal Information**: Title, first name, last name, job title
 - **Contact Details**: Email, telephone, country, town, postcode
 - **Employer Information**: Organization name and ID
-- **Marketing Preferences**: DTR news, events, webinars, third-party communications
+- **Marketing Preferences**: News, events, webinars, third-party communications
 - **Areas of Interest**: Business, diseases, drugs & therapies, genomics, R&D, technology, tools & techniques
 
 #### Field Mapping Details
@@ -240,11 +248,11 @@ Configure your Ninja Forms with the following field names for automatic mapping:
 4. Create webinar registration in Workbooks
 5. Optional speaker questions and sponsor opt-in
 
-#### ACF Integration
-Supports Advanced Custom Fields for:
-- Workbooks webinar reference
-- Campaign reference tracking
-- Event metadata storage
+
+### Gated Content Integration
+- **No ACF Required**: All gating logic and fields are managed by the plugin.
+- **Shortcode Usage**: Place `[gated_preview_content id="123"]` or `[gated_preview_content post_id="123"]` in any post, page, or template to display gated content.
+- **Admin Management**: Use the Gated Content admin screen to configure preview and main content, media, and integration fields for each article.
 
 ## Advanced Features
 
@@ -264,19 +272,22 @@ The admin interface provides:
 - Field name reference for developers
 - Mapping count statistics
 
+
 ### Error Handling & Debugging
 
-#### Comprehensive Logging
+#### Comprehensive Logging & Debugging
 - **Registration Debug Log**: Step-by-step registration process logging
 - **Workbooks API Log**: Daily API interaction logs
 - **WordPress Debug Log**: Integration with WordPress debugging
+- **Gated Content Debug Log**: Dedicated logging for all gated content and shortcode operations
 - **Admin Notifications**: Real-time error reporting in admin interface
 
 #### Debug Features
 - Clear log files before testing
-- Detailed API response logging
+- Detailed API and shortcode response logging
 - Timing diagnostics for performance monitoring
 - Error recovery mechanisms
+- Debug output panels in admin and on the frontend for gated content troubleshooting
 
 ### Database Schema
 
@@ -297,9 +308,9 @@ wp_workbooks_employers
 'employer_name' - Editable employer name
 
 // Marketing Preferences
-'cf_person_dtr_news' - DTR news subscription
-'cf_person_dtr_events' - DTR events subscription
-'cf_person_dtr_webinar' - DTR webinar subscription
+'cf_person_news' - News subscription
+'cf_person_events' - Events subscription
+'cf_person_webinar' - Webinar subscription
 
 // Areas of Interest
 'cf_person_aoi_*' - AOI field mappings
@@ -379,11 +390,11 @@ Enable WordPress debugging and check the following log files:
 4. **Employer Sync Problems**: Ensure sufficient memory and execution time
 
 ### Support
-For technical support and customization requests:
-- **Website**: [https://www.supersonicplayground.com](https://www.supersonicplayground.com)
-- **Email**: Contact through the website
+For technical support or custom development:  
+- 🌐 [https://www.supersonicplayground.com](https://www.supersonicplayground.com)  
+- 📧 Levon Gravett: levon.gravett@supersonicplayground.com
 - **Documentation**: Refer to inline code comments and debug logs
 
 ## License
 
-This plugin is proprietary software developed by Supersonic Playground for DTR (Drug Target Review). All rights reserved.
+This plugin is proprietary software developed by Levon Gravett for Supersonic Playground. All rights reserved.
