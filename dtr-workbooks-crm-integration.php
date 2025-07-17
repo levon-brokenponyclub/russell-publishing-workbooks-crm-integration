@@ -153,67 +153,15 @@ add_action('admin_menu', function() {
         'dashicons-admin-network',
         25
     );
-    
-    // Gated Content submenu
-    add_submenu_page(
-        'workbooks-crm-settings',
-        'Gated Content',
-        'Gated Content',
-        'manage_options',
-        'workbooks-gated-content',
-        'workbooks_gated_content_main_page'
-    );
-    
-    // Gated Content sub-pages
-    add_submenu_page(
-        'workbooks-crm-settings',
-        'Articles',
-        '↳ Articles',
-        'manage_options',
-        'workbooks-gated-articles',
-        'workbooks_gated_articles_page'
-    );
-    
-    add_submenu_page(
-        'workbooks-crm-settings',
-        'Whitepapers',
-        '↳ Whitepapers',
-        'manage_options',
-        'workbooks-gated-whitepapers',
-        'workbooks_gated_whitepapers_page'
-    );
-    
-    add_submenu_page(
-        'workbooks-crm-settings',
-        'News',
-        '↳ News',
-        'manage_options',
-        'workbooks-gated-news',
-        'workbooks_gated_news_page'
-    );
-    
-    add_submenu_page(
-        'workbooks-crm-settings',
-        'Events',
-        '↳ Events',
-        'manage_options',
-        'workbooks-gated-events',
-        'workbooks_gated_events_page'
-    );
 });
 
 // Enqueue admin scripts and styles for AJAX and UI (only on workbooks pages)
 add_action('admin_enqueue_scripts', function($hook) {
-    // Include all workbooks pages
+    // Only include top-level and Gated Content admin pages
     $workbooks_pages = [
         'toplevel_page_workbooks-crm-settings',
-        'workbooks-crm_page_workbooks-gated-content',
-        'workbooks-crm_page_workbooks-gated-articles',
-        'workbooks-crm_page_workbooks-gated-whitepapers',
-        'workbooks-crm_page_workbooks-gated-news',
-        'workbooks-crm_page_workbooks-gated-events'
+        'workbooks-crm_page_workbooks-gated-content'
     ];
-    
     if (!in_array($hook, $workbooks_pages)) return;
     
     // Enqueue admin CSS
@@ -379,10 +327,6 @@ function workbooks_crm_settings_page() {
                 <a href="#" class="nav-tab nav-tab-active" id="workbooks-settings-tab">Settings</a>
                 <a href="#" class="nav-tab" id="workbooks-person-tab">Person Record</a>
                 <a href="#" class="nav-tab" id="workbooks-gated-content-tab">Gated Content</a>
-                <!--  <a href="#" class="nav-tab" id="workbooks-gated-articles-tab" style="padding-left: 25px;">↳ Articles</a>
-                <a href="#" class="nav-tab" id="workbooks-gated-whitepapers-tab" style="padding-left: 25px;">↳ Whitepapers</a>
-                <a href="#" class="nav-tab" id="workbooks-gated-news-tab" style="padding-left: 25px;">↳ News</a>
-                <a href="#" class="nav-tab" id="workbooks-gated-events-tab" style="padding-left: 25px;">↳ Events</a> -->
                 <a href="#" class="nav-tab" id="workbooks-webinar-tab">Webinar Registration</a>
                 <a href="#" class="nav-tab" id="workbooks-membership-tab">Membership Sign Up</a>
                 <a href="#" class="nav-tab" id="workbooks-employers-tab">Employers</a>
@@ -686,69 +630,14 @@ function workbooks_crm_settings_page() {
                         <?php submit_button('Update Person Record'); ?>
                     </form>
                 </div>
-                <!-- Gated Content Tab -->
-                <div id="workbooks-gated-content" class="workbooks-tab-content">
+                <!-- Gated Content Section (Single Page, No Tabs) -->
+                <div id="workbooks-gated-content" class="workbooks-tab-content" style="display: block !important;">
                     <?php
                         $gated_content_file = WORKBOOKS_NF_PATH . 'admin/gated-content.php';
                         if (file_exists($gated_content_file)) {
                             include $gated_content_file;
                         } else {
                             echo '<p><em>Gated content admin file not found.</em></p>';
-                        }
-                    ?>
-                </div>
-                <!-- Gated Articles Tab -->
-                <div id="workbooks-gated-articles-content" class="workbooks-tab-content">
-                    <?php
-                        $gated_articles_file = WORKBOOKS_NF_PATH . 'admin/gated-content-single.php';
-                        if (file_exists($gated_articles_file)) {
-                            // Set the post type for articles
-                            $current_post_type = 'articles';
-                            include $gated_articles_file;
-                        } else {
-                            echo '<p><em>Gated articles admin file not found.</em></p>';
-                        }
-                    ?>
-                </div>
-                
-                <!-- Gated Whitepapers Tab -->
-                <div id="workbooks-gated-whitepapers-content" class="workbooks-tab-content">
-                    <?php
-                        $gated_whitepapers_file = WORKBOOKS_NF_PATH . 'admin/gated-content-single.php';
-                        if (file_exists($gated_whitepapers_file)) {
-                            // Set the post type for whitepapers
-                            $current_post_type = 'whitepapers';
-                            include $gated_whitepapers_file;
-                        } else {
-                            echo '<p><em>Gated whitepapers admin file not found.</em></p>';
-                        }
-                    ?>
-                </div>
-                
-                <!-- Gated News Tab -->
-                <div id="workbooks-gated-news-content" class="workbooks-tab-content">
-                    <?php
-                        $gated_news_file = WORKBOOKS_NF_PATH . 'admin/gated-content-single.php';
-                        if (file_exists($gated_news_file)) {
-                            // Set the post type for news
-                            $current_post_type = 'news';
-                            include $gated_news_file;
-                        } else {
-                            echo '<p><em>Gated news admin file not found.</em></p>';
-                        }
-                    ?>
-                </div>
-                
-                <!-- Gated Events Tab -->
-                <div id="workbooks-gated-events-content" class="workbooks-tab-content">
-                    <?php
-                        $gated_events_file = WORKBOOKS_NF_PATH . 'admin/gated-content-single.php';
-                        if (file_exists($gated_events_file)) {
-                            // Set the post type for events
-                            $current_post_type = 'events';
-                            include $gated_events_file;
-                        } else {
-                            echo '<p><em>Gated events admin file not found.</em></p>';
                         }
                     ?>
                 </div>
@@ -2009,7 +1898,7 @@ add_action('admin_enqueue_scripts', function($hook) {
     if (isset($_GET['page']) && $_GET['page'] === 'workbooks-gated-articles') {
         wp_enqueue_script(
             'gated-content-admin',
-            plugins_url('admin/gated-content-admin.js', __FILE__),
+            plugins_url('assets/gated-content-admin.js', __FILE__),
             array('jquery'),
             null,
             true

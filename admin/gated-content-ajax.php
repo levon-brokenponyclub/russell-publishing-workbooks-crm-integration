@@ -11,23 +11,32 @@ function dtr_load_current_gated_articles() {
         'posts_per_page' => -1,
         'post_status' => 'publish',
         'orderby' => 'title',
-        'order' => 'ASC'
+        'order' => 'ASC',
+        'meta_query' => array(
+            array(
+                'key' => 'restrict_post',
+                'value' => '1',
+                'compare' => '='
+            )
+        )
     );
     $posts = get_posts($args);
     $data = array();
     foreach ($posts as $post) {
-        $gate_content = get_post_meta($post->ID, 'gate_content', true);
-        if ($gate_content == '1') {
-            $data[] = array(
-                'post_id' => $post->ID,
-                'title' => $post->post_title,
-                'workbooks_reference' => get_post_meta($post->ID, 'workbooks_reference', true),
-                'campaign_reference' => get_post_meta($post->ID, 'campaign_reference', true),
-                'ninja_form_id' => get_post_meta($post->ID, 'ninja_form_id', true),
-                'ninja_form_title' => '', // Optionally fetch Ninja Form title
-                'edit_url' => get_edit_post_link($post->ID)
-            );
-        }
+        // Get ACF group field
+        $acf_group = get_field('restricted_content_fields', $post->ID);
+        $workbooks_reference = isset($acf_group['reference']) ? $acf_group['reference'] : '';
+        $campaign_reference = isset($acf_group['campaign_reference']) ? $acf_group['campaign_reference'] : '';
+        $ninja_form_id = isset($acf_group['select_lead_form']) ? $acf_group['select_lead_form'] : '';
+        $data[] = array(
+            'post_id' => $post->ID,
+            'title' => $post->post_title,
+            'workbooks_reference' => $workbooks_reference,
+            'campaign_reference' => $campaign_reference,
+            'ninja_form_id' => $ninja_form_id,
+            'ninja_form_title' => '', // Optionally fetch Ninja Form title
+            'edit_url' => get_edit_post_link($post->ID)
+        );
     }
     // Optionally fetch Ninja Form titles
     if (function_exists('ninja_forms_get_all_forms')) {

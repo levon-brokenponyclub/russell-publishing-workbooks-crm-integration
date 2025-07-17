@@ -2,7 +2,7 @@
 if (!defined('ABSPATH')) exit;
 
 // Get counts for each post type
-$post_types = ['articles', 'whitepapers', 'news', 'events'];
+$post_types = ['articles', 'whitepapers', 'events'];
 $content_stats = [];
 
 foreach ($post_types as $post_type) {
@@ -60,6 +60,28 @@ foreach ($post_types as $post_type) {
             </div>
         <?php endforeach; ?>
     </div>
+    
+    <!-- Recent Activity: Current Gated Content Lists -->
+    <div class="recent-activity" id="recent-gated-activity">
+        <h3>Current Gated Articles</h3>
+        <div class="gated-content-list-section">
+            <div id="gated-articles-list"><p class="loading">Loading current gated articles...</p></div>
+        </div>
+    </div>
+
+    <div class="recent-activity" id="recent-gated-activity">
+        <h3>Current Gated Whitepapers</h3>
+        <div class="gated-content-list-section">
+            <div id="gated-whitepapers-list"><p class="loading">Loading current gated whitepapers...</p></div>
+        </div>
+    </div>
+
+    <div class="recent-activity" id="recent-gated-activity">
+        <h3>Current Gated Events</h3>
+        <div class="gated-content-list-section">
+            <div id="gated-events-list"><p class="loading">Loading current gated events...</p></div>
+        </div>
+    </div>
 
     <div class="quick-actions">
         <h3>Quick Actions</h3>
@@ -70,257 +92,41 @@ foreach ($post_types as $post_type) {
         </div>
     </div>
 
-    <!-- <div class="recent-activity" id="recent-gated-activity">
-        <h3>Recently Configured Gated Content</h3>
-        <div class="activity-list">
-            <?php
-            // Get recently modified gated content
-            $recent_gated = get_posts(array(
-                'post_type' => $post_types,
-                'meta_query' => array(
-                    array(
-                        'key' => 'gated_content_settings',
-                        'compare' => 'EXISTS'
-                    )
-                ),
-                'posts_per_page' => 10,
-                'orderby' => 'modified',
-                'order' => 'DESC'
-            ));
-
-            if (!empty($recent_gated)):
-                foreach ($recent_gated as $post):
-                    $gated_settings = get_post_meta($post->ID, 'gated_content_settings', true);
-                    $required_toi = isset($gated_settings['required_toi']) ? $gated_settings['required_toi'] : [];
-                    $required_aoi = isset($gated_settings['required_aoi']) ? $gated_settings['required_aoi'] : [];
-            ?>
-                <div class="activity-item">
-                    <div class="activity-content">
-                        <strong><?php echo esc_html($post->post_title); ?></strong>
-                        <span class="post-type-badge"><?php echo ucfirst($post->post_type); ?></span>
-                        <div class="activity-meta">
-                            <span>Modified: <?php echo get_the_modified_date('M j, Y', $post); ?></span>
-                            <?php if (!empty($required_toi)): ?>
-                                <span class="requirements">TOI: <?php echo count($required_toi); ?> required</span>
-                            <?php endif; ?>
-                            <?php if (!empty($required_aoi)): ?>
-                                <span class="requirements">AOI: <?php echo count($required_aoi); ?> required</span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    <div class="activity-actions">
-                        <a href="#" class="button button-small edit-gated-btn" 
-                           data-type="<?php echo $post->post_type; ?>" 
-                           data-id="<?php echo $post->ID; ?>">Edit</a>
-                    </div>
-                </div>
-            <?php 
-                endforeach;
-            else:
-            ?>
-                <p class="no-activity">No gated content configured yet. Use the buttons above to start managing access control.</p>
-            <?php endif; ?>
-        </div>
-    </div> -->
 </div>
 
-<!-- Content Management Sections - Unified for All Content Types -->
-<!-- <div class="gated-content-unified-management" style="margin-top: 30px;">
-    <h3>Manage All Content Types</h3>
-    <p>Configure gated content settings for Articles, Whitepapers, News, and Events. All content types use the same access control system based on Topics of Interest (TOI) and Areas of Interest (AOI).</p>
-    
-    <div class="content-type-tabs" style="margin-top: 20px;">
-        <div class="nav-tab-wrapper" style="border-bottom: 1px solid #ccd0d4; margin-bottom: 20px;">
-            <?php foreach ($post_types as $index => $post_type): ?>
-                <a href="#" class="nav-tab <?php echo $index === 0 ? 'nav-tab-active' : ''; ?>" data-content-type="<?php echo $post_type; ?>" id="tab-<?php echo $post_type; ?>">
-                    <?php echo ucfirst($post_type); ?>
-                </a>
-            <?php endforeach; ?>
-        </div>
-        
-        <?php foreach ($post_types as $index => $post_type): ?>
-            <div class="content-type-panel <?php echo $index === 0 ? 'active' : ''; ?>" id="panel-<?php echo $post_type; ?>">
-                <div class="gated-content-wrapper">
-                    <h4><?php echo ucfirst($post_type); ?> Gated Content Management</h4>
-                    
-                    <form id="<?php echo $post_type; ?>-gated-form" class="gated-content-form">
-                        <table class="form-table">
-                            <tr>
-                                <th scope="row">
-                                    <label for="<?php echo $post_type; ?>-search">Search <?php echo ucfirst($post_type); ?></label>
-                                </th>
-                                <td>
-                                    <input type="text" id="<?php echo $post_type; ?>-search" class="regular-text content-search" placeholder="Type to search <?php echo $post_type; ?>..." data-post-type="<?php echo $post_type; ?>">
-                                    <p class="description">Start typing to filter <?php echo $post_type; ?> by title</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    <label for="<?php echo $post_type; ?>-post-select">Select <?php echo ucfirst(substr($post_type, 0, -1)); ?></label>
-                                </th>
-                                <td>
-                                    <select id="<?php echo $post_type; ?>-post-select" name="post_id" class="post-select" data-post-type="<?php echo $post_type; ?>">
-                                        <option value="">-- Select <?php echo ucfirst(substr($post_type, 0, -1)); ?> --</option>
-                                        <?php
-                                        $posts = get_posts(array(
-                                            'post_type' => $post_type,
-                                            'posts_per_page' => -1,
-                                            'post_status' => 'publish',
-                                            'orderby' => 'title',
-                                            'order' => 'ASC'
-                                        ));
-                                        foreach ($posts as $post) {
-                                            echo '<option value="' . esc_attr($post->ID) . '" data-title="' . esc_attr(strtolower($post->post_title)) . '">' . esc_html($post->post_title) . '</option>';
-                                        }
-                                        ?>
-                                    </select>
-                                    <p class="description">Choose the <?php echo substr($post_type, 0, -1); ?> you want to gate</p>
-                                    <p class="search-results" style="display: none; color: #666; font-style: italic;">Showing filtered results</p>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <div id="<?php echo $post_type; ?>-content-config" class="content-config" style="display: none;">
-                            <h4>Content Configuration</h4>
-                            <table class="form-table">
-                                <tr>
-                                    <th scope="row">
-                                        <label for="<?php echo $post_type; ?>-post-title">Post Title</label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="<?php echo $post_type; ?>-post-title" name="post_title" class="regular-text" readonly>
-                                        <p class="description">Current post title (read-only)</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label for="<?php echo $post_type; ?>-preview-text">Preview Text</label>
-                                    </th>
-                                    <td>
-                                        <textarea id="<?php echo $post_type; ?>-preview-text" name="preview_text" rows="5" cols="50" class="large-text" placeholder="Enter the preview text that will be shown to non-subscribers..."></textarea>
-                                        <p class="description">This text will be displayed instead of the full content for users without access</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label>Required Topics of Interest (TOI)</label>
-                                    </th>
-                                    <td>
-                                        <fieldset class="access-control-section">
-                                            <legend>Topics of Interest</legend>
-                                            <p class="description">Users must have selected at least one of these topics to access the full content:</p>
-                                            <div class="access-control-checkboxes">
-                                                <?php
-                                                $toi_options = function_exists('dtr_get_all_toi_options') ? dtr_get_all_toi_options() : [];
-                                                if (empty($toi_options)) {
-                                                    // Fallback TOI options if function doesn't exist
-                                                    $toi_options = [
-                                                        'cf_person_business' => 'Business',
-                                                        'cf_person_diseases' => 'Diseases',
-                                                        'cf_person_drugs_therapies' => 'Drugs & Therapies',
-                                                        'cf_person_genomics_3774' => 'Genomics',
-                                                        'cf_person_research_development' => 'Research & Development',
-                                                        'cf_person_technology' => 'Technology',
-                                                        'cf_person_tools_techniques' => 'Tools & Techniques'
-                                                    ];
-                                                }
-                                                foreach ($toi_options as $toi_key => $toi_label) {
-                                                    echo '<label>';
-                                                    echo '<input type="checkbox" name="required_toi[]" value="' . esc_attr($toi_key) . '" class="' . $post_type . '-toi-checkbox">';
-                                                    echo '<span>' . esc_html($toi_label) . '</span>';
-                                                    echo '</label>';
-                                                }
-                                                ?>
-                                            </div>
-                                        </fieldset>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label>Required Areas of Interest (AOI)</label>
-                                    </th>
-                                    <td>
-                                        <fieldset class="access-control-section">
-                                            <legend>Areas of Interest</legend>
-                                            <p class="description">Users must have selected at least one of these areas to access the full content:</p>
-                                            <div class="access-control-checkboxes">
-                                                <?php
-                                                $aoi_options = function_exists('dtr_get_aoi_field_names') ? dtr_get_aoi_field_names() : [];
-                                                if (empty($aoi_options)) {
-                                                    // Fallback AOI options if function doesn't exist
-                                                    $aoi_options = [
-                                                        'cf_person_dtr_news' => 'DTR News',
-                                                        'cf_person_dtr_events' => 'DTR Events',
-                                                        'cf_person_dtr_third_party' => 'DTR Third Party',
-                                                        'cf_person_dtr_webinar' => 'DTR Webinar'
-                                                    ];
-                                                }
-                                                foreach ($aoi_options as $aoi_key => $aoi_label) {
-                                                    echo '<label>';
-                                                    echo '<input type="checkbox" name="required_aoi[]" value="' . esc_attr($aoi_key) . '" class="' . $post_type . '-aoi-checkbox">';
-                                                    echo '<span>' . esc_html($aoi_label) . '</span>';
-                                                    echo '</label>';
-                                                }
-                                                ?>
-                                            </div>
-                                        </fieldset>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label for="<?php echo $post_type; ?>-ninja-form">Access Request Form</label>
-                                    </th>
-                                    <td>
-                                        <select id="<?php echo $post_type; ?>-ninja-form" name="ninja_form_id">
-                                            <option value="">-- Select a Form --</option>
-                                            <?php 
-                                            // Get all Ninja Forms for the dropdown
-                                            $ninja_forms = array();
-                                            if (function_exists('ninja_forms_get_all_forms')) {
-                                                $ninja_forms = ninja_forms_get_all_forms();
-                                            } else {
-                                                // Fallback method to get Ninja Forms
-                                                $forms = get_posts(array(
-                                                    'post_type' => 'nf_sub',
-                                                    'posts_per_page' => -1,
-                                                    'post_status' => 'publish'
-                                                ));
-                                                foreach ($forms as $form) {
-                                                    $ninja_forms[] = array('id' => $form->ID, 'title' => $form->post_title);
-                                                }
-                                            }
-                                            
-                                            // If still no forms found, create a default entry
-                                            if (empty($ninja_forms)) {
-                                                $ninja_forms = array(
-                                                    array('id' => 24, 'title' => 'Default Registration Form')
-                                                );
-                                            }
-                                            
-                                            foreach ($ninja_forms as $form): ?>
-                                                <option value="<?php echo esc_attr($form['id']); ?>">
-                                                    <?php echo esc_html($form['title']); ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                        <p class="description">Form that will be displayed for users to request access</p>
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                            <p class="submit">
-                                <button type="submit" class="button button-primary">Save Gated Content Settings</button>
-                                <button type="button" class="button button-secondary clear-settings">Clear Settings</button>
-                            </p>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
-</div> -->
-
 <style>
+/* Gated Content Table Styles */
+.gated-content-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: #fff;
+    font-size: 13px;
+}
+.gated-content-table th,
+.gated-content-table td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e1e4e7;
+    vertical-align: middle;
+}
+.gated-content-table th {
+    background: #f8f9fa;
+    color: #23282d;
+    font-weight: 600;
+    font-size: 14px;
+    border-top: 1px solid #e1e4e7;
+}
+.gated-content-table td.actions {
+    min-width: 120px;
+    padding: 6px 0px !important;
+}
+.gated-content-table a.button-small {
+    font-size: 12px;
+    padding: 4px 10px;
+    line-height: 1.4;
+}
+/* End Gated Content Table Styles */
 /* Gated Content Overview Styles */
 .gated-content-overview {
     margin: 20px 0;
@@ -351,7 +157,7 @@ foreach ($post_types as $post_type) {
     color: #23282d;
     font-size: 18px;
     font-weight: 600;
-    border-bottom: 2px solid #0073aa;
+    border-bottom: 1px solid #bcbcbcff;
     padding-bottom: 8px;
 }
 
@@ -368,8 +174,8 @@ foreach ($post_types as $post_type) {
 
 .stat-number {
     display: block;
-    font-size: 28px;
-    font-weight: 700;
+    font-size: 22px;
+    font-weight: 600;
     line-height: 1;
     margin-bottom: 5px;
 }
@@ -431,7 +237,7 @@ foreach ($post_types as $post_type) {
 }
 
 .recent-activity {
-    background: #fff;
+    background: #ffffff;
     border: 1px solid #ccd0d4;
     border-radius: 6px;
     padding: 20px;
@@ -657,284 +463,51 @@ fieldset legend {
 
 <script>
 jQuery(document).ready(function($) {
-    console.log('Gated Content: jQuery loaded and ready');
-    console.log('AJAX URL:', ajaxurl);
-    
-    // Store original options for search functionality for each content type
-    var originalOptions = {};
-    $('.post-select').each(function() {
-        var postType = $(this).data('post-type');
-        originalOptions[postType] = $(this).find('option').clone();
-    });
-    
-    // Content type tab switching
-    $('.content-type-tabs .nav-tab').on('click', function(e) {
-        e.preventDefault();
-        
-        var contentType = $(this).data('content-type');
-        
-        // Update tab states
-        $('.content-type-tabs .nav-tab').removeClass('nav-tab-active');
-        $(this).addClass('nav-tab-active');
-        
-        // Update panel visibility
-        $('.content-type-panel').removeClass('active');
-        $('#panel-' + contentType).addClass('active');
-        
-        console.log('Switched to content type:', contentType);
-    });
-    
-    // Search functionality for each post type
-    $('.content-search').on('input', function() {
-        var searchTerm = $(this).val().toLowerCase().trim();
-        var postType = $(this).data('post-type');
-        var $select = $('#' + postType + '-post-select');
-        var $resultsText = $select.siblings('.search-results');
-        
-        console.log('Searching for:', searchTerm, 'in', postType);
-        
-        // Clear current selection
-        $select.val('');
-        $('#' + postType + '-content-config').slideUp();
-        
-        if (searchTerm === '') {
-            // Show all options if search is empty
-            $select.empty().append(originalOptions[postType].clone());
-            $resultsText.hide();
-        } else {
-            // Filter options based on search term
-            var filteredOptions = originalOptions[postType].filter(function() {
-                var title = $(this).data('title') || '';
-                return title.includes(searchTerm) || $(this).val() === '';
-            });
-            
-            $select.empty().append(filteredOptions.clone());
-            
-            // Show results count
-            var resultCount = filteredOptions.length - 1; // Subtract 1 for the default option
-            if (resultCount > 0) {
-                $resultsText.text('Showing ' + resultCount + ' filtered result(s)').removeClass('no-results').show();
-            } else {
-                $resultsText.text('No ' + postType + ' found matching "' + searchTerm + '"').addClass('no-results').show();
-            }
+    // Only code needed: load and display gated content lists, Edit button links to post edit page
+    function renderGatedContentTable(content) {
+        if (!content || content.length === 0) {
+            return '<p class="no-gated-content">No gated content found.</p>';
         }
-    });
-    
-    // Clear search when a post is selected
-    $('.post-select').on('change', function() {
-        var postType = $(this).data('post-type');
-        var searchInput = $('#' + postType + '-search');
-        
-        console.log('Post selected:', $(this).val(), 'Type:', postType);
-        
-        if ($(this).val()) {
-            searchInput.val('');
-            searchInput.siblings('.search-results').hide();
-            // Restore all options
-            $(this).empty().append(originalOptions[postType].clone());
-            $(this).val($(this).find('option:selected').val());
-        }
-    });
-    
-    // Post selection functionality
-    $('.post-select').on('change', function() {
-        var postId = $(this).val();
-        var postType = $(this).data('post-type');
-        var $config = $('#' + postType + '-content-config');
-        var $titleField = $('#' + postType + '-post-title');
-        
-        console.log('Post selected:', postId, 'Type:', postType);
-        
-        if (postId) {
-            // Get the selected post title
-            var postTitle = $(this).find('option:selected').text();
-            $titleField.val(postTitle);
-            
-            // Load existing settings if any
-            loadGatedContentSettings(postId, postType);
-            
-            // Show configuration section
-            $config.slideDown();
-        } else {
-            // Hide configuration section
-            $config.slideUp();
-        }
-    });
-
-    // Form submission
-    $('.gated-content-form').on('submit', function(e) {
-        e.preventDefault();
-        console.log('Form submitted');
-        
-        var $form = $(this);
-        var postId = $form.find('.post-select').val();
-        var postType = $form.find('.post-select').data('post-type');
-        
-        if (!postId) {
-            alert('Please select a post first.');
-            return;
-        }
-        
-        console.log('Submitting for post:', postId, 'type:', postType);
-        
-        // Collect selected TOI and AOI values
-        var selectedToi = [];
-        $form.find('.' + postType + '-toi-checkbox:checked').each(function() {
-            selectedToi.push($(this).val());
+        var html = '<table class="gated-content-table">';
+        html += '<thead><tr>';
+        html += '<th>Title</th>';
+        html += '<th>Workbooks Ref</th>';
+        html += '<th>Campaign Ref</th>';
+        html += '<th>Form</th>';
+        html += '<th class="actions">Actions</th>';
+        html += '</tr></thead><tbody>';
+        content.forEach(function(item) {
+            html += '<tr>';
+            html += '<td><strong>' + item.title + '</strong></td>';
+            html += '<td>' + (item.workbooks_reference || '-') + '</td>';
+            html += '<td>' + (item.campaign_reference ? 'CAMP-' + item.campaign_reference : '-') + '</td>';
+            html += '<td>' + (item.ninja_form_title || 'Request Access Form') + '</td>';
+            html += '<td class="actions" style="padding:0;">';
+            html += '<a href="' + item.edit_url + '" class="button button-primary button-small" target="_blank">Edit</a>';
+            html += '</td>';
+            html += '</tr>';
         });
-        
-        var selectedAoi = [];
-        $form.find('.' + postType + '-aoi-checkbox:checked').each(function() {
-            selectedAoi.push($(this).val());
-        });
-        
-        console.log('Selected TOI:', selectedToi);
-        console.log('Selected AOI:', selectedAoi);
-        
-        var formData = {
-            action: 'save_gated_content_settings',
-            nonce: '<?php echo wp_create_nonce("gated_content_nonce"); ?>',
-            post_id: postId,
-            post_type: postType,
-            preview_text: $form.find('[name="preview_text"]').val(),
-            ninja_form_id: $form.find('[name="ninja_form_id"]').val(),
-            required_toi: selectedToi,
-            required_aoi: selectedAoi
-        };
-        
-        console.log('Sending form data:', formData);
-        
-        $.post(ajaxurl, formData, function(response) {
-            console.log('Response received:', response);
-            if (response.success) {
-                alert('Gated content settings saved successfully!');
-            } else {
-                alert('Error saving settings: ' + (response.data || 'Unknown error'));
-                console.error('Save error:', response);
-            }
-        }).fail(function(xhr, status, error) {
-            console.error('AJAX request failed:', status, error);
-            alert('Network error occurred. Please try again.');
-        });
-    });
+        html += '</tbody></table>';
+        return html;
+    }
 
-    // Clear settings functionality
-    $('.clear-settings').on('click', function() {
-        if (confirm('Are you sure you want to clear all settings for this content?')) {
-            var $form = $(this).closest('.gated-content-form');
-            var postId = $form.find('.post-select').val();
-            var postType = $form.find('.post-select').data('post-type');
-            
-            if (!postId) {
-                alert('Please select a post first.');
-                return;
-            }
-            
-            var formData = {
-                action: 'clear_gated_content_settings',
-                nonce: '<?php echo wp_create_nonce("gated_content_nonce"); ?>',
-                post_id: postId
-            };
-            
-            $.post(ajaxurl, formData, function(response) {
-                if (response.success) {
-                    // Clear form fields
-                    $form.find('[name="preview_text"]').val('');
-                    $form.find('[name="ninja_form_id"]').val('');
-                    // Clear AOI/TOI checkboxes for this specific post type
-                    $form.find('.' + postType + '-toi-checkbox, .' + postType + '-aoi-checkbox').prop('checked', false);
-                    alert('Settings cleared successfully!');
-                } else {
-                    alert('Error clearing settings: ' + (response.data || 'Unknown error'));
-                    console.error('Clear error:', response);
-                }
-            }).fail(function(xhr, status, error) {
-                console.error('AJAX request failed:', status, error);
-                alert('Network error occurred. Please try again.');
-            });
-        }
-    });
-
-    function loadGatedContentSettings(postId, postType) {
-        console.log('Loading settings for post:', postId, 'type:', postType);
-        
+    function loadGatedContentList(postType, containerId) {
         $.post(ajaxurl, {
-            action: 'load_gated_content_settings',
+            action: 'load_current_gated_articles',
             nonce: '<?php echo wp_create_nonce("gated_content_nonce"); ?>',
-            post_id: postId
+            post_type: postType
         }, function(response) {
-            console.log('Settings loaded:', response);
-            
-            if (response.success && response.data) {
-                var data = response.data;
-                $('#' + postType + '-preview-text').val(data.preview_text || '');
-                $('#' + postType + '-ninja-form').val(data.ninja_form_id || '');
-                
-                // Clear all checkboxes for this post type first
-                $('.' + postType + '-toi-checkbox, .' + postType + '-aoi-checkbox').prop('checked', false);
-                
-                // Set TOI checkboxes
-                if (data.required_toi && Array.isArray(data.required_toi)) {
-                    data.required_toi.forEach(function(toi) {
-                        $('.' + postType + '-toi-checkbox[value="' + toi + '"]').prop('checked', true);
-                    });
-                }
-                
-                // Set AOI checkboxes
-                if (data.required_aoi && Array.isArray(data.required_aoi)) {
-                    data.required_aoi.forEach(function(aoi) {
-                        $('.' + postType + '-aoi-checkbox[value="' + aoi + '"]').prop('checked', true);
-                    });
-                }
+            if (response.success) {
+                $(containerId).html(renderGatedContentTable(response.data));
             } else {
-                console.log('No existing settings found or error occurred');
+                $(containerId).html('<p class="loading">Error loading gated content.</p>');
             }
-        }).fail(function(xhr, status, error) {
-            console.error('AJAX request failed:', status, error);
         });
     }
-    
-    // Add click handlers for manage buttons
-    $('.manage-type-btn').on('click', function(e) {
-        e.preventDefault();
-        var postType = $(this).data('type');
-        console.log('Manage button clicked for:', postType);
-        
-        // Switch to the appropriate tab
-        $('.content-type-tabs .nav-tab').removeClass('nav-tab-active');
-        $('#tab-' + postType).addClass('nav-tab-active');
-        
-        $('.content-type-panel').removeClass('active');
-        $('#panel-' + postType).addClass('active');
-        
-        // Scroll to the content
-        $('html, body').animate({
-            scrollTop: $('.content-type-tabs').offset().top - 100
-        }, 500);
-    });
-    
-    // Add click handlers for edit buttons in recent activity
-    $('.edit-gated-btn').on('click', function(e) {
-        e.preventDefault();
-        var postType = $(this).data('type');
-        var postId = $(this).data('id');
-        
-        console.log('Edit button clicked for:', postType, 'ID:', postId);
-        
-        // Switch to the appropriate tab
-        $('.content-type-tabs .nav-tab').removeClass('nav-tab-active');
-        $('#tab-' + postType).addClass('nav-tab-active');
-        
-        $('.content-type-panel').removeClass('active');
-        $('#panel-' + postType).addClass('active');
-        
-        // Set the post in the dropdown
-        $('#' + postType + '-post-select').val(postId).trigger('change');
-        
-        // Scroll to the content
-        $('html, body').animate({
-            scrollTop: $('.content-type-tabs').offset().top - 100
-        }, 500);
-    });
+
+    loadGatedContentList('articles', '#gated-articles-list');
+    loadGatedContentList('whitepapers', '#gated-whitepapers-list');
+    loadGatedContentList('news', '#gated-news-list');
+    loadGatedContentList('events', '#gated-events-list');
 });
 </script>

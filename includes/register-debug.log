@@ -61241,3 +61241,1197 @@
 [2025-07-15 23:35:21] === NF DEBUG: WP User + Workbooks sync complete for user ID 68 ===
 [2025-07-15 23:35:44] === NF DEBUG: Submission triggered ===
 [2025-07-15 23:35:44] NF DEBUG: Skipping - form ID does not match target.
+[2025-07-17 02:51:04] Workbooks person record: Array
+(
+    [success] => 1
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [organisation_annual_revenue] =>   0
+                    [no_post_soliciting] => 
+                    [main_location[alternate_telephone]] => 
+                    [cf_person_send_media_pack] => 
+                    [cf_person_nf_areas_of_interest_312] => 
+                    [cf_person_conference_source] => 
+                    [cf_person_dtr_core_audience] => 
+                    [cf_person_dtr_all_brand_unsubscribe] => 
+                    [home_location[mobile]] => 
+                    [cf_person_fbpa25_registered] => 
+                    [cf_person_iar_no_postal] => 
+                    [cf_person_dtr_web_member] => 1
+                    [cf_person_nf_events] => 
+                    [cf_person_molecular_diagnostics] => 1
+                    [cf_person_it_engagement] => Unknown
+                    [cf_person_dtr_advertiser_type] => 
+                    [linkedin_url] => 
+                    [home_location[email]] => 
+                    [_can_delete] => 
+                    [cf_person_authentication_blocked] => 
+                    [main_location[fax]] => 
+                    [created_through_reference] => wp_user_28
+                    [cf_person_technology] => 
+                    [cf_person_nf_tdm] => 
+                    [cf_person_it_assumed_aoi] => 
+                    [cf_person_2023_digital] => 0.0 GBP 1
+                    [cf_person_fraser_owen] => 
+                    [cf_person_informatics] => 1
+                    [spouse_name] => 
+                    [cf_person_sam_pirani] => 
+                    [cf_person_epr_news_and_events] => 
+                    [cf_person_insights_today_score] => 
+                    [main_location[street_address]] => 
+                    [compliance_channels] => 
+                    [cf_person_lead_event_reference] => 
+                    [cf_person_it_assumed_website_aoi] => 
+                    [cf_person_force24_nt_deletion] => 
+                    [cf_person_artificial_intelligencemachine_learning] => 1
+                    [cf_person_ias25_registered] => 
+                    [cf_person_stem_cells] => 1
+                    [cf_person_nf_advertiser_type] => 
+                    [cf_person_grr_no_postal] => 
+                    [cf_person_client_nps] => 
+                    [cf_person_dtr_nurture_track] => 
+                    [image_url] => 
+                    [id] => 4208693
+                    [cf_person_nf_web_member] => 
+                    [cf_person_grr_webinar_aoi] => 
+                    [cf_person_data_matching_picklist] => 
+                    [cf_person_first_login_time] => 
+                    [cf_person_ias25_sponsor] => 
+                    [cf_person_insight_yesterday_score] => 
+                    [cf_person_iar_ias23] => 
+                    [cf_person_clinical_trials] => 1
+                    [cf_person_grr_areas_of_interest_314] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [cf_person_translational_science] => 1
+                    [cf_person_tony_portelli] => 
+                    [cf_person_idbs_potential_speaker] => 
+                    [cf_person_iar_subscriber] => 
+                    [cf_person_location__name] => 
+                    [cf_person_ias24_registered] => 
+                    [cf_person_iar_eligible_for_communications_after_30_days] => 
+                    [cf_person_iar_engagement] => Unknown
+                    [cf_person_epr_ord_sign_off_only] => 
+                    [cf_person_brand] => 
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [cf_person_nf_online_aoi__name] => 
+                    [cf_person_nf_all_brand_unsubscribe] => 
+                    [cf_person_it_zmember_reference] => 
+                    [cf_person_iar_advertiser_type] => 
+                    [cf_person_force24_lead_score] => 80
+                    [cf_person_act_urn] => 
+                    [cf_person_zoe_bryant] => 
+                    [cf_person_last_login_ip_address] => 
+                    [cf_person_job_level] => Other
+                    [cf_person_dtr_zmember_reference] => 20455
+                    [cf_person_grr_conference_source] => 
+                    [cf_person_2023_spex] => 0.0 GBP 1
+                    [cf_person_iar_tdm] => 
+                    [party_notes] => 
+                    [home_location[street_address]] => 
+                    [cf_person_world_region] => Africa
+                    [cf_person_insights_yesterday_score] => 
+                    [cf_person_dtr_subscriber] => 
+                    [sync_with_mailer] => 1
+                    [main_location[county_province_state]] => KwaZulu-Natal
+                    [employer_name] => Supersonic Playground Ltd
+                    [cf_person_it_conference_source] => 
+                    [cf_person_epr_sales_contact] => 
+                    [cf_person_dtr_eligible_for_communications_after_30_days] => 1
+                    [cf_person_dtr_engagement] => Medium
+                    [cf_person_nurture_track] => 
+                    [cf_person_nf_zmember_reference] => 
+                    [cf_person_nf_editorial_type] => 
+                    [cf_person_epr_nurture_track] => 
+                    [cf_person_insights_employees] => 
+                    [queue_entry[queue[name]]] => Data Team
+                    [cf_person_ryan_clarke] => 
+                    [cf_person_nf_no_postal] => 
+                    [cf_person_act_company_name] => Supersonic Playground
+                    [cf_person_grr_editorial_type] => 
+                    [alternate_names] => 
+                    [cf_person_iar_conference_attended] => 
+                    [cf_person_insights_first_source] => 
+                    [cf_person_iar_nurture_track] => 
+                    [cf_person_ias24_attended] => 
+                    [cf_person_epr_editorial_type] => 
+                    [cf_person_fbpa24_registered] => 
+                    [cf_person_dtr_assumed_website_aoi] => 
+                    [skype_name] => 
+                    [cf_person_nf_webinar_aoi] => 
+                    [_can_chown] => 
+                    [cf_person_it_all_brand_unsubscribe] => 
+                    [cf_person_workbooks] => 1
+                    [cf_person_research_development] => 
+                    [cf_person_dtr_events] => 
+                    [cf_person_grr_dr23] => 
+                    [cf_person_epr_areas_of_interest_310] => 
+                    [marketing_campaign_id] => 
+                    [home_location[telephone]] => 
+                    [email_opt_in] => 
+                    [cf_person_it_webinar] => 
+                    [cf_person_insights_7_days_score] => 
+                    [cf_person_diseases] => 1
+                    [watched] => 
+                    [cf_person_nf_webinar] => 
+                    [cf_person_location] => 
+                    [cf_person_lab_automation] => 1
+                    [cf_person_grr_engagement] => Unknown
+                    [cf_person_conference_attendee_type] => 
+                    [cf_person_insights_first_medium] => 
+                    [preferred_language] => 
+                    [logo_url] => 
+                    [home_location[county_province_state]] => 
+                    [main_location[email_address_undeliverable]] => 
+                    [cf_person_nf_online_aoi] => 
+                    [cf_person_it_no_postal] => 
+                    [cf_person_fbpa24_sponsor] => 
+                    [cf_person_external_event_exhibitors] => 
+                    [cf_person_grr_ord_sign_off_only] => 
+                    [main_location[country]] => South Africa
+                    [cf_person_nf_eligible_for_communications_after_30_days] => 
+                    [cf_person_epr_tdm] => 
+                    [cf_person_grr_assumed_aoi] => 
+                    [cf_person_iar_web_member] => 
+                    [descriptor] => Levon Gravett - Supersonic Playground Ltd
+                    [cf_person_dtr_manual_advertiser_type] => 
+                    [cf_person_insights_industry] => 
+                    [person_suffix] => 
+                    [owner[person_name]] => Dean Patterson
+                    [cf_person_nf_nurture_track] => 
+                    [cf_person_it_webinar_aoi] => 
+                    [cf_person_it_conference_attended] => 
+                    [cf_person_grr_assumed_website_aoi] => 
+                    [cf_person_2022_total] => 0.0 GBP 1
+                    [cf_person_dtr_assumed_aoi] => 
+                    [cf_person_2023_print] => 0.0 GBP 1
+                    [cf_person_nic_losardo] => 
+                    [cf_person_nf_fig23] => 
+                    [cf_person_it_third_party] => 
+                    [cf_person_insights_first_campaign] => 
+                    [cf_person_epr_subscriber_type] => Prospect
+                    [cf_person_fbpa24_attended] => 
+                    [cf_person_iar_zmember_reference] => 
+                    [cf_person_grr_conference_attended] => 
+                    [cf_person_insights_background] => 
+                    [cf_person_epr_third_party] => 
+                    [_can_chaccess] => 
+                    [cf_person_imaging] => 
+                    [cf_person_act_info_source] => 
+                    [no_phone_soliciting] => 
+                    [employer_link] => 3856255
+                    [cf_person_screening_sequencing] => 1
+                    [cf_person_it_its23] => 
+                    [cf_person_dtr_subscriber_type] => Prospect
+                    [cf_person_delegate_blacklist] => 
+                    [cf_person_ias25_declined] => 
+                    [cf_person_iar_all_brand_unsubscribe] => 
+                    [photo_url] => 
+                    [owner_id] => 119662
+                    [home_location[fax]] => 
+                    [cf_person_it_news] => 
+                    [cf_person_grr_core_audience] => 
+                    [cf_person_nf_assumed_aoi] => 
+                    [linked_item_association_for_cf_person_location] => 
+                    [cf_person_biomarkers] => 1
+                    [cf_person_grr_eligible_for_communications_after_30_days] => 
+                    [cf_person_dtr_webinar] => 
+                    [home_location[country]] => 
+                    [facebook_url] => 
+                    [linked_item_association_for_cf_person_nf_online_aoi] => 
+                    [cf_person_claimed_employer] => Supersonic Playground Ltd
+                    [assigned_to] => 538
+                    [_can_read] => 1
+                    [cf_person_dtr_webinar_aoi] => 
+                    [cf_person_confidence_level] => High
+                    [cf_person_iar_news_and_events] => 
+                    [person_last_name] => Gravett
+                    [organisation_num_employees] => 
+                    [main_location[mobile]] => 
+                    [created_at] => Fri Mar 21 18:00:17 UTC 2025
+                    [cf_person_it_news_and_events] => 
+                    [cf_person_2022_print] => 0.0 GBP 1
+                    [cf_person_andy_holland] => 
+                    [cf_person_epr_events] => 
+                    [cf_person_iar_manual_advertiser_type] => 
+                    [cf_person_dtr_tdm] => 
+                    [cf_person_nf_news] => 
+                    [cf_person_it_subscriber_type] => 
+                    [cf_person_it_leadgen_aoi] => 
+                    [cf_person_insights_revenue] => 
+                    [cf_person_grr_events] => 
+                    [assistant_phone] => 
+                    [gdpr_compliant] => 
+                    [cf_person_les_lubwama] => 
+                    [cf_person_iar_subscriber_type] => 
+                    [cf_person_epr_eligible_for_communications_after_30_days] => 1
+                    [cf_person_grr_web_member] => 
+                    [cf_person_nf_ord_sign_off_only] => 
+                    [cf_person_nf_assumed_website_aoi] => 
+                    [_preload_linked_item_association_for_cf_person_location] => 
+                    [cf_person_epr_leadgen_aoi] => 
+                    [cf_person_fbpa24_declined] => 
+                    [cf_person_dtr_third_party] => 1
+                    [cf_person_grr_news_and_events] => 
+                    [cf_person_it_events] => 
+                    [_link_or_create_employer] => 
+                    [cf_person_business] => 1
+                    [marketing_campaign[name]] => 
+                    [cf_person_epr_advertiser_type] => 
+                    [cf_person_ias25_speaker] => 
+                    [cf_person_dtr_no_postal] => 
+                    [created_by_user[person_name]] => Automation
+                    [created_by] => 79458
+                    [cf_person_registered] => 
+                    [cf_person_it_nurture_track] => 
+                    [cf_person_iar_ord_sign_off_only] => 
+                    [cf_person_hit_to_lead] => 
+                    [cf_person_grr_advertiser_type] => 
+                    [object_url] => https://russellpublishing-live.workbooks.com/link/3cDMzUTM/PERS-671830
+                    [main_location[alternate_email]] => 
+                    [cf_person_joanna_kirby] => 
+                    [cf_person_dtr_news] => 1
+                    [cf_person_it_advertiser_type] => 
+                    [cf_person_dtr_areas_of_interest_v2] => Analysis
+                    [cf_person_2022_digital] => 0.0 GBP 1
+                    [twitter_url] => 
+                    [home_location[alternate_email]] => 
+                    [created_by_user[login_name]] => automation-28640@system.workbooks.com
+                    [cf_person_preclinical_research] => 
+                    [cf_person_nf_manual_advertiser_type] => 
+                    [cf_person_ias24_speaker] => 
+                    [person_job_title] => Developer
+                    [main_location[email]] => levon.gravett@supersonicplayground.com
+                    [cf_person_nf_subscriber] => 
+                    [cf_person_iar_webinar_aoi] => 
+                    [cf_person_analysis] => 1
+                    [cf_person_epr_engagement] => Unknown
+                    [cf_person_confidence_score_rating] => 92
+                    [cf_person_confidence_score_date] => June 2025
+                    [cf_person_insights_total_score] => 
+                    [cf_person_drugs_therapies] => 
+                    [biography] => 
+                    [main_location[town]] => Durban
+                    [imported] => 
+                    [compliance_special_categories] => 
+                    [cf_person_last_login_time] => 
+                    [cf_person_act_company_type] => 
+                    [categories] => 
+                    [cf_person_conference_attended] => 
+                    [cf_person_fbpa25_sponsor] => 
+                    [cf_person_iar_brand_unsubscribe] => 
+                    [cf_person_epr_assumed_aoi] => 
+                    [_preload_linked_item_association_for_cf_person_nf_online_aoi] => 
+                    [cf_person_manual_advertiser_type] => 
+                    [cf_person_grr_subscribers] => 
+                    [cf_person_dtr_therapeutic_aoi] => Neuroscience
+                    [cf_person_fbpa24_speaker] => 
+                    [cf_person_iar_iaos23] => 
+                    [cf_person_insights_30_days_score] => 
+                    [type] => Private::Crm::Person
+                    [person_job_role] => Not selected
+                    [cf_person_toxicology] => 1
+                    [cf_person_fbpa25_attended] => 
+                    [cf_person_epr_assumed_website_aoi] => 
+                    [cf_person_nf_industry_sector_worked] => 
+                    [cf_person_epr_core_audience] => 
+                    [cf_person_iar_brand_unsubscribe_2106] => 
+                    [cf_person_2022_spex] => 0.0 GBP 1
+                    [website] => 
+                    [is_deleted] => 
+                    [cf_person_epr_webinar_aoi] => Bio-Processing,Manufacturing/Production
+                    [cf_person_data_source_detail] => DTR-WEBINAR-Cancer-drug-discovery-breakthroughs-research-that-s-changing-lives
+                    [cf_person_personalised_medicine] => 1
+                    [cf_person_nf_engagement] => Unknown
+                    [cf_person_it_subscriber] => 
+                    [cf_person_dtr_editorial_type] => 
+                    [cf_person_epr_foba23] => 
+                    [created_through] => Scribe
+                    [cf_person_epr_subscriber] => 
+                    [cf_person_drug_discovery_processes] => 
+                    [cf_person_grr_webinar] => 
+                    [cf_person_2023_total] => 0.0 GBP 1
+                    [cf_person_iar_leadgen_aoi] => 
+                    [cf_person_nf_third_party] => 
+                    [cf_person_assays] => 
+                    [cf_person_iar_assumed_aoi] => 
+                    [cf_person_dtr_leadgen_aoi] => 
+                    [cf_person_epr_all_brand_unsubscribe] => 
+                    [cf_person_ias25_attended] => 
+                    [home_location[town]] => 
+                    [cf_person_temp_exclusion] => 
+                    [cf_person_iar_core_audience] => 
+                    [person_personal_title] => Mr.
+                    [main_location[postcode]] => 4051
+                    [cf_person_sponsor_optin] => 
+                    [cf_person_jess_russell] => 
+                    [cf_person_iar_assumed_website_aoi] => 
+                    [cf_person_epr_news] => 
+                    [cf_person_insights_first_term] => 
+                    [cf_person_insights_first_visit] => 
+                    [queue_entry[updated_at]] => Mon Jun 30 15:00:20 UTC 2025
+                    [cf_person_grr_third_party] => 
+                    [cf_person_grr_leadgen_aoi] => 
+                    [updated_at] => Wed Jul 16 22:04:19 UTC 2025
+                    [person_middle_name] => 
+                    [no_email_soliciting] => 
+                    [cf_person_tools_techniques] => 
+                    [cf_person_linkedin_url] => 
+                    [cf_person_fbpa25_declined] => 
+                    [cf_person_iar_news] => 
+                    [cf_person_beau_bailey] => 
+                    [cf_person_is_person_active_or_inactive] => Active
+                    [cf_person_iar_third_party] => 
+                    [cf_person_it_mode_of_transport_interest] => 
+                    [cf_person_it_editorial_type] => 
+                    [cf_person_epr_no_postal] => 
+                    [cf_person_grr_news] => 
+                    [cf_person_iar_areas_of_interest_316] => 
+                    [lock_version] => 195
+                    [cf_person_epr_web_member] => 
+                    [cf_person_insights_last_visit] => 
+                    [cf_person_ias24_sponsor] => 
+                    [cf_person_grr_manual_advertiser_type] => 
+                    [cf_person_editorial_contact_type] => 
+                    [cf_person_iar_editorial_type] => 
+                    [object_ref] => PERS-671830
+                    [lead_source_type] => Live Webinar Registration
+                    [cf_person_dtr_news_and_events] => 
+                    [cf_person_insights_first_content] => 
+                    [cf_person_duplicate_person] => 
+                    [cf_person_epr_2] => 
+                    [cf_person_epr_zmember_reference] => 
+                    [cf_person_dtr_ord_sign_off_only] => 
+                    [cf_person_iar_events] => 
+                    [home_location[alternate_telephone]] => 
+                    [cf_person_data_matching] => 
+                    [cf_person_genomics] => 1
+                    [main_location_id] => 4264131
+                    [mailchimp_last_synchronised_at] => 
+                    [cf_person_suzy_baverstock] => 
+                    [cf_person_grr_tdm] => 
+                    [special_requirements] => 
+                    [name] => Levon Gravett
+                    [home_location[postcode]] => 
+                    [cf_person_targets] => 
+                    [cf_person_nf_subscriber_type] => 
+                    [cf_person_grr_nurture_track] => 
+                    [cf_person_dan_birchmore] => 
+                    [person_first_name] => Levon
+                    [main_location[telephone]] => +27609961781
+                    [industry] => 
+                    [cf_person_science_primary_secondary_audience] => 
+                    [cf_person_interests] => 
+                    [cf_person_cell_gene_therapy] => 1
+                    [cf_person_grr_subscriber_type] => 
+                    [cf_person_insights_link] => 
+                    [cf_person_ias24_declined] => 
+                    [assistant_name] => 
+                    [cf_person_grr_zmember_reference] => 
+                    [person_salutation] => Dear Mr. Gravett
+                    [owner[login_name]] => dpatterson@russellpublishing.com
+                    [cf_person_transport_primary_secondary_audience] => 
+                    [cf_person_nf_news_and_events] => 
+                    [cf_person_epr_webinar] => 1
+                    [cf_person_iar_conference_source] => 
+                    [cf_person_fbpa25_speaker] => 
+                    [cf_person_iar_webinar] => 
+                    [cf_person_verification_picklist] => Valid
+                    [cf_person_nf_core_audience] => 
+                    [cf_person_it_areas_of_interest_318] => 
+                    [queue_entry[queue_id]] => 538
+                    [cf_person_nf_leadgen_aoi] => 
+                    [cf_person_last_issue_sent] => 
+                    [_can_modify] => 1
+                    [cf_person_genomics_3774] => 
+                    [cf_person_grr_brand_unsubscribe] => 
+                    [cf_person_grr_all_brand_unsubscribe] => 
+                )
+
+        )
+
+    [total] => 1
+)
+
+[2025-07-17 02:51:05] Workbooks campaign memberships: Array
+(
+    [success] => 1
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [cf_mailing_list_member_campaign_source] => 
+                    [cf_mailing_list_member_poll_one] => 
+                    [member_status[status]] => Unknown
+                    [cf_mailing_list_member_webinar_question_22] => 
+                    [cf_mailing_list_member_sponsor_question_8] => 
+                    [cf_mailing_list_member_it_webinars] => 
+                    [created_at] => Tue Mar 25 09:15:00 UTC 2025
+                    [cf_mailing_list_member_poll_three] => 
+                    [cf_mailing_list_member_epr_third_party] => 
+                    [cf_mailing_list_member_sponsor_3_optin] => 
+                    [campaign_membership_status_id] => 299551
+                    [cf_mailing_list_member_it_events] => 
+                    [cf_mailing_list_member_dtr_topics] => 
+                    [marketing_campaign_id] => 85005
+                    [cf_mailing_list_member_grr_third_party] => 
+                    [cf_mailing_list_member_wdyhau] => 
+                    [cf_mailing_list_member_epr_topics] => 
+                    [cf_mailing_list_member_ticket_category] => 
+                    [cf_mailing_list_member_attended] => 
+                    [id] => 1395552557
+                    [cf_mailing_list_member_webinar_question_7] => 
+                    [cf_mailing_list_member_it_third_party] => 
+                    [cf_mailing_list_member_sponsor_question_3] => 
+                    [email_soft_bounced] => 
+                    [cf_mailing_list_member_state] => 
+                    [cf_mailing_list_member_speaker_questions] => 
+                    [email_sent] => 
+                    [cf_mailing_list_member_grr_webinars] => 
+                    [cf_mailing_list_member_webinar_question_3] => 
+                    [created_by_user[person_name]] => Aimee Shanks
+                    [cf_mailing_list_member_iar_third_party] => 
+                    [email_last_clicked] => 
+                    [cf_mailing_list_member_gotowebinar_registrant_key] => 
+                    [cf_mailing_list_member_attendee_list_optin] => 
+                    [party_or_lead_id] => 4208693
+                    [is_deleted] => 
+                    [cf_mailing_list_member_grr_events_2474] => 
+                    [cf_mailing_list_member_sponsor_question_10] => 
+                    [cf_mailing_list_member_epr_events] => 
+                    [cf_mailing_list_member_poll_five] => 
+                    [cf_mailing_list_member_speaker_description] => 
+                    [cf_mailing_list_member_job_title] => 
+                    [cf_mailing_list_member_nf_topics] => 
+                    [cf_mailing_list_member_sponsor_question_2] => 
+                    [cf_mailing_list_member_webinar_question_6] => 
+                    [cf_mailing_list_member_linkedin_url] => 
+                    [marketing_campaign[mailing_list[public_name]]] => Solving the AOC puzzle: Strategies for chemistry, manufacturing and regulatory success
+                    [cf_mailing_list_member_time_in_session] => 
+                    [created_by_user[login_name]] => ashanks@russellpublishing.com
+                    [created_through_reference] => DTR - Emails - Webinars - Master Mailing List
+                    [cf_mailing_list_member_sponsor_2_optin] => 
+                    [_can_chaccess] => 
+                    [cf_mailing_list_member_sponsor_question_7] => 
+                    [cf_mailing_list_member_epr_webinars] => 
+                    [cf_mailing_list_member_delegate_discount_code] => 
+                    [cf_mailing_list_member_epr_news] => 
+                    [cf_mailing_list_member_country] => 
+                    [cf_mailing_list_member_dtr_events] => 
+                    [cf_mailing_list_member_sponsor_4_optin] => 
+                    [cf_mailing_list_member_award_dinner] => 
+                    [mailchimp_last_synchronised_at] => 
+                    [cf_mailing_list_member_poll_four] => 
+                    [email_opens] => 0
+                    [cf_mailing_list_member_grr_news] => 
+                    [type] => Private::Crm::CampaignMembership
+                    [cf_mailing_list_member_topics] => 
+                    [cf_mailing_list_member_iar_topics] => 
+                    [email_hard_bounced] => 
+                    [cf_mailing_list_member_sponsor_question_5] => 
+                    [cf_mailing_list_member_sponsor_question_1] => 
+                    [cf_mailing_list_member_webinar_question_5] => 
+                    [updated_by_user[person_name]] => Aimee Shanks
+                    [created_by] => 149100
+                    [cf_mailing_list_member_sponsor_1_optin] => 
+                    [cf_mailing_list_member_town] => 
+                    [cf_mailing_list_member_webinar_question_10] => 
+                    [cf_mailing_list_member_iar_news] => 
+                    [email_campaign_unsubscribe] => 
+                    [email] => levon.gravett@supersonicplayground.com
+                    [cf_mailing_list_member_sponsor_question_4] => 
+                    [cf_mailing_list_member_poll_two] => 
+                    [cf_mailing_list_member_dtr_third_party] => 
+                    [cf_mailing_list_member_nf_webinars] => 
+                    [cf_mailing_list_member_time_in_session_secs] => 
+                    [cf_mailing_list_member_sponsor_question_9] => 
+                    [updated_at] => Tue Mar 25 09:15:00 UTC 2025
+                    [member_name] => Levon Gravett
+                    [cf_mailing_list_member_nf_third_party] => 
+                    [cf_mailing_list_member_synced_to_gotowebinar] => 
+                    [cf_mailing_list_member_it_topics] => 
+                    [_can_chown] => 
+                    [cf_mailing_list_member_nf_events] => 
+                    [updated_by_user[login_name]] => ashanks@russellpublishing.com
+                    [cf_mailing_list_member_webinar_question_4] => 
+                    [cf_mailing_list_member_it_news] => 
+                    [_can_read] => 1
+                    [cf_mailing_list_member_areas_of_interest] => 
+                    [subscribed] => 1
+                    [cf_mailing_list_member_interest_rating] => 
+                    [_can_modify] => 1
+                    [cf_mailing_list_member_ticket_value] =>  GBP 0
+                    [cf_mailing_list_member_lead_generated_timestamp] => 
+                    [cf_mailing_list_member_webinar_question_9] => 
+                    [cf_mailing_list_member_ticket_type] => 
+                    [cf_mailing_list_member_postcode] => 
+                    [cf_mailing_list_member_dtr_news] => 
+                    [cf_mailing_list_member_swapcard_eventperson_id] => 
+                    [_can_delete] => 1
+                    [cf_mailing_list_member_iar_webinars] => 
+                    [email_clicks] => 0
+                    [marketing_campaign[name]] => Solving the AOC puzzle: Strategies for chemistry, manufacturing and regulatory success (CAMP-42489)
+                    [cf_mailing_list_member_please_rate_this_webinar] => 
+                    [cf_mailing_list_member_telephone] => 
+                    [created_through] => Mailing List Refreshing
+                    [cf_mailing_list_member_nf_news] => 
+                    [cf_mailing_list_member_iar_events] => 
+                    [email_last_opened] => 
+                    [cf_mailing_list_member_grr_topics] => 
+                    [cf_mailing_list_member_ticket_value_net] =>   0
+                    [updated_by] => 149100
+                    [party_or_lead_type] => Private::Crm::Person
+                    [cf_mailing_list_member_ticket_upgrade] => 
+                    [cf_mailing_list_member_webinar_question_1] => 
+                    [cf_mailing_list_member_speaker_profile_image] => 
+                    [cf_mailing_list_member_employer] => 
+                    [cf_mailing_list_member_ticket_description] => 
+                    [lock_version] => 0
+                    [imported] => 
+                    [descriptor] => Levon Gravett in mailing list E9QYXFR (Hidden for Event)
+                    [cf_mailing_list_member_sponsor_question_6] => 
+                    [cf_mailing_list_member_dtr_webinars] => 
+                    [cf_mailing_list_member_webinar_question_8] => 
+                )
+
+            [1] => Array
+                (
+                    [cf_mailing_list_member_campaign_source] => 
+                    [cf_mailing_list_member_poll_one] => 
+                    [member_status[status]] => Unknown
+                    [cf_mailing_list_member_webinar_question_22] => 
+                    [cf_mailing_list_member_sponsor_question_8] => 
+                    [cf_mailing_list_member_it_webinars] => 
+                    [created_at] => Thu Mar 27 09:09:38 UTC 2025
+                    [cf_mailing_list_member_poll_three] => 
+                    [cf_mailing_list_member_epr_third_party] => 
+                    [cf_mailing_list_member_sponsor_3_optin] => 
+                    [campaign_membership_status_id] => 299503
+                    [cf_mailing_list_member_it_events] => 
+                    [cf_mailing_list_member_dtr_topics] => 
+                    [marketing_campaign_id] => 85001
+                    [cf_mailing_list_member_grr_third_party] => 
+                    [cf_mailing_list_member_wdyhau] => 
+                    [cf_mailing_list_member_epr_topics] => 
+                    [cf_mailing_list_member_ticket_category] => 
+                    [cf_mailing_list_member_attended] => 
+                    [id] => 1395962887
+                    [cf_mailing_list_member_webinar_question_7] => 
+                    [cf_mailing_list_member_it_third_party] => 
+                    [cf_mailing_list_member_sponsor_question_3] => 
+                    [email_soft_bounced] => 
+                    [cf_mailing_list_member_state] => 
+                    [cf_mailing_list_member_speaker_questions] => 
+                    [email_sent] => 
+                    [cf_mailing_list_member_grr_webinars] => 
+                    [cf_mailing_list_member_webinar_question_3] => 
+                    [created_by_user[person_name]] => Aimee Shanks
+                    [cf_mailing_list_member_iar_third_party] => 
+                    [email_last_clicked] => 
+                    [cf_mailing_list_member_gotowebinar_registrant_key] => 
+                    [cf_mailing_list_member_attendee_list_optin] => 
+                    [party_or_lead_id] => 4208693
+                    [is_deleted] => 
+                    [cf_mailing_list_member_grr_events_2474] => 
+                    [cf_mailing_list_member_sponsor_question_10] => 
+                    [cf_mailing_list_member_epr_events] => 
+                    [cf_mailing_list_member_poll_five] => 
+                    [cf_mailing_list_member_speaker_description] => 
+                    [cf_mailing_list_member_job_title] => 
+                    [cf_mailing_list_member_nf_topics] => 
+                    [cf_mailing_list_member_sponsor_question_2] => 
+                    [cf_mailing_list_member_webinar_question_6] => 
+                    [cf_mailing_list_member_linkedin_url] => 
+                    [marketing_campaign[mailing_list[public_name]]] => Beyond the lab: artificial intelligence
+                    [cf_mailing_list_member_time_in_session] => 
+                    [created_by_user[login_name]] => ashanks@russellpublishing.com
+                    [created_through_reference] => DTR - Emails - All - Master Mailing List
+                    [cf_mailing_list_member_sponsor_2_optin] => 
+                    [_can_chaccess] => 
+                    [cf_mailing_list_member_sponsor_question_7] => 
+                    [cf_mailing_list_member_epr_webinars] => 
+                    [cf_mailing_list_member_delegate_discount_code] => 
+                    [cf_mailing_list_member_epr_news] => 
+                    [cf_mailing_list_member_country] => 
+                    [cf_mailing_list_member_dtr_events] => 
+                    [cf_mailing_list_member_sponsor_4_optin] => 
+                    [cf_mailing_list_member_award_dinner] => 
+                    [mailchimp_last_synchronised_at] => 
+                    [cf_mailing_list_member_poll_four] => 
+                    [email_opens] => 0
+                    [cf_mailing_list_member_grr_news] => 
+                    [type] => Private::Crm::CampaignMembership
+                    [cf_mailing_list_member_topics] => 
+                    [cf_mailing_list_member_iar_topics] => 
+                    [email_hard_bounced] => 
+                    [cf_mailing_list_member_sponsor_question_5] => 
+                    [cf_mailing_list_member_sponsor_question_1] => 
+                    [cf_mailing_list_member_webinar_question_5] => 
+                    [updated_by_user[person_name]] => Aimee Shanks
+                    [created_by] => 149100
+                    [cf_mailing_list_member_sponsor_1_optin] => 
+                    [cf_mailing_list_member_town] => 
+                    [cf_mailing_list_member_webinar_question_10] => 
+                    [cf_mailing_list_member_iar_news] => 
+                    [email_campaign_unsubscribe] => 
+                    [email] => levon.gravett@supersonicplayground.com
+                    [cf_mailing_list_member_sponsor_question_4] => 
+                    [cf_mailing_list_member_poll_two] => 
+                    [cf_mailing_list_member_dtr_third_party] => 
+                    [cf_mailing_list_member_nf_webinars] => 
+                    [cf_mailing_list_member_time_in_session_secs] => 
+                    [cf_mailing_list_member_sponsor_question_9] => 
+                    [updated_at] => Thu Mar 27 09:09:38 UTC 2025
+                    [member_name] => Levon Gravett
+                    [cf_mailing_list_member_nf_third_party] => 
+                    [cf_mailing_list_member_synced_to_gotowebinar] => 
+                    [cf_mailing_list_member_it_topics] => 
+                    [_can_chown] => 
+                    [cf_mailing_list_member_nf_events] => 
+                    [updated_by_user[login_name]] => ashanks@russellpublishing.com
+                    [cf_mailing_list_member_webinar_question_4] => 
+                    [cf_mailing_list_member_it_news] => 
+                    [_can_read] => 1
+                    [cf_mailing_list_member_areas_of_interest] => 
+                    [subscribed] => 1
+                    [cf_mailing_list_member_interest_rating] => 
+                    [_can_modify] => 1
+                    [cf_mailing_list_member_ticket_value] =>  GBP 0
+                    [cf_mailing_list_member_lead_generated_timestamp] => 
+                    [cf_mailing_list_member_webinar_question_9] => 
+                    [cf_mailing_list_member_ticket_type] => 
+                    [cf_mailing_list_member_postcode] => 
+                    [cf_mailing_list_member_dtr_news] => 
+                    [cf_mailing_list_member_swapcard_eventperson_id] => 
+                    [_can_delete] => 1
+                    [cf_mailing_list_member_iar_webinars] => 
+                    [email_clicks] => 0
+                    [marketing_campaign[name]] => Beyond the lab: artificial intelligence (CAMP-42487)
+                    [cf_mailing_list_member_please_rate_this_webinar] => 
+                    [cf_mailing_list_member_telephone] => 
+                    [created_through] => Mailing List Refreshing
+                    [cf_mailing_list_member_nf_news] => 
+                    [cf_mailing_list_member_iar_events] => 
+                    [email_last_opened] => 
+                    [cf_mailing_list_member_grr_topics] => 
+                    [cf_mailing_list_member_ticket_value_net] =>   0
+                    [updated_by] => 149100
+                    [party_or_lead_type] => Private::Crm::Person
+                    [cf_mailing_list_member_ticket_upgrade] => 
+                    [cf_mailing_list_member_webinar_question_1] => 
+                    [cf_mailing_list_member_speaker_profile_image] => 
+                    [cf_mailing_list_member_employer] => 
+                    [cf_mailing_list_member_ticket_description] => 
+                    [lock_version] => 0
+                    [imported] => 
+                    [descriptor] => Levon Gravett in mailing list Beyond the lab: artificial intelligence (CAMP-42487)
+                    [cf_mailing_list_member_sponsor_question_6] => 
+                    [cf_mailing_list_member_dtr_webinars] => 
+                    [cf_mailing_list_member_webinar_question_8] => 
+                )
+
+            [2] => Array
+                (
+                    [cf_mailing_list_member_campaign_source] => 
+                    [cf_mailing_list_member_poll_one] => 
+                    [member_status[status]] => Absent
+                    [cf_mailing_list_member_webinar_question_22] => 
+                    [cf_mailing_list_member_sponsor_question_8] => 
+                    [cf_mailing_list_member_it_webinars] => 
+                    [created_at] => Mon Jun 09 13:29:34 UTC 2025
+                    [cf_mailing_list_member_poll_three] => 
+                    [cf_mailing_list_member_epr_third_party] => 
+                    [cf_mailing_list_member_sponsor_3_optin] => 
+                    [campaign_membership_status_id] => 306397
+                    [cf_mailing_list_member_it_events] => 
+                    [cf_mailing_list_member_dtr_topics] => 
+                    [marketing_campaign_id] => 86251
+                    [cf_mailing_list_member_grr_third_party] => 
+                    [cf_mailing_list_member_wdyhau] => 
+                    [cf_mailing_list_member_epr_topics] => 
+                    [cf_mailing_list_member_ticket_category] => 
+                    [cf_mailing_list_member_attended] => 
+                    [id] => 1420605577
+                    [cf_mailing_list_member_webinar_question_7] => 
+                    [cf_mailing_list_member_it_third_party] => 
+                    [cf_mailing_list_member_sponsor_question_3] => 
+                    [email_soft_bounced] => 
+                    [cf_mailing_list_member_state] => 
+                    [cf_mailing_list_member_speaker_questions] => 
+                    [email_sent] => 
+                    [cf_mailing_list_member_grr_webinars] => 
+                    [cf_mailing_list_member_webinar_question_3] => 
+                    [created_by_user[person_name]] => Levon Gravett
+                    [cf_mailing_list_member_iar_third_party] => 
+                    [email_last_clicked] => 
+                    [cf_mailing_list_member_gotowebinar_registrant_key] => 
+                    [cf_mailing_list_member_attendee_list_optin] => 
+                    [party_or_lead_id] => 4208693
+                    [is_deleted] => 
+                    [cf_mailing_list_member_grr_events_2474] => 
+                    [cf_mailing_list_member_sponsor_question_10] => 
+                    [cf_mailing_list_member_epr_events] => 
+                    [cf_mailing_list_member_poll_five] => 
+                    [cf_mailing_list_member_speaker_description] => 
+                    [cf_mailing_list_member_job_title] => 
+                    [cf_mailing_list_member_nf_topics] => 
+                    [cf_mailing_list_member_sponsor_question_2] => 
+                    [cf_mailing_list_member_webinar_question_6] => 
+                    [cf_mailing_list_member_linkedin_url] => 
+                    [marketing_campaign[mailing_list[public_name]]] => Join Our Upcoming Webinar: "The Future of Digital Transformation"
+                    [cf_mailing_list_member_time_in_session] => 
+                    [created_by_user[login_name]] => levon.gravett@supersonic-playground.com
+                    [created_through_reference] => Individually Added
+                    [cf_mailing_list_member_sponsor_2_optin] => 
+                    [_can_chaccess] => 
+                    [cf_mailing_list_member_sponsor_question_7] => 
+                    [cf_mailing_list_member_epr_webinars] => 
+                    [cf_mailing_list_member_delegate_discount_code] => 
+                    [cf_mailing_list_member_epr_news] => 
+                    [cf_mailing_list_member_country] => 
+                    [cf_mailing_list_member_dtr_events] => 
+                    [cf_mailing_list_member_sponsor_4_optin] => 
+                    [cf_mailing_list_member_award_dinner] => 
+                    [mailchimp_last_synchronised_at] => 
+                    [cf_mailing_list_member_poll_four] => 
+                    [email_opens] => 0
+                    [cf_mailing_list_member_grr_news] => 
+                    [type] => Private::Crm::CampaignMembership
+                    [cf_mailing_list_member_topics] => 
+                    [cf_mailing_list_member_iar_topics] => 
+                    [email_hard_bounced] => 
+                    [cf_mailing_list_member_sponsor_question_5] => 
+                    [cf_mailing_list_member_sponsor_question_1] => 
+                    [cf_mailing_list_member_webinar_question_5] => 
+                    [updated_by_user[person_name]] => Automation
+                    [created_by] => 152350
+                    [cf_mailing_list_member_sponsor_1_optin] => 
+                    [cf_mailing_list_member_town] => 
+                    [cf_mailing_list_member_webinar_question_10] => 
+                    [cf_mailing_list_member_iar_news] => 
+                    [email_campaign_unsubscribe] => 
+                    [email] => levon.gravett@supersonicplayground.com
+                    [cf_mailing_list_member_sponsor_question_4] => 
+                    [cf_mailing_list_member_poll_two] => 
+                    [cf_mailing_list_member_dtr_third_party] => 
+                    [cf_mailing_list_member_nf_webinars] => 
+                    [cf_mailing_list_member_time_in_session_secs] => 
+                    [cf_mailing_list_member_sponsor_question_9] => 
+                    [updated_at] => Tue Jun 10 21:30:46 UTC 2025
+                    [member_name] => Levon Gravett
+                    [cf_mailing_list_member_nf_third_party] => 
+                    [cf_mailing_list_member_synced_to_gotowebinar] => 
+                    [cf_mailing_list_member_it_topics] => 
+                    [_can_chown] => 
+                    [cf_mailing_list_member_nf_events] => 
+                    [updated_by_user[login_name]] => automation-28640@system.workbooks.com
+                    [cf_mailing_list_member_webinar_question_4] => 
+                    [cf_mailing_list_member_it_news] => 
+                    [_can_read] => 1
+                    [cf_mailing_list_member_areas_of_interest] => 
+                    [subscribed] => 1
+                    [cf_mailing_list_member_interest_rating] => 
+                    [_can_modify] => 1
+                    [cf_mailing_list_member_ticket_value] =>  GBP 0
+                    [cf_mailing_list_member_lead_generated_timestamp] => 
+                    [cf_mailing_list_member_webinar_question_9] => 
+                    [cf_mailing_list_member_ticket_type] => 
+                    [cf_mailing_list_member_postcode] => 
+                    [cf_mailing_list_member_dtr_news] => 
+                    [cf_mailing_list_member_swapcard_eventperson_id] => 
+                    [_can_delete] => 1
+                    [cf_mailing_list_member_iar_webinars] => 
+                    [email_clicks] => 0
+                    [marketing_campaign[name]] => Join Our Upcoming Webinar: "The Future of Digital Transformation" (CAMP-43113)
+                    [cf_mailing_list_member_please_rate_this_webinar] => 
+                    [cf_mailing_list_member_telephone] => 
+                    [created_through] => Workbooks
+                    [cf_mailing_list_member_nf_news] => 
+                    [cf_mailing_list_member_iar_events] => 
+                    [email_last_opened] => 
+                    [cf_mailing_list_member_grr_topics] => 
+                    [cf_mailing_list_member_ticket_value_net] =>   0
+                    [updated_by] => 79458
+                    [party_or_lead_type] => Private::Crm::Person
+                    [cf_mailing_list_member_ticket_upgrade] => 
+                    [cf_mailing_list_member_webinar_question_1] => 
+                    [cf_mailing_list_member_speaker_profile_image] => 
+                    [cf_mailing_list_member_employer] => 
+                    [cf_mailing_list_member_ticket_description] => 
+                    [lock_version] => 1
+                    [imported] => 
+                    [descriptor] => Levon Gravett in Marketing Campaign Join Our Upcoming Webinar: "The Future of Digital Transformation" (CAMP-43113)
+                    [cf_mailing_list_member_sponsor_question_6] => 
+                    [cf_mailing_list_member_dtr_webinars] => 
+                    [cf_mailing_list_member_webinar_question_8] => 
+                )
+
+            [3] => Array
+                (
+                    [cf_mailing_list_member_campaign_source] => 
+                    [cf_mailing_list_member_poll_one] => 
+                    [member_status[status]] => Registered
+                    [cf_mailing_list_member_webinar_question_22] => 
+                    [cf_mailing_list_member_sponsor_question_8] => 
+                    [cf_mailing_list_member_it_webinars] => 
+                    [created_at] => Tue Jul 15 10:41:40 UTC 2025
+                    [cf_mailing_list_member_poll_three] => 
+                    [cf_mailing_list_member_epr_third_party] => 
+                    [cf_mailing_list_member_sponsor_3_optin] => 
+                    [campaign_membership_status_id] => 306819
+                    [cf_mailing_list_member_it_events] => 
+                    [cf_mailing_list_member_dtr_topics] => 
+                    [marketing_campaign_id] => 86285
+                    [cf_mailing_list_member_grr_third_party] => 
+                    [cf_mailing_list_member_wdyhau] => 
+                    [cf_mailing_list_member_epr_topics] => 
+                    [cf_mailing_list_member_ticket_category] => 
+                    [cf_mailing_list_member_attended] => 
+                    [id] => 1431199370
+                    [cf_mailing_list_member_webinar_question_7] => 
+                    [cf_mailing_list_member_it_third_party] => 
+                    [cf_mailing_list_member_sponsor_question_3] => 
+                    [email_soft_bounced] => 
+                    [cf_mailing_list_member_state] => 
+                    [cf_mailing_list_member_speaker_questions] => 
+                    [email_sent] => 
+                    [cf_mailing_list_member_grr_webinars] => 
+                    [cf_mailing_list_member_webinar_question_3] => 
+                    [created_by_user[person_name]] => Automation
+                    [cf_mailing_list_member_iar_third_party] => 
+                    [email_last_clicked] => 
+                    [cf_mailing_list_member_gotowebinar_registrant_key] => 
+                    [cf_mailing_list_member_attendee_list_optin] => 
+                    [party_or_lead_id] => 4208693
+                    [is_deleted] => 
+                    [cf_mailing_list_member_grr_events_2474] => 
+                    [cf_mailing_list_member_sponsor_question_10] => 
+                    [cf_mailing_list_member_epr_events] => 
+                    [cf_mailing_list_member_poll_five] => 
+                    [cf_mailing_list_member_speaker_description] => 
+                    [cf_mailing_list_member_job_title] => 
+                    [cf_mailing_list_member_nf_topics] => 
+                    [cf_mailing_list_member_sponsor_question_2] => 
+                    [cf_mailing_list_member_webinar_question_6] => 
+                    [cf_mailing_list_member_linkedin_url] => 
+                    [marketing_campaign[mailing_list[public_name]]] => PWAJHG6 (Hidden for Event)
+                    [cf_mailing_list_member_time_in_session] => 
+                    [created_by_user[login_name]] => automation-28640@system.workbooks.com
+                    [created_through_reference] => 
+                    [cf_mailing_list_member_sponsor_2_optin] => 
+                    [_can_chaccess] => 
+                    [cf_mailing_list_member_sponsor_question_7] => 
+                    [cf_mailing_list_member_epr_webinars] => 
+                    [cf_mailing_list_member_delegate_discount_code] => 
+                    [cf_mailing_list_member_epr_news] => 
+                    [cf_mailing_list_member_country] => 
+                    [cf_mailing_list_member_dtr_events] => 
+                    [cf_mailing_list_member_sponsor_4_optin] => 
+                    [cf_mailing_list_member_award_dinner] => 
+                    [mailchimp_last_synchronised_at] => 
+                    [cf_mailing_list_member_poll_four] => 
+                    [email_opens] => 0
+                    [cf_mailing_list_member_grr_news] => 
+                    [type] => Private::Crm::CampaignMembership
+                    [cf_mailing_list_member_topics] => 
+                    [cf_mailing_list_member_iar_topics] => 
+                    [email_hard_bounced] => 
+                    [cf_mailing_list_member_sponsor_question_5] => 
+                    [cf_mailing_list_member_sponsor_question_1] => 
+                    [cf_mailing_list_member_webinar_question_5] => 
+                    [updated_by_user[person_name]] => Automation
+                    [created_by] => 79458
+                    [cf_mailing_list_member_sponsor_1_optin] => 
+                    [cf_mailing_list_member_town] => 
+                    [cf_mailing_list_member_webinar_question_10] => 
+                    [cf_mailing_list_member_iar_news] => 
+                    [email_campaign_unsubscribe] => 
+                    [email] => levon.gravett@supersonicplayground.com
+                    [cf_mailing_list_member_sponsor_question_4] => 
+                    [cf_mailing_list_member_poll_two] => 
+                    [cf_mailing_list_member_dtr_third_party] => 
+                    [cf_mailing_list_member_nf_webinars] => 
+                    [cf_mailing_list_member_time_in_session_secs] => 
+                    [cf_mailing_list_member_sponsor_question_9] => 
+                    [updated_at] => Tue Jul 15 10:41:40 UTC 2025
+                    [member_name] => Levon Gravett
+                    [cf_mailing_list_member_nf_third_party] => 
+                    [cf_mailing_list_member_synced_to_gotowebinar] => 
+                    [cf_mailing_list_member_it_topics] => 
+                    [_can_chown] => 
+                    [cf_mailing_list_member_nf_events] => 
+                    [updated_by_user[login_name]] => automation-28640@system.workbooks.com
+                    [cf_mailing_list_member_webinar_question_4] => 
+                    [cf_mailing_list_member_it_news] => 
+                    [_can_read] => 1
+                    [cf_mailing_list_member_areas_of_interest] => 
+                    [subscribed] => 1
+                    [cf_mailing_list_member_interest_rating] => 
+                    [_can_modify] => 1
+                    [cf_mailing_list_member_ticket_value] =>  GBP 0
+                    [cf_mailing_list_member_lead_generated_timestamp] => 
+                    [cf_mailing_list_member_webinar_question_9] => 
+                    [cf_mailing_list_member_ticket_type] => 
+                    [cf_mailing_list_member_postcode] => 
+                    [cf_mailing_list_member_dtr_news] => 
+                    [cf_mailing_list_member_swapcard_eventperson_id] => 
+                    [_can_delete] => 1
+                    [cf_mailing_list_member_iar_webinars] => 
+                    [email_clicks] => 0
+                    [marketing_campaign[name]] => PWAJHG6 (Hidden for Event)
+                    [cf_mailing_list_member_please_rate_this_webinar] => 
+                    [cf_mailing_list_member_telephone] => 
+                    [created_through] => Action Form Submissions to Event Attendees
+                    [cf_mailing_list_member_nf_news] => 
+                    [cf_mailing_list_member_iar_events] => 
+                    [email_last_opened] => 
+                    [cf_mailing_list_member_grr_topics] => 
+                    [cf_mailing_list_member_ticket_value_net] =>   0
+                    [updated_by] => 79458
+                    [party_or_lead_type] => Private::Crm::Person
+                    [cf_mailing_list_member_ticket_upgrade] => 
+                    [cf_mailing_list_member_webinar_question_1] => 
+                    [cf_mailing_list_member_speaker_profile_image] => 
+                    [cf_mailing_list_member_employer] => 
+                    [cf_mailing_list_member_ticket_description] => 
+                    [lock_version] => 0
+                    [imported] => 
+                    [descriptor] => Levon Gravett in Marketing Campaign PWAJHG6 (Hidden for Event)
+                    [cf_mailing_list_member_sponsor_question_6] => 
+                    [cf_mailing_list_member_dtr_webinars] => 
+                    [cf_mailing_list_member_webinar_question_8] => 
+                )
+
+        )
+
+    [total] => 4
+)
+
+[2025-07-17 02:51:05] Workbooks custom fields: Array
+(
+    [cf_person_dtr_areas_of_interest_v2] => Analysis
+    [cf_person_dtr_news] => 1
+    [cf_person_dtr_events] => 
+    [cf_person_dtr_subscriber] => 
+    [cf_person_dtr_third_party] => 1
+    [cf_person_dtr_webinar] => 
+    [cf_person_dtr_news_and_events] => 
+)
+
+[2025-07-17 02:51:05] Workbooks picklist [DTR Areas of Interest]: Array
+(
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [value] => Analysis
+                )
+
+            [1] => Array
+                (
+                    [value] => Artificial Intelligence/Machine Learning
+                )
+
+            [2] => Array
+                (
+                    [value] => Assays
+                )
+
+            [3] => Array
+                (
+                    [value] => Biomarkers
+                )
+
+            [4] => Array
+                (
+                    [value] => Cell & Gene Therapy
+                )
+
+            [5] => Array
+                (
+                    [value] => Clinical Trials
+                )
+
+            [6] => Array
+                (
+                    [value] => Drug Discovery Processes
+                )
+
+            [7] => Array
+                (
+                    [value] => Genomics
+                )
+
+            [8] => Array
+                (
+                    [value] => Hit-to-Lead
+                )
+
+            [9] => Array
+                (
+                    [value] => Imaging
+                )
+
+            [10] => Array
+                (
+                    [value] => Informatics
+                )
+
+            [11] => Array
+                (
+                    [value] => Lab Automation
+                )
+
+            [12] => Array
+                (
+                    [value] => Molecular Diagnostics (MDX)
+                )
+
+            [13] => Array
+                (
+                    [value] => Personalised Medicine
+                )
+
+            [14] => Array
+                (
+                    [value] => Preclinical Research
+                )
+
+            [15] => Array
+                (
+                    [value] => Screening
+                )
+
+            [16] => Array
+                (
+                    [value] => Sequencing
+                )
+
+            [17] => Array
+                (
+                    [value] => Stem Cells
+                )
+
+            [18] => Array
+                (
+                    [value] => Targets
+                )
+
+            [19] => Array
+                (
+                    [value] => Toxicology
+                )
+
+            [20] => Array
+                (
+                    [value] => Translational Science
+                )
+
+        )
+
+    [total] => 21
+    [success] => 1
+)
+
+[2025-07-17 02:51:05] Workbooks picklist [DTR Subscription Types]: Array
+(
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [value] => Lapsed
+                )
+
+            [1] => Array
+                (
+                    [value] => Prospect
+                )
+
+            [2] => Array
+                (
+                    [value] => Subscriber
+                )
+
+        )
+
+    [total] => 3
+    [success] => 1
+)
+
+[2025-07-17 02:51:06] Workbooks picklist [DTR Advertiser Type]: Array
+(
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [value] => Avoid this Year
+                )
+
+            [1] => Array
+                (
+                    [value] => Current 
+                )
+
+            [2] => Array
+                (
+                    [value] => Key
+                )
+
+            [3] => Array
+                (
+                    [value] => Lapsed
+                )
+
+            [4] => Array
+                (
+                    [value] => New Sales Lead
+                )
+
+            [5] => Array
+                (
+                    [value] => New Sales Lead Action Required
+                )
+
+            [6] => Array
+                (
+                    [value] => New Sales Lead Media Planner Download
+                )
+
+            [7] => Array
+                (
+                    [value] => New Sales Lead Processed
+                )
+
+            [8] => Array
+                (
+                    [value] => Other (Audience & competitors)
+                )
+
+            [9] => Array
+                (
+                    [value] => Previous
+                )
+
+            [10] => Array
+                (
+                    [value] => Prospect
+                )
+
+            [11] => Array
+                (
+                    [value] => Prospect - Send Print Copy
+                )
+
+            [12] => Array
+                (
+                    [value] => Recent
+                )
+
+        )
+
+    [total] => 13
+    [success] => 1
+)
+
