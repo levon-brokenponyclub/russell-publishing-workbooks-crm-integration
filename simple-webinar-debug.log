@@ -1,0 +1,1125 @@
+[2025-08-05 12:32:03] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:32:06] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:32:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:32:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:32:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:32:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:32:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:32:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:32:38] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:32:38] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:32:39] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:32:39] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:32:45] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:32:45] === NINJA FORMS HOOK ===
+[2025-08-05 12:32:45] Processing form ID: 31
+[2025-08-05 12:32:45] ✅ Detected lead generation form submission!
+[2025-08-05 12:32:45] === PROCESSING LEAD GENERATION FORM ===
+[2025-08-05 12:32:45] Post Title (374): Beyond the Lab: Stem cell research - TEST
+[2025-08-05 12:32:45] Post ID (375): 160900
+[2025-08-05 12:32:45] First Name (376): Levon
+[2025-08-05 12:32:45] Last Name (377): Last NameGravett
+[2025-08-05 12:32:45] Email Address (378): levon.gravett@supersonicplayground.com
+[2025-08-05 12:32:45] Unknown field ID 379: 
+[2025-08-05 12:32:45] Privacy Consent (380): 1
+[2025-08-05 12:32:45] ACF Questions (383): 
+[2025-08-05 12:32:45] ✅ All required lead generation data present
+[2025-08-05 12:32:45] === CALLING WORKBOOKS LEAD REGISTRATION ===
+[2025-08-05 12:32:45] ✅ Found restricted_content_fields ACF data
+[2025-08-05 12:32:45]   - Campaign Reference: CAMP-43178
+[2025-08-05 12:32:45]   - Campaign ID: 5744
+[2025-08-05 12:32:45] ✅ Prepared lead registration data:
+[2025-08-05 12:32:45]   - Post ID: 160900
+[2025-08-05 12:32:45]   - Post Title: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 12:32:45]   - First Name: Levon
+[2025-08-05 12:32:45]   - Last Name: Last NameGravett
+[2025-08-05 12:32:45]   - Email: levon.gravett@supersonicplayground.com
+[2025-08-05 12:32:45]   - Campaign Reference: CAMP-43178
+[2025-08-05 12:32:45]   - Campaign ID: 5744
+[2025-08-05 12:32:45]   - ACF Questions: Array
+(
+)
+
+[2025-08-05 12:32:45]   - Privacy Consent: 1
+[2025-08-05 12:32:45] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-05 12:32:45] LEAD-REG: === DTR REGISTER WORKBOOKS LEAD ===
+[2025-08-05 12:32:45] LEAD-REG: 📧 Processing lead registration for: levon.gravett@supersonicplayground.com
+[2025-08-05 12:32:45] LEAD-REG: 📝 Content: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 12:32:45] LEAD-REG: 🎯 Campaign ID: 5744
+[2025-08-05 12:32:45] LEAD-REG: 🎯 Campaign Reference: CAMP-43178
+[2025-08-05 12:32:45] LEAD-REG: ❌ ERROR: Workbooks API credentials not configured
+[2025-08-05 12:32:45] LEAD-REG: API URL: NOT SET
+[2025-08-05 12:32:45] LEAD-REG: API Key: NOT SET
+[2025-08-05 12:32:45] ✅ Core lead registration function completed
+[2025-08-05 12:32:45] ✅ Lead registration result: 
+[2025-08-05 12:32:45] 🎉 Lead generation registration successful via Ninja Forms hook!
+[2025-08-05 12:33:29] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:30] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:31] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:31] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:38] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:38] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:41] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:44] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:44] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:45] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:45] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:45] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:46] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:47] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:33:54] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:34:44] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:34:46] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:10] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:12] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:14] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:16] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:16] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:18] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:18] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:18] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:22] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:22] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:22] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:24] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:25] === NINJA FORMS HOOK ===
+[2025-08-05 12:36:25] Processing form ID: 2_1
+[2025-08-05 12:36:25] ✅ Detected webinar form submission!
+[2025-08-05 12:36:25] Field webinar_title: New Updated Test Webinar - Final Functional Testing
+[2025-08-05 12:36:25] Field post_id: 160746
+[2025-08-05 12:36:25] Field email_address: {field:email_address}
+[2025-08-05 12:36:25] Field speaker_question: Test
+[2025-08-05 12:36:25] Field sponsor_optin: 1
+[2025-08-05 12:36:25] Field register_1732890612728: 
+[2025-08-05 12:36:25] ✅ Using current user email: levon.gravett@supersonicplayground.com
+[2025-08-05 12:36:25] ✅ All required data present
+[2025-08-05 12:36:25] === CALLING CORE WEBINAR REGISTRATION ===
+[2025-08-05 12:36:25] ✅ Prepared registration data:
+[2025-08-05 12:36:25]   - webinar_post_id: 160746
+[2025-08-05 12:36:25]   - participant_email: levon.gravett@supersonicplayground.com
+[2025-08-05 12:36:25]   - speaker_question: Test
+[2025-08-05 12:36:25]   - privacy_consent: 1
+[2025-08-05 12:36:25] 🚀 Calling dtr_register_workbooks_webinar()...
+[2025-08-05 12:36:27] ✅ Core registration function completed
+[2025-08-05 12:36:27] ✅ Registration result: Array
+(
+    [success] => Webinar registration submitted successfully. Ticket ID: 809412
+)
+
+[2025-08-05 12:36:27] 🎉 Webinar registration successful via Ninja Forms hook!
+[2025-08-05 12:36:28] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:29] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:29] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:36:30] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:38:11] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:38:12] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:40:11] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:40:12] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:12] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:14] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:24] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:24] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:25] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:25] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:27] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:27] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:29] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:30] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:30] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:32] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:32] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:34] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:42:35] === NINJA FORMS HOOK ===
+[2025-08-05 12:42:35] Processing form ID: 31
+[2025-08-05 12:42:35] ✅ Detected lead generation form submission!
+[2025-08-05 12:42:35] === PROCESSING LEAD GENERATION FORM ===
+[2025-08-05 12:42:35] Post Title (374): Beyond the Lab: Stem cell research - TEST
+[2025-08-05 12:42:35] Post ID (375): 160900
+[2025-08-05 12:42:35] First Name (376): Levon
+[2025-08-05 12:42:35] Last Name (377): Last NameGravett
+[2025-08-05 12:42:35] Email Address (378): levon.gravett@supersonicplayground.com
+[2025-08-05 12:42:35] Unknown field ID 379: 
+[2025-08-05 12:42:35] Privacy Consent (380): 1
+[2025-08-05 12:42:35] ACF Questions (383): 
+[2025-08-05 12:42:35] ✅ All required lead generation data present
+[2025-08-05 12:42:35] === CALLING WORKBOOKS LEAD REGISTRATION ===
+[2025-08-05 12:42:35] ✅ Found restricted_content_fields ACF data
+[2025-08-05 12:42:35]   - Campaign Reference: CAMP-43178
+[2025-08-05 12:42:35]   - Campaign ID: 5744
+[2025-08-05 12:42:35] ✅ Prepared lead registration data:
+[2025-08-05 12:42:35]   - Post ID: 160900
+[2025-08-05 12:42:35]   - Post Title: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 12:42:35]   - First Name: Levon
+[2025-08-05 12:42:35]   - Last Name: Last NameGravett
+[2025-08-05 12:42:35]   - Email: levon.gravett@supersonicplayground.com
+[2025-08-05 12:42:35]   - Campaign Reference: CAMP-43178
+[2025-08-05 12:42:35]   - Campaign ID: 5744
+[2025-08-05 12:42:35]   - ACF Questions: Array
+(
+)
+
+[2025-08-05 12:42:35]   - Privacy Consent: 1
+[2025-08-05 12:42:35] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-05 12:42:35] LEAD-REG: === DTR REGISTER WORKBOOKS LEAD ===
+[2025-08-05 12:42:35] LEAD-REG: 📧 Processing lead registration for: levon.gravett@supersonicplayground.com
+[2025-08-05 12:42:35] LEAD-REG: 📝 Content: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 12:42:35] LEAD-REG: 🎯 Campaign ID: 5744
+[2025-08-05 12:42:35] LEAD-REG: 🎯 Campaign Reference: CAMP-43178
+[2025-08-05 12:42:35] LEAD-REG: ✅ get_workbooks_instance function is available
+[2025-08-05 12:42:35] LEAD-REG: 🔧 API URL from options: https://russellpublishing-live.workbooks.com/
+[2025-08-05 12:42:35] LEAD-REG: 🔧 API Key from options: SET (eb7f1-04a7...)
+[2025-08-05 12:42:35] LEAD-REG: ✅ Workbooks API instance available
+[2025-08-05 12:42:36] LEAD-REG: 🔍 Person search response: {"success":true,"data":[{"id":4208693}],"total":1}
+[2025-08-05 12:42:36] LEAD-REG: ✅ Found existing person in Workbooks: 4208693
+[2025-08-05 12:42:36] LEAD-REG: � Registering person 4208693 for campaign 5744
+[2025-08-05 12:42:36] LEAD-REG: ❌ ERROR: Exception during Workbooks API calls - Non-OK response (404)
+[2025-08-05 12:42:36] ✅ Core lead registration function completed
+[2025-08-05 12:42:36] ✅ Lead registration result: 
+[2025-08-05 12:42:36] 🎉 Lead generation registration successful via Ninja Forms hook!
+[2025-08-05 12:43:13] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:43:15] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:45:15] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:13] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:15] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:16] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:16] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:17] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:17] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:19] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:27] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 12:55:28] === NINJA FORMS HOOK ===
+[2025-08-05 12:55:28] Processing form ID: 31
+[2025-08-05 12:55:28] ✅ Detected lead generation form submission!
+[2025-08-05 12:55:28] === PROCESSING LEAD GENERATION FORM ===
+[2025-08-05 12:55:28] Post Title (374): Beyond the Lab: Stem cell research - TEST
+[2025-08-05 12:55:28] Post ID (375): 160900
+[2025-08-05 12:55:28] First Name (376): Levon
+[2025-08-05 12:55:28] Last Name (377): Last NameGravett
+[2025-08-05 12:55:28] Email Address (378): levon.gravett@supersonicplayground.com
+[2025-08-05 12:55:28] Unknown field ID 379: 
+[2025-08-05 12:55:28] Privacy Consent (380): 1
+[2025-08-05 12:55:28] ACF Questions (383): 
+[2025-08-05 12:55:28] ✅ All required lead generation data present
+[2025-08-05 12:55:28] === CALLING WORKBOOKS LEAD REGISTRATION ===
+[2025-08-05 12:55:28] ✅ Found restricted_content_fields ACF data
+[2025-08-05 12:55:28]   - Campaign Reference: CAMP-43178
+[2025-08-05 12:55:28]   - Campaign ID: 5744
+[2025-08-05 12:55:28] ✅ Prepared lead registration data:
+[2025-08-05 12:55:28]   - Post ID: 160900
+[2025-08-05 12:55:28]   - Post Title: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 12:55:28]   - First Name: Levon
+[2025-08-05 12:55:28]   - Last Name: Last NameGravett
+[2025-08-05 12:55:28]   - Email: levon.gravett@supersonicplayground.com
+[2025-08-05 12:55:28]   - Campaign Reference: CAMP-43178
+[2025-08-05 12:55:28]   - Campaign ID: 5744
+[2025-08-05 12:55:28]   - ACF Questions: Array
+(
+)
+
+[2025-08-05 12:55:28]   - Privacy Consent: 1
+[2025-08-05 12:55:28] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-05 12:55:28] LEAD-REG: === DTR REGISTER WORKBOOKS LEAD ===
+[2025-08-05 12:55:28] LEAD-REG: 📧 Processing lead registration for: levon.gravett@supersonicplayground.com
+[2025-08-05 12:55:28] LEAD-REG: 📝 Content: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 12:55:28] LEAD-REG: 🎯 Event ID: 5744
+[2025-08-05 12:55:28] LEAD-REG: 🎯 Event Reference: CAMP-43178
+[2025-08-05 12:55:28] LEAD-REG: ✅ get_workbooks_instance function is available
+[2025-08-05 12:55:28] LEAD-REG: 🔧 API URL from options: https://russellpublishing-live.workbooks.com/
+[2025-08-05 12:55:28] LEAD-REG: 🔧 API Key from options: SET (eb7f1-04a7...)
+[2025-08-05 12:55:28] LEAD-REG: ✅ Workbooks API instance available
+[2025-08-05 12:55:29] LEAD-REG: 🔍 Person search response: {"success":true,"data":[{"id":4208693}],"total":1}
+[2025-08-05 12:55:29] LEAD-REG: ✅ Found existing person in Workbooks: 4208693
+[2025-08-05 12:55:29] LEAD-REG: ℹ️  No event ID provided, skipping event registration
+[2025-08-05 12:55:29] LEAD-REG: 💾 Stored registration data with key: dtr_lead_registration_ff38d460df9cac7b6e07f8aea777d025
+[2025-08-05 12:55:29] LEAD-REG: 🎉 Lead generation registration completed successfully!
+[2025-08-05 12:55:29] ✅ Core lead registration function completed
+[2025-08-05 12:55:29] ✅ Lead registration result: Array
+(
+    [success] => 1
+    [person_id] => 4208693
+    [message] => Lead registered successfully in Workbooks CRM
+)
+
+[2025-08-05 12:55:29] 🎉 Lead generation registration successful via Ninja Forms hook!
+[2025-08-05 13:29:28] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:31:29] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:31:30] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:31:43] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:37:32] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:37:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:40:06] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:40:07] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:40:10] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:40:12] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:40:12] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:40:13] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:40:13] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:40:18] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:40:18] === NINJA FORMS HOOK ===
+[2025-08-05 13:40:18] Processing form ID: 31
+[2025-08-05 13:40:18] ✅ Detected lead generation form submission!
+[2025-08-05 13:40:18] === PROCESSING LEAD GENERATION FORM ===
+[2025-08-05 13:40:18] Post Title (374): Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:40:18] Post ID (375): 160900
+[2025-08-05 13:40:18] First Name (376): Levon
+[2025-08-05 13:40:18] Last Name (377): Last NameGravett
+[2025-08-05 13:40:18] Email Address (378): levon.gravett@supersonicplayground.com
+[2025-08-05 13:40:18] Unknown field ID 379: 
+[2025-08-05 13:40:18] Privacy Consent (380): 1
+[2025-08-05 13:40:18] ACF Questions (383): 
+[2025-08-05 13:40:18] ✅ All required lead generation data present
+[2025-08-05 13:40:18] === CALLING WORKBOOKS LEAD REGISTRATION ===
+[2025-08-05 13:40:18] ✅ Found restricted_content_fields ACF data
+[2025-08-05 13:40:18]   - Campaign Reference: CAMP-43178
+[2025-08-05 13:40:18]   - Campaign ID: 5744
+[2025-08-05 13:40:18] ✅ Prepared lead registration data:
+[2025-08-05 13:40:18]   - Post ID: 160900
+[2025-08-05 13:40:18]   - Post Title: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:40:18]   - First Name: Levon
+[2025-08-05 13:40:18]   - Last Name: Last NameGravett
+[2025-08-05 13:40:18]   - Email: levon.gravett@supersonicplayground.com
+[2025-08-05 13:40:18]   - Campaign Reference: CAMP-43178
+[2025-08-05 13:40:18]   - Campaign ID: 5744
+[2025-08-05 13:40:18]   - ACF Questions: Array
+(
+)
+
+[2025-08-05 13:40:18]   - Privacy Consent: 1
+[2025-08-05 13:40:18] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-05 13:40:18] LEAD-REG: === DTR REGISTER WORKBOOKS LEAD ===
+[2025-08-05 13:40:18] LEAD-REG: 📧 Processing lead registration for: levon.gravett@supersonicplayground.com
+[2025-08-05 13:40:18] LEAD-REG: 📝 Content: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:40:18] LEAD-REG: 🎯 Event ID: 5744
+[2025-08-05 13:40:18] LEAD-REG: 🎯 Event Reference: CAMP-43178
+[2025-08-05 13:40:18] LEAD-REG: ✅ get_workbooks_instance function is available
+[2025-08-05 13:40:18] LEAD-REG: 🔧 API URL from options: https://russellpublishing-live.workbooks.com/
+[2025-08-05 13:40:18] LEAD-REG: 🔧 API Key from options: SET (eb7f1-04a7...)
+[2025-08-05 13:40:18] LEAD-REG: ✅ Workbooks API instance available
+[2025-08-05 13:40:20] LEAD-REG: 🔍 Person search response: {"success":true,"data":[{"id":4208693}],"total":1}
+[2025-08-05 13:40:20] LEAD-REG: ✅ Found existing person in Workbooks: 4208693
+[2025-08-05 13:40:20] LEAD-REG: ℹ️  No event ID provided, skipping event registration
+[2025-08-05 13:40:20] LEAD-REG: 💾 Stored registration data with key: dtr_lead_registration_b41860cec51342ea89406b02b29b3400
+[2025-08-05 13:40:20] LEAD-REG: 🎉 Lead generation registration completed successfully!
+[2025-08-05 13:40:20] ✅ Core lead registration function completed
+[2025-08-05 13:40:20] ✅ Lead registration result: Array
+(
+    [success] => 1
+    [person_id] => 4208693
+    [message] => Lead registered successfully in Workbooks CRM
+)
+
+[2025-08-05 13:40:20] 🎉 Lead generation registration successful via Ninja Forms hook!
+[2025-08-05 13:42:07] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:42:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:44:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:44:09] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:50:32] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:50:34] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:50:35] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:50:35] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:50:36] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:50:36] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:50:40] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:50:41] === NINJA FORMS HOOK ===
+[2025-08-05 13:50:41] Processing form ID: 2_1
+[2025-08-05 13:50:41] ✅ Detected webinar form submission!
+[2025-08-05 13:50:41] Field webinar_title: New Updated Test Webinar - Final Functional Testing
+[2025-08-05 13:50:41] Field post_id: 160746
+[2025-08-05 13:50:41] Field email_address: {field:email_address}
+[2025-08-05 13:50:41] Field speaker_question: Test
+[2025-08-05 13:50:41] Field sponsor_optin: 1
+[2025-08-05 13:50:41] Field register_1732890612728: 
+[2025-08-05 13:50:41] ✅ Using current user email: levon.gravett@supersonicplayground.com
+[2025-08-05 13:50:41] ✅ All required data present
+[2025-08-05 13:50:41] === CALLING CORE WEBINAR REGISTRATION ===
+[2025-08-05 13:50:41] ✅ Prepared registration data:
+[2025-08-05 13:50:41]   - webinar_post_id: 160746
+[2025-08-05 13:50:41]   - participant_email: levon.gravett@supersonicplayground.com
+[2025-08-05 13:50:41]   - speaker_question: Test
+[2025-08-05 13:50:41]   - privacy_consent: 1
+[2025-08-05 13:50:41] 🚀 Calling dtr_register_workbooks_webinar()...
+[2025-08-05 13:50:44] ✅ Core registration function completed
+[2025-08-05 13:50:44] ✅ Registration result: Array
+(
+    [success] => Webinar registration submitted successfully. Ticket ID: 809446
+)
+
+[2025-08-05 13:50:44] 🎉 Webinar registration successful via Ninja Forms hook!
+[2025-08-05 13:50:44] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:50:45] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:50:45] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:50:47] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:50:47] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:50:48] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:51:07] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:51:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:51:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:51:09] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:51:09] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:51:13] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:51:14] === NINJA FORMS HOOK ===
+[2025-08-05 13:51:14] Processing form ID: 31
+[2025-08-05 13:51:14] ✅ Detected lead generation form submission!
+[2025-08-05 13:51:14] === PROCESSING LEAD GENERATION FORM ===
+[2025-08-05 13:51:14] Post Title (374): Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:51:14] Post ID (375): 160900
+[2025-08-05 13:51:14] First Name (376): Levon
+[2025-08-05 13:51:14] Last Name (377): Last NameGravett
+[2025-08-05 13:51:14] Email Address (378): levon.gravett@supersonicplayground.com
+[2025-08-05 13:51:14] Unknown field ID 379: 
+[2025-08-05 13:51:14] Privacy Consent (380): 1
+[2025-08-05 13:51:14] ACF Questions (383): 
+[2025-08-05 13:51:14] ✅ All required lead generation data present
+[2025-08-05 13:51:14] === CALLING WORKBOOKS LEAD REGISTRATION ===
+[2025-08-05 13:51:14] ✅ Found restricted_content_fields ACF data
+[2025-08-05 13:51:14]   - Campaign Reference: CAMP-43178
+[2025-08-05 13:51:14]   - Campaign ID: 5744
+[2025-08-05 13:51:14] ✅ Prepared lead registration data:
+[2025-08-05 13:51:14]   - Post ID: 160900
+[2025-08-05 13:51:14]   - Post Title: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:51:14]   - First Name: Levon
+[2025-08-05 13:51:14]   - Last Name: Last NameGravett
+[2025-08-05 13:51:14]   - Email: levon.gravett@supersonicplayground.com
+[2025-08-05 13:51:14]   - Campaign Reference: CAMP-43178
+[2025-08-05 13:51:14]   - Campaign ID: 5744
+[2025-08-05 13:51:14]   - ACF Questions: Array
+(
+)
+
+[2025-08-05 13:51:14]   - Privacy Consent: 1
+[2025-08-05 13:51:14] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-05 13:51:14] LEAD-REG: === DTR REGISTER WORKBOOKS LEAD ===
+[2025-08-05 13:51:14] LEAD-REG: 📧 Processing lead registration for: levon.gravett@supersonicplayground.com
+[2025-08-05 13:51:14] LEAD-REG: 📝 Content: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:51:14] LEAD-REG: 🎯 Event ID: 5744
+[2025-08-05 13:51:14] LEAD-REG: 🎯 Event Reference: CAMP-43178
+[2025-08-05 13:51:14] LEAD-REG: ✅ get_workbooks_instance function is available
+[2025-08-05 13:51:14] LEAD-REG: 🔧 API URL from options: https://russellpublishing-live.workbooks.com/
+[2025-08-05 13:51:14] LEAD-REG: 🔧 API Key from options: SET (eb7f1-04a7...)
+[2025-08-05 13:51:14] LEAD-REG: ✅ Workbooks API instance available
+[2025-08-05 13:51:15] LEAD-REG: 🔍 Person search response: {"success":true,"data":[{"id":4208693}],"total":1}
+[2025-08-05 13:51:15] LEAD-REG: ✅ Found existing person in Workbooks: 4208693
+[2025-08-05 13:51:15] LEAD-REG: � Registering person 4208693 for event 5744
+[2025-08-05 13:51:15] LEAD-REG: 🔍 Event ticket search: {"success":true,"data":[{"lock_version":3,"id":805452}],"total":3}
+[2025-08-05 13:51:15] LEAD-REG: ℹ️  Person already has ticket for this event
+[2025-08-05 13:51:15] LEAD-REG: 💾 Stored registration data with key: dtr_lead_registration_106d4bbbcfc17cfe339b4363cb5fbaeb
+[2025-08-05 13:51:15] LEAD-REG: 🎉 Lead generation registration completed successfully!
+[2025-08-05 13:51:15] ✅ Core lead registration function completed
+[2025-08-05 13:51:15] ✅ Lead registration result: Array
+(
+    [success] => 1
+    [person_id] => 4208693
+    [message] => Lead registered successfully in Workbooks CRM
+)
+
+[2025-08-05 13:51:15] 🎉 Lead generation registration successful via Ninja Forms hook!
+[2025-08-05 13:54:48] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:54:50] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:54:51] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:54:51] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:54:52] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:54:52] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:54:55] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:54:55] === NINJA FORMS HOOK ===
+[2025-08-05 13:54:55] Processing form ID: 31
+[2025-08-05 13:54:55] ✅ Detected lead generation form submission!
+[2025-08-05 13:54:55] === PROCESSING LEAD GENERATION FORM ===
+[2025-08-05 13:54:55] Post Title (374): Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:54:55] Post ID (375): 160900
+[2025-08-05 13:54:55] First Name (376): Levon
+[2025-08-05 13:54:55] Last Name (377): Last NameGravett
+[2025-08-05 13:54:55] Email Address (378): levon.gravett@supersonicplayground.com
+[2025-08-05 13:54:55] Unknown field ID 379: 
+[2025-08-05 13:54:55] Privacy Consent (380): 1
+[2025-08-05 13:54:55] ACF Questions (383): 
+[2025-08-05 13:54:55] ✅ All required lead generation data present
+[2025-08-05 13:54:55] === CALLING WORKBOOKS LEAD REGISTRATION ===
+[2025-08-05 13:54:55] ✅ Found restricted_content_fields ACF data
+[2025-08-05 13:54:55]   - Campaign Reference: CAMP-43178
+[2025-08-05 13:54:55]   - Campaign ID: 5744
+[2025-08-05 13:54:55] ✅ Prepared lead registration data:
+[2025-08-05 13:54:55]   - Post ID: 160900
+[2025-08-05 13:54:55]   - Post Title: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:54:55]   - First Name: Levon
+[2025-08-05 13:54:55]   - Last Name: Last NameGravett
+[2025-08-05 13:54:55]   - Email: levon.gravett@supersonicplayground.com
+[2025-08-05 13:54:55]   - Campaign Reference: CAMP-43178
+[2025-08-05 13:54:55]   - Campaign ID: 5744
+[2025-08-05 13:54:55]   - ACF Questions: Array
+(
+)
+
+[2025-08-05 13:54:55]   - Privacy Consent: 1
+[2025-08-05 13:54:55] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-05 13:54:55] LEAD-REG: === DTR REGISTER WORKBOOKS LEAD ===
+[2025-08-05 13:54:55] LEAD-REG: 📧 Processing lead registration for: levon.gravett@supersonicplayground.com
+[2025-08-05 13:54:55] LEAD-REG: 📝 Content: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:54:55] LEAD-REG: 🎯 Event ID: 5744
+[2025-08-05 13:54:55] LEAD-REG: 🎯 Event Reference: CAMP-43178
+[2025-08-05 13:54:55] LEAD-REG: ✅ get_workbooks_instance function is available
+[2025-08-05 13:54:55] LEAD-REG: 🔧 API URL from options: https://russellpublishing-live.workbooks.com/
+[2025-08-05 13:54:55] LEAD-REG: 🔧 API Key from options: SET (eb7f1-04a7...)
+[2025-08-05 13:54:55] LEAD-REG: ✅ Workbooks API instance available
+[2025-08-05 13:54:56] LEAD-REG: 🔍 Person search response: {"success":true,"data":[{"id":4208693}],"total":1}
+[2025-08-05 13:54:56] LEAD-REG: ✅ Found existing person in Workbooks: 4208693
+[2025-08-05 13:54:56] LEAD-REG: � Registering person 4208693 for event 5744
+[2025-08-05 13:54:56] LEAD-REG: 🔍 Event ticket search: {"success":true,"data":[{"lock_version":3,"id":805452}],"total":3}
+[2025-08-05 13:54:56] LEAD-REG: ℹ️  Person already has ticket for this event
+[2025-08-05 13:54:56] LEAD-REG: 💾 Stored registration data with key: dtr_lead_registration_f29b9552f5dec7adcd346ebae49ef528
+[2025-08-05 13:54:56] LEAD-REG: 🎉 Lead generation registration completed successfully!
+[2025-08-05 13:54:56] ✅ Core lead registration function completed
+[2025-08-05 13:54:56] ✅ Lead registration result: Array
+(
+    [success] => 1
+    [person_id] => 4208693
+    [message] => Lead registered successfully in Workbooks CRM
+)
+
+[2025-08-05 13:54:56] 🎉 Lead generation registration successful via Ninja Forms hook!
+[2025-08-05 13:57:10] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:57:11] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:57:13] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:57:13] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:57:14] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:57:14] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:57:17] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:57:18] === NINJA FORMS HOOK ===
+[2025-08-05 13:57:18] Processing form ID: 31
+[2025-08-05 13:57:18] ✅ Detected lead generation form submission!
+[2025-08-05 13:57:18] === PROCESSING LEAD GENERATION FORM ===
+[2025-08-05 13:57:18] Post Title (374): Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:57:18] Post ID (375): 160900
+[2025-08-05 13:57:18] First Name (376): Levon
+[2025-08-05 13:57:18] Last Name (377): Last NameGravett
+[2025-08-05 13:57:18] Email Address (378): levon.gravett@supersonicplayground.com
+[2025-08-05 13:57:18] Unknown field ID 379: 
+[2025-08-05 13:57:18] Privacy Consent (380): 1
+[2025-08-05 13:57:18] ACF Questions (383): 
+[2025-08-05 13:57:18] ✅ All required lead generation data present
+[2025-08-05 13:57:18] === CALLING WORKBOOKS LEAD REGISTRATION ===
+[2025-08-05 13:57:18] ✅ Found restricted_content_fields ACF data
+[2025-08-05 13:57:18]   - Campaign Reference: CAMP-43178
+[2025-08-05 13:57:18]   - Campaign ID: 5744
+[2025-08-05 13:57:18] ✅ Prepared lead registration data:
+[2025-08-05 13:57:18]   - Post ID: 160900
+[2025-08-05 13:57:18]   - Post Title: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:57:18]   - First Name: Levon
+[2025-08-05 13:57:18]   - Last Name: Last NameGravett
+[2025-08-05 13:57:18]   - Email: levon.gravett@supersonicplayground.com
+[2025-08-05 13:57:18]   - Campaign Reference: CAMP-43178
+[2025-08-05 13:57:18]   - Campaign ID: 5744
+[2025-08-05 13:57:18]   - ACF Questions: Array
+(
+)
+
+[2025-08-05 13:57:18]   - Privacy Consent: 1
+[2025-08-05 13:57:18] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-05 13:57:18] LEAD-REG: === DTR REGISTER WORKBOOKS LEAD ===
+[2025-08-05 13:57:18] LEAD-REG: 📧 Processing lead registration for: levon.gravett@supersonicplayground.com
+[2025-08-05 13:57:18] LEAD-REG: 📝 Content: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:57:18] LEAD-REG: 🎯 Event ID: 5744
+[2025-08-05 13:57:18] LEAD-REG: 🎯 Event Reference: CAMP-43178
+[2025-08-05 13:57:18] LEAD-REG: ✅ get_workbooks_instance function is available
+[2025-08-05 13:57:18] LEAD-REG: 🔧 API URL from options: https://russellpublishing-live.workbooks.com/
+[2025-08-05 13:57:18] LEAD-REG: 🔧 API Key from options: SET (eb7f1-04a7...)
+[2025-08-05 13:57:18] LEAD-REG: ✅ Workbooks API instance available
+[2025-08-05 13:57:19] LEAD-REG: 🔍 Person search response: {"success":true,"data":[{"id":4208693}],"total":1}
+[2025-08-05 13:57:19] LEAD-REG: ✅ Found existing person in Workbooks: 4208693
+[2025-08-05 13:57:19] LEAD-REG: � Registering person 4208693 for event 5744
+[2025-08-05 13:57:19] LEAD-REG: 🔍 Event ticket search: {"success":true,"data":[{"lock_version":3,"id":805452}],"total":3}
+[2025-08-05 13:57:19] LEAD-REG: ℹ️  Person already has ticket for this event
+[2025-08-05 13:57:19] LEAD-REG: 💾 Stored registration data with key: dtr_lead_registration_8971a6d6c27cb4c3f78e976ea05c28e9
+[2025-08-05 13:57:19] LEAD-REG: 🎉 Lead generation registration completed successfully!
+[2025-08-05 13:57:19] ✅ Core lead registration function completed
+[2025-08-05 13:57:19] ✅ Lead registration result: Array
+(
+    [success] => 1
+    [person_id] => 4208693
+    [message] => Lead registered successfully in Workbooks CRM
+)
+
+[2025-08-05 13:57:19] 🎉 Lead generation registration successful via Ninja Forms hook!
+[2025-08-05 13:58:05] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:58:06] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:58:07] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:58:07] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:58:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:58:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:58:10] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 13:58:11] === NINJA FORMS HOOK ===
+[2025-08-05 13:58:11] Processing form ID: 31
+[2025-08-05 13:58:11] ✅ Detected lead generation form submission!
+[2025-08-05 13:58:11] === PROCESSING LEAD GENERATION FORM ===
+[2025-08-05 13:58:11] Post Title (374): Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:58:11] Post ID (375): 160900
+[2025-08-05 13:58:11] First Name (376): Levon
+[2025-08-05 13:58:11] Last Name (377): Last NameGravett
+[2025-08-05 13:58:11] Email Address (378): levon.gravett@supersonicplayground.com
+[2025-08-05 13:58:11] Unknown field ID 379: 
+[2025-08-05 13:58:11] Privacy Consent (380): 1
+[2025-08-05 13:58:11] ACF Questions (383): 
+[2025-08-05 13:58:11] ✅ All required lead generation data present
+[2025-08-05 13:58:11] === CALLING WORKBOOKS LEAD REGISTRATION ===
+[2025-08-05 13:58:11] ✅ Found restricted_content_fields ACF data
+[2025-08-05 13:58:11]   - Campaign Reference: CAMP-43178
+[2025-08-05 13:58:11]   - Campaign ID: 5744
+[2025-08-05 13:58:11] ✅ Prepared lead registration data:
+[2025-08-05 13:58:11]   - Post ID: 160900
+[2025-08-05 13:58:11]   - Post Title: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:58:11]   - First Name: Levon
+[2025-08-05 13:58:11]   - Last Name: Last NameGravett
+[2025-08-05 13:58:11]   - Email: levon.gravett@supersonicplayground.com
+[2025-08-05 13:58:11]   - Campaign Reference: CAMP-43178
+[2025-08-05 13:58:11]   - Campaign ID: 5744
+[2025-08-05 13:58:11]   - ACF Questions: Array
+(
+)
+
+[2025-08-05 13:58:11]   - Privacy Consent: 1
+[2025-08-05 13:58:11] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-05 13:58:11] LEAD-REG: === DTR REGISTER WORKBOOKS LEAD ===
+[2025-08-05 13:58:11] LEAD-REG: 📧 Processing lead registration for: levon.gravett@supersonicplayground.com
+[2025-08-05 13:58:11] LEAD-REG: 📝 Content: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 13:58:11] LEAD-REG: 🎯 Event ID: 5744
+[2025-08-05 13:58:11] LEAD-REG: 🎯 Event Reference: CAMP-43178
+[2025-08-05 13:58:11] LEAD-REG: ✅ get_workbooks_instance function is available
+[2025-08-05 13:58:11] LEAD-REG: 🔧 API URL from options: https://russellpublishing-live.workbooks.com/
+[2025-08-05 13:58:11] LEAD-REG: 🔧 API Key from options: SET (eb7f1-04a7...)
+[2025-08-05 13:58:11] LEAD-REG: ✅ Workbooks API instance available
+[2025-08-05 13:58:11] LEAD-REG: 🔍 Person search response: {"success":true,"data":[{"id":4208693}],"total":1}
+[2025-08-05 13:58:11] LEAD-REG: ✅ Found existing person in Workbooks: 4208693
+[2025-08-05 13:58:11] LEAD-REG: � Registering person 4208693 for event 5744
+[2025-08-05 13:58:12] LEAD-REG: 🔍 Event ticket search: {"success":true,"data":[{"lock_version":3,"id":805452}],"total":3}
+[2025-08-05 13:58:12] LEAD-REG: ℹ️  Person already has ticket for this event
+[2025-08-05 13:58:12] LEAD-REG: 💾 Stored registration data with key: dtr_lead_registration_0820f65d615f7b47ca68bea68f85124d
+[2025-08-05 13:58:12] LEAD-REG: 🎉 Lead generation registration completed successfully!
+[2025-08-05 13:58:12] ✅ Core lead registration function completed
+[2025-08-05 13:58:12] ✅ Lead registration result: Array
+(
+    [success] => 1
+    [person_id] => 4208693
+    [message] => Lead registered successfully in Workbooks CRM
+)
+
+[2025-08-05 13:58:12] 🎉 Lead generation registration successful via Ninja Forms hook!
+[2025-08-05 14:00:43] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:00:44] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:00:46] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:00:47] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:00:47] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:00:48] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:00:50] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:00:50] === NINJA FORMS HOOK ===
+[2025-08-05 14:00:50] Processing form ID: 31
+[2025-08-05 14:00:50] ✅ Detected lead generation form submission!
+[2025-08-05 14:00:50] === PROCESSING LEAD GENERATION FORM ===
+[2025-08-05 14:00:50] Post Title (374): Beyond the Lab: Stem cell research - TEST
+[2025-08-05 14:00:50] Post ID (375): 160900
+[2025-08-05 14:00:50] First Name (376): Levon
+[2025-08-05 14:00:50] Last Name (377): Last NameGravett
+[2025-08-05 14:00:50] Email Address (378): levon.gravett@supersonicplayground.com
+[2025-08-05 14:00:50] Unknown field ID 379: 
+[2025-08-05 14:00:50] Privacy Consent (380): 1
+[2025-08-05 14:00:50] ACF Questions (383): 
+[2025-08-05 14:00:50] ✅ All required lead generation data present
+[2025-08-05 14:00:50] === CALLING WORKBOOKS LEAD REGISTRATION ===
+[2025-08-05 14:00:50] ✅ Found restricted_content_fields ACF data
+[2025-08-05 14:00:50]   - Campaign Reference: CAMP-43178
+[2025-08-05 14:00:50]   - Campaign ID: 5744
+[2025-08-05 14:00:50] ✅ Prepared lead registration data:
+[2025-08-05 14:00:50]   - Post ID: 160900
+[2025-08-05 14:00:50]   - Post Title: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 14:00:50]   - First Name: Levon
+[2025-08-05 14:00:50]   - Last Name: Last NameGravett
+[2025-08-05 14:00:50]   - Email: levon.gravett@supersonicplayground.com
+[2025-08-05 14:00:50]   - Campaign Reference: CAMP-43178
+[2025-08-05 14:00:50]   - Campaign ID: 5744
+[2025-08-05 14:00:50]   - ACF Questions: Array
+(
+)
+
+[2025-08-05 14:00:50]   - Privacy Consent: 1
+[2025-08-05 14:00:50] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-05 14:00:50] LEAD-REG: === DTR REGISTER WORKBOOKS LEAD ===
+[2025-08-05 14:00:50] LEAD-REG: 📧 Processing lead registration for: levon.gravett@supersonicplayground.com
+[2025-08-05 14:00:50] LEAD-REG: 📝 Content: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 14:00:50] LEAD-REG: 🎯 Event ID: 5744
+[2025-08-05 14:00:50] LEAD-REG: 🎯 Event Reference: CAMP-43178
+[2025-08-05 14:00:50] LEAD-REG: ✅ get_workbooks_instance function is available
+[2025-08-05 14:00:50] LEAD-REG: 🔧 API URL from options: https://russellpublishing-live.workbooks.com/
+[2025-08-05 14:00:50] LEAD-REG: 🔧 API Key from options: SET (eb7f1-04a7...)
+[2025-08-05 14:00:50] LEAD-REG: ✅ Workbooks API instance available
+[2025-08-05 14:00:52] LEAD-REG: 🔍 Person search response: {"success":true,"data":[{"id":4208693}],"total":1}
+[2025-08-05 14:00:52] LEAD-REG: ✅ Found existing person in Workbooks: 4208693
+[2025-08-05 14:00:52] LEAD-REG: ℹ️  Lead generation campaign: no event ticket will be created or checked
+[2025-08-05 14:00:52] LEAD-REG: 💾 Stored registration data with key: dtr_lead_registration_7c500a66c6171e2a30c5739a7e904bcb
+[2025-08-05 14:00:52] LEAD-REG: 🎉 Lead generation registration completed successfully!
+[2025-08-05 14:00:52] ✅ Core lead registration function completed
+[2025-08-05 14:00:52] ✅ Lead registration result: Array
+(
+    [success] => 1
+    [person_id] => 4208693
+    [message] => Lead registered successfully in Workbooks CRM
+)
+
+[2025-08-05 14:00:52] 🎉 Lead generation registration successful via Ninja Forms hook!
+[2025-08-05 14:03:03] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:03:05] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:03:06] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:03:07] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:03:07] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:03:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:45:17] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:45:25] === NINJA FORMS HOOK ===
+[2025-08-05 14:45:25] Processing form ID: 2_1
+[2025-08-05 14:45:25] ✅ Detected webinar form submission!
+[2025-08-05 14:45:25] Field webinar_title: New Updated Test Webinar - Final Functional Testing
+[2025-08-05 14:45:25] Field post_id: 160746
+[2025-08-05 14:45:25] Field email_address: {field:email_address}
+[2025-08-05 14:45:25] Field speaker_question: Test
+[2025-08-05 14:45:25] Field sponsor_optin: 1
+[2025-08-05 14:45:25] Field register_1732890612728: 
+[2025-08-05 14:45:25] ✅ Using current user email: levon.gravett@supersonicplayground.com
+[2025-08-05 14:45:25] ✅ All required data present
+[2025-08-05 14:45:25] === CALLING CORE WEBINAR REGISTRATION ===
+[2025-08-05 14:45:25] ✅ Prepared registration data:
+[2025-08-05 14:45:25]   - webinar_post_id: 160746
+[2025-08-05 14:45:25]   - participant_email: levon.gravett@supersonicplayground.com
+[2025-08-05 14:45:25]   - speaker_question: Test
+[2025-08-05 14:45:25]   - privacy_consent: 1
+[2025-08-05 14:45:25] 🚀 Calling dtr_register_workbooks_webinar()...
+[2025-08-05 14:45:25] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:45:29] ✅ Core registration function completed
+[2025-08-05 14:45:29] ✅ Registration result: Array
+(
+    [success] => Webinar registration submitted successfully. Ticket ID: 809484
+)
+
+[2025-08-05 14:45:29] 🎉 Webinar registration successful via Ninja Forms hook!
+[2025-08-05 14:45:30] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:45:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:45:34] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:45:36] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:46:46] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:46:48] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:46:50] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:46:50] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:46:52] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:46:52] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:46:54] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:46:56] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:46:56] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:46:57] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:46:57] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:46:58] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:02] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:04] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:04] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:05] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:05] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:14] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:15] === NINJA FORMS HOOK ===
+[2025-08-05 14:47:15] Processing form ID: 3
+[2025-08-05 14:47:15] Form not handled. Form ID: 3
+[2025-08-05 14:47:16] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:18] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:18] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:31] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:34] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:34] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:39] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:39] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:40] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:47:40] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:49:11] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:49:12] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:49:13] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:49:14] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:49:14] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:49:16] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:49:17] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:49:17] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:49:19] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:49:19] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:00] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:02] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:30] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:31] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:32] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:32] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:34] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:34] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:34] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:36] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:36] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:42] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:50:43] === NINJA FORMS HOOK ===
+[2025-08-05 14:50:43] Processing form ID: 31
+[2025-08-05 14:50:43] ✅ Detected lead generation form submission!
+[2025-08-05 14:50:43] === PROCESSING LEAD GENERATION FORM ===
+[2025-08-05 14:50:43] Post Title (374): Beyond the Lab: Stem cell research - TEST
+[2025-08-05 14:50:43] Post ID (375): 160900
+[2025-08-05 14:50:43] First Name (376): Levon
+[2025-08-05 14:50:43] Last Name (377): Last NameGravett
+[2025-08-05 14:50:43] Email Address (378): levon.gravett@supersonicplayground.com
+[2025-08-05 14:50:43] Unknown field ID 379: 
+[2025-08-05 14:50:43] Privacy Consent (380): 1
+[2025-08-05 14:50:43] ACF Questions (383): 
+[2025-08-05 14:50:43] ✅ All required lead generation data present
+[2025-08-05 14:50:43] === CALLING WORKBOOKS LEAD REGISTRATION ===
+[2025-08-05 14:50:43] ✅ Found restricted_content_fields ACF data
+[2025-08-05 14:50:43]   - Campaign Reference: CAMP-43178
+[2025-08-05 14:50:43]   - Campaign ID: 5744
+[2025-08-05 14:50:43] ✅ Prepared lead registration data:
+[2025-08-05 14:50:43]   - Post ID: 160900
+[2025-08-05 14:50:43]   - Post Title: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 14:50:43]   - First Name: Levon
+[2025-08-05 14:50:43]   - Last Name: Last NameGravett
+[2025-08-05 14:50:43]   - Email: levon.gravett@supersonicplayground.com
+[2025-08-05 14:50:43]   - Campaign Reference: CAMP-43178
+[2025-08-05 14:50:43]   - Campaign ID: 5744
+[2025-08-05 14:50:43]   - ACF Questions: Array
+(
+)
+
+[2025-08-05 14:50:43]   - Privacy Consent: 1
+[2025-08-05 14:50:43] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-05 14:50:43] LEAD-REG: === DTR REGISTER WORKBOOKS LEAD ===
+[2025-08-05 14:50:43] LEAD-REG: 📧 Processing lead registration for: levon.gravett@supersonicplayground.com
+[2025-08-05 14:50:43] LEAD-REG: 📝 Content: Beyond the Lab: Stem cell research - TEST
+[2025-08-05 14:50:43] LEAD-REG: 🎯 Event ID: 5744
+[2025-08-05 14:50:43] LEAD-REG: 🎯 Event Reference: CAMP-43178
+[2025-08-05 14:50:43] LEAD-REG: ✅ get_workbooks_instance function is available
+[2025-08-05 14:50:43] LEAD-REG: 🔧 API URL from options: https://russellpublishing-live.workbooks.com/
+[2025-08-05 14:50:43] LEAD-REG: 🔧 API Key from options: SET (eb7f1-04a7...)
+[2025-08-05 14:50:43] LEAD-REG: ✅ Workbooks API instance available
+[2025-08-05 14:50:44] LEAD-REG: 🔍 Person search response: {"success":true,"data":[{"id":4208693}],"total":1}
+[2025-08-05 14:50:44] LEAD-REG: ✅ Found existing person in Workbooks: 4208693
+[2025-08-05 14:50:44] LEAD-REG: ℹ️  Lead generation campaign: no event ticket will be created or checked
+[2025-08-05 14:50:44] LEAD-REG: 💾 Stored registration data with key: dtr_lead_registration_253b60f916fe5c1e9fab68b502e2f1f9
+[2025-08-05 14:50:44] LEAD-REG: 🎉 Lead generation registration completed successfully!
+[2025-08-05 14:50:44] ✅ Core lead registration function completed
+[2025-08-05 14:50:44] ✅ Lead registration result: Array
+(
+    [success] => 1
+    [person_id] => 4208693
+    [message] => Lead registered successfully in Workbooks CRM
+)
+
+[2025-08-05 14:50:44] 🎉 Lead generation registration successful via Ninja Forms hook!
+[2025-08-05 14:53:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:53:47] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:53:50] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:53:56] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:53:56] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:54:01] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:54:01] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:54:05] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:54:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:54:10] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:54:11] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:54:17] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:54:17] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:54:27] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:54:28] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:54:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:56:43] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:56:51] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:56:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:56:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:57:06] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:57:07] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:57:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:57:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:57:10] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:57:11] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:57:13] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:57:16] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:57:27] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:57:27] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:58:18] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:58:27] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:58:41] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 14:59:32] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:01:27] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:01:29] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:03:28] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:03:29] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:05:29] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:05:31] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:07:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:09:54] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:09:57] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:09:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:00] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:03] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:04] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:09] === NINJA FORMS HOOK ===
+[2025-08-05 15:10:09] Processing form ID: 3
+[2025-08-05 15:10:09] Form not handled. Form ID: 3
+[2025-08-05 15:10:10] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:13] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:13] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:16] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:16] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:17] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:24] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:24] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:24] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:25] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:25] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:28] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:28] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:10:30] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:12:29] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:12:32] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:13:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:13:39] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:13:42] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:13:45] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:13:51] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:13:54] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:13:55] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:13:56] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:13:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:13:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:14:04] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:14:04] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:18] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:22] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:24] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:29] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:30] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:39] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:39] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:43] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:43] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:48] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:48] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:51] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:55] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:55] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:16:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:26:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:26:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:26:39] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:26:40] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:26:42] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:26:42] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:26:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:00] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:02] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:03] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:05] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:05] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:07] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:09] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:09] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:12] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:12] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:46] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:48] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:49] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:52] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:54] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:55] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:56] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:58] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:27:58] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:28:02] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:28:02] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:31:13] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:31:18] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:33:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:33:24] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:33:26] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:33:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:33:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:33:41] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:33:41] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:33:46] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:33:50] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:33:54] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:33:55] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:33:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:33:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:34:34] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:34:39] === NINJA FORMS HOOK ===
+[2025-08-05 15:34:39] Processing form ID: 2_1
+[2025-08-05 15:34:39] ✅ Detected webinar form submission!
+[2025-08-05 15:34:39] Field webinar_title: New Updated Test Webinar - Final Functional Testing
+[2025-08-05 15:34:39] Field post_id: 160746
+[2025-08-05 15:34:39] Field email_address: {field:email_address}
+[2025-08-05 15:34:39] Field speaker_question: Test
+[2025-08-05 15:34:39] Field sponsor_optin: 1
+[2025-08-05 15:34:39] Field register_1732890612728: 
+[2025-08-05 15:34:39] ✅ Using current user email: levon.gravett@supersonicplayground.com
+[2025-08-05 15:34:39] ✅ All required data present
+[2025-08-05 15:34:39] === CALLING CORE WEBINAR REGISTRATION ===
+[2025-08-05 15:34:39] ✅ Prepared registration data:
+[2025-08-05 15:34:39]   - webinar_post_id: 160746
+[2025-08-05 15:34:39]   - participant_email: levon.gravett@supersonicplayground.com
+[2025-08-05 15:34:39]   - speaker_question: Test
+[2025-08-05 15:34:39]   - privacy_consent: 1
+[2025-08-05 15:34:39] 🚀 Calling dtr_register_workbooks_webinar()...
+[2025-08-05 15:34:42] ✅ Core registration function completed
+[2025-08-05 15:34:43] ✅ Registration result: Array
+(
+    [success] => Webinar registration submitted successfully. Ticket ID: 809518
+)
+
+[2025-08-05 15:34:43] 🎉 Webinar registration successful via Ninja Forms hook!
+[2025-08-05 15:34:51] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:35:00] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:35:01] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:35:06] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:35:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:37:21] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:37:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:39:22] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:39:24] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:41:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:41:25] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:43:24] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-05 15:43:24] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:39:43] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:39:44] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:39:44] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:39:48] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:39:50] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:39:51] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:39:53] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:39:53] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:39:55] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:39:57] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:39:58] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:39:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:00] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:01] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:03] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:05] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:06] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:07] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:11] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:12] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:13] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:16] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:17] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:21] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:25] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:25] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:34] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:35] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:38] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:38] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:48] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:40:49] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:42:06] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:42:08] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:42:09] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:42:19] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:42:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:42:21] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:42:30] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:43:16] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:43:17] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:43:22] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:43:23] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:43:24] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:43:25] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:43:27] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:43:27] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:43:28] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:43:29] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:43:30] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:43:31] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:43:32] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:44:19] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:44:20] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:44:32] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:44:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:45:34] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:45:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:46:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:48:36] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:49:34] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:50:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:51:34] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:52:37] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:52:41] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:54:39] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:54:44] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:55:45] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:55:48] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:56:39] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:56:41] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:58:40] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 10:58:42] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:00:41] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:00:42] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:02:42] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:02:44] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:15:53] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:15:54] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:15:55] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:15:56] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:16:54] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:18:55] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:18:56] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:20:56] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:20:58] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:22:57] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:22:58] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:23:48] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:23:49] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:23:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:24:58] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:24:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:26:59] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 11:27:00] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 12:05:00] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 12:05:03] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 12:07:00] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 12:07:02] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 12:09:02] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 12:09:04] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 12:11:02] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 12:11:03] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 12:12:32] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)
+[2025-08-06 12:12:33] 🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)

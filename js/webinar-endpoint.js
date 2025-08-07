@@ -9,7 +9,6 @@ jQuery(document).ready(function($) {
             form_id: '23', // Add this line
             webinar_post_id: $('#webinar_post_id').val(),
             participant_email: $('#participant_email').val(),
-            participant_question: $('#participant_question').val(),
             speaker_question: $('#speaker_question').val(),
             sponsor_optin: $('#sponsor_optin').is(':checked') ? '1' : '0'
         };

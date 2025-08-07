@@ -2,29 +2,29 @@
 if (!defined('ABSPATH')) exit;
 
 // Get counts for each post type
-$post_types = ['articles', 'whitepapers', 'events'];
+$post_types = ['articles', 'publications', 'whitepapers'];
 $content_stats = [];
 
 foreach ($post_types as $post_type) {
     $total_posts = wp_count_posts($post_type);
     $total_published = isset($total_posts->publish) ? $total_posts->publish : 0;
     
-    // Count gated posts (posts with gated content meta)
+    // Count gated posts (posts with restrict_post = 1, matching AJAX handler)
     $gated_posts = get_posts(array(
         'post_type' => $post_type,
         'meta_query' => array(
             array(
-                'key' => 'gated_content_settings',
-                'compare' => 'EXISTS'
+                'key' => 'restrict_post',
+                'value' => '1',
+                'compare' => '='
             )
         ),
         'posts_per_page' => -1,
         'fields' => 'ids'
     ));
-    
     $content_stats[$post_type] = array(
-        'total' => $total_published,
         'gated' => count($gated_posts),
+        'total' => $total_published,
         'open' => $total_published - count($gated_posts)
     );
 }
@@ -39,13 +39,13 @@ foreach ($post_types as $post_type) {
             <div class="stats-card">
                 <h3><?php echo ucfirst($post_type); ?></h3>
                 <div class="stats-numbers">
-                    <div class="stat-item">
-                        <span class="stat-number"><?php echo $content_stats[$post_type]['total']; ?></span>
-                        <span class="stat-label">Total</span>
-                    </div>
                     <div class="stat-item gated">
                         <span class="stat-number"><?php echo $content_stats[$post_type]['gated']; ?></span>
                         <span class="stat-label">Gated</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number"><?php echo $content_stats[$post_type]['total']; ?></span>
+                        <span class="stat-label">Total</span>
                     </div>
                     <div class="stat-item open">
                         <span class="stat-number"><?php echo $content_stats[$post_type]['open']; ?></span>
@@ -70,16 +70,16 @@ foreach ($post_types as $post_type) {
     </div>
 
     <div class="recent-activity" id="recent-gated-activity">
-        <h3>Current Gated Whitepapers</h3>
+        <h3>Current Gated Publications</h3>
         <div class="gated-content-list-section">
-            <div id="gated-whitepapers-list"><p class="loading">Loading current gated whitepapers...</p></div>
+            <div id="gated-publications-list"><p class="loading">Loading current gated publications...</p></div>
         </div>
     </div>
 
     <div class="recent-activity" id="recent-gated-activity">
-        <h3>Current Gated Events</h3>
+        <h3>Current Gated Whitepapers</h3>
         <div class="gated-content-list-section">
-            <div id="gated-events-list"><p class="loading">Loading current gated events...</p></div>
+            <div id="gated-whitepapers-list"><p class="loading">Loading current gated whitepapers...</p></div>
         </div>
     </div>
 
@@ -471,17 +471,15 @@ jQuery(document).ready(function($) {
         var html = '<table class="gated-content-table">';
         html += '<thead><tr>';
         html += '<th>Title</th>';
-        html += '<th>Workbooks Ref</th>';
+        html += '<th>Reference</th>';
         html += '<th>Campaign Ref</th>';
-        html += '<th>Form</th>';
         html += '<th class="actions">Actions</th>';
         html += '</tr></thead><tbody>';
         content.forEach(function(item) {
             html += '<tr>';
             html += '<td><strong>' + item.title + '</strong></td>';
-            html += '<td>' + (item.workbooks_reference || '-') + '</td>';
-            html += '<td>' + (item.campaign_reference ? 'CAMP-' + item.campaign_reference : '-') + '</td>';
-            html += '<td>' + (item.ninja_form_title || 'Request Access Form') + '</td>';
+            html += '<td>' + (item.workbooks_reference ? item.workbooks_reference : '-') + '</td>';
+            html += '<td>' + (item.campaign_reference ? item.campaign_reference : '-') + '</td>';
             html += '<td class="actions" style="padding:0;">';
             html += '<a href="' + item.edit_url + '" class="button button-primary button-small" target="_blank">Edit</a>';
             html += '</td>';
@@ -506,8 +504,7 @@ jQuery(document).ready(function($) {
     }
 
     loadGatedContentList('articles', '#gated-articles-list');
+    loadGatedContentList('publications', '#gated-publications-list');
     loadGatedContentList('whitepapers', '#gated-whitepapers-list');
-    loadGatedContentList('news', '#gated-news-list');
-    loadGatedContentList('events', '#gated-events-list');
 });
 </script>

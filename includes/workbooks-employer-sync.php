@@ -525,7 +525,7 @@ add_action('wp_ajax_resync_workbooks_employer', function() {
 /**
  * Ajax: test connection
  */
-add_action('wp_ajax_workbooks_test_connection', function() {
+/* add_action('wp_ajax_workbooks_test_connection', function() {
     check_ajax_referer('workbooks_nonce', 'nonce');
     $workbooks = get_workbooks_instance();
     try {
@@ -544,4 +544,4 @@ add_action('wp_ajax_workbooks_test_connection', function() {
     } catch (Exception $e) {
         wp_send_json_error('Exception: ' . $e->getMessage());
     }
-});
+}); */

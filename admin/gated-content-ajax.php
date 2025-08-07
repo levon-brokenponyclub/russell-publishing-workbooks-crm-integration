@@ -25,31 +25,19 @@ function dtr_load_current_gated_articles() {
     foreach ($posts as $post) {
         // Get ACF group field
         $acf_group = get_field('restricted_content_fields', $post->ID);
-        $workbooks_reference = isset($acf_group['reference']) ? $acf_group['reference'] : '';
-        $campaign_reference = isset($acf_group['campaign_reference']) ? $acf_group['campaign_reference'] : '';
-        $ninja_form_id = isset($acf_group['select_lead_form']) ? $acf_group['select_lead_form'] : '';
+        $workbooks_reference = '';
+        $campaign_reference = '';
+        if (is_array($acf_group)) {
+            $workbooks_reference = isset($acf_group['reference']) ? $acf_group['reference'] : '';
+            $campaign_reference = isset($acf_group['campaign_reference']) ? $acf_group['campaign_reference'] : '';
+        }
         $data[] = array(
             'post_id' => $post->ID,
             'title' => $post->post_title,
             'workbooks_reference' => $workbooks_reference,
             'campaign_reference' => $campaign_reference,
-            'ninja_form_id' => $ninja_form_id,
-            'ninja_form_title' => '', // Optionally fetch Ninja Form title
             'edit_url' => get_edit_post_link($post->ID)
         );
-    }
-    // Optionally fetch Ninja Form titles
-    if (function_exists('ninja_forms_get_all_forms')) {
-        $forms = ninja_forms_get_all_forms();
-        $form_titles = array();
-        foreach ($forms as $form) {
-            $form_titles[$form['id']] = $form['title'];
-        }
-        foreach ($data as &$item) {
-            if (!empty($item['ninja_form_id']) && isset($form_titles[$item['ninja_form_id']])) {
-                $item['ninja_form_title'] = $form_titles[$item['ninja_form_id']];
-            }
-        }
     }
     wp_send_json_success($data);
 }

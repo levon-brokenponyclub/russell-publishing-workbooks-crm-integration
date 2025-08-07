@@ -2,7 +2,7 @@
 /**
  * Plugin Name: DTR - Workbooks CRM API Integration
  * Description: Connects WordPress to DTR Workbooks CRM
- * Version: 1.4.3
+ * Version: 1.5.0
  * Author: Supersonic Playground
  * Author URI: https://www.supersonicplayground.com
  * Text Domain: dtr-workbooks-crm-integration
@@ -657,10 +657,11 @@ function workbooks_crm_settings_page() {
                     <form id="webinar-registration-form" method="post">
                         <p>
                             <label for="workbooks_event_ref">Or Enter Workbooks Event ID or Reference:</label><br>
-                            <input type="text" id="workbooks_event_ref" name="workbooks_event_ref" class="regular-text" placeholder="Event ID or Reference" />
+                            <input type="text" id="workbooks_event_ref" name="workbooks_event_ref" class="regular-text" placeholder="Event ID or Reference (e.g. 5029)" />
                             <button type="button" id="fetch-event-btn" class="button">Fetch Event Details</button>
                         </p>
                         <div id="event-fetch-response" style="margin-bottom: 15px; color: #444;"></div>
+                        <div id="event-fields-table-container" style="margin-bottom: 15px; display:none;"></div>
                         <p>
                             <label for="webinar_post_id">Select Webinar:</label><br>
                             <select id="webinar_post_id" name="webinar_post_id" required>
@@ -693,6 +694,64 @@ function workbooks_crm_settings_page() {
                         <p><button type="submit" class="button button-primary">Submit Registration</button></p>
                     </form>
                     <div id="webinar-response" style="margin-top: 20px;"></div>
+                    <script>
+                    jQuery(document).ready(function($) {
+                        $('#fetch-event-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var eventRef = $('#workbooks_event_ref').val();
+                            var $response = $('#event-fetch-response');
+                            var $tableContainer = $('#event-fields-table-container');
+                            $response.html('');
+                            $tableContainer.hide().html('');
+                            if (!eventRef) {
+                                $response.html('<span style="color:red;">Please enter an Event ID or Reference.</span>');
+                                return;
+                            }
+                            $response.html('Fetching event details...');
+                            $.ajax({
+                                url: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.ajax_url) ? workbooks_ajax.ajax_url : ajaxurl,
+                                method: 'POST',
+                                data: {
+                                    action: 'fetch_workbooks_event',
+                                    event_ref: eventRef,
+                                    nonce: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.nonce) ? workbooks_ajax.nonce : ''
+                                },
+                                dataType: 'json',
+                                success: function(response) {
+                                    $tableContainer.hide().html('');
+                                    if (response && response.success) {
+                                        var details = response.data;
+                                        var html = '<span style="color:green;">Event details fetched.</span>';
+                                        if (details && typeof details === 'object' && Object.keys(details).length > 0) {
+                                            html += '<table class="widefat striped" style="margin-top:8px; max-width:600px;">';
+                                            html += '<thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
+                                            for (var key in details) {
+                                                if (!details.hasOwnProperty(key)) continue;
+                                                var val = details[key];
+                                                if (typeof val === 'object') val = JSON.stringify(val);
+                                                html += '<tr><td>' + key + '</td><td>' + (val === '' ? '-' : val) + '</td></tr>';
+                                            }
+                                            html += '</tbody></table>';
+                                        } else {
+                                            html += '<div style="margin-top:10px;">No event details found for this reference.</div>';
+                                        }
+                                        $response.html(html);
+                                    } else {
+                                        $response.html('<span style="color:red;">Could not fetch event details.</span>');
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    $tableContainer.hide().html('');
+                                    $response.html('<span style="color:red;">AJAX error fetching event details.</span>');
+                                    if (xhr && xhr.responseText) {
+                                        // Optionally log or display debug info
+                                        console.error('AJAX error:', xhr.responseText);
+                                    }
+                                }
+                            });
+                        });
+                    });
+                    </script>
                 </div>
                 <!-- Membership Sign Up Tab -->
                 <div id="workbooks-membership-content" class="workbooks-tab-content">
@@ -1909,5 +1968,10 @@ add_action('admin_enqueue_scripts', function($hook) {
     }
 });
 
+// Include simple Ninja Forms webinar hook
+// Clean ninja forms webinar hook that works exactly like the successful form
+if (file_exists(WORKBOOKS_NF_PATH . 'includes/ninja-forms-simple-hook.php')) {
+    require_once WORKBOOKS_NF_PATH . 'includes/ninja-forms-simple-hook.php';
+}
 
 ?>
