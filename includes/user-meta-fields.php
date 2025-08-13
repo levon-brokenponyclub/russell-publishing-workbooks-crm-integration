@@ -6,12 +6,17 @@ if (!defined('ABSPATH')) exit;
  */
 if (!function_exists('nf_debug_log')) {
     function nf_debug_log($message) {
-        $log_file = plugin_dir_path(__FILE__) . 'register-debug.log';
-        $time = date('Y-m-d H:i:s');
-        if (is_array($message) || is_object($message)) {
-            $message = print_r($message, true);
+        $log_file = WORKBOOKS_NF_PATH . 'logs/register-debug.log';
+        
+        // Ensure the logs directory exists
+        $logs_dir = dirname($log_file);
+        if (!file_exists($logs_dir)) {
+            wp_mkdir_p($logs_dir);
         }
-        file_put_contents($log_file, "[$time] $message\n", FILE_APPEND);
+        
+        $timestamp = date('Y-m-d H:i:s');
+        $log_entry = "[$timestamp] $message" . PHP_EOL;
+        file_put_contents($log_file, $log_entry, FILE_APPEND | LOCK_EX);
     }
 }
 

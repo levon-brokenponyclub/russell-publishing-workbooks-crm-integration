@@ -2,13 +2,16 @@
 /**
  * Plugin Name: DTR - Workbooks CRM API Integration
  * Description: Connects WordPress to DTR Workbooks CRM
- * Version: 1.5.0
+ * Version: 1.4.3
  * Author: Supersonic Playground
  * Author URI: https://www.supersonicplayground.com
  * Text Domain: dtr-workbooks-crm-integration
  */
 
 if (!defined('ABSPATH')) exit;
+
+// Debug: Plugin is loading
+error_log('DTR Workbooks Plugin Loading - File: ' . __FILE__);
 // Define plugin base path constant
 if (!defined('WORKBOOKS_NF_PATH')) {
     define('WORKBOOKS_NF_PATH', plugin_dir_path(__FILE__));
@@ -175,22 +178,72 @@ add_action('admin_enqueue_scripts', function($hook) {
         'plugin_url' => plugin_dir_url(__FILE__)
     ]);
     
+    // Create single nonce for all AJAX calls
+    $ajax_nonce = wp_create_nonce('workbooks_nonce');
+
     // Enqueue and localize webinar-endpoint.js for this page
     wp_enqueue_script('workbooks-webinar-endpoint-js', plugin_dir_url(__FILE__) . 'js/webinar-endpoint.js', ['jquery'], null, true);
-    wp_localize_script('workbooks-webinar-endpoint-js', 'workbooksAjax', [
-        'ajaxurl' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('workbooks_nonce'),
+    wp_localize_script('workbooks-webinar-endpoint-js', 'workbooks_ajax', [
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce' => $ajax_nonce
     ]);
     
     wp_enqueue_script('employers-sync', plugin_dir_url(__FILE__) . 'js/employers-sync.js', ['jquery'], null, true);
     wp_localize_script('employers-sync', 'workbooks_ajax', [
         'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce' => $ajax_nonce
+    ]);
+
+// Enqueue frontend scripts for webinar forms
+add_action('wp_enqueue_scripts', function() {
+    // Temporarily load on all pages to test - we'll restrict this later
+    error_log('🚀 DTR FRONTEND SCRIPTS: wp_enqueue_scripts hook fired at ' . date('Y-m-d H:i:s'));
+    
+    // Enqueue webinar endpoint script on frontend
+    wp_enqueue_script('workbooks-webinar-endpoint-js', plugin_dir_url(__FILE__) . 'js/webinar-endpoint.js', ['jquery'], time(), true);
+    wp_localize_script('workbooks-webinar-endpoint-js', 'workbooks_ajax', [
+        'ajax_url' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('workbooks_nonce')
     ]);
+    
+    error_log('🎯 DTR WEBINAR SCRIPT: Enqueued with URL: ' . plugin_dir_url(__FILE__) . 'js/webinar-endpoint.js');
+}, 20);
+
+// Fallback: Force script inclusion in footer if enqueue doesn't work
+add_action('wp_footer', function() {
+    error_log('🦶 DTR FOOTER: wp_footer hook fired at ' . date('Y-m-d H:i:s'));
+    if (!wp_script_is('workbooks-webinar-endpoint-js', 'enqueued')) {
+        error_log('❌ DTR FALLBACK: Script not enqueued, adding manually to footer');
+        echo '<script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/webinar-endpoint.js?ver=' . time() . '"></script>';
+        echo '<script type="text/javascript">
+        var workbooks_ajax = {
+            ajax_url: "' . admin_url('admin-ajax.php') . '",
+            nonce: "' . wp_create_nonce('workbooks_nonce') . '"
+        };
+        </script>';
+    } else {
+        error_log('✅ DTR SUCCESS: Script properly enqueued');
+    }
+}, 99);
 
 // AJAX handler for fetching webinar ACF data
 add_action('wp_ajax_fetch_webinar_acf_data', 'dtr_ajax_fetch_webinar_acf_data');
 add_action('wp_ajax_nopriv_fetch_webinar_acf_data', 'dtr_ajax_fetch_webinar_acf_data');
+add_action('wp_ajax_fetch_leadgen_acf_data', 'dtr_ajax_fetch_leadgen_acf_data');
+add_action('wp_ajax_nopriv_fetch_leadgen_acf_data', 'dtr_ajax_fetch_leadgen_acf_data');
+
+// Debug: AJAX actions registered
+error_log('DTR AJAX actions registered for fetch_leadgen_acf_data');
+
+// Test function to ensure AJAX is working
+add_action('wp_ajax_test_leadgen_ajax', 'dtr_test_leadgen_ajax');
+add_action('wp_ajax_nopriv_test_leadgen_ajax', 'dtr_test_leadgen_ajax');
+
+function dtr_test_leadgen_ajax() {
+    error_log('=== dtr_test_leadgen_ajax CALLED ===');
+    echo 'AJAX TEST SUCCESS';
+    wp_die(); // Use wp_die() instead of wp_send_json_success() for testing
+}
 function dtr_ajax_fetch_webinar_acf_data() {
     check_ajax_referer('workbooks_nonce', 'nonce');
     $post_id = intval($_POST['post_id'] ?? 0);
@@ -211,9 +264,205 @@ function dtr_ajax_fetch_webinar_acf_data() {
     ]);
 }
 
+function dtr_ajax_fetch_leadgen_acf_data() {
+    // IMMEDIATE debug logging
+    error_log('=== dtr_ajax_fetch_leadgen_acf_data CALLED ===');
+    error_log('POST data: ' . print_r($_POST, true));
+    
+    // Simple debug logging to WordPress debug log
+    error_log('dtr_ajax_fetch_leadgen_acf_data called');
+    error_log('POST data: ' . print_r($_POST, true));
+    
+    // Create logs directory if it doesn't exist
+    $log_dir = plugin_dir_path(__FILE__) . 'logs';
+    if (!file_exists($log_dir)) {
+        wp_mkdir_p($log_dir);
+    }
+    $log_file = $log_dir . '/admin-lead-gen-debug.log';
+    
+    // Custom logging function
+    $log_debug = function($message) use ($log_file) {
+        $timestamp = date('Y-m-d H:i:s');
+        $log_entry = "[$timestamp] $message" . PHP_EOL;
+        file_put_contents($log_file, $log_entry, FILE_APPEND | LOCK_EX);
+    };
+    
+    // Add debug logging
+    $log_debug('dtr_ajax_fetch_leadgen_acf_data called with: ' . print_r($_POST, true));
+    
+    // Simplified nonce check - try to make it more permissive
+    $nonce_valid = false;
+    if (isset($_POST['nonce'])) {
+        $nonce_valid = wp_verify_nonce($_POST['nonce'], 'workbooks_nonce');
+        $log_debug('Nonce check result: ' . ($nonce_valid ? 'VALID' : 'INVALID'));
+        $log_debug('Provided nonce: ' . $_POST['nonce']);
+        $log_debug('Expected nonce action: workbooks_nonce');
+    } else {
+        $log_debug('No nonce provided');
+    }
+    
+    // Continue even if nonce fails for debugging
+    if (!$nonce_valid) {
+        $log_debug('Nonce verification failed but continuing for debug');
+        // Don't return early, continue for debugging
+    }
+    
+    $post_id = intval($_POST['post_id'] ?? 0);
+    if (!$post_id) {
+        $log_debug('Invalid post ID provided: ' . ($post_id ?: 'empty'));
+        wp_send_json_error('Invalid post ID');
+        return;
+    }
+    $post = get_post($post_id);
+    if (!$post) {
+        $log_debug('Post not found for ID: ' . $post_id);
+        wp_send_json_error('Content not found');
+        return;
+    }
+    
+    // Check if this is a valid lead gen content type
+    $valid_types = ['post', 'publications', 'whitepapers'];
+    if (!in_array($post->post_type, $valid_types)) {
+        $log_debug('Invalid content type for lead generation: ' . $post->post_type);
+        wp_send_json_error('Invalid content type for lead generation');
+        return;
+    }
+    
+    // Fetch ACF fields - check if gated content field group is active first
+    $workbooks_reference = '';
+    $campaign_reference = '';
+    
+    $log_debug("Checking ACF field groups for post $post_id");
+    
+    // Check if ACF is available
+    if (!function_exists('get_field')) {
+        $log_debug('ACF get_field function not available');
+        wp_send_json_error('ACF plugin not available');
+        return;
+    }
+    
+    // First, let's see what ACF fields are actually available for this post
+    $all_acf_fields = get_fields($post_id);
+    $log_debug('All ACF fields for post: ' . print_r($all_acf_fields, true));
+    
+    // Check if this post has the "Gated Content" field group and if restrict_post is enabled
+    $restrict_post = get_field('restrict_post', $post_id);
+    $log_debug("Restrict post setting: " . ($restrict_post ? 'true' : 'false'));
+    
+    $has_gated_content = false;
+    
+    if ($restrict_post) {
+        // Access the nested restricted_content_fields group
+        $restricted_content_fields = get_field('restricted_content_fields', $post_id);
+        $log_debug('Restricted content fields: ' . print_r($restricted_content_fields, true));
+        
+        if (is_array($restricted_content_fields)) {
+            $has_gated_content = true;
+            
+            // Extract reference and campaign_reference from the nested group
+            if (isset($restricted_content_fields['reference'])) {
+                $workbooks_reference = $restricted_content_fields['reference'];
+                $log_debug("Found workbooks reference '$workbooks_reference' in restricted_content_fields.reference");
+            }
+            
+            if (isset($restricted_content_fields['campaign_reference'])) {
+                $campaign_reference = $restricted_content_fields['campaign_reference'];
+                $log_debug("Found campaign reference '$campaign_reference' in restricted_content_fields.campaign_reference");
+            }
+        } else {
+            $log_debug('Restricted content fields group is not an array or is empty');
+        }
+    } else {
+        $log_debug('Restrict post is not enabled - checking for legacy field structure');
+        
+        // Fallback: Check for legacy field structure (direct fields)
+        $workbooks_ref_fields = [
+            'workbooks_event_reference',
+            'workbooks_reference', 
+            'event_reference',
+            'reference',
+            'gated_content_workbooks_reference',
+            'gated_content_event_reference'
+        ];
+        
+        foreach ($workbooks_ref_fields as $field_name) {
+            $value = '';
+            // Try ACF first if available
+            if (function_exists('get_field')) {
+                $value = get_field($field_name, $post_id);
+            }
+            // Fallback to post meta
+            if (!$value) {
+                $value = get_post_meta($post_id, $field_name, true);
+            }
+            if ($value) {
+                $workbooks_reference = $value;
+                $has_gated_content = true;
+                $log_debug("Found workbooks reference '$value' in legacy field '$field_name' for post $post_id");
+                break;
+            }
+        }
+        
+        // Try common field names for Campaign reference
+        $campaign_ref_fields = [
+            'campaign_reference',
+            'campaign_ref',
+            'workbooks_campaign_reference',
+            'gated_content_campaign_reference',
+            'gated_content_campaign_ref'
+        ];
+        
+        foreach ($campaign_ref_fields as $field_name) {
+            $value = '';
+            // Try ACF first
+            $value = get_field($field_name, $post_id);
+            // Fallback to post meta
+            if (!$value) {
+                $value = get_post_meta($post_id, $field_name, true);
+            }
+            if ($value) {
+                $campaign_reference = $value;
+                $log_debug("Found campaign reference '$value' in legacy field '$field_name' for post $post_id");
+                break;
+            }
+        }
+    }
+    
+    if (!$has_gated_content) {
+        $log_debug('No gated content fields found - ACF field group may not be active or restrict_post may be disabled');
+    }
+    
+    $log_debug("Final results - Workbooks reference: '$workbooks_reference', Campaign reference: '$campaign_reference'");
+    
+    // Let's also check the raw post meta to see what's actually stored
+    $all_post_meta = get_post_meta($post_id);
+    $log_debug('All post meta for this post: ' . print_r($all_post_meta, true));
+    
+    $response_data = [
+        'workbooks_reference' => $workbooks_reference ?: 'Not set',
+        'campaign_reference' => $campaign_reference ?: 'Not set',
+        'post_type' => $post->post_type,
+        'post_title' => $post->post_title,
+        'has_gated_content' => $has_gated_content,
+        'restrict_post' => $restrict_post,
+        'all_acf_fields' => $all_acf_fields,
+        'debug_info' => [
+            'acf_available' => function_exists('get_field'),
+            'gated_content_approach' => $restrict_post ? 'nested_conditional' : 'legacy_direct'
+        ]
+    ];
+    
+    $log_debug('Sending response: ' . print_r($response_data, true));
+    wp_send_json_success($response_data);
+}
+
 // AJAX handler for fetching Workbooks event details
 add_action('wp_ajax_fetch_workbooks_event', 'dtr_ajax_fetch_workbooks_event');
 add_action('wp_ajax_nopriv_fetch_workbooks_event', 'dtr_ajax_fetch_workbooks_event');
+add_action('wp_ajax_list_workbooks_events', 'dtr_ajax_list_workbooks_events');
+add_action('wp_ajax_nopriv_list_workbooks_events', 'dtr_ajax_list_workbooks_events');
+add_action('wp_ajax_submit_leadgen_form', 'dtr_ajax_submit_leadgen_form');
+add_action('wp_ajax_nopriv_submit_leadgen_form', 'dtr_ajax_submit_leadgen_form');
 function dtr_ajax_fetch_workbooks_event() {
     check_ajax_referer('workbooks_nonce', 'nonce');
     $event_ref = sanitize_text_field($_POST['event_ref'] ?? '');
@@ -228,22 +477,215 @@ function dtr_ajax_fetch_workbooks_event() {
     }
     try {
         $filter_field = is_numeric($event_ref) ? 'id' : 'object_ref';
-        $result = $workbooks->assertGet('crm/events.api', [
+        // Fetch the event with all columns
+        $event_result = $workbooks->assertGet('crm/events.api', [
             '_start' => 0,
             '_limit' => 1,
             '_ff[]' => $filter_field,
             '_ft[]' => 'eq',
             '_fc[]' => $event_ref,
-            '_select_columns[]' => ['id', 'object_ref', 'name', 'start_date', 'end_date', 'description']
+            '_select_columns[]' => '*', // all columns
         ]);
-        if (empty($result['data'])) {
-            wp_send_json_error('Event not found with reference: ' . $event_ref);
+        
+        // Debug: Log the search parameters and result
+        if (function_exists('workbooks_log')) {
+            workbooks_log("Event search - Field: {$filter_field}, Value: {$event_ref}, Results: " . count($event_result['data'] ?? []));
+        }
+        
+        if (empty($event_result['data'][0])) {
+            // Try alternative search methods
+            if (is_numeric($event_ref)) {
+                // Try searching by object_ref as well
+                $alt_result = $workbooks->assertGet('crm/events.api', [
+                    '_start' => 0,
+                    '_limit' => 1,
+                    '_ff[]' => 'object_ref',
+                    '_ft[]' => 'eq',
+                    '_fc[]' => $event_ref,
+                    '_select_columns[]' => '*',
+                ]);
+                if (!empty($alt_result['data'][0])) {
+                    $event_result = $alt_result;
+                }
+            }
+            
+            if (empty($event_result['data'][0])) {
+                wp_send_json_error("Event not found with {$filter_field}: {$event_ref}. Please verify the event exists in Workbooks.");
+                return;
+            }
+        }
+        $event = $event_result['data'][0];
+
+        // Fetch all tabs/related records (e.g., attendees/registrants)
+        // Example: fetch attendees/registrants for the event
+        $attendees_result = $workbooks->assertGet('crm/event_attendees.api', [
+            '_ff[]' => 'event_id',
+            '_ft[]' => 'eq',
+            '_fc[]' => $event['id'],
+            '_select_columns[]' => '*',
+            '_limit' => 1000 // fetch up to 1000 attendees
+        ]);
+        $attendees = $attendees_result['data'] ?? [];
+        
+        // Debug: Log attendees count
+        if (function_exists('workbooks_log')) {
+            workbooks_log("Event {$event['id']} attendees found: " . count($attendees));
+        }
+
+        // You can add more related tabs here if needed (e.g., sponsors, sessions, etc.)
+
+        $response = [
+            'event' => $event,
+            'attendees' => $attendees,
+            // Add more related data here as needed
+        ];
+        wp_send_json_success($response);
+    } catch (Exception $e) {
+        if (function_exists('workbooks_log')) {
+            workbooks_log("Event fetch error for {$event_ref}: " . $e->getMessage());
+        }
+        wp_send_json_error('Error fetching event: ' . $e->getMessage());
+    }
+}
+
+function dtr_ajax_list_workbooks_events() {
+    check_ajax_referer('workbooks_nonce', 'nonce');
+    
+    $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+    if (!$workbooks) {
+        wp_send_json_error('Workbooks API not available');
+        return;
+    }
+    
+    try {
+        // Fetch recent events (last 50)
+        $events_result = $workbooks->assertGet('crm/events.api', [
+            '_start' => 0,
+            '_limit' => 50,
+            '_select_columns[]' => ['id', 'name', 'object_ref', 'start_date', 'end_date', 'event_type', 'lock_version'],
+            '_sort_column' => 'id',
+            '_sort_direction' => 'DESC'
+        ]);
+        
+        $events = $events_result['data'] ?? [];
+        
+        if (function_exists('workbooks_log')) {
+            workbooks_log("Listed " . count($events) . " recent events");
+        }
+        
+        wp_send_json_success(['events' => $events]);
+        
+    } catch (Exception $e) {
+        if (function_exists('workbooks_log')) {
+            workbooks_log("Error listing events: " . $e->getMessage());
+        }
+        wp_send_json_error('Error listing events: ' . $e->getMessage());
+    }
+}
+
+function dtr_ajax_submit_leadgen_form() {
+    check_ajax_referer('workbooks_nonce', 'nonce');
+    
+    // Sanitize form inputs
+    $post_id = intval($_POST['leadgen_post_id'] ?? 0);
+    $event_ref = sanitize_text_field($_POST['leadgen_event_ref'] ?? '');
+    $participant_email = sanitize_email($_POST['leadgen_participant_email'] ?? '');
+    $interest_reason = sanitize_textarea_field($_POST['leadgen_interest_reason'] ?? '');
+    $sponsor_optin = isset($_POST['leadgen_sponsor_optin']) ? 1 : 0;
+    $marketing_optin = isset($_POST['leadgen_marketing_optin']) ? 1 : 0;
+    
+    if (!$participant_email) {
+        wp_send_json_error('Email is required');
+        return;
+    }
+    
+    if (!$post_id && !$event_ref) {
+        wp_send_json_error('Either content selection or event reference is required');
+        return;
+    }
+    
+    $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+    if (!$workbooks) {
+        wp_send_json_error('Workbooks API not available');
+        return;
+    }
+    
+    try {
+        // Get or create person record
+        $person_result = $workbooks->assertGet('crm/people.api', [
+            '_start' => 0,
+            '_limit' => 1,
+            '_ff[]' => 'main_location[email]',
+            '_ft[]' => 'eq',
+            '_fc[]' => $participant_email,
+        ]);
+        
+        $person_id = null;
+        if (!empty($person_result['data'][0])) {
+            $person_id = $person_result['data'][0]['id'];
+        } else {
+            // Create new person if not found
+            $person_data = [
+                'main_location[email]' => $participant_email,
+                'lead_source_type' => 'Lead Generation Form',
+                'cf_person_dtr_subscriber_type' => 'Lead',
+                'cf_person_is_person_active_or_inactive' => 'Active',
+                'cf_person_data_source_detail' => 'Lead Gen Form Submission',
+            ];
+            
+            if ($marketing_optin) {
+                $person_data['cf_person_dtr_news'] = 1;
+                $person_data['cf_person_dtr_events'] = 1;
+            }
+            
+            $create_result = $workbooks->assertCreate('crm/people', [$person_data]);
+            if (!empty($create_result['data'][0]['id'])) {
+                $person_id = $create_result['data'][0]['id'];
+            }
+        }
+        
+        if (!$person_id) {
+            wp_send_json_error('Could not create or find person record');
             return;
         }
-        $event = $result['data'][0];
-        wp_send_json_success($event);
+        
+        // Create lead generation activity
+        $activity_data = [
+            'party_id' => $person_id,
+            'activity_type' => 'Lead Generation',
+            'subject' => 'Lead Gen Form Submission',
+            'description' => "Interest in content: " . ($post_id ? get_the_title($post_id) : "Event $event_ref"),
+        ];
+        
+        if ($interest_reason) {
+            $activity_data['description'] .= "\nReason: " . $interest_reason;
+        }
+        
+        if ($post_id) {
+            $activity_data['description'] .= "\nContent ID: $post_id";
+            $activity_data['description'] .= "\nContent Type: " . get_post_type($post_id);
+        }
+        
+        if ($event_ref) {
+            $activity_data['description'] .= "\nEvent Reference: $event_ref";
+        }
+        
+        $activity_data['description'] .= "\nSponsor Opt-in: " . ($sponsor_optin ? 'Yes' : 'No');
+        $activity_data['description'] .= "\nMarketing Opt-in: " . ($marketing_optin ? 'Yes' : 'No');
+        
+        $activity_result = $workbooks->assertCreate('crm/activities', [$activity_data]);
+        
+        if (function_exists('workbooks_log')) {
+            workbooks_log("Lead gen form submitted for $participant_email, Person ID: $person_id");
+        }
+        
+        wp_send_json_success('Lead generation form submitted successfully. Thank you for your interest!');
+        
     } catch (Exception $e) {
-        wp_send_json_error('Error fetching event: ' . $e->getMessage());
+        if (function_exists('workbooks_log')) {
+            workbooks_log("Lead gen form error for $participant_email: " . $e->getMessage());
+        }
+        wp_send_json_error('Error submitting form: ' . $e->getMessage());
     }
 }
     
@@ -328,6 +770,7 @@ function workbooks_crm_settings_page() {
                 <a href="#" class="nav-tab" id="workbooks-person-tab">Person Record</a>
                 <a href="#" class="nav-tab" id="workbooks-gated-content-tab">Gated Content</a>
                 <a href="#" class="nav-tab" id="workbooks-webinar-tab">Webinar Registration</a>
+                <a href="#" class="nav-tab" id="workbooks-leadgen-tab">Lead Gen Forms</a>
                 <a href="#" class="nav-tab" id="workbooks-membership-tab">Membership Sign Up</a>
                 <a href="#" class="nav-tab" id="workbooks-employers-tab">Employers</a>
                 <a href="#" class="nav-tab" id="workbooks-ninja-users-tab">Ninja Form Users</a>
@@ -357,10 +800,9 @@ function workbooks_crm_settings_page() {
                 <div id="workbooks-settings-content" class="workbooks-tab-content active">
                 <h2>Workbooks CRM Settings</h2>
                 <form method="post" action="options.php">
+                    <?php settings_fields('workbooks_crm_options'); ?>
                     <input type="hidden" name="option_page" value="workbooks_crm_options">
                     <input type="hidden" name="action" value="update">
-                    <input type="hidden" id="_wpnonce" name="_wpnonce" value="6a43e433f9">
-                    <input type="hidden" name="_wp_http_referer" value="/wp-admin/admin.php?page=workbooks-crm-settings">
                     
                     <table class="form-table">
                         <tbody>
@@ -747,6 +1189,391 @@ function workbooks_crm_settings_page() {
                                         // Optionally log or display debug info
                                         console.error('AJAX error:', xhr.responseText);
                                     }
+                                }
+                            });
+                        });
+                    });
+                    </script>
+                </div>
+                <!-- Lead Gen Forms Tab -->
+                <div id="workbooks-leadgen-content" class="workbooks-tab-content">
+                    <?php
+                    // Get all post types that can be used for lead generation
+                    $lead_gen_post_types = ['post', 'publications', 'whitepapers'];
+                    $lead_gen_posts = [];
+                    
+                    foreach ($lead_gen_post_types as $post_type) {
+                        $posts = get_posts([
+                            'post_type'      => $post_type,
+                            'post_status'    => 'publish',
+                            'posts_per_page' => -1,
+                            'orderby'        => 'date',
+                            'order'          => 'DESC',
+                        ]);
+                        foreach ($posts as $post) {
+                            $post->post_type_label = ucfirst($post->post_type);
+                            $lead_gen_posts[] = $post;
+                        }
+                    }
+                    
+                    $current_user_email = esc_attr(wp_get_current_user()->user_email);
+                    ?>
+                    <h2>Lead Generation Forms</h2>
+                    <form id="leadgen-form" method="post">
+                        <p>
+                            <label for="leadgen_event_ref">Search by Workbooks Event ID or Reference:</label><br>
+                            <input type="text" id="leadgen_event_ref" name="leadgen_event_ref" class="regular-text" placeholder="Event ID or Reference (e.g. 5339)" />
+                            <button type="button" id="fetch-leadgen-event-btn" class="button">Fetch Event Details</button>
+                            <button type="button" id="list-leadgen-events-btn" class="button button-secondary">List Recent Events</button>
+                        </p>
+                        <div id="leadgen-event-fetch-response" style="margin-bottom: 15px; color: #444;"></div>
+                        <div id="leadgen-event-fields-table-container" style="margin-bottom: 15px; display:none;"></div>
+                        
+                        <p>
+                            <label for="leadgen_post_id">Or Select Content:</label><br>
+                            <select id="leadgen_post_id" name="leadgen_post_id" required>
+                                <option value="">-- Select Content --</option>
+                                <?php foreach ($lead_gen_posts as $post): ?>
+                                    <option value="<?php echo esc_attr($post->ID); ?>" data-post-type="<?php echo esc_attr($post->post_type); ?>">
+                                        [<?php echo esc_html($post->post_type_label); ?>] <?php echo esc_html($post->post_title); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <button type="button" id="test-ajax-btn" class="button button-secondary">Test AJAX</button>
+                        </p>
+                        
+                        <div id="leadgen-acf-info" style="margin-bottom: 15px; display:none;">
+                            <strong>Content ID:</strong> <span id="leadgen_content_id"></span><br>
+                            <strong>Content Type:</strong> <span id="leadgen_content_type"></span><br>
+                            <strong>Has Gated Content Fields:</strong> <span id="leadgen_has_gated_content"></span><br>
+                            <strong>Workbooks Event Reference:</strong> <span id="leadgen_event_ref_display"></span><br>
+                            <strong>Campaign Reference:</strong> <span id="leadgen_campaign_ref"></span><br>
+                            <strong>All ACF Fields:</strong> <span id="leadgen_all_fields" style="font-family: monospace; font-size: 0.8em;"></span>
+                        </div>
+                        
+                        <p>
+                            <label for="leadgen_participant_email">Participant Email:</label><br>
+                            <input type="email" id="leadgen_participant_email" name="leadgen_participant_email" class="regular-text" required value="<?php echo $current_user_email; ?>" readonly>
+                        </p>
+                        
+                        <p>
+                            <label for="leadgen_interest_reason">Reason for Interest (optional):</label><br>
+                            <textarea id="leadgen_interest_reason" name="leadgen_interest_reason" rows="4" cols="50" placeholder="Why are you interested in this content?"></textarea>
+                        </p>
+                        
+                        <p>
+                            <label>
+                                <input type="checkbox" name="leadgen_sponsor_optin" id="leadgen_sponsor_optin" value="1">
+                                I agree to receive sponsor information (opt-in)
+                            </label>
+                        </p>
+                        
+                        <p>
+                            <label>
+                                <input type="checkbox" name="leadgen_marketing_optin" id="leadgen_marketing_optin" value="1" checked>
+                                I agree to receive marketing communications
+                            </label>
+                        </p>
+                        
+                        <p><button type="submit" class="button button-primary">Submit Lead Gen Form</button></p>
+                    </form>
+                    <div id="leadgen-response" style="margin-top: 20px;"></div>
+                    
+                    <script>
+                    jQuery(document).ready(function($) {
+                        // Test AJAX functionality
+                        $('#test-ajax-btn').on('click', function(e) {
+                            e.preventDefault();
+                            console.log('Testing AJAX...');
+                            
+                            $.ajax({
+                                url: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.ajax_url) ? workbooks_ajax.ajax_url : ajaxurl,
+                                method: 'POST',
+                                data: {
+                                    action: 'test_leadgen_ajax',
+                                    nonce: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.nonce) ? workbooks_ajax.nonce : ''
+                                },
+                                dataType: 'json',
+                                success: function(response) {
+                                    console.log('Test AJAX success:', response);
+                                    alert('AJAX Test: ' + (response.success ? 'SUCCESS - ' + response.data : 'FAILED'));
+                                },
+                                error: function(xhr, status, error) {
+                                    console.log('Test AJAX error:', error);
+                                    console.log('XHR response:', xhr.responseText);
+                                    alert('AJAX Test FAILED: ' + error);
+                                }
+                            });
+                        });
+                        
+                        // Handle content selection to show ACF info
+                        $('#leadgen_post_id').on('change', function() {
+                            var postId = $(this).val();
+                            var postType = $(this).find(':selected').data('post-type');
+                            var $acfInfo = $('#leadgen-acf-info');
+                            
+                            console.log('Lead gen content selected:', postId, postType);
+                            
+                            if (postId) {
+                                $('#leadgen_content_id').text(postId);
+                                $('#leadgen_content_type').text(postType);
+                                
+                                // Fetch actual ACF fields via AJAX
+                                var ajaxData = {
+                                    action: 'fetch_leadgen_acf_data',
+                                    post_id: postId,
+                                    nonce: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.nonce) ? workbooks_ajax.nonce : ''
+                                };
+                                console.log('Sending AJAX request with data:', ajaxData);
+                                
+                                $.ajax({
+                                    url: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.ajax_url) ? workbooks_ajax.ajax_url : ajaxurl,
+                                    method: 'POST',
+                                    data: ajaxData,
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        console.log('ACF data response:', response);
+                                        if (response && response.success) {
+                                            var data = response.data;
+                                            $('#leadgen_event_ref_display').text(data.workbooks_reference || 'Not set');
+                                            $('#leadgen_campaign_ref').text(data.campaign_reference || 'Not set');
+                                            $('#leadgen_has_gated_content').text(data.has_gated_content ? 'Yes' : 'No');
+                                            $('#leadgen_all_fields').text(data.all_acf_fields ? JSON.stringify(data.all_acf_fields) : 'None');
+                                        } else {
+                                            $('#leadgen_event_ref_display').text('Error loading reference');
+                                            $('#leadgen_campaign_ref').text('Error loading reference');
+                                            $('#leadgen_has_gated_content').text('Unknown');
+                                            $('#leadgen_all_fields').text('Error');
+                                            console.error('Error fetching ACF data:', response);
+                                        }
+                                    },
+                                    error: function(xhr, status, error) {
+                                        $('#leadgen_event_ref_display').text('Error loading reference');
+                                        $('#leadgen_campaign_ref').text('Error loading reference');
+                                        $('#leadgen_has_gated_content').text('Unknown');
+                                        $('#leadgen_all_fields').text('Error');
+                                        console.error('AJAX error fetching ACF data:', error);
+                                        console.error('XHR response:', xhr.responseText);
+                                    }
+                                });
+                                
+                                $acfInfo.show();
+                            } else {
+                                $acfInfo.hide();
+                            }
+                        });
+                        
+                        // Fetch event details for lead gen
+                        $('#fetch-leadgen-event-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var eventRef = $('#leadgen_event_ref').val();
+                            var $response = $('#leadgen-event-fetch-response');
+                            var $tableContainer = $('#leadgen-event-fields-table-container');
+                            $response.html('');
+                            $tableContainer.hide().html('');
+                            if (!eventRef) {
+                                $response.html('<span style="color:red;">Please enter an Event ID or Reference.</span>');
+                                return;
+                            }
+                            $response.html('Fetching event details...');
+                            $.ajax({
+                                url: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.ajax_url) ? workbooks_ajax.ajax_url : ajaxurl,
+                                method: 'POST',
+                                data: {
+                                    action: 'fetch_workbooks_event',
+                                    event_ref: eventRef,
+                                    nonce: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.nonce) ? workbooks_ajax.nonce : ''
+                                },
+                                dataType: 'json',
+                                success: function(response) {
+                                    $tableContainer.hide().html('');
+                                    if (response && response.success) {
+                                        var data = response.data;
+                                        // Compose summary message for response div
+                                        var msg = 'Event Found: ';
+                                        if (data.event && data.event.name) {
+                                            msg += data.event.name;
+                                            if (data.event.id) msg += ' (ID: ' + data.event.id + ')';
+                                        } else {
+                                            msg += 'Event details loaded.';
+                                        }
+                                        if (data.event && data.event.start_date) msg += ', Starts: ' + data.event.start_date;
+                                        if (data.event && data.event.end_date) msg += ', Ends: ' + data.event.end_date;
+                                        $response.css('color', 'green').text(msg);
+
+                                        // Build detailed tables for table container
+                                        var html = '';
+                                        if (data.event && typeof data.event === 'object' && Object.keys(data.event).length > 0) {
+                                            html += '<h4 style="margin-top:12px;">Event Details</h4>';
+                                            html += '<table class="widefat striped" style="margin-top:8px; max-width:600px;">';
+                                            html += '<thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
+                                            for (var key in data.event) {
+                                                if (!data.event.hasOwnProperty(key)) continue;
+                                                var val = data.event[key];
+                                                if (typeof val === 'object') val = JSON.stringify(val);
+                                                html += '<tr><td>' + key + '</td><td>' + (val === '' ? '-' : val) + '</td></tr>';
+                                            }
+                                            html += '</tbody></table>';
+                                        } else {
+                                            html += '<div style="margin-top:10px;">No event details found for this reference.</div>';
+                                        }
+                                        
+                                        // Add attendees/registrants table if present
+                                        if (Array.isArray(data.attendees) && data.attendees.length > 0) {
+                                            html += '<h4 style="margin-top:18px;">Registrants / Attendees (' + data.attendees.length + ')</h4>';
+                                            html += '<table class="widefat striped" style="margin-top:8px; max-width:100%;">';
+                                            html += '<thead><tr>';
+                                            // Get all unique keys from all attendees
+                                            var allKeys = {};
+                                            data.attendees.forEach(function(a) { for (var k in a) allKeys[k]=1; });
+                                            var keys = Object.keys(allKeys);
+                                            keys.forEach(function(k) { html += '<th>' + k + '</th>'; });
+                                            html += '</tr></thead><tbody>';
+                                            data.attendees.forEach(function(att) {
+                                                html += '<tr>';
+                                                keys.forEach(function(k) {
+                                                    var v = att[k];
+                                                    if (typeof v === 'object') v = JSON.stringify(v);
+                                                    html += '<td>' + (v === undefined || v === '' ? '-' : v) + '</td>';
+                                                });
+                                                html += '</tr>';
+                                            });
+                                            html += '</tbody></table>';
+                                        } else {
+                                            html += '<div style="margin-top:10px;">No registrants/attendees found for this event.</div>';
+                                        }
+                                        
+                                        $tableContainer.html(html).show();
+                                    } else {
+                                        var errorMsg = 'Could not fetch event details.';
+                                        if (response && response.data) {
+                                            errorMsg += ' Error: ' + response.data;
+                                        }
+                                        $response.html('<span style="color:red;">' + errorMsg + '</span>');
+                                        $tableContainer.hide().html('');
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    $tableContainer.hide().html('');
+                                    var errorMsg = 'AJAX error fetching event details.';
+                                    if (xhr && xhr.responseJSON && xhr.responseJSON.data) {
+                                        errorMsg += ' ' + xhr.responseJSON.data;
+                                    } else if (xhr && xhr.responseText) {
+                                        try {
+                                            var response = JSON.parse(xhr.responseText);
+                                            if (response && response.data) {
+                                                errorMsg += ' ' + response.data;
+                                            }
+                                        } catch (e) {
+                                            errorMsg += ' Server returned: ' + xhr.status + ' ' + xhr.statusText;
+                                        }
+                                    }
+                                    $response.html('<span style="color:red;">' + errorMsg + '</span>');
+                                    console.error('AJAX error details:', xhr, status, error);
+                                }
+                            });
+                        });
+                        
+                        // List recent events for lead gen
+                        $('#list-leadgen-events-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $response = $('#leadgen-event-fetch-response');
+                            var $tableContainer = $('#leadgen-event-fields-table-container');
+                            $response.html('');
+                            $tableContainer.hide().html('');
+                            
+                            $response.html('Loading recent events...');
+                            
+                            $.ajax({
+                                url: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.ajax_url) ? workbooks_ajax.ajax_url : ajaxurl,
+                                method: 'POST',
+                                data: {
+                                    action: 'list_workbooks_events',
+                                    nonce: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.nonce) ? workbooks_ajax.nonce : ''
+                                },
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response && response.success && response.data && response.data.events) {
+                                        var events = response.data.events;
+                                        $response.css('color', 'green').text('Found ' + events.length + ' recent events:');
+                                        
+                                        var html = '<h4 style="margin-top:12px;">Recent Events</h4>';
+                                        if (events.length > 0) {
+                                            html += '<table class="widefat striped" style="margin-top:8px; max-width:100%;">';
+                                            html += '<thead><tr><th>ID</th><th>Name</th><th>Object Ref</th><th>Start Date</th><th>End Date</th><th>Type</th><th>Actions</th></tr></thead><tbody>';
+                                            events.forEach(function(event) {
+                                                html += '<tr>';
+                                                html += '<td>' + (event.id || '-') + '</td>';
+                                                html += '<td>' + (event.name || '-') + '</td>';
+                                                html += '<td>' + (event.object_ref || '-') + '</td>';
+                                                html += '<td>' + (event.start_date || '-') + '</td>';
+                                                html += '<td>' + (event.end_date || '-') + '</td>';
+                                                html += '<td>' + (event.event_type || '-') + '</td>';
+                                                html += '<td><button type="button" class="button button-small fetch-this-leadgen-event" data-event-id="' + event.id + '">Fetch This Event</button></td>';
+                                                html += '</tr>';
+                                            });
+                                            html += '</tbody></table>';
+                                        } else {
+                                            html += '<p>No events found.</p>';
+                                        }
+                                        
+                                        $tableContainer.html(html).show();
+                                        
+                                        // Add click handlers for "Fetch This Event" buttons
+                                        $('.fetch-this-leadgen-event').on('click', function() {
+                                            var eventId = $(this).data('event-id');
+                                            $('#leadgen_event_ref').val(eventId);
+                                            $('#fetch-leadgen-event-btn').click();
+                                        });
+                                    } else {
+                                        var errorMsg = 'Could not load events.';
+                                        if (response && response.data) {
+                                            errorMsg += ' Error: ' + response.data;
+                                        }
+                                        $response.html('<span style="color:red;">' + errorMsg + '</span>');
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    var errorMsg = 'AJAX error loading events.';
+                                    if (xhr && xhr.responseJSON && xhr.responseJSON.data) {
+                                        errorMsg += ' ' + xhr.responseJSON.data;
+                                    }
+                                    $response.html('<span style="color:red;">' + errorMsg + '</span>');
+                                    console.error('AJAX error details:', xhr, status, error);
+                                }
+                            });
+                        });
+                        
+                        // Handle lead gen form submission
+                        $('#leadgen-form').on('submit', function(e) {
+                            e.preventDefault();
+                            var $response = $('#leadgen-response');
+                            $response.html('Submitting lead generation form...');
+                            
+                            var formData = $(this).serialize();
+                            formData += '&action=submit_leadgen_form&nonce=' + (typeof workbooks_ajax !== 'undefined' ? workbooks_ajax.nonce : '');
+                            
+                            $.ajax({
+                                url: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.ajax_url) ? workbooks_ajax.ajax_url : ajaxurl,
+                                method: 'POST',
+                                data: formData,
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response && response.success) {
+                                        $response.html('<div style="color:green; border:1px solid green; padding:10px; background:#f0fff0;">Success: ' + response.data + '</div>');
+                                        // Reset form
+                                        $('#leadgen-form')[0].reset();
+                                        $('#leadgen-acf-info').hide();
+                                    } else {
+                                        var errorMsg = 'Error submitting form.';
+                                        if (response && response.data) {
+                                            errorMsg = response.data;
+                                        }
+                                        $response.html('<div style="color:red; border:1px solid red; padding:10px; background:#fff0f0;">Error: ' + errorMsg + '</div>');
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    $response.html('<div style="color:red; border:1px solid red; padding:10px; background:#fff0f0;">AJAX error submitting form. Please try again.</div>');
                                 }
                             });
                         });
@@ -1229,6 +2056,8 @@ function workbooks_crm_settings_page() {
                     contentId = 'workbooks-gated-events-content';
                 } else if (tabId === 'workbooks-webinar-tab') {
                     contentId = 'workbooks-webinar-content';
+                } else if (tabId === 'workbooks-leadgen-tab') {
+                    contentId = 'workbooks-leadgen-content';
                 } else if (tabId === 'workbooks-membership-tab') {
                     contentId = 'workbooks-membership-content';
                 } else if (tabId === 'workbooks-employers-tab') {

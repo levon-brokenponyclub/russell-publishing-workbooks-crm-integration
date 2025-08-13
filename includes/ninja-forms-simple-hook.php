@@ -1,63 +1,508 @@
 <?php
 /**
- * Clean Ninja Forms webinar integration that works exactly like the successful webinar form
+ * Ninja Forms Lead Generation & Webinar Registration Hook
+ * Catches form submissions and registers leads/webinars in Workbooks
  */
 
-// Prevent direct access
-if (!defined('ABSPATH')) {
-    exit;
+if (!defined('ABSPATH')) exit;
+
+// Hook into Ninja Forms submission
+add_action('ninja_forms_after_submission', 'dtr_ninja_forms_lead_generation_handler', 10, 1);
+
+/**
+ * Main Ninja Forms submission handler for lead generation
+ */
+function dtr_ninja_forms_lead_generation_handler($form_data) {
+    try {
+        dtr_lead_debug("=== NINJA FORMS SUBMISSION DETECTED ===");
+        dtr_lead_debug("Form Data: " . print_r($form_data, true));
+        
+        // Check if this is a webinar form (Form ID 2) - if so, skip processing
+        $form_id = null;
+        if (isset($form_data['form_id'])) {
+            $form_id = $form_data['form_id'];
+        } elseif (isset($form_data['id'])) {
+            $form_id = $form_data['id'];
+        }
+        
+        dtr_lead_debug("Detected form ID: " . $form_id);
+        
+        // Handle both webinar forms (Form ID 2) and lead generation forms (Form ID 31)
+        if ($form_id == 2 || $form_id === '2') {
+            dtr_lead_debug("✅ Processing webinar form (ID 2)");
+            dtr_handle_webinar_form_submission($form_data);
+            return;
+        }
+        
+        // Only process lead generation forms (Form ID 31)
+        if ($form_id != 31 && $form_id !== '31') {
+            dtr_lead_debug("ℹ️  Form ID $form_id not configured for lead generation processing");
+            return;
+        }
+        
+        dtr_lead_debug("✅ Processing lead generation form (ID 31)");
+        
+        // Get current post context
+        $current_post_id = get_the_ID();
+        if (!$current_post_id) {
+            global $post;
+            if ($post && isset($post->ID)) {
+                $current_post_id = $post->ID;
+            }
+        }
+        
+        // Try to get post ID from $_POST data as fallback
+        if (!$current_post_id && isset($_POST['post_id'])) {
+            $current_post_id = intval($_POST['post_id']);
+        }
+        
+        // Try to get post ID from $_SERVER['HTTP_REFERER'] as last resort
+        if (!$current_post_id && isset($_SERVER['HTTP_REFERER'])) {
+            $referer_post_id = url_to_postid($_SERVER['HTTP_REFERER']);
+            if ($referer_post_id) {
+                $current_post_id = $referer_post_id;
+            }
+        }
+        
+        if (!$current_post_id) {
+            dtr_lead_debug("❌ ERROR: No post context found for form submission");
+            return;
+        }
+        
+        dtr_lead_debug("✅ Post Context Found: Post ID $current_post_id");
+        
+        // Get post details
+        $post = get_post($current_post_id);
+        if (!$post) {
+            dtr_lead_debug("❌ ERROR: Could not get post data for ID $current_post_id");
+            return;
+        }
+        
+        dtr_lead_debug("✅ Post Details: '{$post->post_title}' (Type: {$post->post_type})");
+        
+        // Extract form field data
+        $form_fields = array();
+        $email = '';
+        $first_name = '';
+        $last_name = '';
+        $company = '';
+        $interest_reason = '';
+        $speaker_question = '';
+        $sponsor_optin = false;
+        $marketing_optin = false;
+        
+        // First, check if we have the new Ninja Forms structure with fields_by_key
+        if (isset($form_data['fields_by_key']) && is_array($form_data['fields_by_key'])) {
+            dtr_lead_debug("✅ Using fields_by_key structure for field extraction");
+            foreach ($form_data['fields_by_key'] as $key => $field_data) {
+                $key = strtolower($key);
+                // Get the actual submitted value, not the default
+                $value = '';
+                if (isset($field_data['value'])) {
+                    $value = $field_data['value'];
+                } elseif (isset($field_data['settings']['value'])) {
+                    $value = $field_data['settings']['value'];
+                }
+                
+                $form_fields[$key] = $value;
+                dtr_lead_debug("  Field '$key' = '$value'");
+                
+                // Map specific field names based on the logged-in user context
+                if ($key === 'email_address') {
+                    // For the email_address field, get the current user's email if it's not set
+                    if (empty($value) || $value === '{field:email_address}' || strpos($value, '{') !== false) {
+                        $current_user = wp_get_current_user();
+                        if ($current_user && $current_user->user_email) {
+                            $email = $current_user->user_email;
+                            dtr_lead_debug("  📧 Using logged-in user email: $email");
+                        } else {
+                            $email = $value;
+                        }
+                    } else {
+                        $email = $value;
+                    }
+                } elseif (strpos($key, 'first') !== false && strpos($key, 'name') !== false) {
+                    $first_name = $value;
+                } elseif (strpos($key, 'last') !== false && strpos($key, 'name') !== false) {
+                    $last_name = $value;
+                } elseif (strpos($key, 'company') !== false || strpos($key, 'organization') !== false) {
+                    $company = $value;
+                } elseif (strpos($key, 'interest') !== false || strpos($key, 'reason') !== false) {
+                    $interest_reason = $value;
+                } elseif (strpos($key, 'speaker') !== false && strpos($key, 'question') !== false) {
+                    $speaker_question = $value;
+                } elseif (strpos($key, 'sponsor') !== false && strpos($key, 'optin') !== false) {
+                    $sponsor_optin = !empty($value);
+                } elseif (strpos($key, 'marketing') !== false && strpos($key, 'optin') !== false) {
+                    $marketing_optin = !empty($value);
+                }
+            }
+        } elseif (isset($form_data['fields']) && is_array($form_data['fields'])) {
+            dtr_lead_debug("✅ Using legacy fields array structure for field extraction");
+            foreach ($form_data['fields'] as $field) {
+                if (isset($field['key']) && isset($field['value'])) {
+                    $key = strtolower($field['key']);
+                    $value = $field['value'];
+                    $form_fields[$key] = $value;
+                    dtr_lead_debug("  Field '$key' = '$value'");
+                    
+                    // Map common field names
+                    if (strpos($key, 'email') !== false) {
+                        $email = $value;
+                    } elseif (strpos($key, 'first') !== false && strpos($key, 'name') !== false) {
+                        $first_name = $value;
+                    } elseif (strpos($key, 'last') !== false && strpos($key, 'name') !== false) {
+                        $last_name = $value;
+                    } elseif (strpos($key, 'company') !== false || strpos($key, 'organization') !== false) {
+                        $company = $value;
+                    } elseif (strpos($key, 'interest') !== false || strpos($key, 'reason') !== false) {
+                        $interest_reason = $value;
+                    } elseif (strpos($key, 'speaker') !== false && strpos($key, 'question') !== false) {
+                        $speaker_question = $value;
+                    } elseif (strpos($key, 'sponsor') !== false && strpos($key, 'optin') !== false) {
+                        $sponsor_optin = !empty($value);
+                    } elseif (strpos($key, 'marketing') !== false && strpos($key, 'optin') !== false) {
+                        $marketing_optin = !empty($value);
+                    }
+                }
+            }
+        }
+        
+        if (!$email) {
+            dtr_lead_debug("❌ No email found in form fields, trying current user fallback...");
+            
+            // Fallback: Try to get the current user's email if no email was found
+            $current_user = wp_get_current_user();
+            if ($current_user && $current_user->user_email) {
+                $email = $current_user->user_email;
+                dtr_lead_debug("✅ Using logged-in user email as fallback: $email");
+            } else {
+                dtr_lead_debug("❌ ERROR: No email address found in form submission and no logged-in user");
+                return;
+            }
+        }
+        
+        dtr_lead_debug("✅ Form Data Extracted:");
+        dtr_lead_debug("  - Email: $email");
+        dtr_lead_debug("  - Name: $first_name $last_name");
+        dtr_lead_debug("  - Company: $company");
+        dtr_lead_debug("  - Interest Reason: $interest_reason");
+        dtr_lead_debug("  - Speaker Question: $speaker_question");
+        dtr_lead_debug("  - Sponsor Opt-in: " . ($sponsor_optin ? 'Yes' : 'No'));
+        dtr_lead_debug("  - Marketing Opt-in: " . ($marketing_optin ? 'Yes' : 'No'));
+        
+        // Get Workbooks event reference and campaign reference from ACF fields
+        $workbooks_reference = '';
+        $campaign_reference = '';
+        
+        // Check if this post has the "Gated Content" field group and if restrict_post is enabled
+        $restrict_post = get_field('restrict_post', $current_post_id);
+        dtr_lead_debug("Restrict post setting: " . ($restrict_post ? 'true' : 'false'));
+        
+        if ($restrict_post) {
+            // Access the nested restricted_content_fields group
+            $restricted_content_fields = get_field('restricted_content_fields', $current_post_id);
+            dtr_lead_debug('Restricted content fields: ' . print_r($restricted_content_fields, true));
+            
+            if (is_array($restricted_content_fields)) {
+                // Extract reference and campaign_reference from the nested group
+                if (isset($restricted_content_fields['reference'])) {
+                    $workbooks_reference = $restricted_content_fields['reference'];
+                    dtr_lead_debug("Found workbooks reference '$workbooks_reference' in restricted_content_fields.reference");
+                }
+                
+                if (isset($restricted_content_fields['campaign_reference'])) {
+                    $campaign_reference = $restricted_content_fields['campaign_reference'];
+                    dtr_lead_debug("Found campaign reference '$campaign_reference' in restricted_content_fields.campaign_reference");
+                }
+            }
+        } else {
+            // Fallback: Check for legacy field structure (direct fields)
+            $workbooks_ref_fields = [
+                'workbooks_event_reference',
+                'workbooks_reference', 
+                'event_reference',
+                'reference'
+            ];
+            
+            foreach ($workbooks_ref_fields as $field_name) {
+                $value = get_field($field_name, $current_post_id) ?: get_post_meta($current_post_id, $field_name, true);
+                if ($value) {
+                    $workbooks_reference = $value;
+                    dtr_lead_debug("Found workbooks reference '$value' in field '$field_name'");
+                    break;
+                }
+            }
+            
+            // Try common field names for Campaign reference
+            $campaign_ref_fields = [
+                'campaign_reference',
+                'campaign_ref',
+                'workbooks_campaign_reference'
+            ];
+            
+            foreach ($campaign_ref_fields as $field_name) {
+                $value = get_field($field_name, $current_post_id) ?: get_post_meta($current_post_id, $field_name, true);
+                if ($value) {
+                    $campaign_reference = $value;
+                    dtr_lead_debug("Found campaign reference '$value' in field '$field_name'");
+                    break;
+                }
+            }
+        }
+        
+        if (!$workbooks_reference) {
+            dtr_lead_debug("❌ ERROR: No Workbooks event reference found for post ID $current_post_id");
+            return;
+        }
+        
+        dtr_lead_debug("✅ Workbooks Event Reference: $workbooks_reference");
+        dtr_lead_debug("✅ Campaign Reference: $campaign_reference");
+        
+        // Extract numeric event ID from reference (e.g. EVENT-2893 -> 2893)
+        $event_id = null;
+        if (preg_match('/(\d+)$/', $workbooks_reference, $matches)) {
+            $event_id = $matches[1];
+            dtr_lead_debug("✅ Extracted event numeric ID: $event_id from $workbooks_reference");
+        } else {
+            dtr_lead_debug("❌ ERROR: Could not extract event_id from reference $workbooks_reference");
+            return;
+        }
+        
+        // Register the lead in Workbooks
+        $registration_result = dtr_register_workbooks_event_lead(
+            $event_id,
+            $email,
+            $first_name,
+            $last_name,
+            $company,
+            $interest_reason,
+            $speaker_question,
+            $sponsor_optin,
+            $marketing_optin,
+            $current_post_id,
+            $post->post_title,
+            $campaign_reference
+        );
+        
+        if ($registration_result) {
+            dtr_lead_debug("🎉 Lead generation registration successful!");
+            dtr_lead_debug("Registration result: " . print_r($registration_result, true));
+        } else {
+            dtr_lead_debug("❌ Lead generation registration failed");
+        }
+        
+    } catch (Exception $e) {
+        dtr_lead_debug("❌ Exception during lead registration: " . $e->getMessage());
+        dtr_lead_debug("Exception details: " . print_r($e, true));
+    }
 }
 
-// Debug logging function
-function dtr_simple_debug($message) {
-    $debug_log_file = WP_CONTENT_DIR . '/plugins/dtr-workbooks-crm-integration/simple-webinar-debug.log';
-    error_log("[" . date('Y-m-d H:i:s') . "] $message\n", 3, $debug_log_file);
+/**
+ * Register a lead in a Workbooks event (not campaign)
+ * Creates both the person record and the event ticket
+ */
+function dtr_register_workbooks_event_lead($event_id, $email, $first_name = '', $last_name = '', $company = '', $interest_reason = '', $speaker_question = '', $sponsor_optin = false, $marketing_optin = false, $post_id = null, $post_title = '', $campaign_reference = '') {
+    try {
+        dtr_lead_debug("🚀 Starting Workbooks event lead registration");
+        dtr_lead_debug("  - Event ID: $event_id");
+        dtr_lead_debug("  - Email: $email");
+        dtr_lead_debug("  - Name: $first_name $last_name");
+        dtr_lead_debug("  - Company: $company");
+        dtr_lead_debug("  - Speaker Question: $speaker_question");
+        dtr_lead_debug("  - Sponsor Opt-in: " . ($sponsor_optin ? 'Yes' : 'No'));
+        dtr_lead_debug("  - Post: $post_title (ID: $post_id)");
+        
+        $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+        if (!$workbooks) {
+            dtr_lead_debug('❌ ERROR: Workbooks instance not available');
+            return false;
+        }
+        
+        // Step 1: Check if person already exists
+        dtr_lead_debug("🔍 Checking if person exists with email: $email");
+        $person_search_result = $workbooks->assertGet('crm/people.api', [
+            '_start' => 0,
+            '_limit' => 1,
+            '_ff[]' => 'main_location[email]',
+            '_ft[]' => 'eq',
+            '_fc[]' => $email,
+            '_select_columns[]' => ['id', 'object_ref', 'person_first_name', 'person_last_name', 'main_location[email]']
+        ]);
+        
+        $person_id = null;
+        $person_object_ref = null;
+        
+        if (!empty($person_search_result['data'][0])) {
+            $person_data = $person_search_result['data'][0];
+            $person_id = $person_data['id'];
+            $person_object_ref = $person_data['object_ref'];
+            dtr_lead_debug("✅ Found existing person: ID $person_id, Object Ref: $person_object_ref");
+        } else {
+            // Step 2: Create new person if not found
+            dtr_lead_debug("👤 Creating new person in Workbooks");
+            
+            $person_payload = [
+                'person_first_name' => $first_name,
+                'person_last_name' => $last_name,
+                'main_location[email]' => $email,
+                'cf_person_dtr_subscriber_type' => 'Lead',
+                'cf_person_dtr_web_member' => 1,
+                'lead_source_type' => 'Lead Generation Form',
+                'cf_person_is_person_active_or_inactive' => 'Active',
+                'cf_person_data_source_detail' => 'DTR Lead Gen - ' . $post_title,
+                'created_through_reference' => 'leadgen_' . $post_id . '_' . time()
+            ];
+            
+            if ($company) {
+                $person_payload['cf_person_claimed_employer'] = $company;
+            }
+            
+            if ($marketing_optin) {
+                $person_payload['cf_person_dtr_news'] = 1;
+                $person_payload['cf_person_dtr_events'] = 1;
+            }
+            
+            $person_result = $workbooks->assertCreate('crm/people', [$person_payload]);
+            
+            if (!empty($person_result['data'][0]['id'])) {
+                $person_id = $person_result['data'][0]['id'];
+                $person_object_ref = $person_result['data'][0]['object_ref'] ?? '';
+                dtr_lead_debug("✅ Created new person: ID $person_id, Object Ref: $person_object_ref");
+            } else {
+                dtr_lead_debug("❌ ERROR: Failed to create person in Workbooks");
+                dtr_lead_debug("Person creation result: " . print_r($person_result, true));
+                return false;
+            }
+        }
+        
+        // Step 3: Check if the person is already registered for this event
+        dtr_lead_debug("🎫 Checking if person is already registered for event $event_id");
+        $ticket_search_result = $workbooks->assertGet('event/tickets.api', [
+            '_start' => 0,
+            '_limit' => 1,
+            '_ff[]' => ['person_id', 'event_id'],
+            '_ft[]' => ['eq', 'eq'],
+            '_fc[]' => [$person_id, $event_id]
+        ]);
+        
+        if (!empty($ticket_search_result['data'][0])) {
+            $existing_ticket = $ticket_search_result['data'][0];
+            dtr_lead_debug("⚠️  Person already registered for this event. Ticket ID: " . $existing_ticket['id']);
+            return [
+                'success' => true,
+                'message' => 'Person already registered for event',
+                'person_id' => $person_id,
+                'ticket_id' => $existing_ticket['id'],
+                'existing_registration' => true
+            ];
+        }
+        
+        // Step 4: Create event ticket (registration)
+        dtr_lead_debug("🎫 Creating event ticket for event $event_id");
+        
+        $ticket_payload = [[
+            'event_id' => $event_id,
+            'person_id' => $person_id,
+            'name' => $first_name . ' ' . $last_name,
+            'status' => 'Registered'
+        ]];
+        
+        if ($interest_reason) {
+            $ticket_payload[0]['cf_event_ticket_interest_reason'] = $interest_reason;
+        }
+        
+        if ($speaker_question) {
+            $ticket_payload[0]['cf_event_ticket_speaker_questions'] = $speaker_question;
+        }
+        
+        if ($sponsor_optin) {
+            $ticket_payload[0]['cf_event_ticket_sponsor_optin'] = 1;
+        }
+        
+        if ($campaign_reference) {
+            $ticket_payload[0]['cf_event_ticket_campaign_ref'] = $campaign_reference;
+        }
+        
+        $ticket_result = $workbooks->create('event/tickets.api', $ticket_payload);
+        
+        if (!empty($ticket_result['affected_objects'][0]['id'])) {
+            $ticket_id = $ticket_result['affected_objects'][0]['id'];
+            dtr_lead_debug("✅ Created event ticket: ID $ticket_id");
+            
+            return [
+                'success' => true,
+                'message' => 'Lead successfully registered for event',
+                'person_id' => $person_id,
+                'person_object_ref' => $person_object_ref,
+                'ticket_id' => $ticket_id,
+                'event_id' => $event_id,
+                'existing_registration' => false
+            ];
+        } else {
+            dtr_lead_debug("❌ ERROR: Failed to create event ticket");
+            dtr_lead_debug("Ticket creation result: " . print_r($ticket_result, true));
+            return false;
+        }
+        
+    } catch (Exception $e) {
+        dtr_lead_debug("❌ Exception in event lead registration: " . $e->getMessage());
+        dtr_lead_debug("Exception details: " . print_r($e, true));
+        return false;
+    }
 }
 
-// Hook into Ninja Forms submission with early priority to avoid conflicts
-add_action('ninja_forms_submit_data', 'dtr_ninja_forms_webinar_hook', 5);
-
-function dtr_ninja_forms_webinar_hook($form_data) {
-    dtr_simple_debug("=== NINJA FORMS HOOK ===");
-    
-    // Handle different form types
-    if (!isset($form_data['id'])) {
-        dtr_simple_debug("No form ID found");
-        return $form_data;
+/**
+ * Debug logging function for lead generation
+ */
+function dtr_lead_debug($message) {
+    // Log to WordPress debug.log if WP_DEBUG is enabled
+    if (defined('WP_DEBUG') && WP_DEBUG) {
+        error_log("[DTR Lead Gen] $message");
     }
     
-    $form_id = $form_data['id'];
-    dtr_simple_debug("Processing form ID: " . $form_id);
+    // Also log to our custom debug file in plugin logs directory
+    $debug_log_file = WORKBOOKS_NF_PATH . 'logs/gated-post-submissions-debug.log';
     
-    // Route to appropriate handler
-    if ($form_id === '2_1') {
-        dtr_simple_debug("✅ Detected webinar form submission!");
-        dtr_handle_webinar_form($form_data);
-    } elseif ($form_id === '31') {
-        dtr_simple_debug("✅ Detected lead generation form submission!");
-        dtr_handle_lead_generation_form($form_data);
-    } else {
-        dtr_simple_debug("Form not handled. Form ID: " . $form_id);
+    // Ensure the logs directory exists
+    $logs_dir = dirname($debug_log_file);
+    if (!file_exists($logs_dir)) {
+        wp_mkdir_p($logs_dir);
     }
     
-    return $form_data;
+    $log_entry = "[" . date('Y-m-d H:i:s') . "] $message\n";
+    error_log($log_entry, 3, $debug_log_file);
 }
 
-function dtr_handle_webinar_form($form_data) {
+/**
+ * Handle webinar form submissions (Form ID 2)
+ */
+function dtr_handle_webinar_form_submission($form_data) {
+    dtr_lead_debug("=== PROCESSING WEBINAR FORM SUBMISSION ===");
     
-    // Extract form fields by their keys (like the working form)
+    // Get participant email from current user (webinar requires login)
+    $current_user = wp_get_current_user();
+    if (!$current_user || !$current_user->user_email) {
+        dtr_lead_debug("❌ ERROR: No current user or user email - webinar registration requires login");
+        return;
+    }
+    
+    $participant_email = $current_user->user_email;
+    dtr_lead_debug("✅ Using current user email: $participant_email");
+    
+    // Extract form fields
     $webinar_title = '';
     $post_id = '';
     $speaker_question = '';
     $sponsor_optin = '';
     
     if (isset($form_data['fields']) && is_array($form_data['fields'])) {
-        foreach ($form_data['fields'] as $field_id => $field_data) {
-            if (isset($field_data['key'])) {
-                $key = $field_data['key'];
-                $value = isset($field_data['value']) ? $field_data['value'] : '';
+        foreach ($form_data['fields'] as $field) {
+            if (isset($field['key']) && isset($field['value'])) {
+                $key = $field['key'];
+                $value = $field['value'];
                 
-                dtr_simple_debug("Field $key: $value");
+                dtr_lead_debug("Field $key: $value");
                 
                 switch ($key) {
                     case 'webinar_title':
@@ -77,50 +522,43 @@ function dtr_handle_webinar_form($form_data) {
         }
     }
     
-    // Get participant email exactly like the working form does
-    $current_user = wp_get_current_user();
-    if (!$current_user || !$current_user->user_email) {
-        dtr_simple_debug("❌ ERROR: No current user or user email - webinar registration requires login");
-        return;
-    }
-    
-    $participant_email = $current_user->user_email;
-    dtr_simple_debug("✅ Using current user email: $participant_email");
-    
     // Validate required data
     if (empty($webinar_title) || empty($post_id) || empty($participant_email)) {
-        dtr_simple_debug("❌ ERROR: Missing required data");
-        dtr_simple_debug("  - Webinar Title: " . ($webinar_title ?: 'MISSING'));
-        dtr_simple_debug("  - Post ID: " . ($post_id ?: 'MISSING'));
-        dtr_simple_debug("  - Email: " . ($participant_email ?: 'MISSING'));
+        dtr_lead_debug("❌ ERROR: Missing required webinar data");
+        dtr_lead_debug("  - Webinar Title: " . ($webinar_title ?: 'MISSING'));
+        dtr_lead_debug("  - Post ID: " . ($post_id ?: 'MISSING'));
+        dtr_lead_debug("  - Email: " . ($participant_email ?: 'MISSING'));
         return;
     }
     
-    dtr_simple_debug("✅ All required data present");
+    dtr_lead_debug("✅ All required webinar data present");
     
-    // Call the working webinar registration function directly
-    dtr_call_workbooks_webinar_registration($post_id, $participant_email, $speaker_question, $sponsor_optin);
+    // Call the core webinar registration function
+    dtr_call_webinar_registration($post_id, $participant_email, $speaker_question, $sponsor_optin);
 }
 
-function dtr_call_workbooks_webinar_registration($post_id, $participant_email, $speaker_question, $sponsor_optin) {
-    dtr_simple_debug("=== CALLING CORE WEBINAR REGISTRATION ===");
+/**
+ * Call the core webinar registration function
+ */
+function dtr_call_webinar_registration($post_id, $participant_email, $speaker_question, $sponsor_optin) {
+    dtr_lead_debug("=== CALLING CORE WEBINAR REGISTRATION ===");
     
     // Check if the core registration function exists
     if (!function_exists('dtr_register_workbooks_webinar')) {
-        dtr_simple_debug("❌ ERROR: Core webinar registration function not found");
+        dtr_lead_debug("❌ ERROR: Core webinar registration function not found");
         
         // Include the ajax-handlers file if it's not loaded
         $ajax_handlers_path = WP_CONTENT_DIR . '/plugins/dtr-workbooks-crm-integration/includes/ajax-handlers.php';
         if (file_exists($ajax_handlers_path)) {
             include_once $ajax_handlers_path;
-            dtr_simple_debug("✅ Loaded ajax-handlers.php");
+            dtr_lead_debug("✅ Loaded ajax-handlers.php");
         } else {
-            dtr_simple_debug("❌ ERROR: ajax-handlers.php not found");
+            dtr_lead_debug("❌ ERROR: ajax-handlers.php not found");
             return;
         }
     }
     
-    // Prepare data for the core registration function (no AJAX needed)
+    // Prepare data for the core registration function
     $registration_data = array(
         'webinar_post_id' => $post_id,
         'participant_email' => $participant_email,
@@ -128,208 +566,34 @@ function dtr_call_workbooks_webinar_registration($post_id, $participant_email, $
         'privacy_consent' => $sponsor_optin
     );
     
-    dtr_simple_debug("✅ Prepared registration data:");
-    dtr_simple_debug("  - webinar_post_id: " . $registration_data['webinar_post_id']);
-    dtr_simple_debug("  - participant_email: " . $registration_data['participant_email']);
-    dtr_simple_debug("  - speaker_question: " . $registration_data['speaker_question']);
-    dtr_simple_debug("  - privacy_consent: " . $registration_data['privacy_consent']);
+    dtr_lead_debug("✅ Prepared webinar registration data:");
+    dtr_lead_debug("  - webinar_post_id: " . $registration_data['webinar_post_id']);
+    dtr_lead_debug("  - participant_email: " . $registration_data['participant_email']);
+    dtr_lead_debug("  - speaker_question: " . $registration_data['speaker_question']);
+    dtr_lead_debug("  - privacy_consent: " . $registration_data['privacy_consent']);
     
-    // Call the core registration function directly (bypasses AJAX)
+    // Call the core registration function directly
     try {
-        dtr_simple_debug("🚀 Calling dtr_register_workbooks_webinar()...");
+        dtr_lead_debug("🚀 Calling dtr_register_workbooks_webinar()...");
         
-        // Call the core registration function
         $result = dtr_register_workbooks_webinar($registration_data);
         
-        dtr_simple_debug("✅ Core registration function completed");
+        dtr_lead_debug("✅ Core webinar registration completed");
         
         if ($result !== null) {
-            dtr_simple_debug("✅ Registration result: " . print_r($result, true));
+            dtr_lead_debug("✅ Registration result: " . print_r($result, true));
         } else {
-            dtr_simple_debug("ℹ️  Registration completed without return value");
+            dtr_lead_debug("ℹ️  Registration completed without return value");
         }
         
-        dtr_simple_debug("🎉 Webinar registration successful via Ninja Forms hook!");
+        dtr_lead_debug("🎉 Webinar registration successful via Ninja Forms hook!");
         
     } catch (Exception $e) {
-        dtr_simple_debug("❌ Exception during registration: " . $e->getMessage());
-        dtr_simple_debug("Exception details: " . print_r($e, true));
+        dtr_lead_debug("❌ Exception during webinar registration: " . $e->getMessage());
     } catch (Error $e) {
-        dtr_simple_debug("❌ Error during registration: " . $e->getMessage());
-        dtr_simple_debug("Error details: " . print_r($e, true));
+        dtr_lead_debug("❌ Error during webinar registration: " . $e->getMessage());
     }
 }
 
-function dtr_handle_lead_generation_form($form_data) {
-    dtr_simple_debug("=== PROCESSING LEAD GENERATION FORM ===");
-    
-    // Extract form fields by their field IDs (based on HTML structure)
-    $post_title = '';
-    $post_id = '';
-    $first_name = '';
-    $last_name = '';
-    $email_address = '';
-    $acf_questions = '';
-    $privacy_consent = '';
-    
-    if (isset($form_data['fields']) && is_array($form_data['fields'])) {
-        foreach ($form_data['fields'] as $field_id => $field_data) {
-            $value = isset($field_data['value']) ? $field_data['value'] : '';
-            
-            // Map field IDs to their purposes
-            switch ($field_id) {
-                case '374': // Post Title
-                    $post_title = $value;
-                    dtr_simple_debug("Post Title (374): $value");
-                    break;
-                case '375': // Post ID  
-                    $post_id = $value;
-                    dtr_simple_debug("Post ID (375): $value");
-                    break;
-                case '376': // First Name
-                    $first_name = $value;
-                    dtr_simple_debug("First Name (376): $value");
-                    break;
-                case '377': // Last Name
-                    $last_name = $value;
-                    dtr_simple_debug("Last Name (377): $value");
-                    break;
-                case '378': // Email Address
-                    $email_address = $value;
-                    dtr_simple_debug("Email Address (378): $value");
-                    break;
-                case '383': // ACF Questions
-                    $acf_questions = $value;
-                    dtr_simple_debug("ACF Questions (383): $value");
-                    break;
-                case '380': // Privacy Consent Checkbox
-                    $privacy_consent = $value;
-                    dtr_simple_debug("Privacy Consent (380): $value");
-                    break;
-                default:
-                    dtr_simple_debug("Unknown field ID $field_id: $value");
-                    break;
-            }
-        }
-    }
-    
-    // Check for ACF question fields (dynamic fields from JavaScript)
-    $acf_data = [];
-    if (isset($_POST)) {
-        foreach ($_POST as $key => $value) {
-            if (strpos($key, 'acf_question_') === 0) {
-                $acf_data[$key] = $value;
-                dtr_simple_debug("ACF Question $key: $value");
-            }
-        }
-    }
-    
-    // Validate required data
-    if (empty($post_title) || empty($post_id) || empty($email_address) || empty($privacy_consent)) {
-        dtr_simple_debug("❌ ERROR: Missing required data for lead generation");
-        dtr_simple_debug("  - Post Title: " . ($post_title ?: 'MISSING'));
-        dtr_simple_debug("  - Post ID: " . ($post_id ?: 'MISSING'));
-        dtr_simple_debug("  - Email: " . ($email_address ?: 'MISSING'));
-        dtr_simple_debug("  - Privacy Consent: " . ($privacy_consent ?: 'MISSING'));
-        return;
-    }
-    
-    dtr_simple_debug("✅ All required lead generation data present");
-    
-    // Call the lead generation registration function
-    dtr_call_workbooks_lead_registration($post_id, $post_title, $first_name, $last_name, $email_address, $acf_data, $privacy_consent);
-}
-
-function dtr_call_workbooks_lead_registration($post_id, $post_title, $first_name, $last_name, $email_address, $acf_data, $privacy_consent) {
-    dtr_simple_debug("=== CALLING WORKBOOKS LEAD REGISTRATION ===");
-    
-    // Get campaign reference from ACF fields (like webinar registration does)
-    $campaign_reference = '';
-    $campaign_id = '';
-    
-    // Try to get restricted content fields (for gated content)
-    $restricted_content_fields = get_field('restricted_content_fields', $post_id);
-    if ($restricted_content_fields && is_array($restricted_content_fields)) {
-        if (isset($restricted_content_fields['campaign_reference'])) {
-            $campaign_reference = $restricted_content_fields['campaign_reference'];
-        }
-        if (isset($restricted_content_fields['reference'])) {
-            $campaign_id = $restricted_content_fields['reference'];
-        }
-        dtr_simple_debug("✅ Found restricted_content_fields ACF data");
-        dtr_simple_debug("  - Campaign Reference: " . $campaign_reference);
-        dtr_simple_debug("  - Campaign ID: " . $campaign_id);
-    } else {
-        // Fallback: try direct campaign_reference field
-        $campaign_reference = get_field('campaign_reference', $post_id);
-        dtr_simple_debug("📝 Using direct campaign_reference field: " . $campaign_reference);
-    }
-    
-    // Prepare data for lead registration
-    $registration_data = array(
-        'post_id' => $post_id,
-        'post_title' => $post_title,
-        'first_name' => $first_name,
-        'last_name' => $last_name,
-        'email_address' => $email_address,
-        'acf_questions' => $acf_data,
-        'privacy_consent' => $privacy_consent,
-        'campaign_reference' => $campaign_reference,
-        'campaign_id' => $campaign_id,
-        'registration_type' => 'lead_generation'
-    );
-    
-    dtr_simple_debug("✅ Prepared lead registration data:");
-    dtr_simple_debug("  - Post ID: " . $registration_data['post_id']);
-    dtr_simple_debug("  - Post Title: " . $registration_data['post_title']);
-    dtr_simple_debug("  - First Name: " . $registration_data['first_name']);
-    dtr_simple_debug("  - Last Name: " . $registration_data['last_name']);
-    dtr_simple_debug("  - Email: " . $registration_data['email_address']);
-    dtr_simple_debug("  - Campaign Reference: " . $registration_data['campaign_reference']);
-    dtr_simple_debug("  - Campaign ID: " . $registration_data['campaign_id']);
-    dtr_simple_debug("  - ACF Questions: " . print_r($registration_data['acf_questions'], true));
-    dtr_simple_debug("  - Privacy Consent: " . $registration_data['privacy_consent']);
-    
-    // Check if the core registration function exists
-    if (!function_exists('dtr_register_workbooks_lead')) {
-        dtr_simple_debug("❌ ERROR: Core lead registration function not found");
-        
-        // Include the ajax-handlers file if it's not loaded
-        $ajax_handlers_path = WP_CONTENT_DIR . '/plugins/dtr-workbooks-crm-integration/includes/ajax-handlers.php';
-        if (file_exists($ajax_handlers_path)) {
-            include_once $ajax_handlers_path;
-            dtr_simple_debug("✅ Loaded ajax-handlers.php");
-        } else {
-            dtr_simple_debug("❌ ERROR: ajax-handlers.php not found");
-            return;
-        }
-    }
-    
-    // Call the core lead registration function directly (bypasses AJAX)
-    try {
-        dtr_simple_debug("🚀 Calling dtr_register_workbooks_lead()...");
-        
-        // Call the core registration function
-        $result = dtr_register_workbooks_lead($registration_data);
-        
-        dtr_simple_debug("✅ Core lead registration function completed");
-        
-        if ($result !== null) {
-            dtr_simple_debug("✅ Lead registration result: " . print_r($result, true));
-        } else {
-            dtr_simple_debug("ℹ️  Lead registration completed without return value");
-        }
-        
-        dtr_simple_debug("🎉 Lead generation registration successful via Ninja Forms hook!");
-        
-    } catch (Exception $e) {
-        dtr_simple_debug("❌ Exception during lead registration: " . $e->getMessage());
-        dtr_simple_debug("Exception details: " . print_r($e, true));
-    } catch (Error $e) {
-        dtr_simple_debug("❌ Error during lead registration: " . $e->getMessage());
-        dtr_simple_debug("Error details: " . print_r($e, true));
-    }
-}
-
-// Load this when plugin loads
-dtr_simple_debug("🔄 Ninja Forms Hook loaded and ready (Webinar + Lead Generation)");
+// Log that this hook is loaded
+dtr_lead_debug("🔄 Ninja Forms Lead Generation Hook loaded and ready");

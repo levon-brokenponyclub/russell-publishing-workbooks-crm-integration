@@ -8,10 +8,17 @@ if (file_exists(__DIR__ . '/helper-functions.php')) {
 
 if (!function_exists('nf_debug_log')) {
     function nf_debug_log($message) {
-        $log_file = WP_CONTENT_DIR . '/register-debug.log';
+        $log_file = WORKBOOKS_NF_PATH . 'logs/register-debug.log';
+        
+        // Ensure the logs directory exists
+        $logs_dir = dirname($log_file);
+        if (!file_exists($logs_dir)) {
+            wp_mkdir_p($logs_dir);
+        }
+        
         $timestamp = date('Y-m-d H:i:s');
-        $formatted = "[$timestamp] $message\n";
-        file_put_contents($log_file, $formatted, FILE_APPEND);
+        $log_entry = "[$timestamp] $message" . PHP_EOL;
+        file_put_contents($log_file, $log_entry, FILE_APPEND | LOCK_EX);
     }
 }
 
