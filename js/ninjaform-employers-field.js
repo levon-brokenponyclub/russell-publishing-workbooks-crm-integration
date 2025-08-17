@@ -107,12 +107,20 @@
     // Initialize on document ready
     $(document).ready(function() {
         console.log('ninjaform-employers-field.js: Document ready');
-        initializeEmployerDropdown();
+        if ($('#nf-form-15-cont').length > 0) {
+            initializeEmployerDropdown();
+        } else {
+            console.log('Form ID 15 not found on this page, skipping employer dropdown init.');
+        }
     });
 
     // Initialize on ninjaFormsLoaded
     $(document).on('ninjaFormsLoaded', function() {
         console.log('ninjaform-employers-field.js: ninjaFormsLoaded event fired');
-        initializeEmployerDropdown();
+        if ($('#nf-form-15-cont').length > 0) {
+            initializeEmployerDropdown();
+        } else {
+            console.log('Form ID 15 not found on this page, skipping employer dropdown init.');
+        }
     });
 })(jQuery);

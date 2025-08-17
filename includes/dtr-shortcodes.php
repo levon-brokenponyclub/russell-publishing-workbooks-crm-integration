@@ -78,19 +78,16 @@ add_shortcode('dtr_user_topics_of_interest', function() {
     ?>
     <form method="post" class="dtr-custom-checkbox-form">
         <fieldset>
-            <legend>Topics of Interest</legend>
-            <ul class="dtr subscription list">
+            
+            <div class="workbooks-checkboxes dtr subscription list">
             <?php $i = 0; foreach ($interests_fields as $field => $label): $i++; ?>
                 <?php $checked = get_user_meta($user_id, $field, true); ?>
-                <li class="list-item">
-                    <div class="check">
-                        <input type="checkbox" id="dtr_interest_<?php echo $i; ?>" name="<?php echo esc_attr($field); ?>" value="1" <?php checked($checked); ?> />
-                        <label for="dtr_interest_<?php echo $i; ?>"></label>
-                    </div>
-                    <span class="check-label-text"><?php echo esc_html($label); ?></span>
-                </li>
+                <label>
+                    <input type="checkbox" id="dtr_interest_<?php echo $i; ?>" name="<?php echo esc_attr($field); ?>" value="1" <?php checked($checked); ?> />
+                    <?php echo esc_html($label); ?>
+                </label>
             <?php endforeach; ?>
-            </ul>
+            </div>
             <?php wp_nonce_field('dtr_interests_update', 'dtr_interests_update_nonce'); ?>
         </fieldset>
         <input type="submit" name="update_interests" value="Update Interests">
@@ -105,10 +102,10 @@ add_shortcode('dtr_user_marketing_preferences', function() {
     $user_id = get_current_user_id();
     $msg = '';
     $dtr_fields = [
-        'cf_person_dtr_news' => 'DTR News',
-        'cf_person_dtr_events' => 'DTR Events',
-        'cf_person_dtr_third_party' => 'DTR Third Party',
-        'cf_person_dtr_webinar' => 'DTR Webinar',
+        'cf_person_dtr_news'        => 'Newsletter: News, articles and analysis by email',
+        'cf_person_dtr_third_party' => 'Third party: Application notes, product developments and updates from our trusted partners by email',
+        'cf_person_dtr_webinar'     => 'Webinar: Information about webinars by email',
+        'cf_person_dtr_events'      => 'Event: Information about events by email',
     ];
     // Handle form submission
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_marketing']) && isset($_POST['dtr_marketing_update_nonce']) && wp_verify_nonce($_POST['dtr_marketing_update_nonce'], 'dtr_marketing_update')) {
@@ -161,19 +158,16 @@ add_shortcode('dtr_user_marketing_preferences', function() {
     ?>
     <form method="post" class="dtr-custom-checkbox-form">
         <fieldset>
-            <legend>Manage Subscriptions</legend>
-            <ul class="dtr subscription list">
+            
+            <div class="workbooks-checkboxes dtr subscription list">
             <?php $i = 0; foreach ($dtr_fields as $field => $label): $i++; ?>
                 <?php $checked = get_user_meta($user_id, $field, true); ?>
-                <li class="list-item">
-                    <div class="check">
-                        <input type="checkbox" id="dtr_marketing_<?php echo $i; ?>" name="<?php echo esc_attr($field); ?>" value="1" <?php checked($checked); ?> />
-                        <label for="dtr_marketing_<?php echo $i; ?>"></label>
-                    </div>
-                    <span class="check-label-text"><?php echo esc_html($label); ?></span>
-                </li>
+                <label>
+                    <input type="checkbox" id="dtr_marketing_<?php echo $i; ?>" name="<?php echo esc_attr($field); ?>" value="1" <?php checked($checked); ?> />
+                    <?php echo esc_html($label); ?>
+                </label>
             <?php endforeach; ?>
-            </ul>
+            </div>
             <?php wp_nonce_field('dtr_marketing_update', 'dtr_marketing_update_nonce'); ?>
         </fieldset>
         <input type="submit" name="update_marketing" value="Update Preferences">
@@ -194,10 +188,10 @@ add_shortcode('dtr_marketing_preferences_form', function() {
     $user_id = get_current_user_id();
     $msg = '';
     $fields = [
-        'cf_person_dtr_news' => 'Newsletter: News, articles and analysis by email',
+        'cf_person_dtr_news'        => 'Newsletter: News, articles and analysis by email',
         'cf_person_dtr_third_party' => 'Third party: Application notes, product developments and updates from our trusted partners by email',
-        'cf_person_dtr_webinar' => 'Webinar: Information about webinars by email',
-        'cf_person_dtr_events' => 'Event: Information about events by email',
+        'cf_person_dtr_webinar'     => 'Webinar: Information about webinars by email',
+        'cf_person_dtr_events'      => 'Event: Information about events by email',
     ];
     // Handle form submission
     if (
@@ -276,19 +270,16 @@ add_shortcode('dtr_marketing_preferences_form', function() {
     ?>
     <form method="post" class="dtr-custom-checkbox-form">
         <fieldset>
-            <legend>Manage Subscriptions</legend>
-            <ul class="dtr subscription list">
+            
+            <div class="workbooks-checkboxes dtr subscription list">
             <?php $i = 0; foreach ($fields as $k => $label): $i++; ?>
                 <?php $checked = get_user_meta($user_id, $k, true); ?>
-                <li class="list-item">
-                    <div class="check">
-                        <input type="checkbox" id="dtr_marketing_<?php echo $i; ?>" name="<?php echo esc_attr($k); ?>" value="1" <?php checked($checked); ?> />
-                        <label for="dtr_marketing_<?php echo $i; ?>"></label>
-                    </div>
-                    <span class="check-label-text"><?php echo esc_html($label); ?></span>
-                </li>
+                <label>
+                    <input type="checkbox" id="dtr_marketing_<?php echo $i; ?>" name="<?php echo esc_attr($k); ?>" value="1" <?php checked($checked); ?> />
+                    <?php echo esc_html($label); ?>
+                </label>
             <?php endforeach; ?>
-            </ul>
+            </div>
             <?php wp_nonce_field('dtr_marketing_update', 'dtr_marketing_update_nonce'); ?>
         </fieldset>
         <input type="submit" name="update_marketing" value="Update Preferences">

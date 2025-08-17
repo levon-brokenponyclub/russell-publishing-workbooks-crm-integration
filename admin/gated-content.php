@@ -89,13 +89,14 @@ foreach ($post_types as $post_type) {
             <button type="button" class="button button-primary" id="view-all-gated">View All Gated Content</button>
             <button type="button" class="button button-secondary" id="access-settings">Global Access Settings</button>
             <button type="button" class="button button-secondary" id="export-settings">Export Gated Settings</button>
+            <!-- NEW BUTTON: Fetch Queues -->
+            <button type="button" class="button button-secondary" id="fetch-workbooks-queues">Fetch Workbooks Queues</button>
         </div>
+        <div id="workbooks-queues-result" style="margin-top:18px;"></div>
     </div>
-
 </div>
 
 <style>
-/* Gated Content Table Styles */
 .gated-content-table {
     width: 100%;
     border-collapse: collapse;
@@ -126,8 +127,6 @@ foreach ($post_types as $post_type) {
     padding: 4px 10px;
     line-height: 1.4;
 }
-/* End Gated Content Table Styles */
-/* Gated Content Overview Styles */
 .gated-content-overview {
     margin: 20px 0;
 }
@@ -321,7 +320,6 @@ foreach ($post_types as $post_type) {
     padding: 20px;
 }
 
-/* Content Type Tabs */
 .content-type-tabs .nav-tab-wrapper {
     background: #f1f1f1;
     padding: 0;
@@ -379,61 +377,48 @@ foreach ($post_types as $post_type) {
     padding-bottom: 10px;
 }
 
-.post-select {
-    min-width: 300px;
-}
-
+.post-select,
 .content-search {
     min-width: 300px;
 }
-
 .search-results {
     margin-top: 5px;
     font-size: 0.9em;
 }
-
 .no-results {
     color: #dc3232;
     font-weight: bold;
 }
-
 .gated-content-form .submit {
     border-top: 1px solid #ddd;
     padding-top: 15px;
     margin-top: 20px;
 }
-
-/* AOI/TOI Access Control Styling */
 fieldset {
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 15px;
     background: #f9f9f9;
 }
-
 fieldset legend {
     font-weight: 600;
     padding: 0 10px;
     color: #23282d;
 }
-
 .access-control-section {
     margin: 15px 0;
 }
-
 .access-control-section .description {
     margin-bottom: 10px;
     font-style: italic;
     color: #666;
 }
-
 .access-control-checkboxes {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 10px;
     margin-top: 10px;
 }
-
 .access-control-checkboxes label {
     display: flex;
     align-items: center;
@@ -445,16 +430,13 @@ fieldset legend {
     cursor: pointer;
     transition: background-color 0.2s;
 }
-
 .access-control-checkboxes label:hover {
     background: #f0f8ff;
     border-color: #0073aa;
 }
-
 .access-control-checkboxes input[type="checkbox"] {
     margin-right: 8px;
 }
-
 .access-control-checkboxes input[type="checkbox"]:checked + span {
     font-weight: 600;
     color: #0073aa;
@@ -463,7 +445,6 @@ fieldset legend {
 
 <script>
 jQuery(document).ready(function($) {
-    // Only code needed: load and display gated content lists, Edit button links to post edit page
     function renderGatedContentTable(content) {
         if (!content || content.length === 0) {
             return '<p class="no-gated-content">No gated content found.</p>';
@@ -506,5 +487,37 @@ jQuery(document).ready(function($) {
     loadGatedContentList('articles', '#gated-articles-list');
     loadGatedContentList('publications', '#gated-publications-list');
     loadGatedContentList('whitepapers', '#gated-whitepapers-list');
+
+    // === Fetch Workbooks Queues button handler ===
+    $('#fetch-workbooks-queues').on('click', function(){
+        var $btn = $(this);
+        var $result = $('#workbooks-queues-result');
+        $btn.prop('disabled', true).text('Fetching...');
+        $result.html('<em>Fetching queues from Workbooks CRM...</em>');
+        $.ajax({
+            url: typeof ajaxurl !== 'undefined' ? ajaxurl : '<?php echo admin_url('admin-ajax.php'); ?>',
+            method: 'POST',
+            data: {
+                action: 'dtr_fetch_workbooks_queues',
+                nonce: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.nonce) ? workbooks_ajax.nonce : '<?php echo wp_create_nonce("workbooks_nonce"); ?>'
+            },
+            dataType: 'json'
+        }).done(function(response){
+            $btn.prop('disabled', false).text('Fetch Workbooks Queues');
+            if(response.success && response.data && Object.keys(response.data).length) {
+                var html = '<table class="gated-content-table"><thead><tr><th>Queue Name</th><th>Queue ID</th></tr></thead><tbody>';
+                $.each(response.data, function(id, name){
+                    html += '<tr><td><strong>' + name + '</strong></td><td>' + id + '</td></tr>';
+                });
+                html += '</tbody></table>';
+                $result.html(html);
+            } else {
+                $result.html('<span style="color:#d63638;">No queues found or API call failed.</span>');
+            }
+        }).fail(function(xhr){
+            $btn.prop('disabled', false).text('Fetch Workbooks Queues');
+            $result.html('<span style="color:#d63638;">AJAX error fetching queues.</span>');
+        });
+    });
 });
 </script>

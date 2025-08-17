@@ -109,7 +109,6 @@ function dtr_ninja_forms_lead_generation_handler($form_data) {
                 
                 // Map specific field names based on the logged-in user context
                 if ($key === 'email_address') {
-                    // For the email_address field, get the current user's email if it's not set
                     if (empty($value) || $value === '{field:email_address}' || strpos($value, '{') !== false) {
                         $current_user = wp_get_current_user();
                         if ($current_user && $current_user->user_email) {
@@ -286,7 +285,7 @@ function dtr_ninja_forms_lead_generation_handler($form_data) {
         );
         
         if ($registration_result) {
-            dtr_lead_debug("🎉 Lead generation registration successful!");
+            dtr_lead_debug("🥳 FUCK YEAH - EVENT REGISTRATION SUCCESSFUL - CELEBRATE");
             dtr_lead_debug("Registration result: " . print_r($registration_result, true));
         } else {
             dtr_lead_debug("❌ Lead generation registration failed");
@@ -300,26 +299,17 @@ function dtr_ninja_forms_lead_generation_handler($form_data) {
 
 /**
  * Register a lead in a Workbooks event (not campaign)
- * Creates both the person record and the event ticket
+ * Creates both the person record, the event ticket, and the sales lead (even if ticket exists)
  */
 function dtr_register_workbooks_event_lead($event_id, $email, $first_name = '', $last_name = '', $company = '', $interest_reason = '', $speaker_question = '', $sponsor_optin = false, $marketing_optin = false, $post_id = null, $post_title = '', $campaign_reference = '') {
     try {
-        dtr_lead_debug("🚀 Starting Workbooks event lead registration");
-        dtr_lead_debug("  - Event ID: $event_id");
-        dtr_lead_debug("  - Email: $email");
-        dtr_lead_debug("  - Name: $first_name $last_name");
-        dtr_lead_debug("  - Company: $company");
-        dtr_lead_debug("  - Speaker Question: $speaker_question");
-        dtr_lead_debug("  - Sponsor Opt-in: " . ($sponsor_optin ? 'Yes' : 'No'));
-        dtr_lead_debug("  - Post: $post_title (ID: $post_id)");
-        
+        // Step 1: Check if person already exists or create them
         $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
         if (!$workbooks) {
             dtr_lead_debug('❌ ERROR: Workbooks instance not available');
             return false;
         }
         
-        // Step 1: Check if person already exists
         dtr_lead_debug("🔍 Checking if person exists with email: $email");
         $person_search_result = $workbooks->assertGet('crm/people.api', [
             '_start' => 0,
@@ -337,9 +327,8 @@ function dtr_register_workbooks_event_lead($event_id, $email, $first_name = '', 
             $person_data = $person_search_result['data'][0];
             $person_id = $person_data['id'];
             $person_object_ref = $person_data['object_ref'];
-            dtr_lead_debug("✅ Found existing person: ID $person_id, Object Ref: $person_object_ref");
+            dtr_lead_debug("✅ Found existing person: ID $person_id, Object Ref: PERS-$person_object_ref");
         } else {
-            // Step 2: Create new person if not found
             dtr_lead_debug("👤 Creating new person in Workbooks");
             
             $person_payload = [
@@ -368,7 +357,7 @@ function dtr_register_workbooks_event_lead($event_id, $email, $first_name = '', 
             if (!empty($person_result['data'][0]['id'])) {
                 $person_id = $person_result['data'][0]['id'];
                 $person_object_ref = $person_result['data'][0]['object_ref'] ?? '';
-                dtr_lead_debug("✅ Created new person: ID $person_id, Object Ref: $person_object_ref");
+                dtr_lead_debug("✅ Created new person: ID $person_id, Object Ref: PERS-$person_object_ref");
             } else {
                 dtr_lead_debug("❌ ERROR: Failed to create person in Workbooks");
                 dtr_lead_debug("Person creation result: " . print_r($person_result, true));
@@ -376,67 +365,64 @@ function dtr_register_workbooks_event_lead($event_id, $email, $first_name = '', 
             }
         }
         
-        // Step 3: Check if the person is already registered for this event
-        dtr_lead_debug("🎫 Checking if person is already registered for event $event_id");
-        $ticket_search_result = $workbooks->assertGet('event/tickets.api', [
-            '_start' => 0,
-            '_limit' => 1,
-            '_ff[]' => ['person_id', 'event_id'],
-            '_ft[]' => ['eq', 'eq'],
-            '_fc[]' => [$person_id, $event_id]
-        ]);
-        
-        if (!empty($ticket_search_result['data'][0])) {
-            $existing_ticket = $ticket_search_result['data'][0];
-            dtr_lead_debug("⚠️  Person already registered for this event. Ticket ID: " . $existing_ticket['id']);
-            return [
-                'success' => true,
-                'message' => 'Person already registered for event',
-                'person_id' => $person_id,
-                'ticket_id' => $existing_ticket['id'],
-                'existing_registration' => true
-            ];
-        }
-        
-        // Step 4: Create event ticket (registration)
+        // Always create a new event ticket
         dtr_lead_debug("🎫 Creating event ticket for event $event_id");
-        
         $ticket_payload = [[
             'event_id' => $event_id,
             'person_id' => $person_id,
             'name' => $first_name . ' ' . $last_name,
             'status' => 'Registered'
         ]];
-        
         if ($interest_reason) {
             $ticket_payload[0]['cf_event_ticket_interest_reason'] = $interest_reason;
         }
-        
         if ($speaker_question) {
             $ticket_payload[0]['cf_event_ticket_speaker_questions'] = $speaker_question;
         }
-        
         if ($sponsor_optin) {
             $ticket_payload[0]['cf_event_ticket_sponsor_optin'] = 1;
         }
-        
         if ($campaign_reference) {
             $ticket_payload[0]['cf_event_ticket_campaign_ref'] = $campaign_reference;
         }
-        
         $ticket_result = $workbooks->create('event/tickets.api', $ticket_payload);
-        
+
         if (!empty($ticket_result['affected_objects'][0]['id'])) {
             $ticket_id = $ticket_result['affected_objects'][0]['id'];
             dtr_lead_debug("✅ Created event ticket: ID $ticket_id");
-            
+
+            // Always create a new sales lead
+            dtr_lead_debug(" 🎉 Creating event lead generation for event $event_id");
+            $lead_payload = [[
+                'assigned_to' => 1,
+                'person_lead_party[name]' => $first_name . ' ' . $last_name,
+                'person_lead_party[person_first_name]' => $first_name,
+                'person_lead_party[person_last_name]' => $last_name,
+                'person_lead_party[email]' => $email,
+                'org_lead_party[name]' => $company,
+                'cf_lead_data_source_detail' => 'DTR-LEADGEN-' . $event_id
+            ]];
+            $lead_result = $workbooks->assertCreate('crm/sales_leads.api', $lead_payload);
+
+            $lead_id = '';
+            if (!empty($lead_result['affected_objects'][0]['id'])) {
+                $lead_id = $lead_result['affected_objects'][0]['id'];
+                dtr_lead_debug("✅  Created lead for person $first_name $last_name $email");
+            } else {
+                dtr_lead_debug("❌ ERROR: Failed to create sales lead for $first_name $last_name $email");
+                dtr_lead_debug("Lead creation result: " . print_r($lead_result, true));
+            }
+
+            dtr_lead_debug("🥳 FUCK YEAH - EVENT REGISTRATION SUCCESSFUL - CELEBRATE");
+
             return [
                 'success' => true,
-                'message' => 'Lead successfully registered for event',
+                'message' => 'Lead and ticket created for event',
                 'person_id' => $person_id,
                 'person_object_ref' => $person_object_ref,
                 'ticket_id' => $ticket_id,
                 'event_id' => $event_id,
+                'lead_id' => $lead_id,
                 'existing_registration' => false
             ];
         } else {
@@ -462,7 +448,7 @@ function dtr_lead_debug($message) {
     }
     
     // Also log to our custom debug file in plugin logs directory
-    $debug_log_file = WORKBOOKS_NF_PATH . 'logs/gated-post-submissions-debug.log';
+    $debug_log_file = defined('WORKBOOKS_NF_PATH') ? WORKBOOKS_NF_PATH . 'logs/gated-post-submissions-debug.log' : __DIR__ . '/gated-post-submissions-debug.log';
     
     // Ensure the logs directory exists
     $logs_dir = dirname($debug_log_file);
@@ -597,3 +583,4 @@ function dtr_call_webinar_registration($post_id, $participant_email, $speaker_qu
 
 // Log that this hook is loaded
 dtr_lead_debug("🔄 Ninja Forms Lead Generation Hook loaded and ready");
+?>

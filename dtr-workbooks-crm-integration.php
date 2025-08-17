@@ -2,7 +2,7 @@
 /**
  * Plugin Name: DTR - Workbooks CRM API Integration
  * Description: Connects WordPress to DTR Workbooks CRM
- * Version: 1.4.3
+ * Version: 1.4.4
  * Author: Supersonic Playground
  * Author URI: https://www.supersonicplayground.com
  * Text Domain: dtr-workbooks-crm-integration
@@ -43,6 +43,33 @@ if (file_exists(WORKBOOKS_NF_PATH . 'includes/user-meta-fields.php')) {
 if (file_exists(WORKBOOKS_NF_PATH . 'includes/workbooks-employer-sync.php')) {
     require_once WORKBOOKS_NF_PATH . 'includes/workbooks-employer-sync.php';
 }
+
+// Include Ninja Forms country converter
+if (file_exists(WORKBOOKS_NF_PATH . 'includes/nf-country-converter.php')) {
+    require_once WORKBOOKS_NF_PATH . 'includes/nf-country-converter.php';
+}
+
+// Load AJAX handler for Media Planner Test Form
+if (file_exists(WORKBOOKS_NF_PATH . 'includes/media-planner-ajax-handler.php')) {
+    require_once WORKBOOKS_NF_PATH . 'includes/media-planner-ajax-handler.php';
+}
+
+// Include media planner form
+/* if (file_exists(WORKBOOKS_NF_PATH . 'includes/media-planner-form.php')) {
+    require_once WORKBOOKS_NF_PATH . 'includes/media-planner-form.php';
+    error_log('Media Planner form included');
+} else {
+    error_log('Media Planner form NOT found at ' . WORKBOOKS_NF_PATH . 'includes/media-planner-form.php');
+}
+
+// Register Ninja Forms submission handler for Media Planner
+if (class_exists('DTR_Media_Planner_Handler')) {
+    add_action('ninja_forms_after_submission', ['DTR_Media_Planner_Handler', 'handle_form_submission'], 10, 1);
+    error_log('Media Planner Ninja Forms handler registered');
+} else {
+    error_log('DTR_Media_Planner_Handler class NOT found');
+} */
+
 // Load AJAX handlers for gated content
 require_once WORKBOOKS_NF_PATH . 'admin/gated-content-ajax.php';
 
@@ -100,17 +127,6 @@ add_action('wp_enqueue_scripts', function() {
         'plugin_url' => plugin_dir_url(__FILE__)
     ]);
 
-    // Enqueue dynamic title select script for Ninja Forms registration
-    wp_enqueue_script(
-        'dtr-ninjaform-title-select',
-        plugin_dir_url(__FILE__) . 'assets/dtr-ninjaform-title-select.js',
-        ['jquery'],
-        null,
-        true
-    );
-    wp_localize_script('dtr-ninjaform-title-select', 'dtr_titles_ajax', [
-        'ajax_url' => admin_url('admin-ajax.php')
-    ]);
 });
 
 // Enqueue custom JS for Ninja Form registration fields (Title, Marketing, Interests)
@@ -131,6 +147,16 @@ add_action('wp_enqueue_scripts', function() {
         'plugin_url' => plugin_dir_url(__FILE__)
     ]);
 });
+// Enqueue custom JS for copying ACF questions into Ninja Forms (placed at the end for clarity)
+add_action('wp_enqueue_scripts', function() {
+    wp_enqueue_script(
+        'acf-form-questions',
+        plugin_dir_url(__FILE__) . 'js/acf-form-questions.js',
+        [],
+        null,
+        true
+    );
+}, 30);
 
 // AJAX handler for dynamic Workbooks titles
 add_action('wp_ajax_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
@@ -770,7 +796,7 @@ function workbooks_crm_settings_page() {
                 <a href="#" class="nav-tab" id="workbooks-person-tab">Person Record</a>
                 <a href="#" class="nav-tab" id="workbooks-gated-content-tab">Gated Content</a>
                 <a href="#" class="nav-tab" id="workbooks-webinar-tab">Webinar Registration</a>
-                <a href="#" class="nav-tab" id="workbooks-leadgen-tab">Lead Gen Forms</a>
+                <a href="#" class="nav-tab" id="workbooks-mediaplanner-tab">Media Planner Form</a>
                 <a href="#" class="nav-tab" id="workbooks-membership-tab">Membership Sign Up</a>
                 <a href="#" class="nav-tab" id="workbooks-employers-tab">Employers</a>
                 <a href="#" class="nav-tab" id="workbooks-ninja-users-tab">Ninja Form Users</a>
@@ -1073,7 +1099,7 @@ function workbooks_crm_settings_page() {
                     </form>
                 </div>
                 <!-- Gated Content Section (Single Page, No Tabs) -->
-                <div id="workbooks-gated-content" class="workbooks-tab-content" style="display: block !important;">
+                <div id="workbooks-gated-content" class="workbooks-tab-content">
                     <?php
                         $gated_content_file = WORKBOOKS_NF_PATH . 'admin/gated-content.php';
                         if (file_exists($gated_content_file)) {
@@ -1195,389 +1221,110 @@ function workbooks_crm_settings_page() {
                     });
                     </script>
                 </div>
-                <!-- Lead Gen Forms Tab -->
-                <div id="workbooks-leadgen-content" class="workbooks-tab-content">
-                    <?php
-                    // Get all post types that can be used for lead generation
-                    $lead_gen_post_types = ['post', 'publications', 'whitepapers'];
-                    $lead_gen_posts = [];
-                    
-                    foreach ($lead_gen_post_types as $post_type) {
-                        $posts = get_posts([
-                            'post_type'      => $post_type,
-                            'post_status'    => 'publish',
-                            'posts_per_page' => -1,
-                            'orderby'        => 'date',
-                            'order'          => 'DESC',
-                        ]);
-                        foreach ($posts as $post) {
-                            $post->post_type_label = ucfirst($post->post_type);
-                            $lead_gen_posts[] = $post;
-                        }
-                    }
-                    
-                    $current_user_email = esc_attr(wp_get_current_user()->user_email);
-                    ?>
-                    <h2>Lead Generation Forms</h2>
-                    <form id="leadgen-form" method="post">
+                <!-- Media Planner Form Tab -->
+                <div id="workbooks-mediaplanner-content" class="workbooks-tab-content">
+                    <h2>Media Planner Form (Test Submission)</h2>
+                    <form id="media-planner-form" method="post">
                         <p>
-                            <label for="leadgen_event_ref">Search by Workbooks Event ID or Reference:</label><br>
-                            <input type="text" id="leadgen_event_ref" name="leadgen_event_ref" class="regular-text" placeholder="Event ID or Reference (e.g. 5339)" />
-                            <button type="button" id="fetch-leadgen-event-btn" class="button">Fetch Event Details</button>
-                            <button type="button" id="list-leadgen-events-btn" class="button button-secondary">List Recent Events</button>
+                            <label for="mp_first_name">First Name:</label><br>
+                            <input type="text" id="mp_first_name" name="first_name" class="regular-text" placeholder="First Name" required>
                         </p>
-                        <div id="leadgen-event-fetch-response" style="margin-bottom: 15px; color: #444;"></div>
-                        <div id="leadgen-event-fields-table-container" style="margin-bottom: 15px; display:none;"></div>
-                        
                         <p>
-                            <label for="leadgen_post_id">Or Select Content:</label><br>
-                            <select id="leadgen_post_id" name="leadgen_post_id" required>
-                                <option value="">-- Select Content --</option>
-                                <?php foreach ($lead_gen_posts as $post): ?>
-                                    <option value="<?php echo esc_attr($post->ID); ?>" data-post-type="<?php echo esc_attr($post->post_type); ?>">
-                                        [<?php echo esc_html($post->post_type_label); ?>] <?php echo esc_html($post->post_title); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                            <button type="button" id="test-ajax-btn" class="button button-secondary">Test AJAX</button>
+                            <label for="mp_last_name">Last Name:</label><br>
+                            <input type="text" id="mp_last_name" name="last_name" class="regular-text" placeholder="Last Name" required>
                         </p>
-                        
-                        <div id="leadgen-acf-info" style="margin-bottom: 15px; display:none;">
-                            <strong>Content ID:</strong> <span id="leadgen_content_id"></span><br>
-                            <strong>Content Type:</strong> <span id="leadgen_content_type"></span><br>
-                            <strong>Has Gated Content Fields:</strong> <span id="leadgen_has_gated_content"></span><br>
-                            <strong>Workbooks Event Reference:</strong> <span id="leadgen_event_ref_display"></span><br>
-                            <strong>Campaign Reference:</strong> <span id="leadgen_campaign_ref"></span><br>
-                            <strong>All ACF Fields:</strong> <span id="leadgen_all_fields" style="font-family: monospace; font-size: 0.8em;"></span>
-                        </div>
-                        
                         <p>
-                            <label for="leadgen_participant_email">Participant Email:</label><br>
-                            <input type="email" id="leadgen_participant_email" name="leadgen_participant_email" class="regular-text" required value="<?php echo $current_user_email; ?>" readonly>
+                            <label for="mp_email_address">Email Address:</label><br>
+                            <input type="email" id="mp_email_address" name="email_address" class="regular-text" placeholder="Email Address" required>
                         </p>
-                        
                         <p>
-                            <label for="leadgen_interest_reason">Reason for Interest (optional):</label><br>
-                            <textarea id="leadgen_interest_reason" name="leadgen_interest_reason" rows="4" cols="50" placeholder="Why are you interested in this content?"></textarea>
+                            <label for="mp_job_title">Job Title:</label><br>
+                            <input type="text" id="mp_job_title" name="job_title" class="regular-text" placeholder="Job Title" required>
                         </p>
-                        
                         <p>
-                            <label>
-                                <input type="checkbox" name="leadgen_sponsor_optin" id="leadgen_sponsor_optin" value="1">
-                                I agree to receive sponsor information (opt-in)
-                            </label>
+                            <label for="mp_organisation">Organisation:</label><br>
+                            <input type="text" id="mp_organisation" name="organisation" class="regular-text" placeholder="Organisation" required>
                         </p>
-                        
                         <p>
-                            <label>
-                                <input type="checkbox" name="leadgen_marketing_optin" id="leadgen_marketing_optin" value="1" checked>
-                                I agree to receive marketing communications
-                            </label>
+                            <label for="mp_town">Town:</label><br>
+                            <input type="text" id="mp_town" name="town" class="regular-text" placeholder="Town" required>
                         </p>
-                        
-                        <p><button type="submit" class="button button-primary">Submit Lead Gen Form</button></p>
+                        <p>
+                            <label for="mp_country">Country:</label><br>
+                            <input type="text" id="mp_country" name="country" class="regular-text" placeholder="Country" required>
+                        </p>
+                        <p>
+                            <label for="mp_telephone">Telephone:</label><br>
+                            <input type="text" id="mp_telephone" name="telephone" class="regular-text" placeholder="Telephone" required>
+                        </p>
+                        <p>
+                            <button type="submit" class="button button-primary">Submit</button>
+                        </p>
                     </form>
-                    <div id="leadgen-response" style="margin-top: 20px;"></div>
-                    
+                    <div id="media-planner-result"></div>
+                    <style>
+                        /* Media Planner Form: Input Styles */
+                        #media-planner-form input[type="text"],
+                        #media-planner-form input[type="email"] {
+                            height: 36px !important;
+                            padding: 0 12px !important;
+                            border: 1px solid #dcdcde !important;
+                            border-radius: 4px !important;
+                            font-size: 14px !important;
+                            line-height: 1.4 !important;
+                            transition: border-color 0.2s ease !important;
+                            background: #ffffff !important;
+                            box-sizing: border-box;
+                            width: 100%;
+                            margin: 0 0 10px 0;
+                        }
+
+                        /* Media Planner Form: Button Style */
+                        #media-planner-form button[type="submit"] {
+                            height: 36px;
+                            padding: 0 16px !important;
+                            border-radius: 4px !important;
+                            font-size: 14px !important;
+                            font-weight: 500;
+                            text-decoration: none;
+                            cursor: pointer;
+                            transition: all 0.2s ease;
+                            border-width: 1px;
+                            border-style: solid;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            line-height: 1;
+                            text-shadow: none !important;
+                            box-shadow: none !important;
+                            background: #007cba;
+                            color: #fff;
+                            border-color: #007cba;
+                        }
+                        #media-planner-form button[type="submit"]:hover {
+                            background: #005a9e;
+                            border-color: #005a9e;
+                        }
+                    </style>
                     <script>
-                    jQuery(document).ready(function($) {
-                        // Test AJAX functionality
-                        $('#test-ajax-btn').on('click', function(e) {
-                            e.preventDefault();
-                            console.log('Testing AJAX...');
-                            
-                            $.ajax({
-                                url: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.ajax_url) ? workbooks_ajax.ajax_url : ajaxurl,
-                                method: 'POST',
-                                data: {
-                                    action: 'test_leadgen_ajax',
-                                    nonce: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.nonce) ? workbooks_ajax.nonce : ''
-                                },
-                                dataType: 'json',
-                                success: function(response) {
-                                    console.log('Test AJAX success:', response);
-                                    alert('AJAX Test: ' + (response.success ? 'SUCCESS - ' + response.data : 'FAILED'));
-                                },
-                                error: function(xhr, status, error) {
-                                    console.log('Test AJAX error:', error);
-                                    console.log('XHR response:', xhr.responseText);
-                                    alert('AJAX Test FAILED: ' + error);
-                                }
-                            });
-                        });
-                        
-                        // Handle content selection to show ACF info
-                        $('#leadgen_post_id').on('change', function() {
-                            var postId = $(this).val();
-                            var postType = $(this).find(':selected').data('post-type');
-                            var $acfInfo = $('#leadgen-acf-info');
-                            
-                            console.log('Lead gen content selected:', postId, postType);
-                            
-                            if (postId) {
-                                $('#leadgen_content_id').text(postId);
-                                $('#leadgen_content_type').text(postType);
-                                
-                                // Fetch actual ACF fields via AJAX
-                                var ajaxData = {
-                                    action: 'fetch_leadgen_acf_data',
-                                    post_id: postId,
-                                    nonce: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.nonce) ? workbooks_ajax.nonce : ''
-                                };
-                                console.log('Sending AJAX request with data:', ajaxData);
-                                
-                                $.ajax({
-                                    url: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.ajax_url) ? workbooks_ajax.ajax_url : ajaxurl,
-                                    method: 'POST',
-                                    data: ajaxData,
-                                    dataType: 'json',
-                                    success: function(response) {
-                                        console.log('ACF data response:', response);
-                                        if (response && response.success) {
-                                            var data = response.data;
-                                            $('#leadgen_event_ref_display').text(data.workbooks_reference || 'Not set');
-                                            $('#leadgen_campaign_ref').text(data.campaign_reference || 'Not set');
-                                            $('#leadgen_has_gated_content').text(data.has_gated_content ? 'Yes' : 'No');
-                                            $('#leadgen_all_fields').text(data.all_acf_fields ? JSON.stringify(data.all_acf_fields) : 'None');
-                                        } else {
-                                            $('#leadgen_event_ref_display').text('Error loading reference');
-                                            $('#leadgen_campaign_ref').text('Error loading reference');
-                                            $('#leadgen_has_gated_content').text('Unknown');
-                                            $('#leadgen_all_fields').text('Error');
-                                            console.error('Error fetching ACF data:', response);
-                                        }
-                                    },
-                                    error: function(xhr, status, error) {
-                                        $('#leadgen_event_ref_display').text('Error loading reference');
-                                        $('#leadgen_campaign_ref').text('Error loading reference');
-                                        $('#leadgen_has_gated_content').text('Unknown');
-                                        $('#leadgen_all_fields').text('Error');
-                                        console.error('AJAX error fetching ACF data:', error);
-                                        console.error('XHR response:', xhr.responseText);
+                        jQuery(function($){
+                            console.log('✅ Media Planner Test Form JS loaded and ready to test');
+                            $('#media-planner-form').off('submit').on('submit', function(e){
+                                e.preventDefault();
+                                e.stopImmediatePropagation();
+                                var data = $(this).serialize();
+                                data += '&action=media_planner_test_submit&nonce=' + workbooks_ajax.nonce;
+                                $('#media-planner-result').html('Submitting...');
+                                $.post(workbooks_ajax.ajax_url, data, function(response){
+                                    if (response.success) {
+                                        $('#media-planner-result').html('<span style="color:green">' + response.data + '</span>');
+                                    } else {
+                                        $('#media-planner-result').html('<span style="color:red">' + response.data + '</span>');
                                     }
                                 });
-                                
-                                $acfInfo.show();
-                            } else {
-                                $acfInfo.hide();
-                            }
-                        });
-                        
-                        // Fetch event details for lead gen
-                        $('#fetch-leadgen-event-btn').on('click', function(e) {
-                            e.preventDefault();
-                            var eventRef = $('#leadgen_event_ref').val();
-                            var $response = $('#leadgen-event-fetch-response');
-                            var $tableContainer = $('#leadgen-event-fields-table-container');
-                            $response.html('');
-                            $tableContainer.hide().html('');
-                            if (!eventRef) {
-                                $response.html('<span style="color:red;">Please enter an Event ID or Reference.</span>');
-                                return;
-                            }
-                            $response.html('Fetching event details...');
-                            $.ajax({
-                                url: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.ajax_url) ? workbooks_ajax.ajax_url : ajaxurl,
-                                method: 'POST',
-                                data: {
-                                    action: 'fetch_workbooks_event',
-                                    event_ref: eventRef,
-                                    nonce: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.nonce) ? workbooks_ajax.nonce : ''
-                                },
-                                dataType: 'json',
-                                success: function(response) {
-                                    $tableContainer.hide().html('');
-                                    if (response && response.success) {
-                                        var data = response.data;
-                                        // Compose summary message for response div
-                                        var msg = 'Event Found: ';
-                                        if (data.event && data.event.name) {
-                                            msg += data.event.name;
-                                            if (data.event.id) msg += ' (ID: ' + data.event.id + ')';
-                                        } else {
-                                            msg += 'Event details loaded.';
-                                        }
-                                        if (data.event && data.event.start_date) msg += ', Starts: ' + data.event.start_date;
-                                        if (data.event && data.event.end_date) msg += ', Ends: ' + data.event.end_date;
-                                        $response.css('color', 'green').text(msg);
-
-                                        // Build detailed tables for table container
-                                        var html = '';
-                                        if (data.event && typeof data.event === 'object' && Object.keys(data.event).length > 0) {
-                                            html += '<h4 style="margin-top:12px;">Event Details</h4>';
-                                            html += '<table class="widefat striped" style="margin-top:8px; max-width:600px;">';
-                                            html += '<thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
-                                            for (var key in data.event) {
-                                                if (!data.event.hasOwnProperty(key)) continue;
-                                                var val = data.event[key];
-                                                if (typeof val === 'object') val = JSON.stringify(val);
-                                                html += '<tr><td>' + key + '</td><td>' + (val === '' ? '-' : val) + '</td></tr>';
-                                            }
-                                            html += '</tbody></table>';
-                                        } else {
-                                            html += '<div style="margin-top:10px;">No event details found for this reference.</div>';
-                                        }
-                                        
-                                        // Add attendees/registrants table if present
-                                        if (Array.isArray(data.attendees) && data.attendees.length > 0) {
-                                            html += '<h4 style="margin-top:18px;">Registrants / Attendees (' + data.attendees.length + ')</h4>';
-                                            html += '<table class="widefat striped" style="margin-top:8px; max-width:100%;">';
-                                            html += '<thead><tr>';
-                                            // Get all unique keys from all attendees
-                                            var allKeys = {};
-                                            data.attendees.forEach(function(a) { for (var k in a) allKeys[k]=1; });
-                                            var keys = Object.keys(allKeys);
-                                            keys.forEach(function(k) { html += '<th>' + k + '</th>'; });
-                                            html += '</tr></thead><tbody>';
-                                            data.attendees.forEach(function(att) {
-                                                html += '<tr>';
-                                                keys.forEach(function(k) {
-                                                    var v = att[k];
-                                                    if (typeof v === 'object') v = JSON.stringify(v);
-                                                    html += '<td>' + (v === undefined || v === '' ? '-' : v) + '</td>';
-                                                });
-                                                html += '</tr>';
-                                            });
-                                            html += '</tbody></table>';
-                                        } else {
-                                            html += '<div style="margin-top:10px;">No registrants/attendees found for this event.</div>';
-                                        }
-                                        
-                                        $tableContainer.html(html).show();
-                                    } else {
-                                        var errorMsg = 'Could not fetch event details.';
-                                        if (response && response.data) {
-                                            errorMsg += ' Error: ' + response.data;
-                                        }
-                                        $response.html('<span style="color:red;">' + errorMsg + '</span>');
-                                        $tableContainer.hide().html('');
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    $tableContainer.hide().html('');
-                                    var errorMsg = 'AJAX error fetching event details.';
-                                    if (xhr && xhr.responseJSON && xhr.responseJSON.data) {
-                                        errorMsg += ' ' + xhr.responseJSON.data;
-                                    } else if (xhr && xhr.responseText) {
-                                        try {
-                                            var response = JSON.parse(xhr.responseText);
-                                            if (response && response.data) {
-                                                errorMsg += ' ' + response.data;
-                                            }
-                                        } catch (e) {
-                                            errorMsg += ' Server returned: ' + xhr.status + ' ' + xhr.statusText;
-                                        }
-                                    }
-                                    $response.html('<span style="color:red;">' + errorMsg + '</span>');
-                                    console.error('AJAX error details:', xhr, status, error);
-                                }
+                                return false;
                             });
                         });
-                        
-                        // List recent events for lead gen
-                        $('#list-leadgen-events-btn').on('click', function(e) {
-                            e.preventDefault();
-                            var $response = $('#leadgen-event-fetch-response');
-                            var $tableContainer = $('#leadgen-event-fields-table-container');
-                            $response.html('');
-                            $tableContainer.hide().html('');
-                            
-                            $response.html('Loading recent events...');
-                            
-                            $.ajax({
-                                url: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.ajax_url) ? workbooks_ajax.ajax_url : ajaxurl,
-                                method: 'POST',
-                                data: {
-                                    action: 'list_workbooks_events',
-                                    nonce: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.nonce) ? workbooks_ajax.nonce : ''
-                                },
-                                dataType: 'json',
-                                success: function(response) {
-                                    if (response && response.success && response.data && response.data.events) {
-                                        var events = response.data.events;
-                                        $response.css('color', 'green').text('Found ' + events.length + ' recent events:');
-                                        
-                                        var html = '<h4 style="margin-top:12px;">Recent Events</h4>';
-                                        if (events.length > 0) {
-                                            html += '<table class="widefat striped" style="margin-top:8px; max-width:100%;">';
-                                            html += '<thead><tr><th>ID</th><th>Name</th><th>Object Ref</th><th>Start Date</th><th>End Date</th><th>Type</th><th>Actions</th></tr></thead><tbody>';
-                                            events.forEach(function(event) {
-                                                html += '<tr>';
-                                                html += '<td>' + (event.id || '-') + '</td>';
-                                                html += '<td>' + (event.name || '-') + '</td>';
-                                                html += '<td>' + (event.object_ref || '-') + '</td>';
-                                                html += '<td>' + (event.start_date || '-') + '</td>';
-                                                html += '<td>' + (event.end_date || '-') + '</td>';
-                                                html += '<td>' + (event.event_type || '-') + '</td>';
-                                                html += '<td><button type="button" class="button button-small fetch-this-leadgen-event" data-event-id="' + event.id + '">Fetch This Event</button></td>';
-                                                html += '</tr>';
-                                            });
-                                            html += '</tbody></table>';
-                                        } else {
-                                            html += '<p>No events found.</p>';
-                                        }
-                                        
-                                        $tableContainer.html(html).show();
-                                        
-                                        // Add click handlers for "Fetch This Event" buttons
-                                        $('.fetch-this-leadgen-event').on('click', function() {
-                                            var eventId = $(this).data('event-id');
-                                            $('#leadgen_event_ref').val(eventId);
-                                            $('#fetch-leadgen-event-btn').click();
-                                        });
-                                    } else {
-                                        var errorMsg = 'Could not load events.';
-                                        if (response && response.data) {
-                                            errorMsg += ' Error: ' + response.data;
-                                        }
-                                        $response.html('<span style="color:red;">' + errorMsg + '</span>');
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    var errorMsg = 'AJAX error loading events.';
-                                    if (xhr && xhr.responseJSON && xhr.responseJSON.data) {
-                                        errorMsg += ' ' + xhr.responseJSON.data;
-                                    }
-                                    $response.html('<span style="color:red;">' + errorMsg + '</span>');
-                                    console.error('AJAX error details:', xhr, status, error);
-                                }
-                            });
-                        });
-                        
-                        // Handle lead gen form submission
-                        $('#leadgen-form').on('submit', function(e) {
-                            e.preventDefault();
-                            var $response = $('#leadgen-response');
-                            $response.html('Submitting lead generation form...');
-                            
-                            var formData = $(this).serialize();
-                            formData += '&action=submit_leadgen_form&nonce=' + (typeof workbooks_ajax !== 'undefined' ? workbooks_ajax.nonce : '');
-                            
-                            $.ajax({
-                                url: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.ajax_url) ? workbooks_ajax.ajax_url : ajaxurl,
-                                method: 'POST',
-                                data: formData,
-                                dataType: 'json',
-                                success: function(response) {
-                                    if (response && response.success) {
-                                        $response.html('<div style="color:green; border:1px solid green; padding:10px; background:#f0fff0;">Success: ' + response.data + '</div>');
-                                        // Reset form
-                                        $('#leadgen-form')[0].reset();
-                                        $('#leadgen-acf-info').hide();
-                                    } else {
-                                        var errorMsg = 'Error submitting form.';
-                                        if (response && response.data) {
-                                            errorMsg = response.data;
-                                        }
-                                        $response.html('<div style="color:red; border:1px solid red; padding:10px; background:#fff0f0;">Error: ' + errorMsg + '</div>');
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    $response.html('<div style="color:red; border:1px solid red; padding:10px; background:#fff0f0;">AJAX error submitting form. Please try again.</div>');
-                                }
-                            });
-                        });
-                    });
                     </script>
                 </div>
                 <!-- Membership Sign Up Tab -->
@@ -2056,8 +1803,8 @@ function workbooks_crm_settings_page() {
                     contentId = 'workbooks-gated-events-content';
                 } else if (tabId === 'workbooks-webinar-tab') {
                     contentId = 'workbooks-webinar-content';
-                } else if (tabId === 'workbooks-leadgen-tab') {
-                    contentId = 'workbooks-leadgen-content';
+                } else if (tabId === 'workbooks-mediaplanner-tab') {
+                    contentId = 'workbooks-mediaplanner-content';
                 } else if (tabId === 'workbooks-membership-tab') {
                     contentId = 'workbooks-membership-content';
                 } else if (tabId === 'workbooks-employers-tab') {

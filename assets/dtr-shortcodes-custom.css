@@ -1,11 +1,4 @@
 /* Side-by-side layout for shortcodes */
-.dtr-custom-checkbox-form {
-    padding: 2rem;
-    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.15);
-    border-radius: 5px;
-}
-
-
 .dtr-custom-checkbox-form legend {
 	text-align:left;
 	margin-bottom:30px;
@@ -134,4 +127,148 @@ body .check-label-text.check-label-text.check-label-text {
 body .check label::before,
 body .check label::after {
     display: none !important;
+}
+
+/* Subscription Checkboxes Styles */
+.subscription-checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* @base-size */
+    padding: 32px; /* @base-size*2 */
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+}
+.subscription-checkboxes input[type='checkbox'] {
+    display: none;
+}
+.subscription-checkboxes label {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    margin-bottom: 0;
+    font-size: 18px;
+    padding: 8px 0;
+}
+.subscription-checkboxes label:before {
+    content: '';
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: #0073e6; /* @dtr-blue */
+    background: #fff; /* @white */
+    display: inline-block;
+    height: 20px; /* @base-size*1.25 */
+    width: 20px;  /* @base-size*1.25 */
+    border: 2px solid #b0b0b0; /* @dtr-grey-mid */
+    border-radius: 5px;
+    margin-right: 8px; /* @base-size*0.5 */
+    transition: border-color 0.2s, background 0.2s;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 18px;
+    font-size: 16px;
+    vertical-align: middle;
+}
+.subscription-checkboxes input[type='checkbox']:checked + label:before {
+    content: '\f00c'; /* FontAwesome check */
+    border-color: #0073e6; /* @dtr-blue */
+    background: #0073e6; /* @dtr-blue */
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.subscription-checkboxes label[for='select-all'] {
+    background: #f5f5f5; /* @dtr-grey-light */
+    border-radius: 5px;
+    padding: 8px 12px;
+}
+.subscription-checkboxes button[type='submit'] {
+    background: #0073e6; /* @dtr-blue */
+    color: #fff;
+    border-radius: 5px !important;
+    width: fit-content;
+    padding: 4px 24px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 16px;
+    position: relative;
+}
+.subscription-checkboxes button[type='submit']:after {
+    content: '\f01e';
+    font-family: "Font Awesome 6 Free";
+    font-weight: 300;
+    margin-left: 8px;
+}
+.workbooks-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* @base-size */
+    padding: 32px; /* @base-size*2 */
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+}
+
+.workbooks-checkboxes label {
+    background: #f5f5f5; /* @dtr-grey-light */
+    border-radius: 5px;
+    padding: 4px 16px; /* @base-size*0.25 @base-size */
+    color: #888; /* .dtr-grey */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    position: relative;
+    transition: background 0.2s, color 0.2s;
+}
+
+.workbooks-checkboxes label:before {
+    content: '\f111';
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: #b0b0b0; /* @dtr-grey-mid */
+    margin-right: 4px; /* @base-size*0.25 */
+    font-size: 16px;
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+}
+
+.workbooks-checkboxes input[type='checkbox'] {
+    display: none;
+}
+
+.workbooks-checkboxes label:has(input[type='checkbox']:checked),
+.workbooks-checkboxes input[type='checkbox']:checked + label {
+    background: #a259e6; /* @dtr-purple */
+    color: #fff;
+}
+
+.workbooks-checkboxes label:has(input[type='checkbox']:checked):before,
+.workbooks-checkboxes input[type='checkbox']:checked + label:before {
+    content: '\f00c';
+    color: #fff;
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+.workbooks-checkboxes button[type='submit'] {
+    background: #0073e6; /* @dtr-blue */
+    color: #fff;
+    border-radius: 5px !important;
+    width: fit-content;
+    padding: 4px 24px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 16px;
+    position: relative;
+}
+
+.workbooks-checkboxes button[type='submit']:after {
+    content: '\f01e';
+    font-family: "Font Awesome 6 Free";
+    font-weight: 300;
+    margin-left: 8px;
 }

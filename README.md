@@ -1,14 +1,10 @@
 # Workbooks CRM API Integration
 
+
 ## Overview
 
-**Author**: Levon Gravett  
-**Developed For**: [https://www.supersonicplayground.com](https://www.supersonicplayground.com)  
-**Version**: 1.5.0
-
-A comprehensive WordPress plugin that provides seamless integration between WordPress and Workbooks CRM. This plugin enables automatic user registration, CRM data synchronization, webinar event registration, lead generation, and advanced field mapping with robust error handling and debugging capabilities.
-
 ## Key Features
+
 
 ### 🔗 **Core CRM Integration**
 - **API Integration**: Secure connection to Workbooks CRM using API keys with timeout and error handling
