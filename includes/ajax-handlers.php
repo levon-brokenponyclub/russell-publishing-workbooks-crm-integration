@@ -79,7 +79,6 @@ function fetch_workbooks_employers_callback() {
     }
 }
 
-
 // --- Logging functions remain unchanged ---
 
 function dtr_log_to_file($message) {
@@ -89,33 +88,4 @@ function dtr_log_to_file($message) {
     file_put_contents($log_file, "[$date] $message\n", FILE_APPEND);
 }
 
-function dtr_webinar_debug_log($level, $message, $data = []) {
-    $log_file = WORKBOOKS_NF_PATH . 'logs/webinar-debug.log';
-    
-    // Ensure the logs directory exists
-    $logs_dir = dirname($log_file);
-    if (!file_exists($logs_dir)) {
-        wp_mkdir_p($logs_dir);
-    }
-    
-    $timestamp = date('Y-m-d H:i:s');
-    $entry = "[$timestamp] [$level] $message";
-    if (!empty($data)) {
-        $entry .= ' | ' . json_encode($data);
-    }
-    file_put_contents($log_file, $entry . PHP_EOL, FILE_APPEND);
-}
-
-// --- All event/ticket/lead creation code is commented out ---
-
-
-// // Webinar register handler (with nonce check) -- NOT USED ANYMORE
-// add_action('wp_ajax_workbooks_webinar_register', 'workbooks_webinar_register_callback');
-// add_action('wp_ajax_nopriv_workbooks_webinar_register', 'workbooks_webinar_register_callback');
-// function workbooks_webinar_register_callback() { /* ... */ }
-
-// // Function dtr_register_workbooks_webinar(...) -- NOT USED ANYMORE
-
-// // Function dtr_register_workbooks_lead(...) -- NOT USED ANYMORE
-
-// --- end file ---
+// Note: No dtr_webinar_debug_log() here. It is defined only in webinar-handler.php.

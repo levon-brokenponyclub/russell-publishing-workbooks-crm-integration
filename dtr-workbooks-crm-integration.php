@@ -2,7 +2,7 @@
 /**
  * Plugin Name: DTR - Workbooks CRM API Integration
  * Description: Connects WordPress to DTR Workbooks CRM
- * Version: 1.4.5
+ * Version: 1.4.4
  * Author: Supersonic Playground
  * Author URI: https://www.supersonicplayground.com
  * Text Domain: dtr-workbooks-crm-integration
@@ -47,6 +47,11 @@ if (file_exists(WORKBOOKS_NF_PATH . 'includes/workbooks-employer-sync.php')) {
 // Include Ninja Forms country converter
 if (file_exists(WORKBOOKS_NF_PATH . 'includes/nf-country-converter.php')) {
     require_once WORKBOOKS_NF_PATH . 'includes/nf-country-converter.php';
+}
+
+// Include Ninja Forms Webinar Handlder
+if (file_exists(WORKBOOKS_NF_PATH . 'includes/webinar-handler.php')) {
+    require_once WORKBOOKS_NF_PATH . 'includes/webinar-handler.php';
 }
 
 // Load AJAX handler for Media Planner Test Form
