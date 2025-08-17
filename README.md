@@ -6,7 +6,7 @@
 **Website**: [https://www.supersonicplayground.com](https://www.supersonicplayground.com)  
 **Version**: 1.4.5
 
-A comprehensive WordPress plugin that provides seamless integration between WordPress and DTR Workbooks CRM. This plugin enables automatic user registration, CRM data synchronization, advanced field mapping, robust error handling, and debugging capabilities.
+A comprehensive WordPress plugin enabling seamless integration between WordPress and DTR Workbooks CRM. This solution powers automated user registration, advanced ACF-driven content gating, dynamic form generation from content metadata, robust event/ticket/lead creation, and detailed debugging—across ALL gated content types (not just webinars).
 
 ---
 
@@ -19,16 +19,24 @@ A comprehensive WordPress plugin that provides seamless integration between Word
 - **Duplicate Detection**: Smart duplicate checking using email matching with Workbooks API
 - **Comprehensive Logging**: Detailed debug logs for troubleshooting and monitoring
 
-### 📝 **Advanced Ninja Forms Integration**
+### 📝 **Advanced Ninja Forms & ACF-Powered Gated Content Integration**
 - **Automatic User Creation**: Seamlessly create WordPress users from form submissions
 - **CRM Record Creation**: Automatically generate corresponding Workbooks person records
-- **Field Mapping**: Complete mapping of all form fields to CRM equivalents including:
+- **Dynamic Form Generation**: Forms for gated content are now generated based on ACF fields within any post type (webinars, reports, whitepapers, etc.), minimizing manual form edits and maintenance
+- **Flexible Mapping**: All ACF fields (including event/campaign references, questions, sponsor opt-in, etc.) are mapped and synchronized to Workbooks CRM
+- **Field Mapping**: Complete mapping of all form fields to CRM equivalents, including:
   - Personal titles (Dr., Mr., Mrs., Ms., Prof., etc.)
   - Contact information (name, email, telephone, address)
   - Employment details with editable employer names
   - Marketing preferences and subscription settings
   - Topics of Interest (TOI) to Areas of Interest (AOI) mapping
 - **Error Recovery**: Robust error handling with detailed logging and recovery mechanisms
+
+### 📚 **Universal Gated Content Integration (Webinars & More)**
+- **All Gated Content Supported**: Handles webinars, reports, whitepapers, and any other ACF-powered gated content post type
+- **ACF-Driven Registration**: All critical event/campaign references, questions, and dynamic fields are defined and managed via ACF on the content itself
+- **Zero-Edit Forms**: When you add or update a field in the ACF group for a gated post, your registration form adapts automatically
+- **Lead and Ticket Automation**: Submissions always create a Workbooks person, event ticket (when relevant), and a new sales lead—ensuring all engagement is tracked
 
 ### 🎯 **Topics of Interest & Areas of Interest**
 - **Dynamic Mapping**: Sophisticated mapping system between Topics of Interest and Areas of Interest
@@ -42,11 +50,11 @@ A comprehensive WordPress plugin that provides seamless integration between Word
 - **JSON Generation**: Optimized JSON data generation for frontend performance
 - **Database Caching**: Local caching of employer data for improved performance
 
-### 📊 **Webinar Integration**
-- **Event Registration**: Direct integration with Workbooks events for webinar registrations
-- **ACF Integration**: Support for Advanced Custom Fields for webinar metadata
-- **Speaker Questions**: Optional speaker question submission with registrations
-- **Sponsor Opt-in**: Configurable sponsor information opt-in functionality
+### 📊 **Webinar & Content Registration**
+- **Direct Event Registration**: Integration with Workbooks for all event and gated content registrations—not just webinars
+- **ACF Integration**: Support for Advanced Custom Fields for all gated content metadata
+- **Dynamic Questions**: Collect custom questions per event or content, as defined in ACF
+- **Sponsor Opt-in**: Configurable sponsor information opt-in on a per-content basis
 
 ### 🎨 **Modern Admin Interface**
 - **Vertical Tab Layout**: Intuitive vertical tab navigation for better user experience
@@ -62,6 +70,7 @@ A comprehensive WordPress plugin that provides seamless integration between Word
 - WordPress 5.0 or higher
 - PHP 7.4 or higher
 - Ninja Forms plugin (for form integration features)
+- Advanced Custom Fields (ACF) plugin for meta-driven gated content
 - Valid Workbooks CRM API credentials
 - cURL extension enabled
 
@@ -91,11 +100,9 @@ A comprehensive WordPress plugin that provides seamless integration between Word
 4. **Test Connection**: Verify connectivity and credentials
 
 #### Field Mapping Configuration
-The plugin automatically maps form fields to Workbooks fields using the following conventions:
-- `person_personal_title` → Personal titles
-- `employer_name` → Editable employer field (recommended)
-- `cf_person_aoi_*` → Areas of Interest fields
-- Marketing preferences and subscription fields
+- Map form and ACF fields to Workbooks fields using standardized naming.
+- ACF fields for event/campaign reference, dynamic questions, and sponsor opt-in are automatically mapped.
+- No need to manually update forms for new gated content fields—just update the ACF field group.
 
 ---
 
@@ -184,26 +191,22 @@ For detailed deployment documentation, see `scripts/README.md`.
 
 ## Usage Guide
 
-### Ninja Forms Integration
+### Gated Content & Ninja Forms Integration
 
-#### Form Field Setup
-Configure your Ninja Forms with the following field names for automatic mapping:
-- **Title**: `person_personal_title`
-- **First Name**: `first_name`
-- **Last Name**: `last_name`
-- **Email**: `email`
-- **Employer**: `employer_name`
-- **Job Title**: `job_title`
-- **Marketing Preferences**: `cf_person_dtr_*`
-- **Topics of Interest**: Use predefined TOI options
+#### Form & Field Setup
+- For any gated content (webinar, report, whitepaper, etc.), use ACF to define all required registration fields.
+- Forms are generated dynamically—simply update the ACF field group attached to your gated content post type.
+- Standard fields (first name, last name, email, employer, job title, marketing preferences, topics of interest) are recognized and mapped.
+- Add additional ACF fields (e.g., speaker question, sponsor opt-in) to enable advanced capture and mapping.
 
 #### Registration Process
-1. User submits Ninja Form
-2. WordPress user account created automatically
-3. Form data mapped to Workbooks fields
-4. Duplicate check performed via Workbooks API
-5. New person record created in Workbooks (if no duplicate)
-6. All actions logged for debugging
+1. User submits the registration form (auto-generated from ACF) on any gated content post.
+2. WordPress user account may be created (if enabled).
+3. Form and ACF data is mapped to Workbooks fields.
+4. Duplicate check performed via Workbooks API.
+5. New person record created in Workbooks (if no duplicate).
+6. Event ticket (if relevant) and sales lead **always** created for every registration.
+7. All actions logged for debugging.
 
 ### Person Record Management
 
@@ -216,7 +219,7 @@ Configure your Ninja Forms with the following field names for automatic mapping:
 
 #### Field Mapping Details
 ```php
-// WordPress Meta → Workbooks Field
+// WordPress Meta / ACF → Workbooks Field
 'person_personal_title' → 'person_personal_title'
 'employer_name' → 'employer_name' (editable field)
 'cf_person_aoi_biomarkers' → 'cf_person_biomarkers'
@@ -238,36 +241,14 @@ Configure your Ninja Forms with the following field names for automatic mapping:
 4. Generate optimized JSON for frontend use
 5. Log sync statistics and errors
 
-### Webinar Registration
+### Webinar & Content Registration
 
 #### Registration Flow
-1. Select webinar from available events
-2. Fetch event details from Workbooks
-3. Submit participant information
-4. Create webinar registration in Workbooks
-5. Optional speaker questions and sponsor opt-in
-
-#### ACF Integration
-Supports Advanced Custom Fields for:
-- Workbooks webinar reference
-- Campaign reference tracking
-- Event metadata storage
-
-### Topics of Interest Mapping
-
-#### Automatic AOI Population
-When users select Topics of Interest during registration:
-- **Genomics** → Automatically sets `cf_person_biomarkers` and `cf_person_genomics`
-- **Business** → Sets `cf_person_business`
-- **Technology** → Sets `cf_person_technology`
-- Additional mappings configurable via helper functions
-
-#### Admin Visualization
-The admin interface provides:
-- Complete TOI to AOI mapping table
-- Visual badges showing active mappings
-- Field name reference for developers
-- Mapping count statistics
+1. Select gated content (webinar, report, etc.)
+2. Fetch event/content details from ACF fields
+3. Submit participant information via generated form
+4. Create Workbooks person, event ticket (if applicable), and **always create a sales lead**
+5. Optional dynamic questions and sponsor opt-in handled via ACF fields
 
 ---
 
@@ -372,10 +353,12 @@ add_action('wp_ajax_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
 
 ## Changelog
 
-### Version 1.4.5 (Unreleased)
-- ✅ **Always Create Sales Leads**: The lead creation process has been updated so that a new sales lead is always created for every event registration (Ninja Forms, Media Planner, etc), even if an event ticket already exists or the person is a duplicate. This ensures all registrations are tracked as leads in Workbooks CRM.
+### Version 1.4.5
+- ✅ **Universal Gated Content Integration**: All gated content post types (not just webinars) now use ACF-driven dynamic forms for Workbooks CRM registration, with zero-edit form maintenance.
+- ✅ **Always Create Sales Leads**: The lead creation process ensures a new sales lead is always created for every event/content registration (Ninja Forms, Media Planner, etc.), even for duplicates or existing tickets.
+- ✅ **ACF-Driven Form Generation**: Forms are now generated based on ACF fields attached to gated content, not hardcoded field lists.
 - ✅ **Debug Logging Enhanced**: Additional logging for lead creation, including all IDs and celebratory confirmation messages.
-- ✅ **File Structure Clarified**: Updated documentation and code comments to reflect new lead creation process.
+- ✅ **Documentation and File Structure**: Updated to reflect the new universal content gating and lead registration process.
 
 ### Version 1.4.4
 - Always creates sales leads on event/ticket registration (Ninja Forms & Media Planner)
@@ -403,7 +386,7 @@ Enable WordPress debugging and check the following log files:
 
 ### Common Issues
 1. **API Connection Failures**: Verify API credentials and network connectivity
-2. **Field Mapping Issues**: Check field naming conventions in forms
+2. **Field Mapping Issues**: Check field naming conventions in forms and ACF
 3. **Duplicate Records**: Review email-based duplicate detection logic
 4. **Employer Sync Problems**: Ensure sufficient memory and execution time
 
