@@ -353,26 +353,104 @@ add_action('wp_ajax_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
 
 ## Changelog
 
+### Version 2.0 Features (Coming Soon)
+- **Site Selection on Setup**: When setting up the plugin, administrators will be able to select the relevant site or brand. The plugin will then auto-configure custom field mappings and integration settings for Workbooks CRM, eliminating all hardcoded field lists or site-specific code.
+- **Advanced Backend Reporting**: A comprehensive reporting suite in the Gated Content Admin section will provide analytics and exportable reports for all registrations, leads, and CRM sync activity—giving marketing and editorial teams actionable insights into content performance.
+
 ### Version 1.4.5
-- ✅ **Universal Gated Content Integration**: All gated content post types (not just webinars) now use ACF-driven dynamic forms for Workbooks CRM registration, with zero-edit form maintenance.
-- ✅ **Always Create Sales Leads**: The lead creation process ensures a new sales lead is always created for every event/content registration (Ninja Forms, Media Planner, etc.), even for duplicates or existing tickets.
-- ✅ **ACF-Driven Form Generation**: Forms are now generated based on ACF fields attached to gated content, not hardcoded field lists.
-- ✅ **Debug Logging Enhanced**: Additional logging for lead creation, including all IDs and celebratory confirmation messages.
-- ✅ **Documentation and File Structure**: Updated to reflect the new universal content gating and lead registration process.
+- **Universal Gated Content Integration**: Registration and CRM sync now work for all gated content post types (not just webinars), using ACF-driven dynamic forms. Adding or changing fields on content is now as easy as updating the ACF group—no more manual form edits or code updates for new fields.
+- **Always Create Sales Leads**: Every event/content registration (via Ninja Forms, Media Planner, etc.) now always results in a new sales lead in Workbooks CRM. This ensures every engagement is captured, even for duplicate people or existing tickets.
+- **ACF-Driven Form Generation**: Registration forms for gated content are auto-generated from ACF field groups, so the backend forms always match the content requirements.
+- **Debug Logging Enhanced**: Lead creation, ticket generation, and event/person sync are now logged with greater detail, including Workbooks object IDs and clear success/failure signals.
+- **Documentation and File Structure**: Major updates to documentation, changelog history, and feature explanations to reflect the new universal content gating approach and improved process.
 
 ### Version 1.4.4
-- Always creates sales leads on event/ticket registration (Ninja Forms & Media Planner)
-- Unified debug logging with celebratory confirmation on success
-- Complete ACF support for event/webinar questions and campaign references
-- Improved admin UI and logging for troubleshooting
-- Updated file structure and script automation
-- Enhanced deployment and backup integration
+- **Sales Lead Enforcement**: Ensured that a new sales lead is always created for every event/ticket registration, regardless of existing tickets or person records, across Ninja Forms and Media Planner integration.
+- **Unified Debug Logging**: Introduced celebratory and error logging for every step of lead and ticket creation, simplifying troubleshooting and confirming successful actions.
+- **ACF Webinar Questions & Campaigns**: Added full support for registering and mapping speaker questions, sponsor opt-ins, and campaign references from ACF fields on webinars/events.
+- **Admin UI & Logging Improvements**: Improved WordPress admin interface with clearer options, logging, and sync status feedback.
+- **File Structure & Script Automation**: Refactored scripts directory, improved deployment automation, and enhanced backup procedures for safe releases.
 
-### Previous Versions
-- **1.4.3**: Enhanced field mapping, improved AOI/TOI logic, better error handling, admin UI and debugging
-- **1.4.2**: Initial stable release with core CRM integration
-- **1.4.1**: Beta release with Ninja Forms integration
-- **1.4.0**: Alpha release with basic Workbooks connectivity
+### Version 1.4.3
+- **Enhanced Field Mapping**: Switched employer mapping to use the editable `employer_name` field for more reliable CRM matching.
+- **AOI/TOI Mapping Overhaul**: Improved handling and mapping of Areas of Interest (AOI) and Topics of Interest (TOI), including special logic for genomics and related fields.
+- **Error Handling**: Introduced comprehensive error trapping, logging, and recovery for API failures and data mismatches.
+- **Duplicate Detection**: Added robust duplicate checking using email address with Workbooks API, reducing accidental duplicate person records.
+- **Admin UI Modernization**: Updated admin panels with vertical tabbed navigation, showing mapping tables and debugging tools.
+- **Debugging & API Response Handling**: Improved debug logs with step-by-step detail, and corrected API response parsing, especially for extracting Workbooks IDs.
+
+### Version 1.4.2
+- **Stable Core CRM Integration**: Marked the first stable release, including automated person record creation, employer sync, and basic lead generation.
+- **Basic Admin Tools**: Provided admin page for API setup and simple connection testing.
+- **Initial Field Mapping**: Mapped standard registration fields to Workbooks, including personal, contact, and employer info.
+- **Cron-Based Employer Sync**: Scheduled daily sync of employer data from Workbooks to local database.
+
+### Version 1.4.1
+- **Ninja Forms Beta Integration**: Added support for Ninja Forms-based user registration and lead capture, including automatic creation of WordPress users and CRM person records.
+- **Early AOI/TOI Mapping**: Introduced initial AOI/TOI mapping logic, with admin display for field relationships.
+- **Workbooks API Error Logging**: Added first version of debug logs for API errors and registration issues.
+- **User Meta Storage**: Started storing Workbooks person IDs and mapping data on WordPress user meta.
+
+### Version 1.4.0
+- **Alpha Workbooks Connectivity**: Enabled basic API connectivity with Workbooks CRM, supporting person record creation from static forms.
+- **Employer Sync Prototype**: First implementation of AJAX-based employer search and caching.
+- **Hardcoded Field Mapping**: Initial hardcoded mapping for registration fields to Workbooks.
+- **Debug Log Prototyping**: Began development of debug log files for API troubleshooting.
+
+### Version 1.3.4
+- **Performance & Caching**: Improved employer sync speed and optimized local caching for faster lookups.
+- **Duplicate Handling**: Enhanced duplicate email detection logic for more accurate CRM person record matching.
+- **UI Polish**: Refined admin screens and added contextual help for field mapping.
+
+### Version 1.3.3
+- **Form Field Validation**: Added backend validation for required fields on all registration forms.
+- **Employer Lookup UX**: Improved autocomplete and dropdown experience for employer selection.
+- **Better Error Feedback**: Displayed specific CRM/API errors to admins in the UI.
+
+### Version 1.3.2
+- **Dynamic Field Maps**: Allowed admins to remap form fields to CRM fields via the admin interface.
+- **Expanded AOI Support**: Added new AOI categories and improved mapping logic.
+- **Logging Upgrades**: Added log levels and filtering to debug logs.
+
+### Version 1.3.1
+- **Bugfix Release**: Addressed edge-case bugs in registration flow (e.g., missing employer, empty email).
+- **API Timeout Handling**: Improved recovery from slow or failed Workbooks API requests.
+
+### Version 1.3.0
+- **Media Planner Integration**: Added support for Media Planner gated content and registration forms, synced to Workbooks CRM.
+- **Form Customization**: Allowed custom questions and sponsor opt-ins on media planner content.
+- **Admin Reporting**: Added basic reporting of registration stats in the admin dashboard.
+
+### Version 1.2.3
+- **Webinar Enhancements**: Improved mapping for webinar-specific questions and campaign reference fields.
+- **Scheduling Fixes**: Fixed issues where scheduled employer syncs would occasionally fail.
+- **Multi-language Support**: Added preliminary support for multilingual forms.
+
+### Version 1.2.2
+- **API Refactoring**: Refactored Workbooks API wrapper for better reliability and maintainability.
+- **Data Sanitization**: Improved sanitization and escaping of form inputs before CRM sync.
+- **Admin Notices**: Added more helpful admin notices for setup and troubleshooting.
+
+### Version 1.2.1
+- **UX Improvements**: Streamlined the registration flow for users, reducing friction and confusion.
+- **Debug Mode Toggle**: Added a toggle in admin for enabling/disabling detailed debug logging.
+- **Field Prepopulation**: Introduced logic to prepopulate form fields with known user data.
+
+### Version 1.2.0
+- **Gated Content Foundation**: Laid groundwork for supporting all gated content types, not just webinars.
+- **Ninja Forms Field Mapping**: Upgraded Ninja Forms integration to support dynamic/optional fields.
+- **Employer Table Migration**: Migrated employer sync storage to a dedicated custom table.
+
+### Version 1.1.0
+- **Employer Sync Improvements**: Improved reliability of employer sync, added manual sync button in admin.
+- **User Meta Enhancements**: Expanded storage of Workbooks-related data in user meta.
+- **Field Mapping UI**: Added visual field mapping table in admin for easier reference.
+
+### Version 1.0.0
+- **Plugin Scaffold Created**: Set up the core WordPress plugin structure, hooks, and initial admin menu.
+- **Workbooks API Authentication**: Implemented first version of API key and endpoint configuration.
+- **Prototype Person Creation**: Added basic form for creating a Workbooks person from WordPress.
+- **Early Error Handling**: Logged API success/failure to a basic debug file.
 
 ---
 
