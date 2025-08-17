@@ -2,7 +2,7 @@
 /**
  * Plugin Name: DTR - Workbooks CRM API Integration
  * Description: Connects WordPress to DTR Workbooks CRM
- * Version: 1.4.4
+ * Version: 1.4.5
  * Author: Supersonic Playground
  * Author URI: https://www.supersonicplayground.com
  * Text Domain: dtr-workbooks-crm-integration

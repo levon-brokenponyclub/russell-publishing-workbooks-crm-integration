@@ -1,10 +1,16 @@
-# Workbooks CRM API Integration
-
+# DTR - Workbooks CRM API Integration
 
 ## Overview
 
-## Key Features
+**Author**: Supersonic Playground / Levon Gravett  
+**Website**: [https://www.supersonicplayground.com](https://www.supersonicplayground.com)  
+**Version**: 1.4.5
 
+A comprehensive WordPress plugin that provides seamless integration between WordPress and DTR Workbooks CRM. This plugin enables automatic user registration, CRM data synchronization, advanced field mapping, robust error handling, and debugging capabilities.
+
+---
+
+## Key Features
 
 ### 🔗 **Core CRM Integration**
 - **API Integration**: Secure connection to Workbooks CRM using API keys with timeout and error handling
@@ -16,9 +22,8 @@
 ### 📝 **Advanced Ninja Forms Integration**
 - **Automatic User Creation**: Seamlessly create WordPress users from form submissions
 - **CRM Record Creation**: Automatically generate corresponding Workbooks person records
-- **Multi-Form Support**: Handles both webinar registration and lead generation forms
 - **Field Mapping**: Complete mapping of all form fields to CRM equivalents including:
-  - Personal person details
+  - Personal titles (Dr., Mr., Mrs., Ms., Prof., etc.)
   - Contact information (name, email, telephone, address)
   - Employment details with editable employer names
   - Marketing preferences and subscription settings
@@ -37,36 +42,19 @@
 - **JSON Generation**: Optimized JSON data generation for frontend performance
 - **Database Caching**: Local caching of employer data for improved performance
 
-### 📊 **Webinar & Event Integration**
+### 📊 **Webinar Integration**
 - **Event Registration**: Direct integration with Workbooks events for webinar registrations
-- **Event Ticket Management**: Automatic creation and management of event tickets in Workbooks
 - **ACF Integration**: Support for Advanced Custom Fields for webinar metadata
 - **Speaker Questions**: Optional speaker question submission with registrations
 - **Sponsor Opt-in**: Configurable sponsor information opt-in functionality
-- **Existing Registration Detection**: Smart detection of existing event registrations to prevent duplicates
-- **Registration Updates**: Ability to update existing registrations with new information
 
-### 📈 **Lead Generation System**
-- **Gated Content Integration**: Seamless lead capture for restricted content access
-- **Lead Generation Forms**: Specialized handling of lead generation form submissions
-- **Event-Based Lead Tracking**: Associate leads with specific events or campaigns in Workbooks
-- **Lead Classification**: Automatic categorization of leads with proper subscriber types
-- **No Duplicate Tickets**: Lead generation creates person records only, not event tickets
-- **ACF Content Integration**: Integration with Advanced Custom Fields for content metadata
-
-### 🔒 **Gated Content & Article Previews**
-- **Plugin-Based Gating System**: All article gating logic is now handled by the plugin, with no reliance on ACF fields
-- **Shortcode for Gated Content**: Use `[gated_preview_content id="123"]` or `[gated_preview_content post_id="123"]` to display preview/full content based on user login and gating status
-- **Preview & Full Content Logic**: Unregistered users see only the preview text; registered users see the full article content
-- **Admin UI for Gated Content**: Modern admin interface for managing all gated content fields, including preview text, images, video, gallery, CTA button, and Workbooks integration fields
-- **Dynamic List & Search**: Easily search, filter, and manage all gated articles from a single admin screen
-- **View Shortcode Button**: Instantly view the shortcode and all associated data for any gated article in the admin UI
-- **Debug Output & Logging**: Built-in debug output and logging for troubleshooting shortcode rendering and gating logic
-- **No ACF Required**: All gating fields are stored as post meta and managed via the plugin interface
-- **Vertical Tab Layout**: Intuitive vertical tab navigation for better user experience (admin UI)
+### 🎨 **Modern Admin Interface**
+- **Vertical Tab Layout**: Intuitive vertical tab navigation for better user experience
 - **Real-time Testing**: Built-in connection testing and validation tools
 - **User Management**: Comprehensive user listing with Workbooks ID management
 - **Debug Dashboard**: Centralized debugging and monitoring interface
+
+---
 
 ## Installation & Setup
 
@@ -74,7 +62,6 @@
 - WordPress 5.0 or higher
 - PHP 7.4 or higher
 - Ninja Forms plugin (for form integration features)
-- Advanced Custom Fields (ACF) plugin (for content gating features)
 - Valid Workbooks CRM API credentials
 - cURL extension enabled
 
@@ -109,6 +96,8 @@ The plugin automatically maps form fields to Workbooks fields using the followin
 - `employer_name` → Editable employer field (recommended)
 - `cf_person_aoi_*` → Areas of Interest fields
 - Marketing preferences and subscription fields
+
+---
 
 ## Deployment System
 
@@ -191,66 +180,30 @@ BACKUP_RETENTION_DAYS=30
 
 For detailed deployment documentation, see `scripts/README.md`.
 
+---
+
 ## Usage Guide
 
 ### Ninja Forms Integration
 
-#### Webinar Registration Forms
-Configure your Ninja Forms for webinar registration with these field names:
-- **Webinar Selection**: `webinar_post_id` (dropdown of available webinars)
-- **Participant Email**: `participant_email`
-- **Speaker Question**: `speaker_question` (optional)
-- **Sponsor Opt-in**: `sponsor_optin` (checkbox)
-
-#### Lead Generation Forms
-Configure your Ninja Forms for lead generation with these field names:
+#### Form Field Setup
+Configure your Ninja Forms with the following field names for automatic mapping:
+- **Title**: `person_personal_title`
 - **First Name**: `first_name`
 - **Last Name**: `last_name`
-- **Email**: `email_address`
-- **Privacy Consent**: Privacy consent field (required)
+- **Email**: `email`
+- **Employer**: `employer_name`
+- **Job Title**: `job_title`
+- **Marketing Preferences**: `cf_person_dtr_*`
+- **Topics of Interest**: Use predefined TOI options
 
 #### Registration Process
-1. User submits appropriate Ninja Form
-2. Plugin detects form type and processes accordingly
-3. For webinars: Creates person record + event ticket in Workbooks
-4. For lead generation: Creates person record only (no event ticket)
-5. All actions logged for debugging and monitoring
-
-### Webinar Registration System
-
-#### Event Integration
-- **ACF Field Integration**: Webinar posts use ACF fields for Workbooks integration
-  - `workbook_reference`: Workbooks event ID
-  - `campaign_reference`: Campaign reference for tracking
-- **Event Ticket Creation**: Automatic creation of event tickets in Workbooks
-- **Existing Registration Handling**: Smart detection and updating of existing registrations
-- **Speaker Questions**: Optional submission of questions for speakers
-- **Sponsor Opt-in**: Configurable sponsor information preferences
-
-#### Registration Flow
-1. Select webinar from available events
-2. Fetch event details from Workbooks via ACF fields
-3. Submit participant information
-4. Create or update event registration in Workbooks
-5. Log all registration activities for monitoring
-
-### Lead Generation System
-
-#### Content Gating Integration
-- **ACF Content Fields**: Gated content uses ACF fields for event association
-  - `campaign_id`: Associated Workbooks event/campaign ID
-  - `campaign_reference`: Campaign reference for tracking
-- **Lead Capture**: Automatic person record creation for content access
-- **Event Association**: Links leads to specific events or campaigns
-- **No Event Tickets**: Lead generation does not create event registrations
-
-#### Lead Generation Flow
-1. User encounters gated content
-2. Submits lead generation form for access
-3. Plugin creates person record in Workbooks
-4. Associates lead with content event/campaign
-5. Grants access to full content
-6. Tracks lead generation in WordPress options
+1. User submits Ninja Form
+2. WordPress user account created automatically
+3. Form data mapped to Workbooks fields
+4. Duplicate check performed via Workbooks API
+5. New person record created in Workbooks (if no duplicate)
+6. All actions logged for debugging
 
 ### Person Record Management
 
@@ -258,8 +211,7 @@ Configure your Ninja Forms for lead generation with these field names:
 - **Personal Information**: Title, first name, last name, job title
 - **Contact Details**: Email, telephone, country, town, postcode
 - **Employer Information**: Organization name and ID
-- **Lead Classification**: Subscriber type, web member status, lead source
-- **Marketing Preferences**: News, events, webinars, third-party communications
+- **Marketing Preferences**: DTR news, events, webinars, third-party communications
 - **Areas of Interest**: Business, diseases, drugs & therapies, genomics, R&D, technology, tools & techniques
 
 #### Field Mapping Details
@@ -269,11 +221,6 @@ Configure your Ninja Forms for lead generation with these field names:
 'employer_name' → 'employer_name' (editable field)
 'cf_person_aoi_biomarkers' → 'cf_person_biomarkers'
 'cf_person_aoi_genomics' → 'cf_person_genomics'
-
-// Lead Generation Specific Fields
-'cf_person_dtr_subscriber_type' → 'Prospect'
-'lead_source_type' → 'Lead Generation Form'
-'cf_person_dtr_web_member' → 1
 ```
 
 ### Employer Synchronization
@@ -291,24 +238,20 @@ Configure your Ninja Forms for lead generation with these field names:
 4. Generate optimized JSON for frontend use
 5. Log sync statistics and errors
 
-### Gated Content Integration
-- **No ACF Required**: All gating logic and fields are managed by the plugin
-- **Shortcode Usage**: Place `[gated_preview_content id="123"]` or `[gated_preview_content post_id="123"]` in any post, page, or template to display gated content
-- **Admin Management**: Use the Gated Content admin screen to configure preview and main content, media, and integration fields for each article
+### Webinar Registration
 
-## Advanced Features
+#### Registration Flow
+1. Select webinar from available events
+2. Fetch event details from Workbooks
+3. Submit participant information
+4. Create webinar registration in Workbooks
+5. Optional speaker questions and sponsor opt-in
 
-### Form Detection & Processing
-
-#### Automatic Form Type Detection
-The plugin automatically detects and processes different form types based on configuration and form fields submitted.
-
-#### Event Ticket Management
-For webinar registrations:
-- **Duplicate Prevention**: Checks for existing event tickets before creation
-- **Ticket Updates**: Updates existing tickets with new information
-- **Lock Version Handling**: Proper handling of Workbooks lock versions for updates
-- **Fallback Creation**: Creates new tickets if updates fail
+#### ACF Integration
+Supports Advanced Custom Fields for:
+- Workbooks webinar reference
+- Campaign reference tracking
+- Event metadata storage
 
 ### Topics of Interest Mapping
 
@@ -326,27 +269,25 @@ The admin interface provides:
 - Field name reference for developers
 - Mapping count statistics
 
-### Error Handling & Debugging
+---
 
-#### Comprehensive Logging & Debugging
+## Error Handling & Debugging
+
+#### Comprehensive Logging
 - **Registration Debug Log**: Step-by-step registration process logging
-- **Webinar Debug Log**: Detailed webinar registration and event ticket logging
-- **Lead Generation Log**: Specialized logging for lead generation processes
 - **Workbooks API Log**: Daily API interaction logs
 - **WordPress Debug Log**: Integration with WordPress debugging
-- **Gated Content Debug Log**: Dedicated logging for all gated content and shortcode operations
 - **Admin Notifications**: Real-time error reporting in admin interface
 
 #### Debug Features
 - Clear log files before testing
-- Detailed API response logging for all endpoints
-- Event ticket creation/update logging
-- Lead generation process tracking
+- Detailed API response logging
 - Timing diagnostics for performance monitoring
 - Error recovery mechanisms
-- Debug output panels in admin and on the frontend for troubleshooting
 
-### Database Schema
+---
+
+## Database Schema
 
 #### Custom Tables
 ```sql
@@ -365,16 +306,15 @@ wp_workbooks_employers
 'employer_name' - Editable employer name
 
 // Marketing Preferences
-'cf_person_news' - News subscription
-'cf_person_events' - Events subscription
-'cf_person_webinar' - Webinar subscription
+'cf_person_dtr_news' - DTR news subscription
+'cf_person_dtr_events' - DTR events subscription
+'cf_person_dtr_webinar' - DTR webinar subscription
 
 // Areas of Interest
 'cf_person_aoi_*' - AOI field mappings
-
-// Lead Generation Tracking
-'dtr_lead_registration_*' - Lead registration metadata
 ```
+
+---
 
 ## Developer Information
 
@@ -384,11 +324,11 @@ dtr-workbooks-crm-integration/
 ├── dtr-workbooks-crm-integration.php (Main plugin file)
 ├── includes/
 │   ├── nf-user-register.php (Ninja Forms handler)
-│   ├── ninja-forms-simple-hook.php (Form processing logic)
-│   ├── ajax-handlers.php (AJAX endpoints and handlers)
+│   ├── ninja-forms-simple-hook.php (New Ninja Forms handler)
 │   ├── helper-functions.php (TOI/AOI mapping)
 │   ├── dtr-shortcodes.php (Shortcode functionality)
-│   └── workbooks-employer-sync.php (Employer sync)
+│   ├── workbooks-employer-sync.php (Employer sync)
+│   └── media-planner-ajax-handler.php (Media planner AJAX handler)
 ├── assets/
 │   ├── admin.css (Admin styling)
 │   └── dtr-ninjaform-title-select.js (Frontend scripts)
@@ -398,22 +338,26 @@ dtr-workbooks-crm-integration/
 │   └── webinar-endpoint.js (Webinar functionality)
 ├── lib/
 │   └── workbooks_api.php (Workbooks API wrapper)
-└── logs/ (Debug and error logs)
+├── logs/ (Debug and error logs)
+├── scripts/
+│   ├── setup.sh
+│   ├── deploy.sh
+│   ├── post-commit-sync.sh
+│   ├── config.example.sh
+│   └── README.md
+└── .github/
+    └── workflows/deploy.yml (GitHub Actions deployment)
 ```
 
 ### API Integration
 The plugin uses the Workbooks REST API with:
 - **Authentication**: API key-based authentication
-- **Endpoints**: People, Organizations, Events, Event Tickets
-- **Error Handling**: Comprehensive exception catching with fallback mechanisms
+- **Endpoints**: People, Organizations, Events, Tickets, Sales Leads
+- **Error Handling**: Comprehensive exception catching
 - **Rate Limiting**: Respectful API usage patterns
-- **Duplicate Prevention**: Smart duplicate detection for both people and event tickets
 
 ### Hooks & Filters
 ```php
-// Form Processing
-add_action('nf_after_final_submit', 'dtr_process_ninja_form_submission');
-
 // User Registration
 add_action('nf_after_final_submit', 'nf_workbooks_user_register_submission');
 
@@ -422,82 +366,57 @@ add_action('workbooks_daily_employer_sync', 'workbooks_sync_employers_cron');
 
 // AJAX Handlers
 add_action('wp_ajax_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
-add_action('wp_ajax_fetch_webinar_acf_data', 'fetch_webinar_acf_data_callback');
-add_action('wp_ajax_workbooks_webinar_register', 'workbooks_webinar_register_callback');
 ```
 
-### Key Functions
-```php
-// Webinar Registration
-dtr_register_workbooks_webinar($data) - Process webinar registrations
-dtr_process_ninja_form_submission($form_data) - Main form processor
-
-// Lead Generation
-dtr_register_workbooks_lead($registration_data) - Process lead generation
-
-// API Utilities
-get_workbooks_instance() - Get authenticated Workbooks API instance
-workbooks_test_connection_callback() - Test API connectivity
-```
+---
 
 ## Changelog
 
-### Version 1.5.0 (Current)
-- ✅ **Webinar Registration System**: Complete integration with Workbooks events and event tickets
-- ✅ **Lead Generation Integration**: Specialized lead capture for gated content
-- ✅ **Form Type Detection**: Automatic detection and processing of different form types
-- ✅ **Event Ticket Management**: Smart creation and updating of event tickets
-- ✅ **ACF Integration**: Support for webinar and content metadata via ACF fields
-- ✅ **Enhanced Logging**: Comprehensive debugging for webinars and lead generation
-- ✅ **Duplicate Prevention**: Advanced duplicate detection for people and event tickets
-- ✅ **Error Recovery**: Robust error handling with fallback mechanisms
-- ✅ **AJAX Endpoints**: Professional AJAX handlers for frontend interactions
+### Version 1.4.5 (Unreleased)
+- ✅ **Always Create Sales Leads**: The lead creation process has been updated so that a new sales lead is always created for every event registration (Ninja Forms, Media Planner, etc), even if an event ticket already exists or the person is a duplicate. This ensures all registrations are tracked as leads in Workbooks CRM.
+- ✅ **Debug Logging Enhanced**: Additional logging for lead creation, including all IDs and celebratory confirmation messages.
+- ✅ **File Structure Clarified**: Updated documentation and code comments to reflect new lead creation process.
 
-### Version 1.4.4 (Previous)
-- ✅ **Enhanced Field Mapping**: Fixed employer field to use editable `employer_name`
-- ✅ **Improved AOI Mapping**: Corrected AOI field prefix handling
-- ✅ **Updated TOI Logic**: Enhanced genomics field mapping
-- ✅ **Robust Error Handling**: Comprehensive error logging and recovery
-- ✅ **Duplicate Detection**: Smart email-based duplicate checking
-- ✅ **Modern Admin UI**: Vertical tab layout with improved UX
-- ✅ **Enhanced Debugging**: Detailed step-by-step logging
-- ✅ **API Response Parsing**: Fixed person ID extraction from `affected_objects`
+### Version 1.4.4
+- Always creates sales leads on event/ticket registration (Ninja Forms & Media Planner)
+- Unified debug logging with celebratory confirmation on success
+- Complete ACF support for event/webinar questions and campaign references
+- Improved admin UI and logging for troubleshooting
+- Updated file structure and script automation
+- Enhanced deployment and backup integration
 
 ### Previous Versions
-- **1.4.3**: Gated content system and shortcode integration
+- **1.4.3**: Enhanced field mapping, improved AOI/TOI logic, better error handling, admin UI and debugging
 - **1.4.2**: Initial stable release with core CRM integration
 - **1.4.1**: Beta release with Ninja Forms integration
 - **1.4.0**: Alpha release with basic Workbooks connectivity
+
+---
 
 ## Support & Documentation
 
 ### Debugging
 Enable WordPress debugging and check the following log files:
 - `/wp-content/debug.log` - WordPress debug log
-- `/wp-content/plugins/dtr-workbooks-crm-integration/simple-webinar-debug.log` - Webinar and lead generation debug log
-- `/wp-content/plugins/dtr-workbooks-crm-integration/logs/` - General plugin logs
+- `/wp-content/plugins/dtr-workbooks-crm-integration/logs/` - Plugin-specific logs
 - `/wp-content/plugins/dtr-workbooks-crm-integration/includes/register-debug.log` - Registration debug log
 
 ### Common Issues
 1. **API Connection Failures**: Verify API credentials and network connectivity
 2. **Field Mapping Issues**: Check field naming conventions in forms
 3. **Duplicate Records**: Review email-based duplicate detection logic
-4. **Event Ticket Creation**: Ensure proper ACF field configuration for webinars
-5. **Lead Generation**: Verify ACF campaign fields for gated content
-6. **Employer Sync Problems**: Ensure sufficient memory and execution time
-
-### Testing & Monitoring
-- **Connection Testing**: Use built-in API connection testing tools
-- **Form Testing**: Test both webinar and lead generation forms separately
-- **Debug Logs**: Monitor debug logs for detailed process tracking
-- **Error Monitoring**: Check admin notifications for real-time error reporting
+4. **Employer Sync Problems**: Ensure sufficient memory and execution time
 
 ### Support
-For technical support or custom development:  
-- 🌐 [https://www.supersonicplayground.com](https://www.supersonicplayground.com)  
-- 📧 Levon Gravett: levon.gravett@supersonicplayground.com
+For technical support and customization requests:
+- **Website**: [https://www.supersonicplayground.com](https://www.supersonicplayground.com)
+- **Email**: Contact through the website
+- **Developer**: Levon Gravett
 - **Documentation**: Refer to inline code comments and debug logs
+
+---
 
 ## License
 
-This plugin is proprietary software developed by Levon Gravett for Supersonic Playground. All rights reserved.
+This plugin is proprietary software developed by Supersonic Playground for DTR (Drug Target Review) and Levon Gravett.  
+All rights reserved.
