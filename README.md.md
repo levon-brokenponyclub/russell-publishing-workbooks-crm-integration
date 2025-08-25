@@ -4,7 +4,7 @@
 
 **Author**: Supersonic Playground / Levon Gravett  
 **Website**: [https://www.supersonicplayground.com](https://www.supersonicplayground.com)  
-**Version**: 1.4.5
+**Version**: 1.4.6
 
 A comprehensive WordPress plugin enabling seamless integration between WordPress and DTR Workbooks CRM. This solution powers automated user registration, advanced ACF-driven content gating, dynamic form generation from content metadata, robust event/ticket/lead creation, and detailed debugging—across ALL gated content types (not just webinars).
 
@@ -20,6 +20,13 @@ A comprehensive WordPress plugin enabling seamless integration between WordPress
 - **Comprehensive Logging**: Detailed debug logs for troubleshooting and monitoring
 
 ### 📝 **Advanced Ninja Forms & ACF-Powered Gated Content Integration**
+
+#### 2025-08-25/26 Additions
+- **Real-Time ACF Answer Logging**: The frontend now logs ACF question answers to the browser console in real time as users interact with the form, including dropdowns, checkboxes, radios, and text fields. This helps confirm that all user input is being captured before submission.
+- **Post ID & Campaign Logging**: The script logs the current `post_id` (and `campaign` if present) alongside ACF answers, ensuring these hidden fields are always visible in the console for debugging and validation.
+- **Robust Field Detection**: Improved JavaScript logic to reliably find hidden fields (like `post_id`) both globally and inside the Ninja Form, so values are always logged even if the form structure changes.
+- **Backend Handler Improvements**: The lead generation handler and Ninja Forms hook were updated to ensure that ACF questions (from the `add_questions` field) are always extracted, merged, and logged, and that all lead generation actions are written to `lead-generation-debug.log`.
+- **Parse Error Fixes**: Fixed PHP parse errors in the ACF question rendering logic by moving array mapping outside of inline echo statements and using `isset()` for compatibility.
 - **Automatic User Creation**: Seamlessly create WordPress users from form submissions
 - **CRM Record Creation**: Automatically generate corresponding Workbooks person records
 - **Dynamic Form Generation**: Forms for gated content are now generated based on ACF fields within any post type (webinars, reports, whitepapers, etc.), minimizing manual form edits and maintenance
@@ -33,6 +40,7 @@ A comprehensive WordPress plugin enabling seamless integration between WordPress
 - **Error Recovery**: Robust error handling with detailed logging and recovery mechanisms
 
 ### 📚 **Universal Gated Content Integration (Webinars & More)**
+- **Dynamic ACF Question Handling**: All ACF questions defined on the post are now merged and passed to the backend, and are visible in both the frontend console and backend debug logs for every submission.
 - **All Gated Content Supported**: Handles webinars, reports, whitepapers, and any other ACF-powered gated content post type
 - **ACF-Driven Registration**: All critical event/campaign references, questions, and dynamic fields are defined and managed via ACF on the content itself
 - **Zero-Edit Forms**: When you add or update a field in the ACF group for a gated post, your registration form adapts automatically
@@ -280,6 +288,7 @@ For detailed deployment documentation, see `scripts/README.md`.
 - All mailing list actions are logged, and exceptions are handled gracefully with detailed error output.
 
 ### 📝 Debug Logging & Error Handling
+- **Lead Generation Debug Log**: All lead generation actions, including extracted ACF questions and field values, are now logged to `lead-generation-debug.log` for full traceability.
 
 - Every submission (webinar or lead) is assigned a unique debug ID for tracking.
 - All major steps (person creation, ticket creation, mailing list update) are logged with timestamps and context.
@@ -402,6 +411,12 @@ add_action('wp_ajax_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
 ## Changelog
 
 ### Version 2.0 Features (Coming Soon)
+
+### Version 1.4.7 (2025-08-25/26)
+- **Real-Time ACF Answer Logging**: Frontend logs ACF answers and hidden fields as users interact with the form.
+- **Improved Hidden Field Logging**: More robust detection and logging of `post_id` and `campaign` fields.
+- **Backend Handler Parity**: Lead generation handler now mirrors webinar handler for ACF question extraction and logging.
+- **Parse Error Fixes**: PHP code for ACF question rendering is now compatible with all environments.
 - **Site Selection on Setup**: When setting up the plugin, administrators will be able to select the relevant site or brand. The plugin will then auto-configure custom field mappings and integration settings for Workbooks CRM, eliminating all hardcoded field lists or site-specific code.
 - **Advanced Backend Reporting**: A comprehensive reporting suite in the Gated Content Admin section will provide analytics and exportable reports for all registrations, leads, and CRM sync activity—giving marketing and editorial teams actionable insights into content performance.
 

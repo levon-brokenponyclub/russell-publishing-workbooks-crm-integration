@@ -278,8 +278,15 @@ function dtr_register_workbooks_webinar(
     dtr_webinar_debug("🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESSFUL!");
 
     // RESULT INFORMATION
+    // Prefer the form submission value for webinar_title if available, else fallback to ACF field
+    $webinar_title_final = '';
+    if (!empty($debug_report['debug_raw_fields']['webinar_title'])) {
+        $webinar_title_final = $debug_report['debug_raw_fields']['webinar_title'];
+    } elseif (!empty($webinar_fields['webinar_title'])) {
+        $webinar_title_final = $webinar_fields['webinar_title'];
+    }
     $result_info = [
-        'webinar_title' => $webinar_fields['webinar_title'] ?? '',
+        'webinar_title' => $webinar_title_final,
         'post_id' => $post_id,
         'email_address' => $email,
         'question_for_speaker' => $speaker_question,
