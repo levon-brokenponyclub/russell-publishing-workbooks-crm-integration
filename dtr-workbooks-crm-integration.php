@@ -2,7 +2,7 @@
 /**
  * Plugin Name: DTR - Workbooks CRM API Integration
  * Description: Connects WordPress to DTR Workbooks CRM
- * Version: 1.4.4
+ * Version: 1.4.5
  * Author: Supersonic Playground
  * Author URI: https://www.supersonicplayground.com
  * Text Domain: dtr-workbooks-crm-integration
@@ -54,13 +54,18 @@ if (file_exists(WORKBOOKS_NF_PATH . 'includes/webinar-handler.php')) {
     require_once WORKBOOKS_NF_PATH . 'includes/webinar-handler.php';
 }
 
+// Load Ninja Forms ACF questions handler
+if (file_exists(WORKBOOKS_NF_PATH . 'includes/acf-ninjaforms-questions.php')) {
+    require_once WORKBOOKS_NF_PATH . 'includes/acf-ninjaforms-questions.php';
+}
+
 // Load AJAX handler for Media Planner Test Form
 if (file_exists(WORKBOOKS_NF_PATH . 'includes/media-planner-ajax-handler.php')) {
     require_once WORKBOOKS_NF_PATH . 'includes/media-planner-ajax-handler.php';
 }
 
 // Include media planner form
-/* if (file_exists(WORKBOOKS_NF_PATH . 'includes/media-planner-form.php')) {
+if (file_exists(WORKBOOKS_NF_PATH . 'includes/media-planner-form.php')) {
     require_once WORKBOOKS_NF_PATH . 'includes/media-planner-form.php';
     error_log('Media Planner form included');
 } else {
@@ -73,7 +78,7 @@ if (class_exists('DTR_Media_Planner_Handler')) {
     error_log('Media Planner Ninja Forms handler registered');
 } else {
     error_log('DTR_Media_Planner_Handler class NOT found');
-} */
+}
 
 // Load AJAX handlers for gated content
 require_once WORKBOOKS_NF_PATH . 'admin/gated-content-ajax.php';
@@ -153,7 +158,7 @@ add_action('wp_enqueue_scripts', function() {
     ]);
 });
 // Enqueue custom JS for copying ACF questions into Ninja Forms (placed at the end for clarity)
-add_action('wp_enqueue_scripts', function() {
+/* add_action('wp_enqueue_scripts', function() {
     wp_enqueue_script(
         'acf-form-questions',
         plugin_dir_url(__FILE__) . 'js/acf-form-questions.js',
@@ -161,7 +166,7 @@ add_action('wp_enqueue_scripts', function() {
         null,
         true
     );
-}, 30);
+}, 30); */
 
 // AJAX handler for dynamic Workbooks titles
 add_action('wp_ajax_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
@@ -849,7 +854,7 @@ function workbooks_crm_settings_page() {
                                     <input name="workbooks_api_key" id="workbooks_api_key" type="text" value="eb7f1-04a7d-9654d-01904-a6823-d10c0-fc4c5-d5b2c" class="regular-text" required="">
                                 </td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <th scope="row"><label for="workbooks_logical_database_id">Logical Database</label></th>
                                 <td>
                                     <select name="workbooks_logical_database_id" id="workbooks_logical_database_id" disabled="">
@@ -857,7 +862,7 @@ function workbooks_crm_settings_page() {
                                     </select>
                                     <p class="description">Select your logical database (optional).</p>
                                 </td>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
                     

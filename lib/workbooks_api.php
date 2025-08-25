@@ -1193,7 +1193,7 @@ class WorkbooksApi
   /**
    * Interface as per update() but if the response is not 'ok' it also logs an error and raises an exception.
   **/
-  public function assertUpdate($endpoint, &$objs, $params=array(), $options=array()) {
+  public function assertUpdate($endpoint, $objs, $params=array(), $options=array()) {
      $response = $this->update($endpoint, $objs, $params, $options);
      $this->assertResponse($response);
      return $response;

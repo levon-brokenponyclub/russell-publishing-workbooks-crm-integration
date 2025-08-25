@@ -252,6 +252,53 @@ For detailed deployment documentation, see `scripts/README.md`.
 
 ---
 
+## Handler & Submission Process Updates (v1.4.5)
+
+### 🛠️ Unified Submission Handlers
+
+- **Ninja Forms Handler** (`includes/ninja-forms-simple-hook.php`):
+   - Catches all Ninja Forms submissions for both webinars and lead generation.
+   - Distinguishes between webinar forms (ID 2) and lead gen forms (ID 31), routing each to the correct process.
+   - Extracts and normalizes all relevant fields, including dynamic ACF fields, sponsor opt-in, and speaker questions.
+   - Ensures all actions are logged with a unique submission/debug ID for traceability.
+
+- **Webinar Registration Handler** (`includes/webinar-handler.php`):
+   - Handles the full registration process for webinars, including:
+      1. Validating required data (post ID, email, etc.)
+      2. Resolving event references and extracting event IDs
+      3. Creating or updating the person in Workbooks CRM
+      4. Creating or updating the event ticket
+      5. **Mailing List Queue:** Adds or updates the participant in the event's mailing list, including sponsor opt-in and speaker questions
+      6. Logs every step and error for debugging
+   - Uses a robust debug logger to write to both the PHP error log and a dedicated plugin log file (`logs/gated-post-submissions-debug.log`).
+   - All failures and successes are clearly logged, with detailed debug reports for each submission.
+
+### 📬 Mailing List Queue Logic
+
+- After successful ticket creation, the handler checks for a mailing list associated with the event.
+- If a mailing list entry for the participant exists, it is updated (including sponsor opt-in and speaker questions); otherwise, a new entry is created.
+- All mailing list actions are logged, and exceptions are handled gracefully with detailed error output.
+
+### 📝 Debug Logging & Error Handling
+
+- Every submission (webinar or lead) is assigned a unique debug ID for tracking.
+- All major steps (person creation, ticket creation, mailing list update) are logged with timestamps and context.
+- Errors and exceptions are captured and included in the debug report, making troubleshooting much easier.
+
+### 🔄 Submission Flow (Webinar Example)
+
+1. **Form Submission:** User submits a Ninja Form (webinar or lead gen)
+2. **Handler Routing:** Form is routed to the correct handler based on form ID
+3. **Data Extraction:** All fields (including ACF, sponsor opt-in, questions) are extracted and normalized
+4. **Person Sync:** Person is created or updated in Workbooks CRM
+5. **Ticket Creation:** Event ticket is created/updated for the person
+6. **Mailing List Update:** Participant is added/updated in the event's mailing list with all relevant info
+7. **Debug Logging:** Every step, success, and error is logged with a unique debug ID
+
+---
+
+---
+
 ## Error Handling & Debugging
 
 #### Comprehensive Logging
@@ -309,6 +356,7 @@ dtr-workbooks-crm-integration/
 │   ├── helper-functions.php (TOI/AOI mapping)
 │   ├── dtr-shortcodes.php (Shortcode functionality)
 │   ├── workbooks-employer-sync.php (Employer sync)
+│   ├── webinar-handler.php (Webinar registration & mailing list handler)
 │   └── media-planner-ajax-handler.php (Media planner AJAX handler)
 ├── assets/
 │   ├── admin.css (Admin styling)
@@ -363,6 +411,7 @@ add_action('wp_ajax_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
 - **ACF-Driven Form Generation**: Registration forms for gated content are auto-generated from ACF field groups, so the backend forms always match the content requirements.
 - **Debug Logging Enhanced**: Lead creation, ticket generation, and event/person sync are now logged with greater detail, including Workbooks object IDs and clear success/failure signals.
 - **Documentation and File Structure**: Major updates to documentation, changelog history, and feature explanations to reflect the new universal content gating approach and improved process.
+- **Handler & Submission Process Overhaul**: New unified Ninja Forms and webinar handlers, with robust debug logging, stepwise processing, and a dedicated mailing list queue system for all webinar/event registrations. All actions are logged with unique debug IDs for traceability and troubleshooting.
 
 ### Version 1.4.4
 - **Sales Lead Enforcement**: Ensured that a new sales lead is always created for every event/ticket registration, regardless of existing tickets or person records, across Ninja Forms and Media Planner integration.
@@ -481,3 +530,6 @@ For technical support and customization requests:
 
 This plugin is proprietary software developed by Supersonic Playground for DTR (Drug Target Review) and Levon Gravett.  
 All rights reserved.
+
+# dtr-workbooks-api
+Workbooks CRM Integration plugin providing seamless integration between WordPress and Workbooks CRM for automated user registration, data synchronisation, and comprehensive field mapping - Post Launch Final

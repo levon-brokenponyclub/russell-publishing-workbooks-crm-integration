@@ -7,32 +7,28 @@ class Media_Planner_Test_Ajax_Handler {
         add_action('wp_ajax_nopriv_media_planner_test_submit', [self::class, 'handle']);
     }
 
-    private static function log($msg, $context = []) {
+    private static function log($msg) {
         $plugin_dir = dirname(__FILE__);
         $log_dir = $plugin_dir . '/logs';
         $log_file = $log_dir . '/media-planner-ajax-debug.log';
         $date = date('Y-m-d H:i:s');
         $entry = "[$date] $msg";
-        if (!empty($context)) $entry .= "\n" . print_r($context, true);
         if (!file_exists($log_dir)) @mkdir($log_dir, 0777, true);
         @file_put_contents($log_file, $entry . "\n", FILE_APPEND);
     }
 
     public static function handle() {
-        // Enable error display for debugging
         ini_set('display_errors', 1);
         error_reporting(E_ALL);
 
         header('Content-Type: application/json; charset=utf-8');
-        // Nonce
         if (
             !isset($_POST['nonce']) ||
             !wp_verify_nonce($_POST['nonce'], 'workbooks_nonce')
         ) {
-            self::log('❌ Invalid nonce', $_POST);
+            self::log('❌ Invalid nonce');
             wp_send_json_error('Security check failed (invalid nonce)');
         }
-        // Validate & sanitize
         $fields = [];
         $expected = [
             'first_name', 'last_name', 'email_address',
@@ -40,59 +36,84 @@ class Media_Planner_Test_Ajax_Handler {
         ];
         foreach ($expected as $field) {
             if (empty($_POST[$field])) {
-                self::log("❌ Missing required field: $field", $_POST);
+                self::log("❌ Missing required field: $field");
                 wp_send_json_error("Missing required field: $field");
             }
             $fields[$field] = sanitize_text_field(wp_unslash($_POST[$field]));
         }
         $name = trim($fields['first_name'] . ' ' . $fields['last_name']);
         if (empty($name)) $name = $fields['email_address'];
-        self::log('Received AJAX form submission', $fields);
+
+        // Early exit: skip mailing lists
+        if (preg_match('/(mail(ing)?list|newsletter|bounce|noreply|no-reply|unsubscribe|@.*lists?\.)/i', $fields['email_address'])) {
+            self::log("⏭️ Skipped mailing list email: {$fields['email_address']}");
+            wp_send_json_error('Mailing list addresses are not processed.');
+        }
+
+        // Early exit: skip handler owner
+        $owner_emails = [
+            'levon.gravett@supersonic-playground.com',
+            'levon-brokenponyclub@supersonic-playground.com'
+        ];
+        $owner_names = [
+            'levon gravett'
+        ];
+        $input_name = strtolower(trim($fields['first_name'] . ' ' . $fields['last_name']));
+        if (in_array(strtolower($fields['email_address']), $owner_emails) ||
+            in_array($input_name, $owner_names)) {
+            self::log("⏭️ Skipped duplicate handler owner: {$fields['email_address']} / $input_name");
+            wp_send_json_error('Duplicate/handler owner details detected. Submission not processed.');
+        }
+
+        // Hardcoded campaign/event info for this form context
+        $parent_event_id = 472341; // Use parent event as per Workbooks API requirements
+        $child_event_id = 5137;   // For reference/reporting if needed
+        $campaign_ref = 'CAMP-41496';
+
+        self::log("✅ Workbooks Parent Event Reference: $parent_event_id");
+        self::log("✅ Child Event Reference: $child_event_id");
+        self::log("✅ Campaign Reference: $campaign_ref");
+        self::log("🔍 Checking if person exists with email: {$fields['email_address']}");
 
         // Workbooks API
         try {
             $workbooks = get_workbooks_instance();
-            // Ensure the Workbooks API client is authenticated/session is valid
-            if (property_exists($workbooks, 'login_state') && !$workbooks->login_state && method_exists($workbooks, 'login')) {
-                $workbooks->login();
-                self::log('Re-authenticated with Workbooks API before ticket creation');
-            }
+            if (!$workbooks) throw new Exception('No Workbooks API instance');
         } catch (Exception $e) {
             self::log("❌ Error instantiating Workbooks API: " . $e->getMessage());
             wp_send_json_error("Could not connect to CRM");
         }
 
-        // 1. Find or create person
+        // Step 1: Find or create person
         $person_id = null;
+        $person_object_ref = null;
+
         try {
             $person_search = [
                 '_ff[]' => 'main_location[email]',
                 '_ft[]' => 'eq',
                 '_fc[]' => $fields['email_address'],
                 '_limit' => 1,
-                '_select_columns[]' => ['id'],
+                '_select_columns[]' => ['id','object_ref'],
             ];
             $search = $workbooks->assertGet('crm/people.api', $person_search);
             if (!empty($search['data'][0]['id'])) {
                 $person_id = $search['data'][0]['id'];
-                self::log("Found existing person in Workbooks: $person_id");
+                $person_object_ref = $search['data'][0]['object_ref'];
+                self::log("✅ Found existing person: ID $person_id, Object Ref: PERS-{$person_object_ref}");
             } else {
                 $person_payload = [[
                     'person_first_name' => $fields['first_name'],
                     'person_last_name' => $fields['last_name'],
                     'main_location[email]' => $fields['email_address'],
-                    'main_location[telephone]' => $fields['telephone'],
-                    'main_location[town]' => $fields['town'],
-                    'main_location[country]' => $fields['country'],
-                    'person_job_title' => $fields['job_title'],
-                    'person_organisation' => $fields['organisation'],
                 ]];
                 $create = $workbooks->assertCreate('crm/people.api', $person_payload);
                 if (!empty($create['affected_objects'][0]['id'])) {
                     $person_id = $create['affected_objects'][0]['id'];
-                    self::log("Created new person in Workbooks: $person_id");
+                    $person_object_ref = $create['affected_objects'][0]['object_ref'] ?? '';
+                    self::log("✅ Created new person: ID $person_id, Object Ref: PERS-{$person_object_ref}");
                 } else {
-                    self::log("❌ ERROR: Could not create person in Workbooks", $create);
+                    self::log("❌ ERROR: Could not create person in Workbooks");
                     wp_send_json_error("Could not create person in CRM");
                 }
             }
@@ -101,128 +122,126 @@ class Media_Planner_Test_Ajax_Handler {
             wp_send_json_error("Could not create/find CRM person");
         }
 
-        // 2. Create a Ticket (Event Registration) with minimal required data
-        $event_id = 5137; // Confirmed for EVENT-2571
+        // Step 2: Always create a new Ticket for the CHILD event (changed here)
+        self::log("🎫 Creating event ticket for child event $child_event_id");
         $ticket_id = null;
         try {
-            if (property_exists($workbooks, 'login_state') && !$workbooks->login_state && method_exists($workbooks, 'login')) {
-                $workbooks->login();
-                self::log('Re-authenticated with Workbooks API before ticket creation (pre-ticket)');
+            $ticket_payload = [[
+                'event_id' => $child_event_id, // <--- CHANGED from $parent_event_id to $child_event_id
+                'person_id' => $person_id,
+                'name' => $name,
+                'status' => 'Registered'
+            ]];
+            self::log("Ticket payload: " . print_r($ticket_payload, true));
+            $ticket_created = $workbooks->create('event/tickets.api', $ticket_payload);
+            self::log("Ticket API raw response: " . print_r($ticket_created, true));
+            try {
+                $workbooks->assertResponse($ticket_created);
+            } catch (Exception $e) {
+                self::log("❌ Ticket API assertResponse failed: " . $e->getMessage());
             }
-            // Prevent duplicates
-            $ticket_search_params = [
-                '_limit' => 1,
-                '_ff[]' => 'event_id',
-                '_ft[]' => 'eq',
-                '_fc[]' => $event_id,
-                '_ff[]' => 'person_id',
-                '_ft[]' => 'eq',
-                '_fc[]' => $person_id,
-                '_select_columns[]' => ['id'],
-            ];
-            $existing_ticket = $workbooks->assertGet('event/tickets.api', $ticket_search_params);
-            $ticket_id = $existing_ticket['data'][0]['id'] ?? null;
-            if (!$ticket_id) {
-                $ticket_payload = [[
-                    'event_id' => $event_id,
-                    'person_id' => $person_id,
-                    'name' => $name
-                ]];
-                self::log("DEBUG: About to call assertCreate on event/tickets.api", $ticket_payload);
-                try {
-                    if (property_exists($workbooks, 'login_state') && !$workbooks->login_state && method_exists($workbooks, 'login')) {
-                        $workbooks->login();
-                        self::log('Re-authenticated with Workbooks API before ticket creation (inside create try)');
-                    }
-                    $ticket_created = $workbooks->assertCreate('event/tickets.api', $ticket_payload);
-                    self::log("Ticket creation raw response", $ticket_created);
-                    self::log("Type of ticket_created", gettype($ticket_created));
-                    $ticket_id = is_array($ticket_created) && isset($ticket_created['affected_objects'][0]['id'])
-                        ? $ticket_created['affected_objects'][0]['id']
-                        : null;
-                    if (!$ticket_id) {
-                        self::log("Ticket creation failed, no ID returned. Full response:", $ticket_created);
-                        if (method_exists($workbooks, 'getLastResponse')) {
-                            self::log("Ticket creation last response via getLastResponse", $workbooks->getLastResponse());
-                        }
-                        if (property_exists($workbooks, 'last_response')) {
-                            self::log("Ticket creation last_response property", $workbooks->last_response);
-                        }
-                        ob_start();
-                        var_dump($workbooks);
-                        self::log("Workbooks object full dump (exception)", ob_get_clean());
-                        wp_send_json_error("Could not create CRM ticket (event registration)");
-                    }
-                } catch (Exception $e) {
-                    self::log("❌ Ticket create failed: " . $e->getMessage());
-                    if (method_exists($workbooks, 'getLastResponse')) {
-                        self::log("Ticket creation last response via getLastResponse (exception)", $workbooks->getLastResponse());
-                    }
-                    if (property_exists($workbooks, 'last_response')) {
-                        self::log("Ticket creation last_response property (exception)", $workbooks->last_response);
-                    }
-                    ob_start();
-                    var_dump($workbooks);
-                    self::log("Workbooks object full dump (exception)", ob_get_clean());
-                    wp_send_json_error("Could not create CRM ticket (event registration)");
-                }
+            $ticket_id = is_array($ticket_created) && isset($ticket_created['affected_objects'][0]['id'])
+                ? $ticket_created['affected_objects'][0]['id']
+                : null;
+            if ($ticket_id) {
+                self::log("✅ Created event ticket: ID $ticket_id");
             } else {
-                self::log("Found existing ticket", $existing_ticket);
+                self::log("❌ Ticket creation failed, no ID returned. Response: " . print_r($ticket_created, true));
+                wp_send_json_error("Could not create CRM ticket (event registration)");
             }
         } catch (Exception $e) {
-            self::log("❌ Ticket search failed: " . $e->getMessage());
-            wp_send_json_error("Could not search for existing CRM ticket");
+            self::log("❌ Ticket create failed: " . $e->getMessage());
+            wp_send_json_error("Could not create CRM ticket (event registration)");
         }
 
-        // 3. Create a Sales Lead in Workbooks
+        // Step 3: Always create a Sales Lead
+        self::log(" 🎉 Creating event lead generation for parent event $parent_event_id");
         try {
-            $lead_id = self::create_sales_lead($workbooks, $fields, $name);
+            $queue_id = 1;
+            $lead_payload = [[
+                'assigned_to' => $queue_id,
+                'person_lead_party[name]' => $name,
+                'person_lead_party[person_first_name]' => $fields['first_name'],
+                'person_lead_party[person_last_name]' => $fields['last_name'],
+                'person_lead_party[email]' => $fields['email_address'],
+                'org_lead_party[name]' => $fields['organisation'],
+                'org_lead_party[main_location][town]' => $fields['town'],
+                'org_lead_party[main_location][country]' => $fields['country'],
+                'org_lead_party[main_location][telephone]' => $fields['telephone'],
+                'cf_lead_data_source_detail' => 'DTR-MEDIA-PLANNER-2025',
+                'cf_lead_campaign_reference' => $campaign_ref,
+            ]];
+            $lead_created = $workbooks->assertCreate('crm/sales_leads.api', $lead_payload);
+            $lead_id = $lead_created['affected_objects'][0]['id'] ?? null;
             if ($lead_id) {
-                self::log("Created sales lead", ['lead_id' => $lead_id]);
+                self::log("✅  Created lead for person $name {$fields['email_address']}");
+            } else {
+                self::log("❌ Lead creation failed, no ID returned.");
             }
         } catch (Exception $e) {
             self::log("❌ Lead create failed: " . $e->getMessage());
-            // Optionally notify, but don't block success
         }
 
-        self::log("✅ Media Planner Test submission processed OK", [
-            'person_id' => $person_id,
-            'ticket_id' => $ticket_id
-        ]);
-        wp_send_json_success("Submission received and sent to CRM! (Ticket and Lead created)");
-    }
+        // Step 4: Add or update Mailing List Entry for reporting (ONLY if mailing_list_id found)
+        self::log("📧 Adding/updating mailing list entry for reporting");
+        try {
+            $event = $workbooks->assertGet('event/events.api', [
+                '_start' => 0,
+                '_limit' => 1,
+                '_ff[]' => 'id',
+                '_ft[]' => 'eq',
+                '_fc[]' => $parent_event_id,
+                '_select_columns[]' => ['id', 'mailing_list_id']
+            ]);
+            $mailing_list_id = $event['data'][0]['mailing_list_id'] ?? null;
+            if (!$mailing_list_id) {
+                self::log("❌ No mailing_list_id found for event_id=$parent_event_id");
+            } else {
+                // 2. Get email for person
+                $person = $workbooks->assertGet('crm/people.api', [
+                    '_start' => 0,
+                    '_limit' => 1,
+                    '_ff[]' => 'id',
+                    '_ft[]' => 'eq',
+                    '_fc[]' => $person_id,
+                    '_select_columns[]' => ['id', 'main_location[email]']
+                ]);
+                $email = $person['data'][0]['main_location[email]'] ?? $fields['email_address'];
 
-    /**
-     * Create a sales lead in Workbooks
-     * @param object $workbooks
-     * @param array $fields
-     * @param string $name
-     * @return int|null Lead ID if created, null otherwise
-     */
-    private static function create_sales_lead($workbooks, $fields, $name) {
-        // Assign to Unassigned queue (ID 1)
-        $queue_id = 1;
-        $lead_payload = [[
-            'assigned_to' => $queue_id,
-            'person_lead_party[name]' => $name,
-            'person_lead_party[person_first_name]' => $fields['first_name'],
-            'person_lead_party[person_last_name]' => $fields['last_name'],
-            'person_lead_party[person_job_title]' => $fields['job_title'],
-            'person_lead_party[email]' => $fields['email_address'],
-            'org_lead_party[name]' => $fields['organisation'],
-            'org_lead_party[main_location][town]' => $fields['town'],
-            'org_lead_party[main_location][country]' => $fields['country'],
-            'org_lead_party[main_location][telephone]' => $fields['telephone'],
-            'cf_lead_data_source_detail' => 'DTR-MEDIA-PLANNER-2025'
-        ]];
-        $lead_created = $workbooks->assertCreate('crm/sales_leads.api', $lead_payload);
-        self::log("Lead creation raw response", $lead_created);
-        $lead_id = $lead_created['affected_objects'][0]['id'] ?? null;
-        if (!$lead_id) {
-            self::log("Lead creation failed, no ID returned. Full response:", $lead_created);
-            return null;
+                // 3. Search for existing mailing list entry
+                $search_params = [
+                    '_start' => 0,
+                    '_limit' => 1,
+                    '_ff[]' => ['mailing_list_id', 'email'],
+                    '_ft[]' => ['eq', 'eq'],
+                    '_fc[]' => [$mailing_list_id, $email],
+                    '_select_columns[]' => ['id']
+                ];
+                $entry_result = $workbooks->assertGet('email/mailing_list_entries.api', $search_params);
+                $entry_id = $entry_result['data'][0]['id'] ?? null;
+
+                $payload = [
+                    'mailing_list_id' => $mailing_list_id,
+                    'email' => $email,
+                ];
+
+                if ($entry_id) {
+                    $lock_version = $entry_result['data'][0]['lock_version'] ?? 0;
+                    $update_result = $workbooks->assertUpdate('email/mailing_list_entries.api', [
+                        array_merge(['id' => $entry_id, 'lock_version' => $lock_version], $payload)
+                    ]);
+                    self::log("✅ Mailing List Entry updated for $email");
+                } else {
+                    $create_result = $workbooks->assertCreate('email/mailing_list_entries.api', [$payload]);
+                    self::log("✅ Mailing List Entry created for $email");
+                }
+            }
+        } catch (Exception $e) {
+            self::log("❌ Mailing List Entry create/update failed: " . $e->getMessage());
         }
-        return $lead_id;
+
+        self::log("🥳 EVENT REGISTRATION SUCCESSFUL - CELEBRATE");
+        wp_send_json_success("Submission received and sent to CRM! (Ticket, Lead, and Mailing List entry created if applicable)");
     }
 }
 

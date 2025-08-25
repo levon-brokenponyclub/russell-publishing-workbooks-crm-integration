@@ -1,0 +1,163 @@
+[2025-08-22 17:09:22] ✅ Workbooks Parent Event Reference: 472341
+[2025-08-22 17:09:22] ✅ Child Event Reference: 5137
+[2025-08-22 17:09:22] ✅ Campaign Reference: CAMP-41496
+[2025-08-22 17:09:22] 🔍 Checking if person exists with email: jjjones@sspgtest.com
+[2025-08-22 17:09:24] ✅ Created new person: ID 4315884, Object Ref: PERS-PERS-684333
+[2025-08-22 17:09:24] 🎫 Creating event ticket for parent event 472341
+[2025-08-22 17:09:25] Ticket API raw response: Array
+(
+    [success] => 
+    [failures] => Array
+        (
+            [0] => Database error. Reference: 594968-1259961-39107
+        )
+
+)
+
+[2025-08-22 17:09:25] ❌ Ticket API assertResponse failed: Unexpected response from Workbooks API
+[2025-08-22 17:09:25] ❌ Ticket creation failed, no ID returned. Response: Array
+(
+    [success] => 
+    [failures] => Array
+        (
+            [0] => Database error. Reference: 594968-1259961-39107
+        )
+
+)
+
+[2025-08-22 17:18:37] ✅ Workbooks Parent Event Reference: 472341
+[2025-08-22 17:18:37] ✅ Child Event Reference: 5137
+[2025-08-22 17:18:37] ✅ Campaign Reference: CAMP-41496
+[2025-08-22 17:18:37] 🔍 Checking if person exists with email: nicSSPG@test.com
+[2025-08-22 17:18:39] ✅ Created new person: ID 4315886, Object Ref: PERS-PERS-684334
+[2025-08-22 17:18:39] 🎫 Creating event ticket for child event 5137
+[2025-08-22 17:18:39] Ticket payload: Array
+(
+    [0] => Array
+        (
+            [event_id] => 5137
+            [person_id] => 4315886
+            [name] => Nicola Feuilherade
+            [status] => Registered
+        )
+
+)
+
+[2025-08-22 17:18:41] Ticket API raw response: Array
+(
+    [success] => 1
+    [affected_objects] => Array
+        (
+            [0] => Array
+                (
+                    [cf_event_ticket_attendee_record] => 
+                    [cf_event_ticket_grr_news] => 
+                    [cf_event_ticket_epr_third_party] => 
+                    [cf_event_ticket_attendee_record__name] => 
+                    [first_used_at] => 
+                    [cf_event_ticket_campaign_source] => 
+                    [cf_event_ticket_epr_news] => 
+                    [badge_organisation_name] => 
+                    [event_id] => 5137
+                    [cf_event_ticket_sponsor_optin] => 
+                    [sales_order_id] => 
+                    [photo_url] => 
+                    [name] => Nicola Feuilherade
+                    [id] => 814152
+                    [cf_event_ticket_ticket_value_net_gbp] =>   0
+                    [_can_delete] => 1
+                    [badge_name] => Nicola Feuilherade
+                    [linked_item_association_for_cf_event_ticket_attendee_record] => 
+                    [updated_by_user[person_name]] => Levon Gravett
+                    [created_by_user[login_name]] => levon.gravett@supersonic-playground.com
+                    [status] => Registered
+                    [cf_event_ticket_ticket_category] => 
+                    [lock_version] => 0
+                    [cf_event_ticket_ticket_value_net] =>   0
+                    [cf_event_ticket_it_third_party] => 
+                    [_preload_linked_item_association_for_cf_event_ticket_attendee_record] => 
+                    [updated_by_user[login_name]] => levon.gravett@supersonic-playground.com
+                    [_can_chown] => 1
+                    [updated_at] => Fri Aug 22 17:18:40 UTC 2025
+                    [cf_event_ticket_nf_third_party] => 
+                    [last_used_at] => 
+                    [created_at] => Fri Aug 22 17:18:40 UTC 2025
+                    [cf_event_ticket_iar_third_party] => 
+                    [_can_modify] => 1
+                    [accessibility_requirements] => 
+                    [created_through] => wp_workbooks_plugin
+                    [_can_chaccess] => 1
+                    [created_by_user[person_name]] => Levon Gravett
+                    [owner[person_name]] => Levon Gravett
+                    [cf_event_ticket_speaker_created] => 
+                    [cf_event_ticket_iar_news] => 
+                    [owner_id] => 152350
+                    [sales_order_line_item_id] => 
+                    [owner[login_name]] => levon.gravett@supersonic-playground.com
+                    [product_id] => 
+                    [email] => 
+                    [object_ref] => TICKET-399785
+                    [cf_event_ticket_dtr_third_party] => 
+                    [updated_by] => 152350
+                    [type] => Private::Event::Ticket
+                    [created_by] => 152350
+                    [dietary_requirements] => 
+                    [object_url] => https://russellpublishing-live.workbooks.com/link/3cDMzUTM/TICKET-399785
+                    [cf_event_ticket_speaker_questions] => 
+                    [person_id] => 4315886
+                    [cf_event_ticket_it_news] => 
+                    [is_deleted] => 
+                    [created_through_reference] => 
+                    [_can_read] => 1
+                    [unique_token] => B8R6PGS
+                    [cf_event_ticket_process_status] => 
+                    [badge_job_title] => 
+                    [imported] => 
+                    [cf_event_ticket_event_vip] => 
+                    [cf_event_ticket_grr_third_party] => 
+                    [cf_event_ticket_ticket_description] => 
+                    [cf_event_ticket_nf_news] => 
+                    [cf_event_ticket_dtr_news] => 
+                    [cf_event_ticket_ticket_value] => 0.0 GBP 0
+                )
+
+        )
+
+    [updates] => Array
+        (
+            [data] => Array
+                (
+                    [immediate] => Array
+                        (
+                            [0] => private_event_ticket
+                        )
+
+                )
+
+        )
+
+    [flash] => saved successfully
+    [affected_object_information] => Array
+        (
+            [0] => Array
+                (
+                    [success] => 1
+                    [errors] => Array
+                        (
+                        )
+
+                    [warnings] => Array
+                        (
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-08-22 17:18:41] ✅ Created event ticket: ID 814152
+[2025-08-22 17:18:41]  🎉 Creating event lead generation for parent event 472341
+[2025-08-22 17:18:42] ✅  Created lead for person Nicola Feuilherade nicSSPG@test.com
+[2025-08-22 17:18:42] 📧 Adding/updating mailing list entry for reporting
+[2025-08-22 17:18:43] ❌ No mailing_list_id found for event_id=472341

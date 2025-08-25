@@ -1,4 +1,0 @@
-[2025-08-17 21:51:29] [INFO] Webinar registration attempt | {"post_id":"160746","email":"jerrySSPG@test.com","first_name":"JerrySSPG","last_name":"SSPGTest","wp_user_id":73}
-[2025-08-17 21:51:29] [INFO] Found event ref inside webinar_fields group | {"event_ref":"5473"}
-[2025-08-17 21:51:30] [INFO] Found existing person in Workbooks | {"person_id":4299644,"email":"jerrySSPG@test.com"}
-[2025-08-17 21:51:31] [SUCCESS] Webinar ticket created | {"ticket_id":812428,"person_id":4299644,"event_id":"5473"}

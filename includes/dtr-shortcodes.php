@@ -1,4 +1,13 @@
 <?php
+// Helper: Log to admin-functions-debug.log
+function dtr_admin_debug_log($message, $data = null) {
+    $log_file = dirname(__FILE__, 2) . '/logs/admin-functions-debug.log';
+    $entry = '[' . date('Y-m-d H:i:s') . '] ' . $message;
+    if ($data !== null) {
+        $entry .= ' | ' . (is_string($data) ? $data : json_encode($data));
+    }
+    file_put_contents($log_file, $entry . PHP_EOL, FILE_APPEND);
+}
 if (!defined('ABSPATH')) exit;
 
 // Shortcode: [dtr_user_topics_of_interest]
@@ -98,7 +107,7 @@ add_shortcode('dtr_user_topics_of_interest', function() {
 
 // Shortcode: [dtr_user_marketing_preferences]
 add_shortcode('dtr_user_marketing_preferences', function() {
-    if (!is_user_logged_in()) return '<p>You must be logged in to update your marketing preferences.</p>';
+    if (!is_user_logged_in()) return '<p>You must be logged in to update your Communication Preferences.</p>';
     $user_id = get_current_user_id();
     $msg = '';
     $dtr_fields = [
@@ -121,7 +130,7 @@ add_shortcode('dtr_user_marketing_preferences', function() {
             if ($person_id) {
                 $workbooks = get_workbooks_instance();
                 try {
-                    // Fetch current lock_version using direct endpoint (same as marketing preferences)
+                    // Fetch current lock_version using direct endpoint (same as Communication Preferences)
                     error_log('DTR SHORTCODE DEBUG: Fetching lock_version for person_id: ' . $person_id);
                     $existing = $workbooks->assertGet('crm/people/' . $person_id . '.api', []);
                     error_log('DTR SHORTCODE DEBUG: lock_version fetch response: ' . json_encode($existing));
@@ -142,14 +151,21 @@ add_shortcode('dtr_user_marketing_preferences', function() {
                         throw new Exception('Could not retrieve lock_version for Workbooks person ID ' . $person_id);
                     }
                     $payload = array_merge(['id' => $person_id, 'lock_version' => $lock_version], $values);
-                    $workbooks->assertUpdate('crm/people.api', $payload);
-                    $msg = '<div class="updated">Marketing preferences updated!</div>';
+                    dtr_admin_debug_log('Attempting Workbooks update (Communication Preferences)', $payload);
+                    $result = $workbooks->assertUpdate('crm/people.api', $payload);
+                    dtr_admin_debug_log('Workbooks raw response (Communication Preferences)', $result);
+                    dtr_admin_debug_log('Workbooks update success (Communication Preferences)', $payload);
+                    $msg = '<div class="updated">Communication Preferences updated!</div>';
                 } catch (Exception $e) {
+                    dtr_admin_debug_log('Workbooks update error (Communication Preferences)', [
+                        'error' => $e->getMessage(),
+                        'payload' => isset($payload) ? $payload : null
+                    ]);
                     $msg = '<div class="error">Workbooks error: ' . esc_html($e->getMessage()) . '</div>';
                 }
             }
         }
-        if (!$msg) $msg = '<div class="updated">Marketing preferences updated!</div>';
+    if (!$msg) $msg = '<div class="updated">Communication Preferences updated!</div>';
     }
     // Get current values from WordPress user meta only
     wp_enqueue_style('dtr-shortcodes-custom', plugin_dir_url(__FILE__) . '../assets/dtr-shortcodes-custom.css', [], null);
@@ -184,7 +200,7 @@ add_shortcode('dtr_interests_form', function() {
 
 // Shortcode: [dtr_marketing_preferences_form] (DISPLAYS CHECKBOXES AND UPDATES WORKBOOKS)
 add_shortcode('dtr_marketing_preferences_form', function() {
-    if (!is_user_logged_in()) return '<p>You must be logged in to update your marketing preferences.</p>';
+    if (!is_user_logged_in()) return '<p>You must be logged in to update your Communication Preferences.</p>';
     $user_id = get_current_user_id();
     $msg = '';
     $fields = [
@@ -237,7 +253,10 @@ add_shortcode('dtr_marketing_preferences_form', function() {
                     error_log('DTR SHORTCODE DEBUG: About to update with payload: ' . json_encode($payload));
                     
                     // Use regular update instead of assertUpdate to capture the raw response
+                    dtr_admin_debug_log('Attempting Workbooks update (Communication Preferences)', $payload);
                     $result = $workbooks->update('crm/people.api', $payload);
+                    dtr_admin_debug_log('Workbooks raw response (Communication Preferences)', $result);
+                    dtr_admin_debug_log('Workbooks update result (Communication Preferences)', $result);
                     
                     error_log('DTR SHORTCODE DEBUG: Raw update result: ' . json_encode($result));
                     error_log('DTR SHORTCODE DEBUG: Result condensed status: ' . $workbooks->condensedStatus($result));
@@ -253,15 +272,17 @@ add_shortcode('dtr_marketing_preferences_form', function() {
                         }
                         throw new Exception('Workbooks update failed: ' . $workbooks->condensedStatus($result));
                     }
-                    $msg = '<div class="updated">Marketing preferences updated!</div>';
+                    $msg = '<div class="updated">Communication Preferences updated!</div>';
                 } catch (Exception $e) {
-                    error_log('DTR SHORTCODE ERROR: Exception details: ' . $e->getMessage());
-                    error_log('DTR SHORTCODE ERROR: Exception trace: ' . $e->getTraceAsString());
+                    dtr_admin_debug_log('Workbooks update error (Communication Preferences)', [
+                        'error' => $e->getMessage(),
+                        'payload' => isset($payload) ? $payload : null
+                    ]);
                     $msg = '<div class="error">Workbooks error: ' . esc_html($e->getMessage()) . '</div>';
                 }
             }
         }
-        if (!$msg) $msg = '<div class="updated">Marketing preferences updated!</div>';
+    if (!$msg) $msg = '<div class="updated">Communication Preferences updated!</div>';
     }
     // Get current values (from WP only, not Workbooks)
     wp_enqueue_style('dtr-shortcodes-custom', plugin_dir_url(__FILE__) . '../assets/dtr-shortcodes-custom.css', [], null);
@@ -296,7 +317,7 @@ add_shortcode('dtr_marketing_preferences_form', function() {
           checkboxes.forEach(cb => {
             changed.push({name: cb.name, checked: cb.checked});
           });
-          console.log('Submitting marketing preferences:', changed);
+          console.log('Submitting Communication Preferences:', changed);
         });
       }
     });

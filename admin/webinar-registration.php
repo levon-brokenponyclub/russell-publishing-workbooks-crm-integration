@@ -42,7 +42,7 @@ $current_user_email = esc_attr(wp_get_current_user()->user_email);
     </p>
     <p>
         <label>
-            <input type="checkbox" name="sponsor_optin" id="sponsor_optin" value="1">
+            <input type="checkbox" name="cf_mailing_list_member_sponsor_1_optin" id="cf_mailing_list_member_sponsor_1_optin" value="1">
             I agree to receive sponsor information (opt-in)
         </label>
     </p>

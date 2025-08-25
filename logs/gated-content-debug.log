@@ -1,0 +1,3884 @@
+[2025-08-18 13:11:41] AJAX: dtr_fetch_workbooks_queues called
+[2025-08-18 13:11:41] AJAX: require_once /nas/content/live/dtrstagingsite/wp-content/plugins/dtr-workbooks-crm-integration/admin/../includes/get-workbooks-queues.php
+[2025-08-18 13:11:41] event-registration-queues: Querying endpoint /custom_record_queues/event_registration_field_mappings.api
+[2025-08-18 13:11:41] event-registration-queues: API result: Array
+(
+    [success] => 1
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Levon Gravett
+                    [created_through_reference] => 
+                    [owner_id] => 152350
+                    [_can_modify] => 
+                    [owner[login_name]] => levon.gravett@supersonic-playground.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Feb 21 14:38:37 UTC 2025
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Fri Feb 21 14:38:37 UTC 2025
+                    [name] => Levon Gravett
+                    [id] => 535
+                    [_can_chaccess] => 
+                )
+
+            [1] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => System
+                    [created_through_reference] => 
+                    [owner_id] => 1
+                    [_can_modify] => 1
+                    [owner[login_name]] => system@workbooks.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => 
+                    [description] => Custom Record Type 3s that are not assigned to any other Custom Record Type 3 queue or user
+                    [created_by_user[person_name]] => 
+                    [created_by] => 
+                    [created_by_user[login_name]] => 
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => 
+                    [updated_by] => 
+                    [queue_type] => unassigned
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => 
+                    [updated_at] => 
+                    [name] => Unassigned
+                    [id] => 1
+                    [_can_chaccess] => 
+                )
+
+            [2] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Aimee Shanks
+                    [created_through_reference] => 
+                    [owner_id] => 149100
+                    [_can_modify] => 
+                    [owner[login_name]] => ashanks@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Tue Oct 29 18:33:17 UTC 2024
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Tue Oct 29 18:33:17 UTC 2024
+                    [name] => Aimee Shanks
+                    [id] => 519
+                    [_can_chaccess] => 
+                )
+
+            [3] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Alex McLachlan
+                    [created_through_reference] => 
+                    [owner_id] => 156253
+                    [_can_modify] => 
+                    [owner[login_name]] => amclachlan@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jul 28 12:30:17 UTC 2025
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Mon Jul 28 12:30:17 UTC 2025
+                    [name] => Alex McLachlan
+                    [id] => 552
+                    [_can_chaccess] => 
+                )
+
+            [4] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Amy Best
+                    [created_through_reference] => 
+                    [owner_id] => 148512
+                    [_can_modify] => 
+                    [owner[login_name]] => abest@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Wed Oct 02 08:48:43 UTC 2024
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Wed Oct 02 08:48:43 UTC 2024
+                    [name] => Amy Best
+                    [id] => 517
+                    [_can_chaccess] => 
+                )
+
+            [5] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Angela Taverner
+                    [created_through_reference] => 
+                    [owner_id] => 83158
+                    [_can_modify] => 
+                    [owner[login_name]] => ataverner@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Angela Taverner
+                    [id] => 67
+                    [_can_chaccess] => 
+                )
+
+            [6] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Bansri Shah
+                    [created_through_reference] => 
+                    [owner_id] => 94356
+                    [_can_modify] => 
+                    [owner[login_name]] => bshah@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [name] => Bansri Shah
+                    [id] => 193
+                    [_can_chaccess] => 
+                )
+
+            [7] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Beau Bailey
+                    [created_through_reference] => 
+                    [owner_id] => 105746
+                    [_can_modify] => 
+                    [owner[login_name]] => bbailey@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:27 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:27 UTC 2021
+                    [name] => Beau Bailey
+                    [id] => 283
+                    [_can_chaccess] => 
+                )
+
+            [8] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Ben Cornwell
+                    [created_through_reference] => 
+                    [owner_id] => 147516
+                    [_can_modify] => 
+                    [owner[login_name]] => bcornwell@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Aug 15 16:05:16 UTC 2024
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Aug 15 16:05:16 UTC 2024
+                    [name] => Ben Cornwell
+                    [id] => 501
+                    [_can_chaccess] => 
+                )
+
+            [9] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Ben Plewes
+                    [created_through_reference] => 
+                    [owner_id] => 141280
+                    [_can_modify] => 
+                    [owner[login_name]] => bplewes@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Wed Nov 01 11:13:28 UTC 2023
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Admin
+                    [created_by] => 137256
+                    [created_by_user[login_name]] => workbooks@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Admin
+                    [updated_by] => 137256
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks@russellpublishing.com
+                    [updated_at] => Wed Nov 01 11:13:28 UTC 2023
+                    [name] => Ben Plewes
+                    [id] => 479
+                    [_can_chaccess] => 
+                )
+
+            [10] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Bob Shearwood
+                    [created_through_reference] => 
+                    [owner_id] => 155945
+                    [_can_modify] => 
+                    [owner[login_name]] => bshearwood@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jul 14 14:03:27 UTC 2025
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Mon Jul 14 14:03:27 UTC 2025
+                    [name] => Bob Shearwood
+                    [id] => 548
+                    [_can_chaccess] => 
+                )
+
+            [11] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Carrie Haslam
+                    [created_through_reference] => 
+                    [owner_id] => 149524
+                    [_can_modify] => 
+                    [owner[login_name]] => chaslam@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Nov 18 13:52:26 UTC 2024
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Mon Nov 18 13:52:26 UTC 2024
+                    [name] => Carrie Haslam
+                    [id] => 523
+                    [_can_chaccess] => 
+                )
+
+            [12] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Catherine Eckford
+                    [created_through_reference] => 
+                    [owner_id] => 131428
+                    [_can_modify] => 
+                    [owner[login_name]] => ceckford@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Wed Sep 14 13:39:10 UTC 2022
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Wed Sep 14 13:39:10 UTC 2022
+                    [name] => Catherine Eckford
+                    [id] => 404
+                    [_can_chaccess] => 
+                )
+
+            [13] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Clare Boldurmaz
+                    [created_through_reference] => 
+                    [owner_id] => 157345
+                    [_can_modify] => 
+                    [owner[login_name]] => cboldurmaz@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Aug 15 07:58:34 UTC 2025
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Fri Aug 15 07:58:34 UTC 2025
+                    [name] => Clare Boldurmaz
+                    [id] => 554
+                    [_can_chaccess] => 
+                )
+
+            [14] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Coral Bosley
+                    [created_through_reference] => 
+                    [owner_id] => 114638
+                    [_can_modify] => 
+                    [owner[login_name]] => cbosley@russellpublishing.com
+                    [lock_version] => 1
+                    [created_through] => Workbooks
+                    [created_at] => Fri Feb 26 16:23:00 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Fri Feb 26 17:20:18 UTC 2021
+                    [name] => Coral Bosley
+                    [id] => 309
+                    [_can_chaccess] => 
+                )
+
+            [15] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Dan Birchmore
+                    [created_through_reference] => 
+                    [owner_id] => 83248
+                    [_can_modify] => 
+                    [owner[login_name]] => dbirchmore@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [name] => Dan Birchmore
+                    [id] => 109
+                    [_can_chaccess] => 
+                )
+
+            [16] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Dane Daly
+                    [created_through_reference] => 
+                    [owner_id] => 132686
+                    [_can_modify] => 
+                    [owner[login_name]] => ddaly@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Tue Nov 08 09:43:33 UTC 2022
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Tue Nov 08 09:43:33 UTC 2022
+                    [name] => Dane Daly
+                    [id] => 418
+                    [_can_chaccess] => 
+                )
+
+            [17] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => David McMullen
+                    [created_through_reference] => 
+                    [owner_id] => 153988
+                    [_can_modify] => 
+                    [owner[login_name]] => dmcmullen@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Apr 28 08:32:25 UTC 2025
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Mon Apr 28 08:32:25 UTC 2025
+                    [name] => David McMullen
+                    [id] => 543
+                    [_can_chaccess] => 
+                )
+
+            [18] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Dean Patterson
+                    [created_through_reference] => 
+                    [owner_id] => 119662
+                    [_can_modify] => 
+                    [owner[login_name]] => dpatterson@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Wed Sep 29 13:45:41 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Wed Sep 29 13:45:41 UTC 2021
+                    [name] => Dean Patterson
+                    [id] => 335
+                    [_can_chaccess] => 
+                )
+
+            [19] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Dominic Tyer
+                    [created_through_reference] => 
+                    [owner_id] => 156005
+                    [_can_modify] => 
+                    [owner[login_name]] => dtyer@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Jul 18 13:50:52 UTC 2025
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Fri Jul 18 13:50:52 UTC 2025
+                    [name] => Dominic Tyer
+                    [id] => 550
+                    [_can_chaccess] => 
+                )
+
+            [20] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Elizabeth Jordan
+                    [created_through_reference] => 
+                    [owner_id] => 136796
+                    [_can_modify] => 
+                    [owner[login_name]] => ejordan@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri May 19 13:51:25 UTC 2023
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Fri May 19 13:51:25 UTC 2023
+                    [name] => Elizabeth Jordan
+                    [id] => 450
+                    [_can_chaccess] => 
+                )
+
+            [21] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Elliot Robinson
+                    [created_through_reference] => 
+                    [owner_id] => 123818
+                    [_can_modify] => 
+                    [owner[login_name]] => erobinson@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Wed Feb 02 08:54:16 UTC 2022
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Wed Feb 02 08:54:16 UTC 2022
+                    [name] => Elliot Robinson
+                    [id] => 359
+                    [_can_chaccess] => 
+                )
+
+            [22] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Emma Waterman
+                    [created_through_reference] => 
+                    [owner_id] => 121884
+                    [_can_modify] => 
+                    [owner[login_name]] => ewaterman@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Wed Dec 01 14:45:39 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Wed Dec 01 14:45:39 UTC 2021
+                    [name] => Emma Waterman
+                    [id] => 341
+                    [_can_chaccess] => 
+                )
+
+            [23] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Frankie Butler
+                    [created_through_reference] => 
+                    [owner_id] => 122326
+                    [_can_modify] => 
+                    [owner[login_name]] => fbutler@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Dec 23 10:33:14 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Thu Dec 23 10:33:14 UTC 2021
+                    [name] => Frankie Butler
+                    [id] => 349
+                    [_can_chaccess] => 
+                )
+
+            [24] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Gabriel Higgins
+                    [created_through_reference] => 
+                    [owner_id] => 147518
+                    [_can_modify] => 
+                    [owner[login_name]] => ghiggins@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Aug 15 16:11:21 UTC 2024
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Aug 15 16:11:21 UTC 2024
+                    [name] => Gabriel Higgins
+                    [id] => 503
+                    [_can_chaccess] => 
+                )
+
+            [25] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Georgina Baxter-Smith
+                    [created_through_reference] => 
+                    [owner_id] => 147520
+                    [_can_modify] => 
+                    [owner[login_name]] => gbaxter-smith@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Aug 15 16:15:11 UTC 2024
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Aug 15 16:15:11 UTC 2024
+                    [name] => Georgina Baxter-Smith
+                    [id] => 505
+                    [_can_chaccess] => 
+                )
+
+            [26] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Harry Marah
+                    [created_through_reference] => 
+                    [owner_id] => 147634
+                    [_can_modify] => 
+                    [owner[login_name]] => harry.marah@supersonicplayground.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Aug 23 10:34:15 UTC 2024
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Fri Aug 23 10:34:15 UTC 2024
+                    [name] => Harry Marah
+                    [id] => 511
+                    [_can_chaccess] => 
+                )
+
+            [27] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Holly Miles
+                    [created_through_reference] => 
+                    [owner_id] => 110368
+                    [_can_modify] => 
+                    [owner[login_name]] => hmiles@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:27 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:27 UTC 2021
+                    [name] => Holly Miles
+                    [id] => 293
+                    [_can_chaccess] => 
+                )
+
+            [28] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Ian Betteridge
+                    [created_through_reference] => 
+                    [owner_id] => 144334
+                    [_can_modify] => 
+                    [owner[login_name]] => ibetteridge@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Mar 25 10:59:43 UTC 2024
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Admin
+                    [created_by] => 137256
+                    [created_by_user[login_name]] => workbooks@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Admin
+                    [updated_by] => 137256
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks@russellpublishing.com
+                    [updated_at] => Mon Mar 25 10:59:43 UTC 2024
+                    [name] => Ian Betteridge
+                    [id] => 489
+                    [_can_chaccess] => 
+                )
+
+            [29] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Ian Westcott
+                    [created_through_reference] => 
+                    [owner_id] => 147514
+                    [_can_modify] => 
+                    [owner[login_name]] => iwestcott@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Aug 15 15:54:15 UTC 2024
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Aug 15 15:54:15 UTC 2024
+                    [name] => Ian Westcott
+                    [id] => 499
+                    [_can_chaccess] => 
+                )
+
+            [30] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Jason Bennett
+                    [created_through_reference] => 
+                    [owner_id] => 83236
+                    [_can_modify] => 
+                    [owner[login_name]] => jbennett@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Jason Bennett
+                    [id] => 101
+                    [_can_chaccess] => 
+                )
+
+            [31] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Jess Bremner
+                    [created_through_reference] => 
+                    [owner_id] => 147522
+                    [_can_modify] => 
+                    [owner[login_name]] => jbremner@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Aug 15 16:18:49 UTC 2024
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Aug 15 16:18:49 UTC 2024
+                    [name] => Jess Bremner
+                    [id] => 507
+                    [_can_chaccess] => 
+                )
+
+            [32] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Jessica Russell
+                    [created_through_reference] => 
+                    [owner_id] => 83250
+                    [_can_modify] => 
+                    [owner[login_name]] => jkrussell@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [name] => Jessica Russell
+                    [id] => 111
+                    [_can_chaccess] => 
+                )
+
+            [33] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => John Nicholls
+                    [created_through_reference] => 
+                    [owner_id] => 136356
+                    [_can_modify] => 
+                    [owner[login_name]] => jnicholls@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Tue May 02 09:50:01 UTC 2023
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Tue May 02 09:50:01 UTC 2023
+                    [name] => John Nicholls
+                    [id] => 442
+                    [_can_chaccess] => 
+                )
+
+            [34] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Jon Shepheard
+                    [created_through_reference] => 
+                    [owner_id] => 151354
+                    [_can_modify] => 
+                    [owner[login_name]] => jshepheard@russellpublishing.com
+                    [lock_version] => 2
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jan 27 16:04:25 UTC 2025
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Tue Jan 28 14:20:35 UTC 2025
+                    [name] => Jon Shepheard
+                    [id] => 531
+                    [_can_chaccess] => 
+                )
+
+            [35] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Josh Russell
+                    [created_through_reference] => 
+                    [owner_id] => 79318
+                    [_can_modify] => 
+                    [owner[login_name]] => jrussell@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Josh Russell
+                    [id] => 11
+                    [_can_chaccess] => 
+                )
+
+            [36] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Joshua Hannan
+                    [created_through_reference] => 
+                    [owner_id] => 130732
+                    [_can_modify] => 
+                    [owner[login_name]] => jhannan@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Tue Aug 16 09:03:57 UTC 2022
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Tue Aug 16 09:03:57 UTC 2022
+                    [name] => Joshua Hannan
+                    [id] => 396
+                    [_can_chaccess] => 
+                )
+
+            [37] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Karen Hill
+                    [created_through_reference] => 
+                    [owner_id] => 140074
+                    [_can_modify] => 
+                    [owner[login_name]] => khill@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Sep 18 13:37:37 UTC 2023
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Admin
+                    [created_by] => 137256
+                    [created_by_user[login_name]] => workbooks@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Admin
+                    [updated_by] => 137256
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks@russellpublishing.com
+                    [updated_at] => Mon Sep 18 13:37:37 UTC 2023
+                    [name] => Karen Hill
+                    [id] => 467
+                    [_can_chaccess] => 
+                )
+
+            [38] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Karen Hutchinson
+                    [created_through_reference] => 
+                    [owner_id] => 83154
+                    [_can_modify] => 
+                    [owner[login_name]] => khutchinson@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Karen Hutchinson
+                    [id] => 63
+                    [_can_chaccess] => 
+                )
+
+            [39] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Klide Jahaj
+                    [created_through_reference] => 
+                    [owner_id] => 154420
+                    [_can_modify] => 
+                    [owner[login_name]] => kjahaj@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri May 09 14:27:03 UTC 2025
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Fri May 09 14:27:03 UTC 2025
+                    [name] => Klide Jahaj
+                    [id] => 545
+                    [_can_chaccess] => 
+                )
+
+            [40] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Mandy Parrett
+                    [created_through_reference] => 
+                    [owner_id] => 87024
+                    [_can_modify] => 
+                    [owner[login_name]] => mparrett@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [name] => Mandy Parrett
+                    [id] => 143
+                    [_can_chaccess] => 
+                )
+
+            [41] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Marlon Ruddock
+                    [created_through_reference] => 
+                    [owner_id] => 83234
+                    [_can_modify] => 
+                    [owner[login_name]] => mruddock@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Marlon Ruddock
+                    [id] => 99
+                    [_can_chaccess] => 
+                )
+
+            [42] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Mayra Clemente
+                    [created_through_reference] => 
+                    [owner_id] => 118490
+                    [_can_modify] => 
+                    [owner[login_name]] => mclemente@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Jul 30 14:05:57 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Fri Jul 30 14:05:57 UTC 2021
+                    [name] => Mayra Clemente
+                    [id] => 325
+                    [_can_chaccess] => 
+                )
+
+            [43] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Miranda Le Croissette
+                    [created_through_reference] => 
+                    [owner_id] => 149102
+                    [_can_modify] => 
+                    [owner[login_name]] => mlecroissette@russellpublishing.com
+                    [lock_version] => 1
+                    [created_through] => Workbooks
+                    [created_at] => Tue Oct 29 18:39:27 UTC 2024
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Oct 31 12:02:36 UTC 2024
+                    [name] => Miranda Le Croissette
+                    [id] => 521
+                    [_can_chaccess] => 
+                )
+
+            [44] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Natasha Johnson
+                    [created_through_reference] => 
+                    [owner_id] => 90702
+                    [_can_modify] => 
+                    [owner[login_name]] => njohnson@russellpublishing.com
+                    [lock_version] => 1
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Mar 06 12:03:25 UTC 2025
+                    [name] => Natasha Johnson
+                    [id] => 177
+                    [_can_chaccess] => 
+                )
+
+            [45] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Nick Wakelin
+                    [created_through_reference] => 
+                    [owner_id] => 151864
+                    [_can_modify] => 
+                    [owner[login_name]] => nick.wakelin@supersonicplayground.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Feb 10 15:14:00 UTC 2025
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Mon Feb 10 15:14:00 UTC 2025
+                    [name] => Nick Wakelin
+                    [id] => 533
+                    [_can_chaccess] => 
+                )
+
+            [46] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Paul Sequeira
+                    [created_through_reference] => 
+                    [owner_id] => 136690
+                    [_can_modify] => 
+                    [owner[login_name]] => psequeira@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon May 15 12:53:00 UTC 2023
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Mon May 15 12:53:00 UTC 2023
+                    [name] => Paul Sequeira
+                    [id] => 448
+                    [_can_chaccess] => 
+                )
+
+            [47] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Roy Lim
+                    [created_through_reference] => 
+                    [owner_id] => 142724
+                    [_can_modify] => 
+                    [owner[login_name]] => rlim@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jan 08 10:53:26 UTC 2024
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Admin
+                    [created_by] => 137256
+                    [created_by_user[login_name]] => workbooks@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Admin
+                    [updated_by] => 137256
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks@russellpublishing.com
+                    [updated_at] => Mon Jan 08 10:53:26 UTC 2024
+                    [name] => Roy Lim
+                    [id] => 481
+                    [_can_chaccess] => 
+                )
+
+            [48] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Ryan Clarke
+                    [created_through_reference] => 
+                    [owner_id] => 83252
+                    [_can_modify] => 
+                    [owner[login_name]] => rclarke@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [name] => Ryan Clarke
+                    [id] => 113
+                    [_can_chaccess] => 
+                )
+
+            [49] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Sam Lister
+                    [created_through_reference] => 
+                    [owner_id] => 155847
+                    [_can_modify] => 
+                    [owner[login_name]] => slister@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jul 07 12:28:38 UTC 2025
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Mon Jul 07 12:28:38 UTC 2025
+                    [name] => Sam Lister
+                    [id] => 546
+                    [_can_chaccess] => 
+                )
+
+            [50] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Sam Pirani
+                    [created_through_reference] => 
+                    [owner_id] => 82178
+                    [_can_modify] => 
+                    [owner[login_name]] => spirani@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Sam Pirani
+                    [id] => 23
+                    [_can_chaccess] => 
+                )
+
+            [51] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Samuel Wightwick
+                    [created_through_reference] => 
+                    [owner_id] => 152492
+                    [_can_modify] => 
+                    [owner[login_name]] => swightwick@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Feb 27 15:40:17 UTC 2025
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Feb 27 15:40:17 UTC 2025
+                    [name] => Samuel Wightwick
+                    [id] => 537
+                    [_can_chaccess] => 
+                )
+
+            [52] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Sandra Barden
+                    [created_through_reference] => 
+                    [owner_id] => 83146
+                    [_can_modify] => 
+                    [owner[login_name]] => sbarden@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Sandra Barden
+                    [id] => 57
+                    [_can_chaccess] => 
+                )
+
+            [53] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Sarah Wills
+                    [created_through_reference] => 
+                    [owner_id] => 99808
+                    [_can_modify] => 
+                    [owner[login_name]] => swills@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:27 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:27 UTC 2021
+                    [name] => Sarah Wills
+                    [id] => 245
+                    [_can_chaccess] => 
+                )
+
+            [54] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Sheila Lewis
+                    [created_through_reference] => 
+                    [owner_id] => 83166
+                    [_can_modify] => 
+                    [owner[login_name]] => slewis@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Sheila Lewis
+                    [id] => 71
+                    [_can_chaccess] => 
+                )
+
+            [55] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Stacey Robertson
+                    [created_through_reference] => 
+                    [owner_id] => 117210
+                    [_can_modify] => 
+                    [owner[login_name]] => sbird@russellpublishing.com
+                    [lock_version] => 1
+                    [created_through] => Workbooks
+                    [created_at] => Thu Jun 03 19:51:26 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Fri Jun 09 15:06:39 UTC 2023
+                    [name] => Stacey Robertson
+                    [id] => 323
+                    [_can_chaccess] => 
+                )
+
+            [56] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Steve Flynn
+                    [created_through_reference] => 
+                    [owner_id] => 138170
+                    [_can_modify] => 
+                    [owner[login_name]] => sflynn@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Jul 21 10:11:25 UTC 2023
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Admin
+                    [created_by] => 137256
+                    [created_by_user[login_name]] => workbooks@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Admin
+                    [updated_by] => 137256
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks@russellpublishing.com
+                    [updated_at] => Fri Jul 21 10:11:25 UTC 2023
+                    [name] => Steve Flynn
+                    [id] => 465
+                    [_can_chaccess] => 
+                )
+
+            [57] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Suzy Baverstock
+                    [created_through_reference] => 
+                    [owner_id] => 132010
+                    [_can_modify] => 
+                    [owner[login_name]] => sbaverstock@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Oct 10 11:24:31 UTC 2022
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Mon Oct 10 11:24:31 UTC 2022
+                    [name] => Suzy Baverstock
+                    [id] => 410
+                    [_can_chaccess] => 
+                )
+
+            [58] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Tom Jones
+                    [created_through_reference] => 
+                    [owner_id] => 150436
+                    [_can_modify] => 
+                    [owner[login_name]] => tjones@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jan 06 12:51:54 UTC 2025
+                    [description] => 
+                    [created_by_user[person_name]] => Frankie Butler
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Mon Jan 06 12:51:54 UTC 2025
+                    [name] => Tom Jones
+                    [id] => 529
+                    [_can_chaccess] => 
+                )
+
+            [59] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Tony Cornell
+                    [created_through_reference] => 
+                    [owner_id] => 96460
+                    [_can_modify] => 
+                    [owner[login_name]] => tcornell@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [name] => Tony Cornell
+                    [id] => 211
+                    [_can_chaccess] => 
+                )
+
+            [60] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Tony Portelli
+                    [created_through_reference] => 
+                    [owner_id] => 127874
+                    [_can_modify] => 
+                    [owner[login_name]] => tportelli@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu May 05 14:05:30 UTC 2022
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Thu May 05 14:05:30 UTC 2022
+                    [name] => Tony Portelli
+                    [id] => 381
+                    [_can_chaccess] => 
+                )
+
+            [61] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Workbooks Admin
+                    [created_through_reference] => 
+                    [owner_id] => 137256
+                    [_can_modify] => 
+                    [owner[login_name]] => workbooks@russellpublishing.com
+                    [lock_version] => 2
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jun 12 14:03:57 UTC 2023
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Access
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Wed Jun 14 10:34:09 UTC 2023
+                    [name] => Workbooks Admin
+                    [id] => 454
+                    [_can_chaccess] => 
+                )
+
+            [62] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Zoe Bryant
+                    [created_through_reference] => 
+                    [owner_id] => 131666
+                    [_can_modify] => 
+                    [owner[login_name]] => zbryant@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Sep 26 09:23:26 UTC 2022
+                    [description] => 
+                    [created_by_user[person_name]] => Nick Jackson
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Mon Sep 26 09:23:26 UTC 2022
+                    [name] => Zoe Bryant
+                    [id] => 406
+                    [_can_chaccess] => 
+                )
+
+            [63] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Zoe Coughlan
+                    [created_through_reference] => 
+                    [owner_id] => 138168
+                    [_can_modify] => 
+                    [owner[login_name]] => zcoughlan@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Jul 21 09:25:30 UTC 2023
+                    [description] => 
+                    [created_by_user[person_name]] => Workbooks Admin
+                    [created_by] => 137256
+                    [created_by_user[login_name]] => workbooks@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by_user[person_name]] => Workbooks Admin
+                    [updated_by] => 137256
+                    [queue_type] => user
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks@russellpublishing.com
+                    [updated_at] => Fri Jul 21 09:25:30 UTC 2023
+                    [name] => Zoe Coughlan
+                    [id] => 463
+                    [_can_chaccess] => 
+                )
+
+        )
+
+    [total] => 64
+)
+
+[2025-08-18 13:11:41] event-registration-queues: Final queues: Array
+(
+    [535] => Levon Gravett
+    [1] => Unassigned
+    [519] => Aimee Shanks
+    [552] => Alex McLachlan
+    [517] => Amy Best
+    [67] => Angela Taverner
+    [193] => Bansri Shah
+    [283] => Beau Bailey
+    [501] => Ben Cornwell
+    [479] => Ben Plewes
+    [548] => Bob Shearwood
+    [523] => Carrie Haslam
+    [404] => Catherine Eckford
+    [554] => Clare Boldurmaz
+    [309] => Coral Bosley
+    [109] => Dan Birchmore
+    [418] => Dane Daly
+    [543] => David McMullen
+    [335] => Dean Patterson
+    [550] => Dominic Tyer
+    [450] => Elizabeth Jordan
+    [359] => Elliot Robinson
+    [341] => Emma Waterman
+    [349] => Frankie Butler
+    [503] => Gabriel Higgins
+    [505] => Georgina Baxter-Smith
+    [511] => Harry Marah
+    [293] => Holly Miles
+    [489] => Ian Betteridge
+    [499] => Ian Westcott
+    [101] => Jason Bennett
+    [507] => Jess Bremner
+    [111] => Jessica Russell
+    [442] => John Nicholls
+    [531] => Jon Shepheard
+    [11] => Josh Russell
+    [396] => Joshua Hannan
+    [467] => Karen Hill
+    [63] => Karen Hutchinson
+    [545] => Klide Jahaj
+    [143] => Mandy Parrett
+    [99] => Marlon Ruddock
+    [325] => Mayra Clemente
+    [521] => Miranda Le Croissette
+    [177] => Natasha Johnson
+    [533] => Nick Wakelin
+    [448] => Paul Sequeira
+    [481] => Roy Lim
+    [113] => Ryan Clarke
+    [546] => Sam Lister
+    [23] => Sam Pirani
+    [537] => Samuel Wightwick
+    [57] => Sandra Barden
+    [245] => Sarah Wills
+    [71] => Sheila Lewis
+    [323] => Stacey Robertson
+    [465] => Steve Flynn
+    [410] => Suzy Baverstock
+    [529] => Tom Jones
+    [211] => Tony Cornell
+    [381] => Tony Portelli
+    [454] => Workbooks Admin
+    [406] => Zoe Bryant
+    [463] => Zoe Coughlan
+)
+
+[2025-08-18 13:11:41] AJAX: Queues result | Array
+(
+    [535] => Levon Gravett
+    [1] => Unassigned
+    [519] => Aimee Shanks
+    [552] => Alex McLachlan
+    [517] => Amy Best
+    [67] => Angela Taverner
+    [193] => Bansri Shah
+    [283] => Beau Bailey
+    [501] => Ben Cornwell
+    [479] => Ben Plewes
+    [548] => Bob Shearwood
+    [523] => Carrie Haslam
+    [404] => Catherine Eckford
+    [554] => Clare Boldurmaz
+    [309] => Coral Bosley
+    [109] => Dan Birchmore
+    [418] => Dane Daly
+    [543] => David McMullen
+    [335] => Dean Patterson
+    [550] => Dominic Tyer
+    [450] => Elizabeth Jordan
+    [359] => Elliot Robinson
+    [341] => Emma Waterman
+    [349] => Frankie Butler
+    [503] => Gabriel Higgins
+    [505] => Georgina Baxter-Smith
+    [511] => Harry Marah
+    [293] => Holly Miles
+    [489] => Ian Betteridge
+    [499] => Ian Westcott
+    [101] => Jason Bennett
+    [507] => Jess Bremner
+    [111] => Jessica Russell
+    [442] => John Nicholls
+    [531] => Jon Shepheard
+    [11] => Josh Russell
+    [396] => Joshua Hannan
+    [467] => Karen Hill
+    [63] => Karen Hutchinson
+    [545] => Klide Jahaj
+    [143] => Mandy Parrett
+    [99] => Marlon Ruddock
+    [325] => Mayra Clemente
+    [521] => Miranda Le Croissette
+    [177] => Natasha Johnson
+    [533] => Nick Wakelin
+    [448] => Paul Sequeira
+    [481] => Roy Lim
+    [113] => Ryan Clarke
+    [546] => Sam Lister
+    [23] => Sam Pirani
+    [537] => Samuel Wightwick
+    [57] => Sandra Barden
+    [245] => Sarah Wills
+    [71] => Sheila Lewis
+    [323] => Stacey Robertson
+    [465] => Steve Flynn
+    [410] => Suzy Baverstock
+    [529] => Tom Jones
+    [211] => Tony Cornell
+    [381] => Tony Portelli
+    [454] => Workbooks Admin
+    [406] => Zoe Bryant
+    [463] => Zoe Coughlan
+)
+
+[2025-08-18 13:11:41] AJAX: Queues found and returned
+[2025-08-19 17:01:05] AJAX: dtr_fetch_workbooks_queues called
+[2025-08-19 17:01:05] AJAX: require_once /nas/content/live/dtrstagingsite/wp-content/plugins/dtr-workbooks-crm-integration/admin/../includes/get-workbooks-queues.php
+[2025-08-19 17:01:05] event-registration-queues: Querying endpoint /custom_record_queues/event_registration_field_mappings.api
+[2025-08-19 17:01:05] event-registration-queues: API result: Array
+(
+    [success] => 1
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Levon Gravett
+                    [created_through_reference] => 
+                    [owner_id] => 152350
+                    [_can_modify] => 
+                    [owner[login_name]] => levon.gravett@supersonic-playground.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Feb 21 14:38:37 UTC 2025
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Fri Feb 21 14:38:37 UTC 2025
+                    [name] => Levon Gravett
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 535
+                    [_can_chaccess] => 
+                )
+
+            [1] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => System
+                    [created_through_reference] => 
+                    [owner_id] => 1
+                    [_can_modify] => 1
+                    [owner[login_name]] => system@workbooks.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => 
+                    [description] => Custom Record Type 3s that are not assigned to any other Custom Record Type 3 queue or user
+                    [created_by] => 
+                    [created_by_user[login_name]] => 
+                    [_can_delete] => 
+                    [_can_chown] => 1
+                    [updated_by] => 
+                    [queue_type] => unassigned
+                    [created_by_user[person_name]] => 
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => 
+                    [updated_at] => 
+                    [name] => Unassigned
+                    [updated_by_user[person_name]] => 
+                    [id] => 1
+                    [_can_chaccess] => 1
+                )
+
+            [2] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Aimee Shanks
+                    [created_through_reference] => 
+                    [owner_id] => 149100
+                    [_can_modify] => 
+                    [owner[login_name]] => ashanks@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Tue Oct 29 18:33:17 UTC 2024
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Tue Oct 29 18:33:17 UTC 2024
+                    [name] => Aimee Shanks
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 519
+                    [_can_chaccess] => 
+                )
+
+            [3] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Alex McLachlan
+                    [created_through_reference] => 
+                    [owner_id] => 156253
+                    [_can_modify] => 
+                    [owner[login_name]] => amclachlan@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jul 28 12:30:17 UTC 2025
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Mon Jul 28 12:30:17 UTC 2025
+                    [name] => Alex McLachlan
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 552
+                    [_can_chaccess] => 
+                )
+
+            [4] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Amy Best
+                    [created_through_reference] => 
+                    [owner_id] => 148512
+                    [_can_modify] => 
+                    [owner[login_name]] => abest@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Wed Oct 02 08:48:43 UTC 2024
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Wed Oct 02 08:48:43 UTC 2024
+                    [name] => Amy Best
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 517
+                    [_can_chaccess] => 
+                )
+
+            [5] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Angela Taverner
+                    [created_through_reference] => 
+                    [owner_id] => 83158
+                    [_can_modify] => 
+                    [owner[login_name]] => ataverner@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Angela Taverner
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 67
+                    [_can_chaccess] => 
+                )
+
+            [6] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Bansri Shah
+                    [created_through_reference] => 
+                    [owner_id] => 94356
+                    [_can_modify] => 
+                    [owner[login_name]] => bshah@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [name] => Bansri Shah
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 193
+                    [_can_chaccess] => 
+                )
+
+            [7] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Beau Bailey
+                    [created_through_reference] => 
+                    [owner_id] => 105746
+                    [_can_modify] => 
+                    [owner[login_name]] => bbailey@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:27 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:27 UTC 2021
+                    [name] => Beau Bailey
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 283
+                    [_can_chaccess] => 
+                )
+
+            [8] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Ben Cornwell
+                    [created_through_reference] => 
+                    [owner_id] => 147516
+                    [_can_modify] => 
+                    [owner[login_name]] => bcornwell@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Aug 15 16:05:16 UTC 2024
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Aug 15 16:05:16 UTC 2024
+                    [name] => Ben Cornwell
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 501
+                    [_can_chaccess] => 
+                )
+
+            [9] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Ben Plewes
+                    [created_through_reference] => 
+                    [owner_id] => 141280
+                    [_can_modify] => 
+                    [owner[login_name]] => bplewes@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Wed Nov 01 11:13:28 UTC 2023
+                    [description] => 
+                    [created_by] => 137256
+                    [created_by_user[login_name]] => workbooks@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 137256
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Admin
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks@russellpublishing.com
+                    [updated_at] => Wed Nov 01 11:13:28 UTC 2023
+                    [name] => Ben Plewes
+                    [updated_by_user[person_name]] => Workbooks Admin
+                    [id] => 479
+                    [_can_chaccess] => 
+                )
+
+            [10] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Bob Shearwood
+                    [created_through_reference] => 
+                    [owner_id] => 155945
+                    [_can_modify] => 
+                    [owner[login_name]] => bshearwood@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jul 14 14:03:27 UTC 2025
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Mon Jul 14 14:03:27 UTC 2025
+                    [name] => Bob Shearwood
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 548
+                    [_can_chaccess] => 
+                )
+
+            [11] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Carrie Haslam
+                    [created_through_reference] => 
+                    [owner_id] => 149524
+                    [_can_modify] => 
+                    [owner[login_name]] => chaslam@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Nov 18 13:52:26 UTC 2024
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Mon Nov 18 13:52:26 UTC 2024
+                    [name] => Carrie Haslam
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 523
+                    [_can_chaccess] => 
+                )
+
+            [12] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Catherine Eckford
+                    [created_through_reference] => 
+                    [owner_id] => 131428
+                    [_can_modify] => 
+                    [owner[login_name]] => ceckford@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Wed Sep 14 13:39:10 UTC 2022
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Wed Sep 14 13:39:10 UTC 2022
+                    [name] => Catherine Eckford
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 404
+                    [_can_chaccess] => 
+                )
+
+            [13] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Clare Boldurmaz
+                    [created_through_reference] => 
+                    [owner_id] => 157345
+                    [_can_modify] => 
+                    [owner[login_name]] => cboldurmaz@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Aug 15 07:58:34 UTC 2025
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Fri Aug 15 07:58:34 UTC 2025
+                    [name] => Clare Boldurmaz
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 554
+                    [_can_chaccess] => 
+                )
+
+            [14] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Coral Bosley
+                    [created_through_reference] => 
+                    [owner_id] => 114638
+                    [_can_modify] => 
+                    [owner[login_name]] => cbosley@russellpublishing.com
+                    [lock_version] => 1
+                    [created_through] => Workbooks
+                    [created_at] => Fri Feb 26 16:23:00 UTC 2021
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Fri Feb 26 17:20:18 UTC 2021
+                    [name] => Coral Bosley
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 309
+                    [_can_chaccess] => 
+                )
+
+            [15] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Dan Birchmore
+                    [created_through_reference] => 
+                    [owner_id] => 83248
+                    [_can_modify] => 
+                    [owner[login_name]] => dbirchmore@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [name] => Dan Birchmore
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 109
+                    [_can_chaccess] => 
+                )
+
+            [16] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Dane Daly
+                    [created_through_reference] => 
+                    [owner_id] => 132686
+                    [_can_modify] => 
+                    [owner[login_name]] => ddaly@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Tue Nov 08 09:43:33 UTC 2022
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Tue Nov 08 09:43:33 UTC 2022
+                    [name] => Dane Daly
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 418
+                    [_can_chaccess] => 
+                )
+
+            [17] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => David McMullen
+                    [created_through_reference] => 
+                    [owner_id] => 153988
+                    [_can_modify] => 
+                    [owner[login_name]] => dmcmullen@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Apr 28 08:32:25 UTC 2025
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Mon Apr 28 08:32:25 UTC 2025
+                    [name] => David McMullen
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 543
+                    [_can_chaccess] => 
+                )
+
+            [18] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Dean Patterson
+                    [created_through_reference] => 
+                    [owner_id] => 119662
+                    [_can_modify] => 
+                    [owner[login_name]] => dpatterson@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Wed Sep 29 13:45:41 UTC 2021
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Wed Sep 29 13:45:41 UTC 2021
+                    [name] => Dean Patterson
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 335
+                    [_can_chaccess] => 
+                )
+
+            [19] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Dominic Tyer
+                    [created_through_reference] => 
+                    [owner_id] => 156005
+                    [_can_modify] => 
+                    [owner[login_name]] => dtyer@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Jul 18 13:50:52 UTC 2025
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Fri Jul 18 13:50:52 UTC 2025
+                    [name] => Dominic Tyer
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 550
+                    [_can_chaccess] => 
+                )
+
+            [20] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Elizabeth Jordan
+                    [created_through_reference] => 
+                    [owner_id] => 136796
+                    [_can_modify] => 
+                    [owner[login_name]] => ejordan@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri May 19 13:51:25 UTC 2023
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Fri May 19 13:51:25 UTC 2023
+                    [name] => Elizabeth Jordan
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 450
+                    [_can_chaccess] => 
+                )
+
+            [21] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Elliot Robinson
+                    [created_through_reference] => 
+                    [owner_id] => 123818
+                    [_can_modify] => 
+                    [owner[login_name]] => erobinson@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Wed Feb 02 08:54:16 UTC 2022
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Wed Feb 02 08:54:16 UTC 2022
+                    [name] => Elliot Robinson
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 359
+                    [_can_chaccess] => 
+                )
+
+            [22] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Emma Waterman
+                    [created_through_reference] => 
+                    [owner_id] => 121884
+                    [_can_modify] => 
+                    [owner[login_name]] => ewaterman@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Wed Dec 01 14:45:39 UTC 2021
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Wed Dec 01 14:45:39 UTC 2021
+                    [name] => Emma Waterman
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 341
+                    [_can_chaccess] => 
+                )
+
+            [23] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Frankie Butler
+                    [created_through_reference] => 
+                    [owner_id] => 122326
+                    [_can_modify] => 
+                    [owner[login_name]] => fbutler@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Dec 23 10:33:14 UTC 2021
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Thu Dec 23 10:33:14 UTC 2021
+                    [name] => Frankie Butler
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 349
+                    [_can_chaccess] => 
+                )
+
+            [24] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Gabriel Higgins
+                    [created_through_reference] => 
+                    [owner_id] => 147518
+                    [_can_modify] => 
+                    [owner[login_name]] => ghiggins@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Aug 15 16:11:21 UTC 2024
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Aug 15 16:11:21 UTC 2024
+                    [name] => Gabriel Higgins
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 503
+                    [_can_chaccess] => 
+                )
+
+            [25] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Georgina Baxter-Smith
+                    [created_through_reference] => 
+                    [owner_id] => 147520
+                    [_can_modify] => 
+                    [owner[login_name]] => gbaxter-smith@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Aug 15 16:15:11 UTC 2024
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Aug 15 16:15:11 UTC 2024
+                    [name] => Georgina Baxter-Smith
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 505
+                    [_can_chaccess] => 
+                )
+
+            [26] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Harry Marah
+                    [created_through_reference] => 
+                    [owner_id] => 147634
+                    [_can_modify] => 
+                    [owner[login_name]] => harry.marah@supersonicplayground.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Aug 23 10:34:15 UTC 2024
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Fri Aug 23 10:34:15 UTC 2024
+                    [name] => Harry Marah
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 511
+                    [_can_chaccess] => 
+                )
+
+            [27] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Holly Miles
+                    [created_through_reference] => 
+                    [owner_id] => 110368
+                    [_can_modify] => 
+                    [owner[login_name]] => hmiles@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:27 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:27 UTC 2021
+                    [name] => Holly Miles
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 293
+                    [_can_chaccess] => 
+                )
+
+            [28] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Ian Betteridge
+                    [created_through_reference] => 
+                    [owner_id] => 144334
+                    [_can_modify] => 
+                    [owner[login_name]] => ibetteridge@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Mar 25 10:59:43 UTC 2024
+                    [description] => 
+                    [created_by] => 137256
+                    [created_by_user[login_name]] => workbooks@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 137256
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Admin
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks@russellpublishing.com
+                    [updated_at] => Mon Mar 25 10:59:43 UTC 2024
+                    [name] => Ian Betteridge
+                    [updated_by_user[person_name]] => Workbooks Admin
+                    [id] => 489
+                    [_can_chaccess] => 
+                )
+
+            [29] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Ian Westcott
+                    [created_through_reference] => 
+                    [owner_id] => 147514
+                    [_can_modify] => 
+                    [owner[login_name]] => iwestcott@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Aug 15 15:54:15 UTC 2024
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Aug 15 15:54:15 UTC 2024
+                    [name] => Ian Westcott
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 499
+                    [_can_chaccess] => 
+                )
+
+            [30] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Jason Bennett
+                    [created_through_reference] => 
+                    [owner_id] => 83236
+                    [_can_modify] => 
+                    [owner[login_name]] => jbennett@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Jason Bennett
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 101
+                    [_can_chaccess] => 
+                )
+
+            [31] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Jess Bremner
+                    [created_through_reference] => 
+                    [owner_id] => 147522
+                    [_can_modify] => 
+                    [owner[login_name]] => jbremner@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Aug 15 16:18:49 UTC 2024
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Aug 15 16:18:49 UTC 2024
+                    [name] => Jess Bremner
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 507
+                    [_can_chaccess] => 
+                )
+
+            [32] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Jessica Russell
+                    [created_through_reference] => 
+                    [owner_id] => 83250
+                    [_can_modify] => 
+                    [owner[login_name]] => jkrussell@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [name] => Jessica Russell
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 111
+                    [_can_chaccess] => 
+                )
+
+            [33] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => John Nicholls
+                    [created_through_reference] => 
+                    [owner_id] => 136356
+                    [_can_modify] => 
+                    [owner[login_name]] => jnicholls@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Tue May 02 09:50:01 UTC 2023
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Tue May 02 09:50:01 UTC 2023
+                    [name] => John Nicholls
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 442
+                    [_can_chaccess] => 
+                )
+
+            [34] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Jon Shepheard
+                    [created_through_reference] => 
+                    [owner_id] => 151354
+                    [_can_modify] => 
+                    [owner[login_name]] => jshepheard@russellpublishing.com
+                    [lock_version] => 2
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jan 27 16:04:25 UTC 2025
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Tue Jan 28 14:20:35 UTC 2025
+                    [name] => Jon Shepheard
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 531
+                    [_can_chaccess] => 
+                )
+
+            [35] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Josh Russell
+                    [created_through_reference] => 
+                    [owner_id] => 79318
+                    [_can_modify] => 
+                    [owner[login_name]] => jrussell@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Josh Russell
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 11
+                    [_can_chaccess] => 
+                )
+
+            [36] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Joshua Hannan
+                    [created_through_reference] => 
+                    [owner_id] => 130732
+                    [_can_modify] => 
+                    [owner[login_name]] => jhannan@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Tue Aug 16 09:03:57 UTC 2022
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Tue Aug 16 09:03:57 UTC 2022
+                    [name] => Joshua Hannan
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 396
+                    [_can_chaccess] => 
+                )
+
+            [37] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Karen Hill
+                    [created_through_reference] => 
+                    [owner_id] => 140074
+                    [_can_modify] => 
+                    [owner[login_name]] => khill@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Sep 18 13:37:37 UTC 2023
+                    [description] => 
+                    [created_by] => 137256
+                    [created_by_user[login_name]] => workbooks@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 137256
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Admin
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks@russellpublishing.com
+                    [updated_at] => Mon Sep 18 13:37:37 UTC 2023
+                    [name] => Karen Hill
+                    [updated_by_user[person_name]] => Workbooks Admin
+                    [id] => 467
+                    [_can_chaccess] => 
+                )
+
+            [38] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Karen Hutchinson
+                    [created_through_reference] => 
+                    [owner_id] => 83154
+                    [_can_modify] => 
+                    [owner[login_name]] => khutchinson@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Karen Hutchinson
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 63
+                    [_can_chaccess] => 
+                )
+
+            [39] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Klide Jahaj
+                    [created_through_reference] => 
+                    [owner_id] => 154420
+                    [_can_modify] => 
+                    [owner[login_name]] => kjahaj@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri May 09 14:27:03 UTC 2025
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Fri May 09 14:27:03 UTC 2025
+                    [name] => Klide Jahaj
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 545
+                    [_can_chaccess] => 
+                )
+
+            [40] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Mandy Parrett
+                    [created_through_reference] => 
+                    [owner_id] => 87024
+                    [_can_modify] => 
+                    [owner[login_name]] => mparrett@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [name] => Mandy Parrett
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 143
+                    [_can_chaccess] => 
+                )
+
+            [41] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Marlon Ruddock
+                    [created_through_reference] => 
+                    [owner_id] => 83234
+                    [_can_modify] => 
+                    [owner[login_name]] => mruddock@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Marlon Ruddock
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 99
+                    [_can_chaccess] => 
+                )
+
+            [42] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Mayra Clemente
+                    [created_through_reference] => 
+                    [owner_id] => 118490
+                    [_can_modify] => 
+                    [owner[login_name]] => mclemente@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Jul 30 14:05:57 UTC 2021
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Fri Jul 30 14:05:57 UTC 2021
+                    [name] => Mayra Clemente
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 325
+                    [_can_chaccess] => 
+                )
+
+            [43] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Miranda Le Croissette
+                    [created_through_reference] => 
+                    [owner_id] => 149102
+                    [_can_modify] => 
+                    [owner[login_name]] => mlecroissette@russellpublishing.com
+                    [lock_version] => 1
+                    [created_through] => Workbooks
+                    [created_at] => Tue Oct 29 18:39:27 UTC 2024
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Oct 31 12:02:36 UTC 2024
+                    [name] => Miranda Le Croissette
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 521
+                    [_can_chaccess] => 
+                )
+
+            [44] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Natasha Johnson
+                    [created_through_reference] => 
+                    [owner_id] => 90702
+                    [_can_modify] => 
+                    [owner[login_name]] => njohnson@russellpublishing.com
+                    [lock_version] => 1
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Mar 06 12:03:25 UTC 2025
+                    [name] => Natasha Johnson
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 177
+                    [_can_chaccess] => 
+                )
+
+            [45] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Nick Wakelin
+                    [created_through_reference] => 
+                    [owner_id] => 151864
+                    [_can_modify] => 
+                    [owner[login_name]] => nick.wakelin@supersonicplayground.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Feb 10 15:14:00 UTC 2025
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Mon Feb 10 15:14:00 UTC 2025
+                    [name] => Nick Wakelin
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 533
+                    [_can_chaccess] => 
+                )
+
+            [46] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Paul Sequeira
+                    [created_through_reference] => 
+                    [owner_id] => 136690
+                    [_can_modify] => 
+                    [owner[login_name]] => psequeira@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon May 15 12:53:00 UTC 2023
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Mon May 15 12:53:00 UTC 2023
+                    [name] => Paul Sequeira
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 448
+                    [_can_chaccess] => 
+                )
+
+            [47] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Roy Lim
+                    [created_through_reference] => 
+                    [owner_id] => 142724
+                    [_can_modify] => 
+                    [owner[login_name]] => rlim@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jan 08 10:53:26 UTC 2024
+                    [description] => 
+                    [created_by] => 137256
+                    [created_by_user[login_name]] => workbooks@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 137256
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Admin
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks@russellpublishing.com
+                    [updated_at] => Mon Jan 08 10:53:26 UTC 2024
+                    [name] => Roy Lim
+                    [updated_by_user[person_name]] => Workbooks Admin
+                    [id] => 481
+                    [_can_chaccess] => 
+                )
+
+            [48] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Ryan Clarke
+                    [created_through_reference] => 
+                    [owner_id] => 83252
+                    [_can_modify] => 
+                    [owner[login_name]] => rclarke@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [name] => Ryan Clarke
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 113
+                    [_can_chaccess] => 
+                )
+
+            [49] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Sam Lister
+                    [created_through_reference] => 
+                    [owner_id] => 155847
+                    [_can_modify] => 
+                    [owner[login_name]] => slister@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jul 07 12:28:38 UTC 2025
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Mon Jul 07 12:28:38 UTC 2025
+                    [name] => Sam Lister
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 546
+                    [_can_chaccess] => 
+                )
+
+            [50] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Sam Pirani
+                    [created_through_reference] => 
+                    [owner_id] => 82178
+                    [_can_modify] => 
+                    [owner[login_name]] => spirani@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Sam Pirani
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 23
+                    [_can_chaccess] => 
+                )
+
+            [51] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Samuel Wightwick
+                    [created_through_reference] => 
+                    [owner_id] => 152492
+                    [_can_modify] => 
+                    [owner[login_name]] => swightwick@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu Feb 27 15:40:17 UTC 2025
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Thu Feb 27 15:40:17 UTC 2025
+                    [name] => Samuel Wightwick
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 537
+                    [_can_chaccess] => 
+                )
+
+            [52] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Sandra Barden
+                    [created_through_reference] => 
+                    [owner_id] => 83146
+                    [_can_modify] => 
+                    [owner[login_name]] => sbarden@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Sandra Barden
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 57
+                    [_can_chaccess] => 
+                )
+
+            [53] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Sarah Wills
+                    [created_through_reference] => 
+                    [owner_id] => 99808
+                    [_can_modify] => 
+                    [owner[login_name]] => swills@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:27 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:27 UTC 2021
+                    [name] => Sarah Wills
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 245
+                    [_can_chaccess] => 
+                )
+
+            [54] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Sheila Lewis
+                    [created_through_reference] => 
+                    [owner_id] => 83166
+                    [_can_modify] => 
+                    [owner[login_name]] => slewis@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:25 UTC 2021
+                    [name] => Sheila Lewis
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 71
+                    [_can_chaccess] => 
+                )
+
+            [55] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Stacey Robertson
+                    [created_through_reference] => 
+                    [owner_id] => 117210
+                    [_can_modify] => 
+                    [owner[login_name]] => sbird@russellpublishing.com
+                    [lock_version] => 1
+                    [created_through] => Workbooks
+                    [created_at] => Thu Jun 03 19:51:26 UTC 2021
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Fri Jun 09 15:06:39 UTC 2023
+                    [name] => Stacey Robertson
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 323
+                    [_can_chaccess] => 
+                )
+
+            [56] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Steve Flynn
+                    [created_through_reference] => 
+                    [owner_id] => 138170
+                    [_can_modify] => 
+                    [owner[login_name]] => sflynn@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Jul 21 10:11:25 UTC 2023
+                    [description] => 
+                    [created_by] => 137256
+                    [created_by_user[login_name]] => workbooks@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 137256
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Admin
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks@russellpublishing.com
+                    [updated_at] => Fri Jul 21 10:11:25 UTC 2023
+                    [name] => Steve Flynn
+                    [updated_by_user[person_name]] => Workbooks Admin
+                    [id] => 465
+                    [_can_chaccess] => 
+                )
+
+            [57] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Suzy Baverstock
+                    [created_through_reference] => 
+                    [owner_id] => 132010
+                    [_can_modify] => 
+                    [owner[login_name]] => sbaverstock@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Oct 10 11:24:31 UTC 2022
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Mon Oct 10 11:24:31 UTC 2022
+                    [name] => Suzy Baverstock
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 410
+                    [_can_chaccess] => 
+                )
+
+            [58] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Tom Jones
+                    [created_through_reference] => 
+                    [owner_id] => 150436
+                    [_can_modify] => 
+                    [owner[login_name]] => tjones@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jan 06 12:51:54 UTC 2025
+                    [description] => 
+                    [created_by] => 122326
+                    [created_by_user[login_name]] => fbutler@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 122326
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Frankie Butler
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [updated_at] => Mon Jan 06 12:51:54 UTC 2025
+                    [name] => Tom Jones
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [id] => 529
+                    [_can_chaccess] => 
+                )
+
+            [59] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Tony Cornell
+                    [created_through_reference] => 
+                    [owner_id] => 96460
+                    [_can_modify] => 
+                    [owner[login_name]] => tcornell@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Action Form Submission to Event Attendee
+                    [created_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Tue Jan 05 12:50:26 UTC 2021
+                    [name] => Tony Cornell
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 211
+                    [_can_chaccess] => 
+                )
+
+            [60] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Tony Portelli
+                    [created_through_reference] => 
+                    [owner_id] => 127874
+                    [_can_modify] => 
+                    [owner[login_name]] => tportelli@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Thu May 05 14:05:30 UTC 2022
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Thu May 05 14:05:30 UTC 2022
+                    [name] => Tony Portelli
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 381
+                    [_can_chaccess] => 
+                )
+
+            [61] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Workbooks Admin
+                    [created_through_reference] => 
+                    [owner_id] => 137256
+                    [_can_modify] => 
+                    [owner[login_name]] => workbooks@russellpublishing.com
+                    [lock_version] => 2
+                    [created_through] => Workbooks
+                    [created_at] => Mon Jun 12 14:03:57 UTC 2023
+                    [description] => 
+                    [created_by] => 111642
+                    [created_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 111642
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Access
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks-admin-28640@system.workbooks.com
+                    [updated_at] => Wed Jun 14 10:34:09 UTC 2023
+                    [name] => Workbooks Admin
+                    [updated_by_user[person_name]] => Workbooks Access
+                    [id] => 454
+                    [_can_chaccess] => 
+                )
+
+            [62] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Zoe Bryant
+                    [created_through_reference] => 
+                    [owner_id] => 131666
+                    [_can_modify] => 
+                    [owner[login_name]] => zbryant@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Mon Sep 26 09:23:26 UTC 2022
+                    [description] => 
+                    [created_by] => 79410
+                    [created_by_user[login_name]] => njackson@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 79410
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Nick Jackson
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => njackson@russellpublishing.com
+                    [updated_at] => Mon Sep 26 09:23:26 UTC 2022
+                    [name] => Zoe Bryant
+                    [updated_by_user[person_name]] => Nick Jackson
+                    [id] => 406
+                    [_can_chaccess] => 
+                )
+
+            [63] => Array
+                (
+                    [type] => Private::CustomRecordType3Queue
+                    [owner[person_name]] => Zoe Coughlan
+                    [created_through_reference] => 
+                    [owner_id] => 138168
+                    [_can_modify] => 
+                    [owner[login_name]] => zcoughlan@russellpublishing.com
+                    [lock_version] => 0
+                    [created_through] => Workbooks
+                    [created_at] => Fri Jul 21 09:25:30 UTC 2023
+                    [description] => 
+                    [created_by] => 137256
+                    [created_by_user[login_name]] => workbooks@russellpublishing.com
+                    [_can_delete] => 
+                    [_can_chown] => 
+                    [updated_by] => 137256
+                    [queue_type] => user
+                    [created_by_user[person_name]] => Workbooks Admin
+                    [_can_read] => 1
+                    [updated_by_user[login_name]] => workbooks@russellpublishing.com
+                    [updated_at] => Fri Jul 21 09:25:30 UTC 2023
+                    [name] => Zoe Coughlan
+                    [updated_by_user[person_name]] => Workbooks Admin
+                    [id] => 463
+                    [_can_chaccess] => 
+                )
+
+        )
+
+    [total] => 64
+)
+
+[2025-08-19 17:01:05] event-registration-queues: Final queues: Array
+(
+    [535] => Levon Gravett
+    [1] => Unassigned
+    [519] => Aimee Shanks
+    [552] => Alex McLachlan
+    [517] => Amy Best
+    [67] => Angela Taverner
+    [193] => Bansri Shah
+    [283] => Beau Bailey
+    [501] => Ben Cornwell
+    [479] => Ben Plewes
+    [548] => Bob Shearwood
+    [523] => Carrie Haslam
+    [404] => Catherine Eckford
+    [554] => Clare Boldurmaz
+    [309] => Coral Bosley
+    [109] => Dan Birchmore
+    [418] => Dane Daly
+    [543] => David McMullen
+    [335] => Dean Patterson
+    [550] => Dominic Tyer
+    [450] => Elizabeth Jordan
+    [359] => Elliot Robinson
+    [341] => Emma Waterman
+    [349] => Frankie Butler
+    [503] => Gabriel Higgins
+    [505] => Georgina Baxter-Smith
+    [511] => Harry Marah
+    [293] => Holly Miles
+    [489] => Ian Betteridge
+    [499] => Ian Westcott
+    [101] => Jason Bennett
+    [507] => Jess Bremner
+    [111] => Jessica Russell
+    [442] => John Nicholls
+    [531] => Jon Shepheard
+    [11] => Josh Russell
+    [396] => Joshua Hannan
+    [467] => Karen Hill
+    [63] => Karen Hutchinson
+    [545] => Klide Jahaj
+    [143] => Mandy Parrett
+    [99] => Marlon Ruddock
+    [325] => Mayra Clemente
+    [521] => Miranda Le Croissette
+    [177] => Natasha Johnson
+    [533] => Nick Wakelin
+    [448] => Paul Sequeira
+    [481] => Roy Lim
+    [113] => Ryan Clarke
+    [546] => Sam Lister
+    [23] => Sam Pirani
+    [537] => Samuel Wightwick
+    [57] => Sandra Barden
+    [245] => Sarah Wills
+    [71] => Sheila Lewis
+    [323] => Stacey Robertson
+    [465] => Steve Flynn
+    [410] => Suzy Baverstock
+    [529] => Tom Jones
+    [211] => Tony Cornell
+    [381] => Tony Portelli
+    [454] => Workbooks Admin
+    [406] => Zoe Bryant
+    [463] => Zoe Coughlan
+)
+
+[2025-08-19 17:01:05] AJAX: Queues result | Array
+(
+    [535] => Levon Gravett
+    [1] => Unassigned
+    [519] => Aimee Shanks
+    [552] => Alex McLachlan
+    [517] => Amy Best
+    [67] => Angela Taverner
+    [193] => Bansri Shah
+    [283] => Beau Bailey
+    [501] => Ben Cornwell
+    [479] => Ben Plewes
+    [548] => Bob Shearwood
+    [523] => Carrie Haslam
+    [404] => Catherine Eckford
+    [554] => Clare Boldurmaz
+    [309] => Coral Bosley
+    [109] => Dan Birchmore
+    [418] => Dane Daly
+    [543] => David McMullen
+    [335] => Dean Patterson
+    [550] => Dominic Tyer
+    [450] => Elizabeth Jordan
+    [359] => Elliot Robinson
+    [341] => Emma Waterman
+    [349] => Frankie Butler
+    [503] => Gabriel Higgins
+    [505] => Georgina Baxter-Smith
+    [511] => Harry Marah
+    [293] => Holly Miles
+    [489] => Ian Betteridge
+    [499] => Ian Westcott
+    [101] => Jason Bennett
+    [507] => Jess Bremner
+    [111] => Jessica Russell
+    [442] => John Nicholls
+    [531] => Jon Shepheard
+    [11] => Josh Russell
+    [396] => Joshua Hannan
+    [467] => Karen Hill
+    [63] => Karen Hutchinson
+    [545] => Klide Jahaj
+    [143] => Mandy Parrett
+    [99] => Marlon Ruddock
+    [325] => Mayra Clemente
+    [521] => Miranda Le Croissette
+    [177] => Natasha Johnson
+    [533] => Nick Wakelin
+    [448] => Paul Sequeira
+    [481] => Roy Lim
+    [113] => Ryan Clarke
+    [546] => Sam Lister
+    [23] => Sam Pirani
+    [537] => Samuel Wightwick
+    [57] => Sandra Barden
+    [245] => Sarah Wills
+    [71] => Sheila Lewis
+    [323] => Stacey Robertson
+    [465] => Steve Flynn
+    [410] => Suzy Baverstock
+    [529] => Tom Jones
+    [211] => Tony Cornell
+    [381] => Tony Portelli
+    [454] => Workbooks Admin
+    [406] => Zoe Bryant
+    [463] => Zoe Coughlan
+)
+
+[2025-08-19 17:01:05] AJAX: Queues found and returned

@@ -130,7 +130,7 @@ class DTR_Media_Planner_Handler {
     }
 
     public static function handle_form_submission($form_data) {
-        self::log('=== PROCESSING MEDIA PLANNER FORM SUBMISSION ===');
+        self::log('=== PROCESSING MEDIA PLANNER FORM SUBMISSION (AJAX-style) ===');
         self::log('Raw $form_data:', $form_data);
 
         $fields = self::extract_fields($form_data);
@@ -150,57 +150,76 @@ class DTR_Media_Planner_Handler {
             return;
         }
         $name = trim($first_name . ' ' . $last_name);
-        if (empty($name)) {
-            $name = "Unknown Name ({$email})";
-        }
+        if (empty($name)) $name = $email;
 
-        // Authenticate Workbooks API instance
-        try {
-            self::log("Authenticating Workbooks API...");
-            $workbooks = get_workbooks_instance();
-            self::log("Workbooks instance created.");
-        } catch (Exception $e) {
-            self::log("❌ ERROR: Could not instantiate Workbooks API: " . $e->getMessage());
+        // Early exit: skip mailing lists
+        if (preg_match('/(mail(ing)?list|newsletter|bounce|noreply|no-reply|unsubscribe|@.*lists?\.)/i', $email)) {
+            self::log("⏭️ Skipped mailing list email: {$email}");
             return;
         }
 
-        // 1. Find or create person in Workbooks
-        $person_id = null;
+        // Early exit: skip handler owner
+        $owner_emails = [
+            'levon.gravett@supersonic-playground.com',
+            'levon-brokenponyclub@supersonic-playground.com'
+        ];
+        $owner_names = [
+            'levon gravett'
+        ];
+        $input_name = strtolower(trim($first_name . ' ' . $last_name));
+        if (in_array(strtolower($email), $owner_emails) || in_array($input_name, $owner_names)) {
+            self::log("⏭️ Skipped duplicate handler owner: {$email} / $input_name");
+            return;
+        }
+
+        // Hardcoded campaign/event info for this form context
+        $parent_event_id = 472341; // Use parent event as per Workbooks API requirements
+        $child_event_id = 5137;   // For reference/reporting if needed
+        $campaign_ref = 'CAMP-41496';
+
+        self::log("✅ Workbooks Parent Event Reference: $parent_event_id");
+        self::log("✅ Child Event Reference: $child_event_id");
+        self::log("✅ Campaign Reference: $campaign_ref");
+        self::log("🔍 Checking if person exists with email: {$email}");
+
+        // Workbooks API
         try {
-            $person_search_params = [
+            $workbooks = get_workbooks_instance();
+            if (!$workbooks) throw new Exception('No Workbooks API instance');
+        } catch (Exception $e) {
+            self::log("❌ Error instantiating Workbooks API: " . $e->getMessage());
+            return;
+        }
+
+        // Step 1: Find or create person
+        $person_id = null;
+        $person_object_ref = null;
+        try {
+            $person_search = [
                 '_ff[]' => 'main_location[email]',
                 '_ft[]' => 'eq',
                 '_fc[]' => $email,
                 '_limit' => 1,
-                '_select_columns[]' => ['id'],
+                '_select_columns[]' => ['id','object_ref'],
             ];
-            self::log('Person search params:', $person_search_params);
-            $search = $workbooks->assertGet('crm/people.api', $person_search_params);
-            self::log('Workbooks person search result:', $search);
+            $search = $workbooks->assertGet('crm/people.api', $person_search);
             if (!empty($search['data'][0]['id'])) {
                 $person_id = $search['data'][0]['id'];
-                self::log("Found existing person in Workbooks: $person_id");
+                $person_object_ref = $search['data'][0]['object_ref'];
+                self::log("✅ Found existing person: ID $person_id, Object Ref: PERS-{$person_object_ref}");
             } else {
                 $person_payload = [[
-                    'person_first_name' => $first_name ?: $name,
-                    'person_last_name' => $last_name ?: '',
+                    'person_first_name' => $first_name,
+                    'person_last_name' => $last_name,
                     'main_location[email]' => $email,
-                    'main_location[telephone]' => $telephone,
-                    'main_location[town]' => $town,
-                    'main_location[country]' => $country,
-                    'person_job_title' => $job_title,
-                    'person_organisation' => $organisation,
                 ]];
-                self::log('Person create payload:', $person_payload);
-                // Always assign array to variable before passing by reference!
-                $person_objs = $person_payload;
-                $create = $workbooks->assertCreate('crm/people.api', $person_objs);
-                self::log('Person create result:', $create);
+                $create = $workbooks->assertCreate('crm/people.api', $person_payload);
                 if (!empty($create['affected_objects'][0]['id'])) {
                     $person_id = $create['affected_objects'][0]['id'];
-                    self::log("Created new person in Workbooks: $person_id");
+                    $person_object_ref = $create['affected_objects'][0]['object_ref'] ?? '';
+                    self::log("✅ Created new person: ID $person_id, Object Ref: PERS-{$person_object_ref}");
                 } else {
-                    self::log("❌ ERROR: Could not create person in Workbooks", $create);
+                    self::log("❌ ERROR: Could not create person in Workbooks");
                     return;
                 }
             }
@@ -209,108 +228,125 @@ class DTR_Media_Planner_Handler {
             return;
         }
 
-        // 2. Find the Media Planner event (static ID for 2025)
-        $event_id = $fields['event_id_1732203940068'] ?? 5137;
+        // Step 2: Always create a new Ticket for the CHILD event
+        self::log("🎫 Creating event ticket for child event $child_event_id");
+        $ticket_id = null;
         try {
-            $event_search_params = [
+            $ticket_payload = [[
+                'event_id' => $child_event_id,
+                'person_id' => $person_id,
+                'name' => $name,
+                'status' => 'Registered'
+            ]];
+            self::log("Ticket payload: " . print_r($ticket_payload, true));
+            $ticket_created = $workbooks->create('event/tickets.api', $ticket_payload);
+            self::log("Ticket API raw response: " . print_r($ticket_created, true));
+            try {
+                $workbooks->assertResponse($ticket_created);
+            } catch (Exception $e) {
+                self::log("❌ Ticket API assertResponse failed: " . $e->getMessage());
+            }
+            $ticket_id = is_array($ticket_created) && isset($ticket_created['affected_objects'][0]['id'])
+                ? $ticket_created['affected_objects'][0]['id']
+                : null;
+            if ($ticket_id) {
+                self::log("✅ Created event ticket: ID $ticket_id");
+            } else {
+                self::log("❌ Ticket creation failed, no ID returned. Response: " . print_r($ticket_created, true));
+            }
+        } catch (Exception $e) {
+            self::log("❌ Ticket create failed: " . $e->getMessage());
+        }
+
+        // Step 3: Always create a Sales Lead
+        self::log(" 🎉 Creating event lead generation for parent event $parent_event_id");
+        try {
+            $queue_id = 1;
+            $lead_payload = [[
+                'assigned_to' => $queue_id,
+                'person_lead_party[name]' => $name,
+                'person_lead_party[person_first_name]' => $first_name,
+                'person_lead_party[person_last_name]' => $last_name,
+                'person_lead_party[email]' => $email,
+                'org_lead_party[name]' => $organisation,
+                'org_lead_party[main_location][town]' => $town,
+                'org_lead_party[main_location][country]' => $country,
+                'org_lead_party[main_location][telephone]' => $telephone,
+                'cf_lead_data_source_detail' => 'DTR-MEDIA-PLANNER-2025',
+                'cf_lead_campaign_reference' => $campaign_ref,
+            ]];
+            self::log('Lead payload:', $lead_payload);
+            $lead_created = $workbooks->assertCreate('crm/sales_leads.api', $lead_payload);
+            self::log('Lead API raw response:', $lead_created);
+            $lead_id = $lead_created['affected_objects'][0]['id'] ?? null;
+            if ($lead_id) {
+                self::log("✅  Created lead for person $name {$email}");
+            } else {
+                self::log("❌ Lead creation failed, no ID returned. Response:", $lead_created);
+            }
+        } catch (Exception $e) {
+            self::log("❌ Lead create failed: " . $e->getMessage());
+        }
+
+        // Step 4: Add or update Mailing List Entry for reporting (ONLY if mailing_list_id found)
+        self::log("📧 Adding/updating mailing list entry for reporting");
+        try {
+            $event = $workbooks->assertGet('event/events.api', [
+                '_start' => 0,
                 '_limit' => 1,
                 '_ff[]' => 'id',
                 '_ft[]' => 'eq',
-                '_fc[]' => $event_id,
-            ];
-            self::log('Event search params:', $event_search_params);
-            $event = $workbooks->assertGet('event/events.api', $event_search_params);
-            self::log('Workbooks event search result:', $event);
-            if (empty($event['data'][0])) {
-                self::log("❌ ERROR: Media Planner event not found in Workbooks (ID: $event_id)");
-                return;
-            }
-            self::log("Found Media Planner event in Workbooks: $event_id");
-        } catch (Exception $e) {
-            self::log("❌ ERROR: Event lookup failed: " . $e->getMessage());
-            return;
-        }
-
-        // 3. Check for existing ticket/registration
-        $ticket_id = null;
-        $lock_version = null;
-        try {
-            $ticket_search_params = [
-                '_limit' => 1,
-                '_ff[]' => 'event_id',
-                '_ft[]' => 'eq',
-                '_fc[]' => $event_id,
-                '_ff[]' => 'person_id',
-                '_ft[]' => 'eq',
-                '_fc[]' => $person_id,
-                '_select_columns[]' => ['id', 'lock_version'],
-            ];
-            self::log('Ticket search params:', $ticket_search_params);
-            $existing_ticket = $workbooks->assertGet('event/tickets.api', $ticket_search_params);
-            self::log('Workbooks ticket search result:', $existing_ticket);
-            $ticket_id = $existing_ticket['data'][0]['id'] ?? null;
-            $lock_version = $existing_ticket['data'][0]['lock_version'] ?? null;
-            if ($ticket_id) {
-                self::log("Found existing ticket: $ticket_id");
+                '_fc[]' => $parent_event_id,
+                '_select_columns[]' => ['id', 'mailing_list_id']
+            ]);
+            $mailing_list_id = $event['data'][0]['mailing_list_id'] ?? null;
+            if (!$mailing_list_id) {
+                self::log("❌ No mailing_list_id found for event_id=$parent_event_id");
             } else {
-                self::log("No existing ticket found, will create new");
-            }
-        } catch (Exception $e) {
-            self::log("❌ ERROR: Ticket lookup failed: " . $e->getMessage());
-        }
+                // 2. Get email for person
+                $person = $workbooks->assertGet('crm/people.api', [
+                    '_start' => 0,
+                    '_limit' => 1,
+                    '_ff[]' => 'id',
+                    '_ft[]' => 'eq',
+                    '_fc[]' => $person_id,
+                    '_select_columns[]' => ['id', 'main_location[email]']
+                ]);
+                $email_actual = $person['data'][0]['main_location[email]'] ?? $email;
 
-        // 4. Build ticket payload
-        $ticket_payload = self::build_ticket_payload($fields, $person_id, $event_id, $name, 'Registered');
-        // Add id and lock_version for update
-        if ($ticket_id && $lock_version) {
-            $ticket_payload['id'] = $ticket_id;
-            $ticket_payload['lock_version'] = $lock_version;
-        }
-        self::log('Final ticket payload:', $ticket_payload);
+                // 3. Search for existing mailing list entry
+                $search_params = [
+                    '_start' => 0,
+                    '_limit' => 1,
+                    '_ff[]' => ['mailing_list_id', 'email'],
+                    '_ft[]' => ['eq', 'eq'],
+                    '_fc[]' => [$mailing_list_id, $email_actual],
+                    '_select_columns[]' => ['id']
+                ];
+                $entry_result = $workbooks->assertGet('email/mailing_list_entries.api', $search_params);
+                $entry_id = $entry_result['data'][0]['id'] ?? null;
 
-        // 5. Update or create ticket, log everything
-        try {
-            if ($ticket_id && $lock_version) {
-                self::log("Updating existing ticket $ticket_id...");
-                $ticket_objs = [ $ticket_payload ]; // assign to variable for by-ref
-                $response = $workbooks->assertUpdate('event/tickets.api', $ticket_objs);
-                self::log('Ticket update response:', $response);
-                if (isset($response['success']) && $response['success'] === false) {
-                    self::log("Update failed, will create new ticket", $response);
-                    unset($ticket_payload['id'], $ticket_payload['lock_version']);
-                    $ticket_objs = [ $ticket_payload ];
-                    $response = $workbooks->assertCreate('event/tickets.api', $ticket_objs);
-                    self::log('Ticket create fallback response:', $response);
-                }
-            } else {
-                self::log("Creating new ticket...");
-                $ticket_objs = [ $ticket_payload ]; // assign to variable for by-ref
-                $response = $workbooks->assertCreate('event/tickets.api', $ticket_objs);
-                self::log('Ticket create response:', $response);
-            }
-            // Redact sensitive fields before logging result
-            $redacted_response = $response;
-            if (isset($redacted_response['affected_objects'][0])) {
-                foreach (['cf_email_address', 'cf_telephone', 'cf_first_name', 'cf_last_name'] as $sensitive) {
-                    if (isset($redacted_response['affected_objects'][0][$sensitive])) {
-                        $redacted_response['affected_objects'][0][$sensitive] = '[REDACTED]';
-                    }
+                $payload = [
+                    'mailing_list_id' => $mailing_list_id,
+                    'email' => $email_actual,
+                ];
+
+                if ($entry_id) {
+                    $lock_version = $entry_result['data'][0]['lock_version'] ?? 0;
+                    $update_result = $workbooks->assertUpdate('email/mailing_list_entries.api', [
+                        array_merge(['id' => $entry_id, 'lock_version' => $lock_version], $payload)
+                    ]);
+                    self::log("✅ Mailing List Entry updated for $email_actual");
+                } else {
+                    $create_result = $workbooks->assertCreate('email/mailing_list_entries.api', [$payload]);
+                    self::log("✅ Mailing List Entry created for $email_actual");
                 }
             }
-            self::log("Ticket API response (redacted):", $redacted_response);
-            $final_ticket_id = $response['affected_objects'][0]['id'] ?? null;
-            if ($final_ticket_id) {
-                self::log("✅ SUCCESS: Ticket/registration processed successfully: $final_ticket_id");
-            } else {
-                self::log("❌ ERROR: Ticket/registration response missing final ID", $response);
-            }
         } catch (Exception $e) {
-            self::log("❌ ERROR: Ticket update/create failed: " . $e->getMessage());
-            // Try to log raw response if possible (if $response exists)
-            if (isset($response)) {
-                self::log("❌ ERROR: Workbooks API raw response:", $response);
-            }
+            self::log("❌ Mailing List Entry create/update failed: " . $e->getMessage());
         }
+
+        self::log("🥳 EVENT REGISTRATION SUCCESSFUL - CELEBRATE");
     }
 }
 

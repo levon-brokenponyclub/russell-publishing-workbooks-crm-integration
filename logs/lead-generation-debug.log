@@ -1,0 +1,224 @@
+[2025-08-25 20:42:57] [INFO] [INFO] Extracted sponsor questions: []
+[2025-08-25 20:42:57] [INFO] [INFO] Calling dtr_register_workbooks_lead with: post_id=161192, email=lpssg@test.com, first_name=lpsspg, last_name=gravsspg, optin=0
+[2025-08-25 20:42:57] [INFO] ✅ All required lead gen data present
+[2025-08-25 20:42:57] [INFO] === CALLING CORE LEAD GENERATION ===
+[2025-08-25 20:42:57] [INFO] ✅ Prepared lead gen data:
+[2025-08-25 20:42:57] [INFO] lead_post_id: | {"lead_post_id":"161192"}
+[2025-08-25 20:42:57] [INFO] lead_email: | {"lead_email":"lpssg@test.com"}
+[2025-08-25 20:42:57] [INFO] acf_questions: | {"acf_questions":[]}
+[2025-08-25 20:42:57] [INFO] cf_mailing_list_member_sponsor_1_optin: | {"cf_mailing_list_member_sponsor_1_optin":0}
+[2025-08-25 20:42:57] [INFO] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-25 20:42:58] [INFO] [CONFIRM] Found existing person: 4314768
+[2025-08-25 20:42:58] [INFO] ✅ STEP 2: Person created/updated
+[2025-08-25 20:42:58] [INFO] [CONFIRM] Creating lead in Workbooks for person 4314768
+[2025-08-25 20:42:58] [INFO] ❌ Exception during lead create: Non-OK response (404)
+[2025-08-25 20:42:58] [INFO] ❌ STEP 3: Lead Created - Non-OK response (404)
+[2025-08-25 20:42:58] [INFO] 🎉 FINAL RESULT: LEAD GENERATION FAILED!
+[2025-08-25 20:42:58] [INFO] [INFO] Lead generation result: 
+[2025-08-25 20:42:58] [INFO] [INFO] Full debug report: Array
+(
+    [resolved_names] => Array
+        (
+            [0] => lpsspg
+            [1] => gravsspg
+        )
+
+    [person_search] => Array
+        (
+            [success] => 1
+            [data] => Array
+                (
+                    [0] => Array
+                        (
+                            [object_ref] => PERS-684229
+                            [id] => 4314768
+                        )
+
+                )
+
+            [total] => 1
+        )
+
+    [lead_payload] => Array
+        (
+            [0] => Array
+                (
+                    [person_id] => 4314768
+                    [lead_source] => Website
+                    [lead_status] => New
+                    [cf_mailing_list_member_sponsor_1_optin] => 0
+                )
+
+        )
+
+    [lead_create_exception] => Non-OK response (404)
+)
+
+[2025-08-25 20:53:17] [INFO] [INFO] Extracted sponsor questions: []
+[2025-08-25 20:53:17] [INFO] [INFO] Calling dtr_register_workbooks_lead with: post_id=161192, email=lpssg@test.com, first_name=lpsspg, last_name=gravsspg, optin=0
+[2025-08-25 20:53:17] [INFO] ✅ All required lead gen data present
+[2025-08-25 20:53:17] [INFO] === CALLING CORE LEAD GENERATION ===
+[2025-08-25 20:53:17] [INFO] ✅ Prepared lead gen data:
+[2025-08-25 20:53:17] [INFO] lead_post_id: | {"lead_post_id":"161192"}
+[2025-08-25 20:53:17] [INFO] lead_email: | {"lead_email":"lpssg@test.com"}
+[2025-08-25 20:53:17] [INFO] acf_questions: | {"acf_questions":[]}
+[2025-08-25 20:53:17] [INFO] cf_mailing_list_member_sponsor_1_optin: | {"cf_mailing_list_member_sponsor_1_optin":0}
+[2025-08-25 20:53:17] [INFO] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-25 20:53:17] [INFO] [CONFIRM] Found existing person: 4314768
+[2025-08-25 20:53:17] [INFO] ✅ STEP 2: Person created/updated
+[2025-08-25 20:53:17] [INFO] [CONFIRM] Creating lead in Workbooks for person 4314768
+[2025-08-25 20:53:18] [INFO] ❌ Exception during lead create: Non-OK response (404)
+[2025-08-25 20:53:18] [INFO] ❌ STEP 3: Lead Created - Non-OK response (404)
+[2025-08-25 20:53:18] [INFO] 🎉 FINAL RESULT: LEAD GENERATION FAILED!
+[2025-08-25 20:53:18] [INFO] [INFO] Lead generation result: 
+[2025-08-25 20:53:18] [INFO] [INFO] Full debug report: Array
+(
+    [resolved_names] => Array
+        (
+            [0] => lpsspg
+            [1] => gravsspg
+        )
+
+    [person_search] => Array
+        (
+            [success] => 1
+            [data] => Array
+                (
+                    [0] => Array
+                        (
+                            [object_ref] => PERS-684229
+                            [id] => 4314768
+                        )
+
+                )
+
+            [total] => 1
+        )
+
+    [lead_payload] => Array
+        (
+            [0] => Array
+                (
+                    [person_id] => 4314768
+                    [lead_source] => Website
+                    [lead_status] => New
+                    [cf_mailing_list_member_sponsor_1_optin] => 0
+                )
+
+        )
+
+    [lead_create_exception] => Non-OK response (404)
+)
+
+[2025-08-25 21:01:18] [INFO] [INFO] Extracted sponsor questions: []
+[2025-08-25 21:01:18] [INFO] [INFO] Calling dtr_register_workbooks_lead with: post_id=161192, email=lpssg@test.com, first_name=lpsspg, last_name=gravsspg, optin=0
+[2025-08-25 21:01:18] [INFO] ✅ All required lead gen data present
+[2025-08-25 21:01:18] [INFO] === CALLING CORE LEAD GENERATION ===
+[2025-08-25 21:01:18] [INFO] ✅ Prepared lead gen data:
+[2025-08-25 21:01:18] [INFO] lead_post_id: | {"lead_post_id":"161192"}
+[2025-08-25 21:01:18] [INFO] lead_email: | {"lead_email":"lpssg@test.com"}
+[2025-08-25 21:01:18] [INFO] acf_questions: | {"acf_questions":[]}
+[2025-08-25 21:01:18] [INFO] cf_mailing_list_member_sponsor_1_optin: | {"cf_mailing_list_member_sponsor_1_optin":0}
+[2025-08-25 21:01:18] [INFO] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-25 21:01:19] [INFO] [CONFIRM] Found existing person: 4314768
+[2025-08-25 21:01:19] [INFO] ✅ STEP 2: Person created/updated
+[2025-08-25 21:01:19] [INFO] [CONFIRM] Creating lead in Workbooks for person 4314768
+[2025-08-25 21:01:19] [INFO] ❌ Exception during lead create: Non-OK response (404)
+[2025-08-25 21:01:19] [INFO] ❌ STEP 3: Lead Created - Non-OK response (404)
+[2025-08-25 21:01:19] [INFO] 🎉 FINAL RESULT: LEAD GENERATION FAILED!
+[2025-08-25 21:01:19] [INFO] [INFO] Lead generation result: 
+[2025-08-25 21:01:19] [INFO] [INFO] Full debug report: Array
+(
+    [resolved_names] => Array
+        (
+            [0] => lpsspg
+            [1] => gravsspg
+        )
+
+    [person_search] => Array
+        (
+            [success] => 1
+            [data] => Array
+                (
+                    [0] => Array
+                        (
+                            [object_ref] => PERS-684229
+                            [id] => 4314768
+                        )
+
+                )
+
+            [total] => 1
+        )
+
+    [lead_payload] => Array
+        (
+            [0] => Array
+                (
+                    [person_id] => 4314768
+                    [lead_source] => Website
+                    [lead_status] => New
+                    [cf_mailing_list_member_sponsor_1_optin] => 0
+                )
+
+        )
+
+    [lead_create_exception] => Non-OK response (404)
+)
+
+[2025-08-25 21:18:15] [INFO] [INFO] Extracted sponsor questions: []
+[2025-08-25 21:18:15] [INFO] [INFO] Calling dtr_register_workbooks_lead with: post_id=161192, email=lpssg@test.com, first_name=lpsspg, last_name=gravsspg, optin=1
+[2025-08-25 21:18:15] [INFO] ✅ All required lead gen data present
+[2025-08-25 21:18:15] [INFO] === CALLING CORE LEAD GENERATION ===
+[2025-08-25 21:18:15] [INFO] ✅ Prepared lead gen data:
+[2025-08-25 21:18:15] [INFO] lead_post_id: | {"lead_post_id":"161192"}
+[2025-08-25 21:18:15] [INFO] lead_email: | {"lead_email":"lpssg@test.com"}
+[2025-08-25 21:18:15] [INFO] acf_questions: | {"acf_questions":[]}
+[2025-08-25 21:18:15] [INFO] cf_mailing_list_member_sponsor_1_optin: | {"cf_mailing_list_member_sponsor_1_optin":1}
+[2025-08-25 21:18:15] [INFO] 🚀 Calling dtr_register_workbooks_lead()...
+[2025-08-25 21:18:16] [INFO] [CONFIRM] Found existing person: 4314768
+[2025-08-25 21:18:16] [INFO] ✅ STEP 2: Person created/updated
+[2025-08-25 21:18:16] [INFO] [CONFIRM] Creating lead in Workbooks for person 4314768
+[2025-08-25 21:18:17] [INFO] ❌ Exception during lead create: Non-OK response (404)
+[2025-08-25 21:18:17] [INFO] ❌ STEP 3: Lead Created - Non-OK response (404)
+[2025-08-25 21:18:17] [INFO] 🎉 FINAL RESULT: LEAD GENERATION FAILED!
+[2025-08-25 21:18:17] [INFO] [INFO] Lead generation result: 
+[2025-08-25 21:18:17] [INFO] [INFO] Full debug report: Array
+(
+    [resolved_names] => Array
+        (
+            [0] => lpsspg
+            [1] => gravsspg
+        )
+
+    [person_search] => Array
+        (
+            [success] => 1
+            [data] => Array
+                (
+                    [0] => Array
+                        (
+                            [object_ref] => PERS-684229
+                            [id] => 4314768
+                        )
+
+                )
+
+            [total] => 1
+        )
+
+    [lead_payload] => Array
+        (
+            [0] => Array
+                (
+                    [person_id] => 4314768
+                    [lead_source] => Website
+                    [lead_status] => New
+                    [cf_mailing_list_member_sponsor_1_optin] => 1
+                )
+
+        )
+
+    [lead_create_exception] => Non-OK response (404)
+)
+
