@@ -1,0 +1,164 @@
+[2025-08-27 04:34:09] ✅ STEP 1: Processing Lead Gen Form (ID 31)
+[2025-08-27 04:34:09] ✅ STEP 2: Fetched form values (Email: levon.gravett@supersonicplayground.com, PostID: 161192)
+[2025-08-27 04:34:09] ✅ STEP 3: Attempting to register lead in CRM...
+[2025-08-27 04:34:09] ✅ STEP 1: Processing Lead Gen Form (ID 161192)
+[2025-08-27 04:34:09] ✅ STEP 2: Workbooks API instance loaded
+[2025-08-27 04:34:10] Workbooks API PERSON GET response: array (
+  'success' => true,
+  'data' => 
+  array (
+    0 => 
+    array (
+      'object_ref' => 'PERS-683506',
+      'id' => 4311218,
+    ),
+  ),
+  'total' => 3,
+)
+[2025-08-27 04:34:10] ✅ STEP 3: Person created/updated (ID 4311218)
+[2025-08-27 04:34:10] [Gated Content Debug] - Back End
+[2025-08-27 04:34:10] Post ID: 161192
+[2025-08-27 04:34:10] Reference: 5834
+[2025-08-27 04:34:10] ✅ STEP 4: Event reference resolved: 5834
+[2025-08-27 04:34:11] Workbooks API EVENT GET response: array (
+  'success' => true,
+  'data' => 
+  array (
+    0 => 
+    array (
+      'mailing_list_id' => 149926,
+      'id' => 5834,
+    ),
+  ),
+  'total' => 1,
+)
+[2025-08-27 04:34:11] ✅ STEP 5: mailing_list_id resolved: 149926
+[2025-08-27 04:34:11] ℹ️ Updating Mailing List Entry for mailing_list_id=149926, email=levon.gravett@supersonicplayground.com
+[2025-08-27 04:34:11] Workbooks API ENTRY GET response: array (
+  'success' => true,
+  'data' => 
+  array (
+  ),
+  'total' => 0,
+)
+[2025-08-27 04:34:11] ❌ STEP 4: Exception in registration: WorkbooksApi::assertCreate(): Argument #2 ($objs) cannot be passed by reference
+[2025-08-27 04:34:11] 🎉 FINAL RESULT: LEAD REGISTRATION FAILED!
+[2025-08-27 04:34:11] 
+RESULT INFORMATION:
+Array
+(
+    [email] => levon.gravett@supersonicplayground.com
+    [post_id] => 161192
+    [error] => WorkbooksApi::assertCreate(): Argument #2 ($objs) cannot be passed by reference
+    [success] => 0
+)
+
+[2025-08-27 04:34:45] ✅ STEP 1: Processing Lead Gen Form (ID 31)
+[2025-08-27 04:34:45] ✅ STEP 2: Fetched form values (Email: bensspg@sspgtest.com, PostID: 161192)
+[2025-08-27 04:34:45] ✅ STEP 3: Attempting to register lead in CRM...
+[2025-08-27 04:34:45] ✅ STEP 1: Processing Lead Gen Form (ID 161192)
+[2025-08-27 04:34:45] ✅ STEP 2: Workbooks API instance loaded
+[2025-08-27 04:34:46] Workbooks API PERSON GET response: array (
+  'success' => true,
+  'data' => 
+  array (
+    0 => 
+    array (
+      'object_ref' => 'PERS-684467',
+      'id' => 4317570,
+    ),
+  ),
+  'total' => 2,
+)
+[2025-08-27 04:34:46] ✅ STEP 3: Person created/updated (ID 4317570)
+[2025-08-27 04:34:46] [Gated Content Debug] - Back End
+[2025-08-27 04:34:46] Post ID: 161192
+[2025-08-27 04:34:46] Reference: 5834
+[2025-08-27 04:34:46] ✅ STEP 4: Event reference resolved: 5834
+[2025-08-27 04:34:46] Workbooks API EVENT GET response: array (
+  'success' => true,
+  'data' => 
+  array (
+    0 => 
+    array (
+      'mailing_list_id' => 149926,
+      'id' => 5834,
+    ),
+  ),
+  'total' => 1,
+)
+[2025-08-27 04:34:46] ✅ STEP 5: mailing_list_id resolved: 149926
+[2025-08-27 04:34:46] ℹ️ Updating Mailing List Entry for mailing_list_id=149926, email=bensspg@sspgtest.com
+[2025-08-27 04:34:46] Workbooks API ENTRY GET response: array (
+  'success' => true,
+  'data' => 
+  array (
+    0 => 
+    array (
+      'lock_version' => 0,
+      'id' => 1433033846,
+    ),
+  ),
+  'total' => 1,
+)
+[2025-08-27 04:34:47] ℹ️ Mailing List Entry updated for bensspg@sspgtest.com
+[2025-08-27 04:34:47] 🎉 FINAL RESULT: LEAD REGISTRATION SUCCESS!
+[2025-08-27 04:34:47] [cf_mailing_list_member_sponsor_1_optin] => 1
+[2025-08-27 04:34:47] ✅ Sponsor Optin: Yes
+[2025-08-27 04:34:47] Array
+[2025-08-27 04:34:47] ✅ STEP 4: Lead registered in CRM
+[2025-08-27 04:34:47] 🎉 FINAL RESULT: LEAD REGISTRATION SUCCESSFUL!
+[2025-08-27 04:34:47] 
+RESULT INFORMATION:
+Array
+(
+    [email] => bensspg@sspgtest.com
+    [post_id] => 161192
+    [success] => 1
+)
+
+[2025-08-27 04:35:43] ✅ STEP 1: Processing Lead Gen Form (ID 31)
+[2025-08-27 04:35:43] ✅ STEP 2: Fetched form values (Email: levon.gravett@supersonicplayground.com, PostID: 161032)
+[2025-08-27 04:35:43] ✅ STEP 3: Attempting to register lead in CRM...
+[2025-08-27 04:35:43] ✅ STEP 1: Processing Lead Gen Form (ID 161032)
+[2025-08-27 04:35:43] ✅ STEP 2: Workbooks API instance loaded
+[2025-08-27 04:35:46] Workbooks API PERSON GET response: array (
+  'success' => true,
+  'data' => 
+  array (
+    0 => 
+    array (
+      'object_ref' => 'PERS-683506',
+      'id' => 4311218,
+    ),
+  ),
+  'total' => 3,
+)
+[2025-08-27 04:35:46] ✅ STEP 3: Person created/updated (ID 4311218)
+[2025-08-27 04:35:46] [Gated Content Debug] - Back End
+[2025-08-27 04:35:46] Post ID: 161032
+[2025-08-27 04:35:46] Reference: 1234
+[2025-08-27 04:35:46] ✅ STEP 4: Event reference resolved: 1234
+[2025-08-27 04:35:47] Workbooks API EVENT GET response: array (
+  'success' => true,
+  'data' => 
+  array (
+  ),
+  'total' => 0,
+)
+[2025-08-27 04:35:47] ❌ STEP 5: No mailing_list_id found for event_id=1234
+[2025-08-27 04:35:47] 🎉 FINAL RESULT: LEAD REGISTRATION FAILED!
+[2025-08-27 04:35:47] Array
+[2025-08-27 04:35:47] not found
+[2025-08-27 04:35:47] ❌ STEP 4: Registration failed in CRM. Error: 
+[2025-08-27 04:35:47] 🎉 FINAL RESULT: LEAD REGISTRATION FAILED!
+[2025-08-27 04:35:47] 
+RESULT INFORMATION:
+Array
+(
+    [email] => levon.gravett@supersonicplayground.com
+    [post_id] => 161032
+    [error] => 
+    [success] => 0
+)
+

@@ -173,4 +173,25 @@ if (!function_exists('dtr_map_toi_to_aoi')) {
         return $aoi_mapping;
     }
 }
+
+// Convert Ninja Forms country codes to full names before submission
+add_filter( 'ninja_forms_submit_data', function( $form_data ) {
+
+    $target_form_id = 15; // Replace with your form ID
+    $target_field_key = 'nf-field-148'; // Replace with your country field key
+
+    if ( intval( $form_data['id'] ) !== $target_form_id ) {
+        return $form_data;
+    }
+
+    foreach ( $form_data['fields'] as &$field ) {
+        if ( isset( $field['key'] ) && $field['key'] === $target_field_key ) {
+            // Convert ISO code to full country name
+            $field['value'] = dtr_convert_country_code_to_name( $field['value'] );
+        }
+    }
+
+    return $form_data;
+});
+
 ?>

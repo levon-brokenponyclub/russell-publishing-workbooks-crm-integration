@@ -2,7 +2,7 @@
 /**
  * Plugin Name: DTR - Workbooks CRM API Integration
  * Description: Connects WordPress to DTR Workbooks CRM
- * Version: 1.4.5
+ * Version: 1.4.7
  * Author: Supersonic Playground
  * Author URI: https://www.supersonicplayground.com
  * Text Domain: dtr-workbooks-crm-integration
@@ -48,6 +48,55 @@ if (file_exists(WORKBOOKS_NF_PATH . 'includes/workbooks-employer-sync.php')) {
 if (file_exists(WORKBOOKS_NF_PATH . 'includes/nf-country-converter.php')) {
     require_once WORKBOOKS_NF_PATH . 'includes/nf-country-converter.php';
 }
+
+// Convert Ninja Forms country codes to full names before submission
+add_filter('ninja_forms_submit_data', function($form_data) {
+
+    $target_form_id = 15;              // Your form ID
+    $target_field_key = 'nf-field-148'; // Confirmed Country field ID
+
+    if (intval($form_data['id']) !== $target_form_id) {
+        return $form_data;
+    }
+
+    foreach ($form_data['fields'] as &$field) {
+        if (isset($field['key']) && $field['key'] === $target_field_key) {
+            $field['value'] = dtr_convert_country_code_to_name($field['value']);
+        }
+    }
+
+    return $form_data;
+});
+
+// Debug logs for country selection in Ninja Forms frontend
+add_action('wp_footer', function() {
+    ?>
+    <script>
+    (function() {
+        let lastSelectedCountryLabel = '';
+
+        // Capture country dropdown changes by HTML ID
+        document.addEventListener('change', function(e) {
+            if (e.target && e.target.id === 'nf-field-148') { // Use the select element ID
+                lastSelectedCountryLabel = e.target.options[e.target.selectedIndex]?.text || '';
+                console.log('Country dropdown changed: ' + lastSelectedCountryLabel);
+            }
+        });
+
+        // Capture value at form submission
+        document.addEventListener('nfFormSubmitResponse', function(e) {
+            const field = Array.from(e.detail.formData.fields)
+                               .find(f => f.id === 'nf-field-148'); // Use ID match if needed
+            const label = lastSelectedCountryLabel || '- No country selected -';
+            const value = field ? field.value : '- Empty value submitted -';
+            console.log('Form submitted - Selected Country: ' + label + ' | Submitted value: ' + value);
+        });
+    })();
+    </script>
+    <?php
+});
+
+
 
 // Include Ninja Forms Webinar Handlder
 if (file_exists(WORKBOOKS_NF_PATH . 'includes/webinar-handler.php')) {

@@ -1,5 +1,5 @@
 <?php
-if (!defined('ABSPATH')) exit;
+/* if (!defined('ABSPATH')) exit;
 
 class Media_Planner_Test_Ajax_Handler {
     public static function init() {
@@ -245,4 +245,4 @@ class Media_Planner_Test_Ajax_Handler {
     }
 }
 
-Media_Planner_Test_Ajax_Handler::init();
+Media_Planner_Test_Ajax_Handler::init(); */

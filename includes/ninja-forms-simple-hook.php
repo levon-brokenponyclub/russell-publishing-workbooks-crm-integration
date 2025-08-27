@@ -6,6 +6,10 @@
 
 if (!defined('ABSPATH')) exit;
 
+// Always require the business logic handlers (modular, robust)
+require_once __DIR__ . '/lead-generation-handler.php';
+require_once __DIR__ . '/webinar-handler.php';
+
 // Debug logging function (unified)
 if (!function_exists('dtr_lead_debug')) {
     function dtr_lead_debug($message) {
@@ -26,11 +30,28 @@ if (!function_exists('dtr_lead_debug')) {
     }
 }
 
+// Checkmarked step-by-step log for lead gen (form 31)
+if (!function_exists('dtr_step_lead_log')) {
+    function dtr_step_lead_log($message) {
+        $simple_log_file = __DIR__ . '/../logs/lead-generation-debug.log';
+        $logs_dir = dirname($simple_log_file);
+        if (!file_exists($logs_dir)) {
+            if (function_exists('wp_mkdir_p')) {
+                wp_mkdir_p($logs_dir);
+            } else {
+                mkdir($logs_dir, 0777, true);
+            }
+        }
+        $log_entry = "[" . date('Y-m-d H:i:s') . "] $message\n";
+        error_log($log_entry, 3, $simple_log_file);
+    }
+}
+
 // Console log for update notification (visible in browser console on every page load)
 add_action('wp_footer', function() {
     ?>
     <script>
-        console.log('%c[Ninja Forms Simple Hook] Update: dtr_register_workbooks_lead function existence check added - 2025-08-25', 'color: green; font-weight: bold;');
+        console.log('%c[Ninja Forms Simple Hook] Ready: Modular handlers loaded - 2025-08-26', 'color: green; font-weight: bold;');
     </script>
     <?php
 });
@@ -58,86 +79,126 @@ function dtr_ninja_forms_lead_generation_handler($form_data) {
         }
         dtr_lead_debug("Detected form ID: " . $form_id);
 
+        // === WEBINAR FORM ===
         if ($form_id == 2 || $form_id === '2') {
             dtr_lead_debug("✅ Processing webinar form (ID 2) and exiting to prevent other handlers");
             dtr_handle_webinar_form_submission($form_data, $submission_uuid);
             return;
         }
 
-        if ($form_id != 31 && $form_id !== '31') {
-            dtr_lead_debug("ℹ️  Form ID $form_id not configured for lead generation processing");
-            return;
-        }
-        dtr_lead_debug("✅ Processing lead generation form (ID 31)");
+        // === LEAD GEN FORM ===
+        if ($form_id == 31 || $form_id === '31') {
+            $step = 1;
+            dtr_step_lead_log("✅ STEP {$step}: Processing Lead Gen Form (ID $form_id)");
+            $step++;
 
-        // Extract fields for lead gen
-        $current_user = wp_get_current_user();
-        $email = $current_user && $current_user->user_email ? $current_user->user_email : '';
-        $first_name = $current_user && $current_user->user_firstname ? $current_user->user_firstname : '';
-        $last_name = $current_user && $current_user->user_lastname ? $current_user->user_lastname : '';
-        $post_id = '';
-        $cf_mailing_list_member_sponsor_1_optin = 0;
-        $sponsor_questions = [];
+            $current_user = wp_get_current_user();
+            $email = $current_user && $current_user->user_email ? $current_user->user_email : '';
+            $first_name = $current_user && $current_user->user_firstname ? $current_user->user_firstname : '';
+            $last_name = $current_user && $current_user->user_lastname ? $current_user->user_lastname : '';
+            $post_id = '';
 
-        if (isset($form_data['fields']) && is_array($form_data['fields'])) {
-            foreach ($form_data['fields'] as $field) {
-                $key = strtolower($field['key']);
-                $value = isset($field['value']) ? $field['value'] : '';
-                if ($key === 'post_id') {
-                    $post_id = $value;
-                } elseif ($key === 'cf_mailing_list_member_sponsor_1_optin' || $key === 'sponsor_optin') {
-                    $cf_mailing_list_member_sponsor_1_optin = ($value === '1' || $value === 1 || $value === true || $value === 'true' || $value === 'on') ? 1 : 0;
-                }
-                // Collect all sponsor questions as individual fields
-                if (preg_match('/^cf_mailing_list_member_sponsor_question_(\d+)$/', $key, $matches)) {
-                    $num = (int)$matches[1];
-                    $sponsor_questions[$num] = $value;
+            $cf_mailing_list_member_sponsor_1_optin = 0;
+            $sponsor_questions = [];
+
+            if (isset($form_data['fields']) && is_array($form_data['fields'])) {
+                foreach ($form_data['fields'] as $field) {
+                    $key = strtolower($field['key']);
+                    $value = isset($field['value']) ? $field['value'] : '';
+                    if ($key === 'post_id') {
+                        $post_id = $value;
+                    } elseif ($key === 'cf_mailing_list_member_sponsor_1_optin' || $key === 'sponsor_optin') {
+                        $cf_mailing_list_member_sponsor_1_optin = ($value === '1' || $value === 1 || $value === true || $value === 'true' || $value === 'on') ? 1 : 0;
+                    }
+                    if (preg_match('/^cf_mailing_list_member_sponsor_question_(\d+)$/', $key, $matches)) {
+                        $num = (int)$matches[1];
+                        $sponsor_questions[$num] = $value;
+                    }
+                    // Handle ACF questions array (if present)
+                    if ($key === 'acf_questions' && is_array($value)) {
+                        $acf_idx = 2; // Start at 2 for cf_mailing_list_member_sponsor_question_2
+                        foreach ($value as $acf_q) {
+                            $sponsor_questions[$acf_idx] = $acf_q;
+                            $acf_idx++;
+                        }
+                    }
                 }
             }
-        }
+            ksort($sponsor_questions);
+            // Log sponsor questions as cf_mailing_list_member_sponsor_question_N: ...
+            foreach ($sponsor_questions as $num => $answer) {
+                dtr_step_lead_log("cf_mailing_list_member_sponsor_question_{$num}: $answer");
+            }
 
-        ksort($sponsor_questions); // Ensure order
+            dtr_step_lead_log("✅ STEP {$step}: Fetched form values (Email: $email, PostID: $post_id)");
+            $step++;
 
-        dtr_lead_debug("[INFO] Extracted sponsor questions: " . json_encode($sponsor_questions));
+            // Call the lead gen handler
+            $debug_report = [];
+            dtr_step_lead_log("✅ STEP {$step}: Attempting to register lead in CRM...");
+            $step++;
 
-        // --- ENSURE THE LEAD HANDLER FUNCTION EXISTS ---
-        if (!function_exists('dtr_register_workbooks_lead')) {
-            // Try to include the file, adjust path if needed
-            $ajax_handlers_path = WP_CONTENT_DIR . '/plugins/dtr-workbooks-crm-integration/includes/ajax-handlers.php';
-            if (file_exists($ajax_handlers_path)) {
-                include_once $ajax_handlers_path;
-                dtr_lead_debug("✅ Loaded ajax-handlers.php for lead registration function.");
-            } else {
-                dtr_lead_debug("❌ ERROR: ajax-handlers.php not found; cannot register lead.");
-                // Extra debug dump if the error persists
-                dtr_lead_debug("❌ [EXTRA DEBUG] Current include_path: " . get_include_path());
-                dtr_lead_debug("❌ [EXTRA DEBUG] File exists? " . ($ajax_handlers_path) . ': ' . (file_exists($ajax_handlers_path) ? 'YES' : 'NO'));
-                dtr_lead_debug("❌ [EXTRA DEBUG] CWD: " . getcwd());
-                dtr_lead_debug("❌ [EXTRA DEBUG] Defined WP_CONTENT_DIR: " . (defined('WP_CONTENT_DIR') ? WP_CONTENT_DIR : 'NOT DEFINED'));
+            $result = false;
+            try {
+                $result = dtr_register_workbooks_lead(
+                    $post_id,
+                    $email,
+                    $first_name,
+                    $last_name,
+                    $sponsor_questions,
+                    $cf_mailing_list_member_sponsor_1_optin,
+                    $debug_report
+                );
+            } catch (\Throwable $e) {
+                dtr_step_lead_log("❌ STEP {$step}: Exception in registration: {$e->getMessage()}");
+                dtr_step_lead_log("🎉 FINAL RESULT: LEAD REGISTRATION FAILED!");
+                dtr_step_lead_log("\nRESULT INFORMATION:\n" . print_r([
+                    'email' => $email,
+                    'post_id' => $post_id,
+                    'error' => $e->getMessage(),
+                    'success' => 0,
+                ], true));
                 return;
             }
-        } else {
-            dtr_lead_debug("[INFO] dtr_register_workbooks_lead() is available before submission processing.");
+
+            foreach ($debug_report as $dbg) {
+                dtr_step_lead_log($dbg);
+            }
+
+            if ($result === false || (is_array($result) && isset($result['success']) && !$result['success'])) {
+                $err = '';
+                if (is_array($result) && isset($result['error'])) {
+                    $err = $result['error'];
+                }
+                dtr_step_lead_log("❌ STEP {$step}: Registration failed in CRM. Error: $err");
+                dtr_step_lead_log("🎉 FINAL RESULT: LEAD REGISTRATION FAILED!");
+                dtr_step_lead_log("\nRESULT INFORMATION:\n" . print_r([
+                    'email' => $email,
+                    'post_id' => $post_id,
+                    'error' => $err,
+                    'success' => 0,
+                ], true));
+            } else {
+                dtr_step_lead_log("✅ STEP {$step}: Lead registered in CRM");
+                dtr_step_lead_log("🎉 FINAL RESULT: LEAD REGISTRATION SUCCESSFUL!");
+                dtr_step_lead_log("\nRESULT INFORMATION:\n" . print_r([
+                    'email' => $email,
+                    'post_id' => $post_id,
+                    'success' => 1,
+                ], true));
+            }
+            return;
         }
 
-        // Call the lead gen handler
-        $debug_report = [];
-        $result = dtr_register_workbooks_lead(
-            $post_id,
-            $email,
-            $first_name,
-            $last_name,
-            $sponsor_questions, // Pass the array of answers
-            $cf_mailing_list_member_sponsor_1_optin,
-            $debug_report
-        );
-        dtr_lead_debug("[INFO] Lead generation result: " . print_r($result, true));
-        dtr_lead_debug("[INFO] Full debug report: " . print_r($debug_report, true));
+        // Fallback: log that form is not recognized
+        dtr_lead_debug("ℹ️  Form ID $form_id not configured for lead generation or webinar processing");
+        return;
+
     } catch (Exception $e) {
-        dtr_lead_debug("❌ Exception during lead registration: " . $e->getMessage());
+        dtr_lead_debug("❌ Exception during lead/webinar registration: " . $e->getMessage());
         dtr_lead_debug("Exception details: " . print_r($e, true));
     } catch (Error $e) {
-        dtr_lead_debug("❌ Error (PHP 7+) during lead registration: " . $e->getMessage());
+        dtr_lead_debug("❌ Error (PHP 7+) during lead/webinar registration: " . $e->getMessage());
         dtr_lead_debug("Error details: " . print_r($e, true));
     }
 }
@@ -190,7 +251,6 @@ function dtr_handle_webinar_form_submission($form_data, $submission_uuid = null)
                     break;
                 case 'cf_mailing_list_member_sponsor_1_optin':
                 case 'sponsor_optin':
-                    // Always treat as integer 1 if checked, 0 otherwise
                     $cf_mailing_list_member_sponsor_1_optin = ($value === '1' || $value === 1 || $value === true || $value === 'true' || $value === 'on') ? 1 : 0;
                     break;
             }
@@ -213,7 +273,7 @@ function dtr_handle_webinar_form_submission($form_data, $submission_uuid = null)
     dtr_lead_debug("  - Add Questions: " . ($add_questions !== '' ? $add_questions : 'MISSING'));
     dtr_lead_debug("  - Sponsor Opt-in 1: $cf_mailing_list_member_sponsor_1_optin");
 
-    // Prepare registration data payload (use consistent keys)
+    // Prepare registration data payload
     $registration_data = array(
         'webinar_title'     => $webinar_title,
         'webinar_post_id'   => $post_id,
@@ -235,18 +295,6 @@ function dtr_handle_webinar_form_submission($form_data, $submission_uuid = null)
 function dtr_call_webinar_registration($registration_data, $submission_uuid = null) {
     dtr_lead_debug("=== CALLING CORE WEBINAR REGISTRATION [ID: {$registration_data['debug_submission_id']}] ===");
 
-    if (!function_exists('dtr_register_workbooks_webinar')) {
-        dtr_lead_debug("❌ ERROR: Core webinar registration function not found");
-        $ajax_handlers_path = WP_CONTENT_DIR . '/plugins/dtr-workbooks-crm-integration/includes/ajax-handlers.php';
-        if (file_exists($ajax_handlers_path)) {
-            include_once $ajax_handlers_path;
-            dtr_lead_debug("✅ Loaded ajax-handlers.php");
-        } else {
-            dtr_lead_debug("❌ ERROR: ajax-handlers.php not found");
-            return;
-        }
-    }
-
     dtr_lead_debug("✅ Prepared webinar registration data:");
     foreach ($registration_data as $k => $v) {
         dtr_lead_debug("$k: | " . json_encode([$k => $v]));
@@ -267,12 +315,10 @@ function dtr_call_webinar_registration($registration_data, $submission_uuid = nu
         dtr_lead_debug("✅ Core webinar registration completed");
         dtr_lead_debug("✅ Registration result: " . print_r($result, true));
         dtr_lead_debug("🎉 Webinar registration successful via Ninja Forms hook!");
-        // === DTR DEBUG REPORT SUMMARY ===
         dtr_lead_debug("=== FULL SUBMISSION DEBUG REPORT [ID: {$registration_data['debug_submission_id']}] ===");
         dtr_lead_debug("RAW FORM DATA: " . print_r($registration_data['debug_raw_fields'], true));
         dtr_lead_debug("FINAL WORKBOOKS RESULT: " . print_r($result, true));
         dtr_lead_debug("=== END SUBMISSION DEBUG REPORT ===");
-        // === END DTR DEBUG REPORT SUMMARY ===
     } catch (Exception $e) {
         dtr_lead_debug("❌ Exception during webinar registration: " . $e->getMessage());
     } catch (Error $e) {

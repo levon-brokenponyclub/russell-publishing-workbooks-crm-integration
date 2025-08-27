@@ -1,3 +1,6 @@
 [2025-08-20 21:40:26] Workbooks update error (Communication Preferences) | Unexpected response from Workbooks API
 [2025-08-20 21:40:36] Workbooks update error (Communication Preferences) | Unexpected response from Workbooks API
 [2025-08-20 21:43:40] Workbooks update error (Communication Preferences) | {"error":"Unexpected response from Workbooks API","payload":null}
+[2025-08-26 17:54:13] Attempting Workbooks update (Communication Preferences) | {"id":"4317580","lock_version":0,"cf_person_dtr_news":1,"cf_person_dtr_third_party":0,"cf_person_dtr_webinar":1,"cf_person_dtr_events":0}
+[2025-08-26 17:54:14] Workbooks raw response (Communication Preferences) | {"success":true,"affected_objects":[{"lock_version":0,"id":4317580}],"updates":{"data":{"immediate":["private_crm_party","private_crm_person","private_crm_organisation","private_crm_opportunity_contact","private_crm_case_contact","private_own_org_currency","private_email_mailing_list_entries","private_crm_campaign_membership","private_accounting_exchange_rates","domain_name"]}},"flash":"saved successfully","affected_object_information":[{"success":true,"errors":[],"warnings":[]}]}
+[2025-08-26 17:54:14] Workbooks update success (Communication Preferences) | {"id":"4317580","lock_version":0,"cf_person_dtr_news":1,"cf_person_dtr_third_party":0,"cf_person_dtr_webinar":1,"cf_person_dtr_events":0}

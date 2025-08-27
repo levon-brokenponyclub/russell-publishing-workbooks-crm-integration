@@ -1,13 +1,12 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
-// Test connection handler
+// === Test connection handler ===
 add_action('wp_ajax_workbooks_test_connection', 'workbooks_test_connection_callback');
 function workbooks_test_connection_callback() {
     check_ajax_referer('workbooks_nonce', 'nonce');
     try {
         $workbooks = get_workbooks_instance();
-        // Try a simple API call to test the connection - using crm/people endpoint
         $response = $workbooks->assertGet('crm/people.api', [ '_limit' => 1 ]);
         if (isset($response['data'])) {
             wp_send_json_success('Connection successful! API is working correctly.');
@@ -31,7 +30,8 @@ function fetch_webinar_acf_data_callback() {
     $webinar_fields = get_field('webinar_fields', $post_id);
     wp_send_json_success([
         'workbooks_reference' => $webinar_fields['workbook_reference'] ?? '',
-        // 'campaign_reference' => $webinar_fields['campaign_reference'] ?? '', // COMMENTED OUT: Not used
+        'campaign_reference'  => $webinar_fields['campaign_reference'] ?? '',
+        'campaign_id'         => $webinar_fields['campaign_id'] ?? '',
     ]);
 }
 
@@ -62,16 +62,11 @@ function fetch_workbooks_event_callback() {
 // === Fetch employers (no nonce check, public) ===
 add_action('wp_ajax_fetch_workbooks_employers', 'fetch_workbooks_employers_callback');
 add_action('wp_ajax_nopriv_fetch_workbooks_employers', 'fetch_workbooks_employers_callback');
-
 function fetch_workbooks_employers_callback() {
     check_ajax_referer('workbooks_nonce', 'nonce');
-
     global $wpdb;
-
     $table_name = $wpdb->prefix . 'workbooks_employers';
-
     $results = $wpdb->get_results("SELECT id, name FROM $table_name ORDER BY name ASC", ARRAY_A);
-
     if ($results) {
         wp_send_json_success($results);
     } else {
@@ -79,13 +74,14 @@ function fetch_workbooks_employers_callback() {
     }
 }
 
-// --- Logging functions remain unchanged ---
-
+// === Logging function ===
 function dtr_log_to_file($message) {
-    $log_file = dirname(__DIR__) . '/logs/workbooks-2025-06-27.log';
-    
+    $log_file = dirname(__DIR__) . '/logs/workbooks-2025-08-26.log';
     $date = date('Y-m-d H:i:s');
     file_put_contents($log_file, "[$date] $message\n", FILE_APPEND);
 }
 
-// Note: No dtr_webinar_debug_log() here. It is defined only in webinar-handler.php.
+// === NOTE: NO business logic such as dtr_register_workbooks_lead() here ===
+// All business logic for leads/webinars should be in their respective handler files.
+
+?>
