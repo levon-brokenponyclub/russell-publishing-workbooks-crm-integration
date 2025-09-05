@@ -4,9 +4,11 @@
 
 **Author**: Supersonic Playground / Levon Gravett  
 **Website**: [https://www.supersonicplayground.com](https://www.supersonicplayground.com)  
-**Version**: 1.4.6
+**Version**: 1.4.8
 
-A comprehensive WordPress plugin enabling seamless integration between WordPress and DTR Workbooks CRM. This solution powers automated user registration, advanced ACF-driven content gating, dynamic form generation from content metadata, robust event/ticket/lead creation, and detailed debugging—across ALL gated content types (not just webinars).
+A comprehensive WordPress plugin that delivers end-to-end integration between WordPress and DTR Workbooks CRM. Designed for publishers and event-driven organizations, it automates user registration, powers ACF-driven gated content, dynamically generates registration forms from content metadata, and manages person, employer, lead, and event/ticket creation—all with advanced error handling and deep debugging.
+
+This solution eliminates manual form editing, synchronizes CRM data in real-time, and ensures every interaction is tracked across webinars, whitepapers, reports, and all other gated content post types.
 
 ---
 
@@ -19,9 +21,24 @@ A comprehensive WordPress plugin enabling seamless integration between WordPress
 - **Duplicate Detection**: Smart duplicate checking using email matching with Workbooks API
 - **Comprehensive Logging**: Detailed debug logs for troubleshooting and monitoring
 
-### 📝 **Advanced Ninja Forms & ACF-Powered Gated Content Integration**
 
-#### 2025-08-25/26 Additions
+### 📝 **Gated Content Enhancements & Microanimation Additions**
+
+- **🔐 Enhanced Gated Content**: 
+  - Dynamic gated content generation based on post type.
+  - Streamlined content access tied to CRM campaign tracking.
+
+- **🎨 User Interface Enhancements**: 
+  - Smooth button animations and micro-interactions.
+  - Improved content presentation for gated resources.
+
+- **👤 Account Management**: 
+  - Customizable dashboards for users to manage their profiles and preferences.
+  - Full integration of CRM-linked user data within WordPress accounts.
+
+
+### 🥷 **Advanced Ninja Forms & ACF-Powered Gated Content Integration**
+
 - **Real-Time ACF Answer Logging**: The frontend now logs ACF question answers to the browser console in real time as users interact with the form, including dropdowns, checkboxes, radios, and text fields. This helps confirm that all user input is being captured before submission.
 - **Post ID & Campaign Logging**: The script logs the current `post_id` (and `campaign` if present) alongside ACF answers, ensuring these hidden fields are always visible in the console for debugging and validation.
 - **Robust Field Detection**: Improved JavaScript logic to reliably find hidden fields (like `post_id`) both globally and inside the Ninja Form, so values are always logged even if the form structure changes.
@@ -258,8 +275,30 @@ For detailed deployment documentation, see `scripts/README.md`.
 4. Create Workbooks person, event ticket (if applicable), and **always create a sales lead**
 5. Optional dynamic questions and sponsor opt-in handled via ACF fields
 
+
 ---
-## 🚀 Handler & Submission Process Updates (v1.4.6)
+## 👥 Handler & Submission & Full ACF Powered Forms (v1.4.7)
+
+- **Real-Time ACF Answer Logging**: Improved workflows and CRM synchronization for all gated resources, ensuring seamless data capture and integration.
+
+- **Button Animations**: Added interactive button animations for a more engaging and dynamic user experience.
+
+- **Account Customization**: Introduced a fully customizable account dashboard featuring user-specific widgets and flexible layout options.
+
+- **Form Improvements**: Enhanced ACF answer logging, more robust hidden field detection, and improved error recovery for reliable submissions.
+
+- **User Management Features**: Automatic user creation, CRM record generation, and improved dashboard integration for streamlined user management.
+
+**Advanced Ninja Forms & ACF-Powered Gated Content Integration**
+
+- **Real-Time ACF Answer Logging**: The frontend now logs ACF question answers to the browser console in real time as users interact with the form, including dropdowns, checkboxes, radios, and text fields. This helps confirm that all user input is being captured before submission.
+- **Post ID & Campaign Logging**: The script logs the current `post_id` (and `campaign` if present) alongside ACF answers, ensuring these hidden fields are always visible in the console for debugging and validation.
+- **Robust Field Detection**: Improved JavaScript logic to reliably find hidden fields (like `post_id`) both globally and inside the Ninja Form, so values are always logged even if the form structure changes.
+- **Backend Handler Improvements**: The lead generation handler and Ninja Forms hook were updated to ensure that ACF questions (from the `add_questions` field) are always extracted, merged, and logged, and that all lead generation actions are written to `lead-generation-debug.log`.
+- **Parse Error Fixes**: Fixed PHP parse errors in the ACF question rendering logic by moving array mapping outside of inline echo statements and using `isset()` for compatibility.
+
+
+## 🖕 Handler & Submission Process Updates (v1.4.6)
 
 - **Lead Generation Handler Overhaul:**
    - Refactored `lead-generation-handler.php` to match the robust logic of the webinar handler.
@@ -561,6 +600,3 @@ For technical support and customization requests:
 
 This plugin is proprietary software developed by Supersonic Playground for DTR (Drug Target Review) and Levon Gravett.  
 All rights reserved.
-
-# dtr-workbooks-api
-Workbooks CRM Integration plugin providing seamless integration between WordPress and Workbooks CRM for automated user registration, data synchronisation, and comprehensive field mapping - Post Launch Final
