@@ -182,7 +182,7 @@ run_tests() {
     # Check for required files
     local required_files=(
         "dtr-workbooks-crm-integration.php"
-        "includes/nf-user-register.php"
+        "includes/ninja-forms-membership-registration.php"
         "includes/helper-functions.php"
         "lib/workbooks_api.php"
     )

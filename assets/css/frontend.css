@@ -1,0 +1,949 @@
+/* DTR Workbooks Frontend Styles */
+.dtr-workbooks-form {
+    margin: 20px 0;
+}
+
+.dtr-workbooks-test-connection-result {
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.dtr-workbooks-test-connection-result.success {
+    color: #4caf50;
+}
+
+.dtr-workbooks-test-connection-result.error {
+    color: #ff3b30;
+}
+
+/* Gated Content Styles */
+.gated-lead-form-content {
+    position: relative;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.gated-lead-form-content.webinars {
+    background-color: #f9f9f9;
+}
+
+.speaker-question {
+    display: none;
+}
+
+.speaker-question.show {
+    display: block;
+}
+
+/* ---------------------------------------------------------------
+    #1. Membership Form Styles
+--------------------------------------------------------------- */
+
+/* --- Container & Typography --- */
+#membership-form-container .blue-container a {
+  color: #fff;
+  text-decoration: underline !important;
+}
+
+#membership-form-container .nf-before-form-content,
+#membership-form-container .nf-form-title {
+  display: none;
+}
+
+#membership-form-container h1,
+#membership-form-container h2,
+#membership-form-container h3,
+#membership-form-container h4,
+#membership-form-container p,
+#membership-form-container a,
+#membership-form-container input,
+#membership-form-container .nf-field-label .nf-label-span,
+#membership-form-container .nf-field-label label {
+  font-family: "Titillium Web", Sans-serif !important;
+}
+
+/* --- Label and Field Styling --- */
+#membership-form-container .label-above .nf-field-label {
+  margin-bottom: 0 !important;
+}
+
+#membership-form-container .nf-field-label .nf-label-span,
+#membership-form-container .nf-field-label label {
+  font-size: 14px;
+  font-weight: 500 !important;
+  line-height: 30px;
+}
+
+#membership-form-container input[type="text"],
+#membership-form-container input[type="password"],
+#membership-form-container input[type="email"],
+#membership-form-container input[type="number"],
+#membership-form-container input[type="tel"],
+#membership-form-container input[type="search"],
+#membership-form-container input[type="checkbox"],
+#membership-form-container input[type="radio"],
+#membership-form-container select,
+#membership-form-container textarea {
+  background-color: #f2f2f2;
+  box-shadow: none !important;
+  border-radius: 5px;
+  font-family: "Titillium Web", Sans-serif !important;
+  border: 0 !important;
+  font-size: 14px !important;
+}
+
+/* --- Checkbox, Radio, Image Lists --- */
+#membership-form-container #nf-field-168-wrap ul li,
+#membership-form-container #nf-field-169-wrap ul li,
+#membership-form-container .list-checkbox-wrap .nf-field-element li,
+#membership-form-container .list-image-wrap .nf-field-element li,
+#membership-form-container .list-radio-wrap .nf-field-element li {
+  font-family: "Titillium Web", Sans-serif !important;
+  border: 0 !important;
+  font-size: 15px !important;
+  margin-bottom: 20px !important;
+}
+
+#membership-form-container .list-checkbox-wrap .nf-field-element li input,
+#membership-form-container .list-image-wrap .nf-field-element li input,
+#membership-form-container .list-radio-wrap .nf-field-element li input {
+  margin-top: 1px !important;
+}
+
+#membership-form-container .list-checkbox-wrap .nf-field-element li label,
+#membership-form-container .list-image-wrap .nf-field-element li label,
+#membership-form-container .list-radio-wrap .nf-field-element li label {
+  margin-left: 30px !important;
+  top: 3px;
+  position: relative;
+}
+
+/* --- Headings & Descriptions --- */
+#membership-form-container #nf-label-field-168,
+#membership-form-container #nf-label-field-169 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: 600 !important;
+}
+#membership-form-container .nf-field-description,
+#membership-form-container .nf-field-description span {
+  margin-bottom: 25px;
+  font-size: 16px !important;
+}
+
+/* --- Breadcrumbs/Progress --- */
+#membership-form-container ul.nf-breadcrumbs {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0 !important;
+  position: relative;
+  top: -17px;
+}
+#membership-form-container ul.nf-breadcrumbs li.active a {
+  background: #871f80;
+}
+#membership-form-container ul.nf-breadcrumbs li a {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #008dc7;
+  text-align: center;
+  line-height: 31px;
+  color: #fff;
+  font-weight: 700;
+}
+#membership-form-container .nf-progress-container {
+  margin: 0 !important;
+  border: none !important;
+  background-color: #f2f2f2;
+}
+#membership-form-container .nf-progress {
+  height: 3px !important;
+}
+#membership-form-container .nf-next-previous::after,
+#membership-form-container .nf-breadcrumbs::after {
+  display: none !important;
+}
+
+/* --- Inline Buttons --- */
+#membership-form-container .nf-form-wrap .inline-buttons .nf-field-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+#membership-form-container .nf-form-wrap .inline-buttons button {
+  display: inline-block;
+  width: auto;
+}
+
+/* --- Submit Button & Container --- */
+#membership-form-container .submit-container {
+  float: right;
+  margin-top: 40px;
+  top: 100px;
+}
+
+#membership-form-container [type="button"],
+#membership-form-container [type="submit"],
+#membership-form-container button {
+  background: #008dc7 !important;
+  border: 0 !important;
+  color: #fff !important;
+  font-weight: 500;
+  font-family: "Titillium Web", Sans-serif !important;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+#membership-form-container [type="button"]:hover,
+#membership-form-container [type="submit"]:hover,
+#membership-form-container button:hover {
+  background: #871f80 !important;
+}
+
+/* --- Custom Checkbox Styling --- */
+#membership-form-container .field-wrap > div input[type="checkbox"] {
+  width: 1.25rem !important;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  min-height: 1.25rem;
+  margin-left: 0;
+  margin-bottom: 0;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  appearance: none;
+  clear:both;
+}
+#membership-form-container .checkbox:not(last-of-type) {
+  display: inline-block;
+  margin-right: 40px;
+}
+#membership-form-container .checkbox {
+  position: relative;
+}
+#membership-form-container .checkbox label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  background-color: #f1f1f1;
+  border: 1px solid #f1f1f1;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 300ms ease, color 300ms ease, box-shadow 300ms ease;
+}
+#membership-form-container .checkbox label:after {
+  content: "";
+  position: absolute;
+  top: 28%;
+  left: 24%;
+  width: 55%;
+  height: 35%;
+  opacity: 0;
+  border-left: 3px solid #871f80;
+  border-bottom: 3px solid #871f80;
+  transform: rotate(-45deg);
+  transition: opacity 300ms ease;
+}
+#membership-form-container .checkbox input {
+  visibility: hidden;
+}
+#membership-form-container .checkbox input:checked + label {
+  background-color: #fff;
+  border-color: #fff;
+}
+#membership-form-container .checkbox input:checked + label:after {
+  opacity: 1;
+}
+#membership-form-container .checkbox:nth-child(1) input:checked + label {
+  background-color: #fff;
+  border-color: #fff;
+}
+#membership-form-container .checkbox span {
+  display: inline-flex;
+  color: #fff;
+  margin: 0 0 0 40px;
+  top: -32px;
+  position: relative;
+  font-family: "Titillium Web", Sans-serif !important;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* --- Miscellaneous Membership Form Customizations --- */
+.full-page.vertical-half-margin.event-registration .nf-field {
+  margin-bottom: 10px;
+}
+.label-above .nf-field-label {
+  margin: 0;
+}
+nf-field .nf-field-container.checkbox-container label {
+  font-size: 16px;
+}
+
+/* --- Section Titles and Adjustments --- */
+#membership-form-container #nf-label-field-153,
+#membership-form-container #nf-label-field-154 {
+  font-size: 20px !important;
+  margin-bottom: 5px !important;
+  font-weight: 600 !important;
+  display: block !important;
+}
+#membership-form-container #nf-field-155 {
+  top: -33px;
+  width:auto !important;
+}
+
+/* --- Hide Select2 Clear Button --- */
+#membership-form-container [type="button"].select2-selection__clear {
+  display: none;
+}
+
+/* --- Positioning and Miscellaneous --- */
+#nf-field-232-container {
+  position: absolute !important;
+  left: -75% !important;
+  top: 60% !important;
+}
+#nf-label-field-232 {
+  max-width: 400px;
+  line-height: 20px !important;
+  color: #fff;
+}
+
+#ea11y-widget-container .ea11y-widget-footer {
+  display: none !important;
+}
+
+/* --- Spinner Overlay for Loading --- */
+#nf-spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.nf-spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: nf-spin 1s linear infinite;
+}
+@keyframes nf-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --- Responsive Membership Form Adjustments --- */
+@media screen and (max-width: 540px) {
+  .author-information h1 {
+    font-size: 2rem;
+  }
+}
+
+/* ---------------------------------------------------------------
+    #2. Russell Publishing General Styles
+--------------------------------------------------------------- */
+
+/* --- Ad Blocks and Article Listing --- */
+.ad-container {
+  margin: 0 0 1rem 0;
+}
+.article-listing .content h4 {
+  min-height: 5rem;
+}
+.advertising-tech-specs .one-third-page {
+  margin-top: 3rem;
+}
+
+/* --- Navigation --- */
+.mobile-navigation nav ul.mobile-navigation-list li.menu-item-has-children {
+  position: relative;
+  cursor: pointer;
+}
+.menu-icon-nb_webinar {
+  display: none;
+}
+
+/* --- Select2 Dropdowns --- */
+.select2-container {
+  width: 100% !important;
+}
+.enable-select2 .select2-container--default .select2-selection--single {
+  background-color: #f2f2f2 !important;
+  box-shadow: none !important;
+  border-radius: 5px !important;
+  font-family: "Titillium Web", Sans-serif !important;
+  border: 0 !important;
+  font-size: 14px !important;
+  line-height: 45px !important;
+  padding: 0 1rem !important;
+  min-height: 2.5rem !important;
+}
+.select2-container .select2-selection--single .select2-selection__rendered {
+  padding: 0 !important;
+  line-height: 50px !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 50px;
+  position: absolute;
+  top: 1px;
+  right: 10px;
+  width: 20px;
+}
+
+/* --- Account/My Account Styles --- */
+.my-account-navigation li a {
+  color: #5c5c5c;
+}
+.my-account .updated,
+.dtr-form-success-message,
+.dtr-account-form .error {
+  background: #4caf50;
+  color: #fff;
+  font-size: 17px;
+  padding: 13px;
+  border-radius: 4px 4px 0 0;
+  top: 2px;
+  position: relative;
+  font-weight: 600;
+  margin-bottom:0 !important;
+  text-align: center;
+}
+.dtr-account-form .error {
+  background:#ff3b30;
+}
+.dtr-account-content input[type="submit"]:hover {
+  background: #009fe3 !important;
+}
+
+/* ---------------------------------------------------------------
+    #3. Account Pages - Tabbed UI & Data Table
+--------------------------------------------------------------- */
+
+.dtr-account-container {
+  display: flex;
+  gap: 0;
+  max-width: 100%;
+  margin: 0 auto;
+  background: #f2f2f2;
+  margin-bottom:3rem;
+}
+.dtr-account-sidebar {
+  width: 33.3%;
+  background: #dff2f9;
+  padding: 2rem;
+  box-sizing: border-box;
+  color: #333333;
+  border-radius: 5px;
+}
+.dtr-account-tabs {
+  list-style: none !important;
+  padding: 0;
+  margin: 0;
+}
+.dtr-account-tabs li {
+  margin-bottom: 16px;
+  list-style: none;
+}
+.dtr-account-tab-link {
+  display: block;
+  padding: 14px 18px;
+  background: #009fe3;
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.dtr-account-tab-link.active,
+.dtr-account-tab-link:hover {
+  background: #871f80;
+  color: #fff;
+}
+.dtr-account-content {
+  width: 66.6%;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+.dtr-account-content .label-icon {
+  padding-top: 10px;
+}
+.dtr-account-tab-content {
+  display: none;
+}
+.dtr-account-tab-content.active {
+  display: block;
+}
+.data-table thead tr th {
+  background-color:#009fe3 !important;
+  color:#fff;
+  font-weight:bold;
+}
+.dtr-account-container table th,
+.dtr-account-container table td {
+  text-align: left;
+  font-size:16px;
+}
+/* --- Standardized Form Styling --- */
+.dtr-account-tab-content .dtr-account-form {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+.dtr-account-form .dtr-form-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+}
+.dtr-form-label {
+  display: block;
+  width: 48%;
+  font-family: "Titillium Web", Sans-serif !important;
+  font-size: 16px;
+  font-weight: 500;
+}
+.dtr-form-label.full-width {
+  width: 100%;
+}
+.dtr-form-label.half-width {
+  width: 48%;
+}
+.dtr-form-input,
+.dtr-form-label select,
+.dtr-form-label input,
+.dtr-form-label textarea {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 5px;
+  border: 0 !important;
+  font-size: 14px !important;
+  font-family: "Titillium Web", Sans-serif !important;
+  padding: 0.75rem;
+  box-sizing: border-box;
+  margin-top:8px;
+}
+.dtr-form-input:focus,
+.dtr-form-label select:focus,
+.dtr-form-label input:focus,
+.dtr-form-label textarea:focus {
+  outline: 2px solid #009fe3;
+  background: #e7f7fc;
+}
+/* --- Full Width Animated Form Button --- */
+/* DISABLED: Problematic CSS that causes positioning conflicts with input elements
+.dtr-form-button,
+.form-button-element {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  font-weight: bold !important;
+  font-family: "Titillium Web", Sans-serif !important;
+  font-size: 0.75rem !important;
+  padding: 0 1.25rem !important;
+  border-radius: 5px !important;
+  margin-top: 1rem !important;
+  cursor: pointer !important;
+  min-width: 2.5rem !important;
+  min-height: 2.5rem !important;
+  color: #fff !important;
+  border: none !important;
+  background: #009fe3 !important;
+  transition: background 0.2s !important;
+  overflow: hidden !important;
+}
+.dtr-form-button:hover,
+.form-button-element:hover {
+  background: #009fe3 !important;
+}
+.dtr-form-button::before,
+.form-button-element::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0%;
+  background: #871f80;
+  z-index: 1;
+  transition: width 0.8s cubic-bezier(.6,.01,0,1);
+  pointer-events: none;
+}
+.dtr-form-button.animating-bg::before,
+.form-button-element.animating-bg::before,
+.dtr-form-button.registered::before,
+.form-button-element.registered::before {
+  width: 100%;
+}
+.dtr-form-button.registered,
+.form-button-element.registered {
+  background: #871f80 !important;
+}
+.dtr-form-button .btn-content,
+.form-button-element .btn-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+*/
+/* DISABLED: Complex spinner animations no longer used
+.fa-solid.icon.spinner {
+  margin-right: 0.5em;
+  opacity: 0;
+  transition: opacity 0.25s;
+  animation: none;
+  background: none;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #fff;
+}
+.fa-solid.icon.spinner.spin {
+  opacity: 1;
+  animation: spin 0.8s linear infinite;
+  background: linear-gradient(90deg, #fff 0%, #871f80 100%);
+  background-size: 200% 100%;
+  background-position: 0 0;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation-name: spin, spinnerColorMask;
+  animation-duration: 0.8s, 0.8s;
+  animation-iteration-count: infinite, 1;
+  animation-timing-function: linear, ease-in-out;
+  animation-fill-mode: forwards;
+}
+@keyframes spinnerColorMask {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+.fa-solid.icon.check {
+  color: #fff;
+  margin-right: 0.5em;
+  opacity: 1;
+}
+.btn-text {
+  display: inline-block;
+}
+*/
+
+/* --- Data Table Styling --- */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+.data-table th,
+.data-table td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* --- Responsive Account Layout --- */
+@media screen and (max-width: 900px) {
+  .dtr-account-container {
+    flex-direction: column;
+  }
+  .dtr-account-sidebar,
+  .dtr-account-content {
+    width: 100%;
+    border-radius: 0;
+    padding: 1rem;
+  }
+  .dtr-form-label,
+  .dtr-form-label.full-width,
+  .dtr-form-label.half-width {
+    width: 100%;
+  }
+  .dtr-account-tabs li {
+    display: inline-block;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* ---------------------------------------------------------------
+    #4. Ninja Forms - Full-Width Submit Button
+--------------------------------------------------------------- */
+
+/* --- Full Width Submit Button for Ninja Forms --- */
+.nf-field-container.submit-container .nf-field-element,
+.nf-field-container.submit-container .field-wrap,
+.nf-field-container.submit-container input[type="submit"].form-button-element {
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 0%;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#nf-form-15-cont .nf-field-container.submit-container .field-wrap,
+#nf-form-15-cont .nf-field-container.submit-container .nf-field-element,
+#nf-form-15-cont .nf-field-container.submit-container input[type="submit"].form-button-element {
+  justify-content: flex-end !important;
+}
+
+/* Force submit button to full width and hide extra flex children */
+.submit-container.form-button-container {
+  display: block !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 1.2rem 0 0 !important;
+}
+
+.submit-container.form-button-container .form-button-element {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+}
+
+/* Make the wrapping container take full width */
+.submit-container .field-wrap,
+.submit-container .nf-field-element {
+  width: 100% !important;
+  display: flex;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Make the button itself stretch 100% */
+.submit-container .form-button-element,
+.dtr-input-button,
+.dtr-account-tab-content .dtr-input-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100% !important;
+  min-width: 0;
+  box-sizing: border-box;
+  font-weight: bold;
+  font-size: 0.75rem;
+  cursor: pointer;
+  user-select: none;
+  color: #fff;
+  border: none;
+  background: #009fe3;
+  transition: background 0.2s;
+  line-height: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0 1em;
+  margin: 0 !important;
+  opacity:1 !important;
+  max-width:300px;
+  margin:20px auto !important;
+}
+.submit-container .form-button-element:hover,
+.dtr-account-tab-content .dtr-input-button:hover {
+  background:#871f80 !important;
+}
+.dtr-account-tab-content .dtr-input-button:disabled {
+    opacity:1;
+    background:#871f80 !important;
+}
+
+/* Ensure parent containers do not restrict width */
+.submit-container,
+.submit-container .nf-field,
+.submit-container .nf-field-element {
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Remove max-width if Ninja Forms sets one */
+.submit-container .form-button-element,
+.submit-container .nf-field input[type="submit"] {
+    max-width: none !important;
+    width: 100% !important;
+    height: 48px !important;
+    line-height: normal !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Additional specific targeting for Ninja Forms buttons */
+input[type="submit"].ninja-forms-field,
+input[type="submit"].nf-element,
+input[type="submit"].dtr-input-button,
+input[type="submit"].custom-btn-decorated,
+input[type="submit"].form-button-element {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: normal !important;
+    height: 48px !important;
+    padding: 0 1rem !important;
+    box-sizing: border-box !important;
+}
+
+/* ---------------------------------------------------------------
+    #5. Ninja Forms - Loading Animation
+--------------------------------------------------------------- */
+
+.nf-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.7);
+  z-index: 9999;
+}
+.nf-loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border: 5px solid #ccc;
+  border-top-color: #0073aa;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+/* ---------------------------------------------------------------
+    #4. Gated Lead Forms & Webinars
+--------------------------------------------------------------- */
+
+.gated-lead-form-content {
+  margin-top: -45px;
+  padding: 1.5rem;
+  padding-top: 2rem;
+  border-radius: 5px;
+  background: #f2f2f2;
+  z-index: 0 !important;
+  position: relative;
+  width: 93.996%;
+}
+.gated-lead-form-content input[type='checkbox'] {
+  width: 1.25rem;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  min-height: 1.25rem;
+  margin-left: 0;
+  margin-bottom: 0;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-color: #fff !important;
+}
+#acf-questions-form label.question-label {
+  margin-bottom: 0 !important;
+  display: block;
+  font-size: 19px;
+  color: #424242;
+}
+.gated-lead-form-content label.answer-label,
+.gated-lead-form-content select,
+.gated-lead-form-content textarea {
+  position: relative;
+  top: -15px !important;
+  display: block;
+  font-size:16px;
+}
+.gated-lead-form-content select {
+  width: 100%;
+  background: #fff;
+}
+#acf-questions-form input[type='radio'],
+#acf-questions-form input[type='checkbox'],
+#acf-questions-form textarea,
+.gated-lead-form-content.webinars label.answer-label,
+.gated-lead-form-content.webinars select,
+.gated-lead-form-content.webinars textarea {
+  background-color: #fff !important;
+  opacity: 1 !important;
+  position: relative;
+  margin-right: 8px;
+}
+#acf-questions-form input[type='radio'],
+#acf-questions-form input[type='checkbox'] {
+  top:7px;
+}
+.gated-lead-form-content.webinars textarea {
+  margin-bottom: 20px;
+}
+.gated-lead-form-content.webinars label.answer-label,
+.gated-lead-form-content.webinars select,
+.gated-lead-form-content.webinars textarea {
+  position: relative;
+  margin-top: 8px !important;
+  top: 0 !important;
+  display: block;
+}
+
+.gated-lead-form-content.webinars textarea,
+#acf-questions-form textarea {
+  width:100% !important;
+  margin-bottom:10px !important;
+}
+
+/* ---------------------------------------------------------------
+    #4.1. ACF Radio Button & Checkbox Alignment
+--------------------------------------------------------------- */
+
+/* ACF Radio Button Label Styling for Perfect Vertical Alignment */
+.acf-radio-label {
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 0 15px 0 !important;
+  font-family: "Titillium Web", Sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.4 !important;
+  cursor: pointer !important;
+}
+
+.acf-radio-label input[type="radio"] {
+  margin: 0 8px 0 0 !important;
+  vertical-align: middle !important;
+  flex-shrink: 0 !important;
+}
+
+/* ACF Checkbox Label Styling for Perfect Vertical Alignment */
+.acf-checkbox-label {
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 0 15px 0 !important;
+  font-family: "Titillium Web", Sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.4 !important;
+  cursor: pointer !important;
+}
+
+.acf-checkbox-label input[type="checkbox"] {
+  margin: 0 8px 0 0 !important;
+  vertical-align: middle !important;
+  flex-shrink: 0 !important;
+}

@@ -1,0 +1,212 @@
+2025-09-07 15:10:50 [Membership-Reg] [REG-68bda07a5961f] ====== MEMBER REGISTRATION ======
+2025-09-07 15:10:50 [Membership-Reg] [REG-68bda07a5961f] [ENTRY] Processing membership registration for form 15
+2025-09-07 15:10:50 [Membership-Reg] [REG-68bda07a5961f] [DEBUG] Checking Workbooks for existing person with email: lpgtestsspg@testing.com
+2025-09-07 15:10:59 [Membership-Reg] [REG-68bda07a5961f] [DEBUG] Workbooks search returned a person, but email did not match exactly. Found: 'van.tran@qantas.com.au', Expected: 'lpgtestsspg@testing.com'
+2025-09-07 15:10:59 [Membership-Reg] [REG-68bda07a5961f] [SUCCESS] WP user created with ID: 113
+2025-09-07 15:10:59 [Membership-Reg] [REG-68bda07a5961f] [DEBUG] No existing Workbooks person found - creating new
+2025-09-07 15:10:59 [Membership-Reg] [REG-68bda07a5961f] [DEBUG] Starting Workbooks sync
+2025-09-07 15:10:59 [Membership-Reg] [REG-68bda07a5961f] [DEBUG] Searching for existing person with email: lpgtestsspg@testing.com
+2025-09-07 15:11:09 [Membership-Reg] [REG-68bda07a5961f] [DEBUG] Workbooks search returned a person, but email did not match exactly. Found: 'van.tran@qantas.com.au', Expected: 'lpgtestsspg@testing.com'
+2025-09-07 15:11:09 [Membership-Reg] [REG-68bda07a5961f] [DEBUG] No existing person found - creating new Workbooks person
+2025-09-07 15:11:09 [Membership-Reg] [REG-68bda07a5961f] [DEBUG] Sending create request to Workbooks API
+2025-09-07 15:11:10 [Membership-Reg] [REG-68bda07a5961f] [SUCCESS] NEW person created in Workbooks with ID: 4326670, ref: PERS-685813
+2025-09-07 15:11:10 [Membership-Reg] ==== MEMBER REGISTRATION =====
+2025-09-07 15:11:10 [Membership-Reg] User Details:
+2025-09-07 15:11:10 [Membership-Reg] First Name: lsspgfsd
+2025-09-07 15:11:10 [Membership-Reg] Last Name: sspgformsdsd
+2025-09-07 15:11:10 [Membership-Reg] Email Address: lpgtestsspg@testing.com
+2025-09-07 15:11:10 [Membership-Reg] Telephone Number: 33554sd45345
+2025-09-07 15:11:10 [Membership-Reg] Job Title: Dev
+2025-09-07 15:11:10 [Membership-Reg] Employer: Supersonic Playground Ltd
+2025-09-07 15:11:10 [Membership-Reg] Country: ZA
+2025-09-07 15:11:10 [Membership-Reg] Town: Durban
+2025-09-07 15:11:10 [Membership-Reg] Post Code: 4001
+2025-09-07 15:11:10 [Membership-Reg] 
+2025-09-07 15:11:10 [Membership-Reg] ---- MARKETING COMMUNICATION ----
+2025-09-07 15:11:10 [Membership-Reg] Newsletter: - Yes
+2025-09-07 15:11:10 [Membership-Reg] Event: - Yes
+2025-09-07 15:11:10 [Membership-Reg] Third party: - Yes
+2025-09-07 15:11:10 [Membership-Reg] Webinar: - Yes
+2025-09-07 15:11:10 [Membership-Reg] 
+2025-09-07 15:11:10 [Membership-Reg] ---- TOPICS OF INTEREST ----
+2025-09-07 15:11:10 [Membership-Reg] Business: - No
+2025-09-07 15:11:10 [Membership-Reg] Diseases: - Yes
+2025-09-07 15:11:10 [Membership-Reg] Drugs & Therapies: - Yes
+2025-09-07 15:11:10 [Membership-Reg] Genomics: - Yes
+2025-09-07 15:11:10 [Membership-Reg] Research & Development: - Yes
+2025-09-07 15:11:10 [Membership-Reg] Technology: - No
+2025-09-07 15:11:10 [Membership-Reg] Tools & Techniques: - No
+2025-09-07 15:11:10 [Membership-Reg] 
+2025-09-07 15:11:10 [Membership-Reg] ---- AREAS OF INTEREST ----
+2025-09-07 15:11:10 [Membership-Reg] cf_person_analysis: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_assays: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_biomarkers: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_clinical_trials: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_preclinical_research: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_drug_discovery_processes: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_genomics: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_hit_to_lead: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_imaging: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_toxicology: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_cell_gene_therapy: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_informatics: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_molecular_diagnostics: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_personalised_medicine: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_screening_sequencing: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_stem_cells: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_targets: - Yes
+2025-09-07 15:11:10 [Membership-Reg] cf_person_translational_science: - Yes
+2025-09-07 15:11:10 [Membership-Reg] 
+2025-09-07 15:11:10 [Membership-Reg] ---- WORDPRESS/WORKBOOKS ----
+2025-09-07 15:11:10 [Membership-Reg] SUCCESS: WordPress user created with ID: 113
+2025-09-07 15:11:10 [Membership-Reg] SUCCESS: New Workbooks person created with ID: 4326670
+2025-09-07 15:11:10 [Membership-Reg] Workbooks Person Ref: PERS-685813
+2025-09-07 15:11:10 [Membership-Reg] 
+2025-09-07 15:11:10 [Membership-Reg] Communication Preferences: Newsletter=Yes, Event=Yes, Third party=Yes, Webinar=Yes
+2025-09-07 15:11:10 [Membership-Reg] Topics of Interest: Business=No, Diseases=Yes, Drugs & Therapies=Yes, Genomics=Yes, Research & Development=Yes, Technology=No, Tools & Techniques=No
+2025-09-07 15:11:10 [Membership-Reg] Areas of Interest: cf_person_analysis=Yes, cf_person_assays=Yes, cf_person_biomarkers=Yes, cf_person_clinical_trials=Yes, cf_person_preclinical_research=Yes, cf_person_drug_discovery_processes=Yes, cf_person_genomics=Yes, cf_person_hit_to_lead=Yes, cf_person_imaging=Yes, cf_person_toxicology=Yes, cf_person_artificial_intelligencemachine_learning=No, cf_person_cell_gene_therapy=Yes, cf_person_informatics=Yes, cf_person_lab_automation=No, cf_person_molecular_diagnostics=Yes, cf_person_personalised_medicine=Yes, cf_person_screening_sequencing=Yes, cf_person_stem_cells=Yes, cf_person_targets=Yes, cf_person_translational_science=Yes, cf_person_protein_production=No
+2025-09-07 15:11:10 [Membership-Reg] 
+2025-09-07 15:11:10 [Membership-Reg] ==== MEMBER REGISTRATION SUCCESSFUL =====
+2025-09-07 15:11:10 [Membership-Reg] Member registration successful - Fucking Celebrate Good Times Come On!!!
+2025-09-07 18:00:42 [Membership-Reg] [REG-68bdc84a914f1] ====== MEMBER REGISTRATION ======
+2025-09-07 18:00:42 [Membership-Reg] [REG-68bdc84a914f1] [ENTRY] Processing membership registration for form 15
+2025-09-07 18:00:42 [Membership-Reg] [REG-68bdc84a914f1] [DEBUG] Checking Workbooks for existing person with email: finaltest@registration.com
+2025-09-07 18:00:51 [Membership-Reg] [REG-68bdc84a914f1] [DEBUG] Workbooks search returned a person, but email did not match exactly. Found: 'van.tran@qantas.com.au', Expected: 'finaltest@registration.com'
+2025-09-07 18:00:51 [Membership-Reg] [REG-68bdc84a914f1] [SUCCESS] WP user created with ID: 114
+2025-09-07 18:00:51 [Membership-Reg] [REG-68bdc84a914f1] [DEBUG] No existing Workbooks person found - creating new
+2025-09-07 18:00:51 [Membership-Reg] [REG-68bdc84a914f1] [DEBUG] Starting Workbooks sync
+2025-09-07 18:00:51 [Membership-Reg] [REG-68bdc84a914f1] [DEBUG] Searching for existing person with email: finaltest@registration.com
+2025-09-07 18:01:01 [Membership-Reg] [REG-68bdc84a914f1] [DEBUG] Workbooks search returned a person, but email did not match exactly. Found: 'van.tran@qantas.com.au', Expected: 'finaltest@registration.com'
+2025-09-07 18:01:01 [Membership-Reg] [REG-68bdc84a914f1] [DEBUG] No existing person found - creating new Workbooks person
+2025-09-07 18:01:01 [Membership-Reg] [REG-68bdc84a914f1] [DEBUG] Sending create request to Workbooks API
+2025-09-07 18:01:02 [Membership-Reg] [REG-68bdc84a914f1] [SUCCESS] NEW person created in Workbooks with ID: 4326678, ref: PERS-685815
+2025-09-07 18:01:02 [Membership-Reg] ==== MEMBER REGISTRATION =====
+2025-09-07 18:01:02 [Membership-Reg] User Details:
+2025-09-07 18:01:02 [Membership-Reg] First Name: LevonFinal
+2025-09-07 18:01:02 [Membership-Reg] Last Name: TestRegistration
+2025-09-07 18:01:02 [Membership-Reg] Email Address: finaltest@registration.com
+2025-09-07 18:01:02 [Membership-Reg] Telephone Number: 3355445345
+2025-09-07 18:01:02 [Membership-Reg] Job Title: Tester
+2025-09-07 18:01:02 [Membership-Reg] Employer: Supersonic Playground Ltd
+2025-09-07 18:01:02 [Membership-Reg] Country: ZA
+2025-09-07 18:01:02 [Membership-Reg] Town: Durban
+2025-09-07 18:01:02 [Membership-Reg] Post Code: 4001
+2025-09-07 18:01:02 [Membership-Reg] 
+2025-09-07 18:01:02 [Membership-Reg] ---- MARKETING COMMUNICATION ----
+2025-09-07 18:01:02 [Membership-Reg] Newsletter: - Yes
+2025-09-07 18:01:02 [Membership-Reg] Event: - Yes
+2025-09-07 18:01:02 [Membership-Reg] Third party: - Yes
+2025-09-07 18:01:02 [Membership-Reg] Webinar: - No
+2025-09-07 18:01:02 [Membership-Reg] 
+2025-09-07 18:01:02 [Membership-Reg] ---- TOPICS OF INTEREST ----
+2025-09-07 18:01:02 [Membership-Reg] Business: - No
+2025-09-07 18:01:02 [Membership-Reg] Diseases: - No
+2025-09-07 18:01:02 [Membership-Reg] Drugs & Therapies: - Yes
+2025-09-07 18:01:02 [Membership-Reg] Genomics: - Yes
+2025-09-07 18:01:02 [Membership-Reg] Research & Development: - Yes
+2025-09-07 18:01:02 [Membership-Reg] Technology: - No
+2025-09-07 18:01:02 [Membership-Reg] Tools & Techniques: - No
+2025-09-07 18:01:02 [Membership-Reg] 
+2025-09-07 18:01:02 [Membership-Reg] ---- AREAS OF INTEREST ----
+2025-09-07 18:01:02 [Membership-Reg] cf_person_analysis: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_assays: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_biomarkers: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_clinical_trials: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_preclinical_research: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_drug_discovery_processes: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_genomics: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_hit_to_lead: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_imaging: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_toxicology: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_cell_gene_therapy: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_informatics: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_molecular_diagnostics: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_personalised_medicine: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_screening_sequencing: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_stem_cells: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_targets: - Yes
+2025-09-07 18:01:02 [Membership-Reg] cf_person_translational_science: - Yes
+2025-09-07 18:01:02 [Membership-Reg] 
+2025-09-07 18:01:02 [Membership-Reg] ---- WORDPRESS/WORKBOOKS ----
+2025-09-07 18:01:02 [Membership-Reg] SUCCESS: WordPress user created with ID: 114
+2025-09-07 18:01:02 [Membership-Reg] SUCCESS: New Workbooks person created with ID: 4326678
+2025-09-07 18:01:02 [Membership-Reg] Workbooks Person Ref: PERS-685815
+2025-09-07 18:01:02 [Membership-Reg] 
+2025-09-07 18:01:02 [Membership-Reg] Communication Preferences: Newsletter=Yes, Event=Yes, Third party=Yes, Webinar=No
+2025-09-07 18:01:02 [Membership-Reg] Topics of Interest: Business=No, Diseases=No, Drugs & Therapies=Yes, Genomics=Yes, Research & Development=Yes, Technology=No, Tools & Techniques=No
+2025-09-07 18:01:02 [Membership-Reg] Areas of Interest: cf_person_analysis=Yes, cf_person_assays=Yes, cf_person_biomarkers=Yes, cf_person_clinical_trials=Yes, cf_person_preclinical_research=Yes, cf_person_drug_discovery_processes=Yes, cf_person_genomics=Yes, cf_person_hit_to_lead=Yes, cf_person_imaging=Yes, cf_person_toxicology=Yes, cf_person_artificial_intelligencemachine_learning=No, cf_person_cell_gene_therapy=Yes, cf_person_informatics=Yes, cf_person_lab_automation=No, cf_person_molecular_diagnostics=Yes, cf_person_personalised_medicine=Yes, cf_person_screening_sequencing=Yes, cf_person_stem_cells=Yes, cf_person_targets=Yes, cf_person_translational_science=Yes, cf_person_protein_production=No
+2025-09-07 18:01:02 [Membership-Reg] 
+2025-09-07 18:01:02 [Membership-Reg] ==== MEMBER REGISTRATION SUCCESSFUL =====
+2025-09-07 18:01:02 [Membership-Reg] Member registration successful - Fucking Celebrate Good Times Come On!!!
+2025-09-07 19:39:03 [Membership-Reg] [REG-68bddf57de86d] ====== MEMBER REGISTRATION ======
+2025-09-07 19:39:03 [Membership-Reg] [REG-68bddf57de86d] [ENTRY] Processing membership registration for form 15
+2025-09-07 19:39:03 [Membership-Reg] [REG-68bddf57de86d] [DEBUG] Checking Workbooks for existing person with email: lpgsspg@testingagain.com
+2025-09-07 19:39:12 [Membership-Reg] [REG-68bddf57de86d] [DEBUG] Workbooks search returned a person, but email did not match exactly. Found: 'van.tran@qantas.com.au', Expected: 'lpgsspg@testingagain.com'
+2025-09-07 19:39:12 [Membership-Reg] [REG-68bddf57de86d] [SUCCESS] WP user created with ID: 115
+2025-09-07 19:39:12 [Membership-Reg] [REG-68bddf57de86d] [DEBUG] No existing Workbooks person found - creating new
+2025-09-07 19:39:12 [Membership-Reg] [REG-68bddf57de86d] [DEBUG] Starting Workbooks sync
+2025-09-07 19:39:12 [Membership-Reg] [REG-68bddf57de86d] [DEBUG] Searching for existing person with email: lpgsspg@testingagain.com
+2025-09-07 19:39:21 [Membership-Reg] [REG-68bddf57de86d] [DEBUG] Workbooks search returned a person, but email did not match exactly. Found: 'van.tran@qantas.com.au', Expected: 'lpgsspg@testingagain.com'
+2025-09-07 19:39:21 [Membership-Reg] [REG-68bddf57de86d] [DEBUG] No existing person found - creating new Workbooks person
+2025-09-07 19:39:21 [Membership-Reg] [REG-68bddf57de86d] [DEBUG] Sending create request to Workbooks API
+2025-09-07 19:39:22 [Membership-Reg] [REG-68bddf57de86d] [SUCCESS] NEW person created in Workbooks with ID: 4326696, ref: PERS-685817
+2025-09-07 19:39:22 [Membership-Reg] ==== MEMBER REGISTRATION =====
+2025-09-07 19:39:22 [Membership-Reg] User Details:
+2025-09-07 19:39:22 [Membership-Reg] First Name: lsspglevon
+2025-09-07 19:39:22 [Membership-Reg] Last Name: sspgform
+2025-09-07 19:39:22 [Membership-Reg] Email Address: lpgsspg@testingagain.com
+2025-09-07 19:39:22 [Membership-Reg] Telephone Number: 335dff5345
+2025-09-07 19:39:22 [Membership-Reg] Job Title: Tester
+2025-09-07 19:39:22 [Membership-Reg] Employer: Supersonic Playground Ltd
+2025-09-07 19:39:22 [Membership-Reg] Country: South Africa
+2025-09-07 19:39:22 [Membership-Reg] Town: La Lucia
+2025-09-07 19:39:22 [Membership-Reg] Post Code: 4051
+2025-09-07 19:39:22 [Membership-Reg] 
+2025-09-07 19:39:22 [Membership-Reg] ---- MARKETING COMMUNICATION ----
+2025-09-07 19:39:22 [Membership-Reg] Newsletter: - Yes
+2025-09-07 19:39:22 [Membership-Reg] Event: - Yes
+2025-09-07 19:39:22 [Membership-Reg] Third party: - Yes
+2025-09-07 19:39:22 [Membership-Reg] Webinar: - Yes
+2025-09-07 19:39:22 [Membership-Reg] 
+2025-09-07 19:39:22 [Membership-Reg] ---- TOPICS OF INTEREST ----
+2025-09-07 19:39:22 [Membership-Reg] Business: - Yes
+2025-09-07 19:39:22 [Membership-Reg] Diseases: - Yes
+2025-09-07 19:39:22 [Membership-Reg] Drugs & Therapies: - Yes
+2025-09-07 19:39:22 [Membership-Reg] Genomics: - No
+2025-09-07 19:39:22 [Membership-Reg] Research & Development: - Yes
+2025-09-07 19:39:22 [Membership-Reg] Technology: - Yes
+2025-09-07 19:39:22 [Membership-Reg] Tools & Techniques: - Yes
+2025-09-07 19:39:22 [Membership-Reg] 
+2025-09-07 19:39:22 [Membership-Reg] ---- AREAS OF INTEREST ----
+2025-09-07 19:39:22 [Membership-Reg] cf_person_analysis: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_assays: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_biomarkers: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_clinical_trials: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_preclinical_research: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_drug_discovery_processes: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_genomics: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_hit_to_lead: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_imaging: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_toxicology: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_artificial_intelligencemachine_learning: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_cell_gene_therapy: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_informatics: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_lab_automation: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_molecular_diagnostics: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_personalised_medicine: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_screening_sequencing: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_stem_cells: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_targets: - Yes
+2025-09-07 19:39:22 [Membership-Reg] cf_person_translational_science: - Yes
+2025-09-07 19:39:22 [Membership-Reg] 
+2025-09-07 19:39:22 [Membership-Reg] ---- WORDPRESS/WORKBOOKS ----
+2025-09-07 19:39:22 [Membership-Reg] SUCCESS: WordPress user created with ID: 115
+2025-09-07 19:39:22 [Membership-Reg] SUCCESS: New Workbooks person created with ID: 4326696
+2025-09-07 19:39:22 [Membership-Reg] Workbooks Person Ref: PERS-685817
+2025-09-07 19:39:22 [Membership-Reg] 
+2025-09-07 19:39:22 [Membership-Reg] Communication Preferences: Newsletter=Yes, Event=Yes, Third party=Yes, Webinar=Yes
+2025-09-07 19:39:22 [Membership-Reg] Topics of Interest: Business=Yes, Diseases=Yes, Drugs & Therapies=Yes, Genomics=No, Research & Development=Yes, Technology=Yes, Tools & Techniques=Yes
+2025-09-07 19:39:22 [Membership-Reg] Areas of Interest: cf_person_analysis=Yes, cf_person_assays=Yes, cf_person_biomarkers=Yes, cf_person_clinical_trials=Yes, cf_person_preclinical_research=Yes, cf_person_drug_discovery_processes=Yes, cf_person_genomics=Yes, cf_person_hit_to_lead=Yes, cf_person_imaging=Yes, cf_person_toxicology=Yes, cf_person_artificial_intelligencemachine_learning=Yes, cf_person_cell_gene_therapy=Yes, cf_person_informatics=Yes, cf_person_lab_automation=Yes, cf_person_molecular_diagnostics=Yes, cf_person_personalised_medicine=Yes, cf_person_screening_sequencing=Yes, cf_person_stem_cells=Yes, cf_person_targets=Yes, cf_person_translational_science=Yes, cf_person_protein_production=No
+2025-09-07 19:39:22 [Membership-Reg] 
+2025-09-07 19:39:22 [Membership-Reg] ==== MEMBER REGISTRATION SUCCESSFUL =====
+2025-09-07 19:39:22 [Membership-Reg] Member registration successful - Fucking Celebrate Good Times Come On!!!

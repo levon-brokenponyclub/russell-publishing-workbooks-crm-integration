@@ -1,0 +1,247 @@
+/* DTR Workbooks CRM Integration - Admin Styles */
+/* Base container */
+.wrap.plugin-admin-content, .wrap.workbooks-crm {
+    width: 100%;
+    margin: 20px auto;
+    background:#fff;
+    padding:20px 30px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    box-sizing: border-box;
+}
+/* Responsive table wrapper */
+.wrap.plugin-admin-content .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Tabs */
+.wrap.plugin-admin-content .nav-tab-wrapper {
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+    padding-bottom: 0;
+}
+
+.wrap.plugin-admin-content .nav-tab-wrapper .nav-tab {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-bottom: none;
+    margin-right: 5px;
+    padding: 10px 20px;
+    border-radius: 4px 4px 0 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+    transition: all 0.2s ease;
+}
+.wrap.plugin-admin-content .nav-tab-wrapper .nav-tab:hover { background:#e9ecef; color:#0073aa; }
+.wrap.plugin-admin-content .nav-tab-wrapper .nav-tab.nav-tab-active { background:#fff; border-bottom:1px solid #fff; color:#0073aa; font-weight:600; }
+
+/* Tab Content */
+.wrap.plugin-admin-content { background:#ffffff; }
+
+/* Headings */
+.wrap.plugin-admin-content h1, .wrap.plugin-admin-content h2, .wrap.plugin-admin-content h3 { color:#1d2327; margin-top:0; font-weight:600; }
+.wrap.plugin-admin-content h2 { font-size:1.2em; border-bottom:1px solid #e0e0e0; padding-bottom:20px; margin-bottom:20px; }
+
+/* Forms */
+.wrap.plugin-admin-content .form-table { margin-bottom:20px; }
+.wrap.plugin-admin-content .form-table th { font-weight:500; color:#1d2327; padding:15px 10px 15px 0; }
+.wrap.plugin-admin-content .form-table td { padding:15px 0; }
+.wrap.plugin-admin-content .form-table input[type=text],
+.wrap.plugin-admin-content .form-table input[type=url],
+.wrap.plugin-admin-content .form-table input[type=email],
+.wrap.plugin-admin-content .form-table input[type=password],
+.wrap.plugin-admin-content .form-table select,
+.wrap.plugin-admin-content .form-table textarea {
+    height:36px!important; padding:0 12px!important; border:1px solid #dcdcde!important; border-radius:4px!important; font-size:14px!important; transition:border-color .2s ease!important; background:#fff!important; width:100%!important; max-width:400px!important; box-sizing:border-box;
+}
+.wrap.plugin-admin-content .form-table textarea { height:auto!important; padding:8px 12px!important; min-height:80px!important; }
+
+/* Alignment improvements */
+.wrap.plugin-admin-content .form-table th { font-weight:500!important; color:#2e2e2e!important; padding:15px 10px 15px 0!important; vertical-align:middle!important; width:150px; }
+.wrap.plugin-admin-content .form-table td { padding:15px 0!important; vertical-align:middle!important; }
+
+/* Buttons */
+.wrap.plugin-admin-content .button { padding:8px 16px; font-size:14px; border-radius:4px; transition:all .2s ease; }
+.wrap.plugin-admin-content .button-primary { background:#0073aa; border-color:#0073aa; color:#fff; }
+.wrap.plugin-admin-content .button-primary:hover { background:#005b87; border-color:#005b87; }
+.wrap.plugin-admin-content .button-secondary, .wrap.plugin-admin-content .button.delete, .wrap.plugin-admin-content .button.small { background:#f8f9fa; border-color:#dcdcde; color:#1d2327; }
+.wrap.plugin-admin-content .button-secondary:hover, .wrap.plugin-admin-content .button.delete:hover, .wrap.plugin-admin-content .button.small:hover { background:#e9ecef; border-color:#c3c4c7; }
+.wrap.plugin-admin-content .button:disabled { background:#e9ecef!important; border-color:#dcdcde!important; color:#6b7280!important; cursor:not-allowed; }
+
+/* Tables */
+.wrap.plugin-admin-content .wp-list-table {
+    border:1px solid #e0e0e0;
+    border-radius:4px;
+    overflow:hidden;
+    table-layout:auto;
+    width:100%;
+    min-width: 700px;
+}
+@media screen and (max-width: 900px) {
+    .wrap.plugin-admin-content .wp-list-table {
+        min-width: 600px;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .wrap.plugin-admin-content .wp-list-table {
+        min-width: 500px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .wrap.plugin-admin-content .wp-list-table {
+        min-width: 400px;
+    }
+    .wrap.plugin-admin-content {
+        padding: 10px 2px;
+    }
+}
+.wrap.plugin-admin-content .wp-list-table th {
+    background:#871f80;
+    font-weight:500;
+    padding:12px;
+    color:#fff;
+    white-space:nowrap;
+}
+/* First column adapts to content, but still ellipsis if overflow */
+.wrap.plugin-admin-content .wp-list-table th:first-child,
+.wrap.plugin-admin-content .wp-list-table td:first-child {
+    word-break: break-all;
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.wrap.plugin-admin-content .wp-list-table th:nth-child(2),
+.wrap.plugin-admin-content .wp-list-table td:nth-child(2),
+.wrap.plugin-admin-content .wp-list-table th:nth-child(3),
+.wrap.plugin-admin-content .wp-list-table td:nth-child(3) {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.wrap.plugin-admin-content .wp-list-table td { padding:12px; vertical-align:middle; }
+.wrap.plugin-admin-content .wp-list-table tr:hover { background:#f6f7f7; }
+
+/* Employers */
+#employers-sync-progress { margin-bottom:20px; }
+#employers-progress-bar { height:8px; border-radius:4px; background:#e9ecef; }
+#employers-progress-text { font-size:13px; color:#6b7280; margin-top:5px; }
+#employer-search { padding:8px; border:1px solid #dcdcde; border-radius:4px; font-size:14px; max-width:300px; }
+#employer-search:focus { border-color:#0073aa; box-shadow:0 0 0 1px #0073aa; }
+
+/* Notices */
+.wrap.plugin-admin-content .notice { margin:10px 0; padding:12px; border-radius:4px; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+.wrap.plugin-admin-content .notice-success { background:#f0fff4; border-left:4px solid #10b981; }
+.wrap.plugin-admin-content .notice-error { background:#fef2f2; border-left:4px solid #ef4444; }
+
+/* TOI Mapping */
+.toi-mapping-table th, .toi-mapping-table td { padding:12px; }
+.toi-mapping-table .toi-field-name { color:#6b7280; font-size:12px; }
+.toi-mapping-table .aoi-badges { display:flex; flex-wrap:wrap; gap:6px; }
+.toi-mapping-table .aoi-badge { background:#0073aa; color:#fff; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:500; }
+.toi-mapping-table .no-mapping { color:#9ca3af; font-style:italic; }
+
+/* Webinar Form */
+#webinar-registration-form { max-width:600px; }
+#event-fetch-response { font-size:13px; color:#6b7280; padding:10px; background:#f8f9fa; border-radius:4px; }
+#acf-info { background:#eff6ff; padding:10px; border-radius:4px; margin-bottom:15px; }
+#webinar-response { font-size:13px; padding:10px; border-radius:4px; }
+
+/* Modern Button Overrides */
+.wrap.plugin-admin-content .button,
+.wrap.plugin-admin-content .button-primary,
+.wrap.plugin-admin-content .button-secondary,
+.wrap.plugin-admin-content .button.delete,
+.wrap.plugin-admin-content .button.small,
+#workbooks_update_user_form .button { height:36px; padding:0 16px!important; border-radius:4px!important; font-size:14px!important; font-weight:500; text-decoration:none; cursor:pointer; transition:all .2s ease; border-width:1px; border-style:solid; display:inline-flex; align-items:center; justify-content:center; line-height:1; text-shadow:none!important; box-shadow:none!important; }
+.wrap.plugin-admin-content .button-primary, #workbooks_update_user_form .button-primary { background:#871f80!important; border-color:#871f80!important; color:#fff!important; }
+.wrap.plugin-admin-content .button-primary:hover, #workbooks_update_user_form .button-primary:hover { background:#6d1966!important; border-color:#6d1966!important; }
+.wrap.plugin-admin-content .button-secondary, #workbooks_update_user_form .button-secondary { background:transparent!important; border-color:#871f80!important; color:#871f80!important; }
+.wrap.plugin-admin-content .button-secondary:hover, #workbooks_update_user_form .button-secondary:hover { background:rgba(135,31,128,.05)!important; border-color:#6d1966!important; color:#6d1966!important; }
+.wrap.plugin-admin-content .button:not(.button-primary):not(.button-secondary):not(.delete), .wrap.plugin-admin-content .button.small, #workbooks_update_user_form .button:not(.button-primary):not(.button-secondary) { background:#f0f2f4!important; border-color:#f0f2f4!important; color:#2e2e2e!important; }
+.wrap.plugin-admin-content .button:not(.button-primary):not(.button-secondary):not(.delete):hover, .wrap.plugin-admin-content .button.small:hover, #workbooks_update_user_form .button:not(.button-primary):not(.button-secondary):hover { background:#e6e9ec!important; border-color:#e6e9ec!important; color:#1a1a1a!important; }
+.wrap.plugin-admin-content .button.delete { background:transparent!important; border-color:#dc3545!important; color:#dc3545!important; }
+.wrap.plugin-admin-content .button.delete:hover { background:#dc3545!important; border-color:#dc3545!important; color:#fff!important; }
+
+/* Form focus */
+.wrap.plugin-admin-content .form-table input:focus,
+.wrap.plugin-admin-content .form-table select:focus,
+.wrap.plugin-admin-content .form-table textarea:focus,
+#employer-search:focus { border-color:#871f80!important; box-shadow:0 0 0 2px rgba(135,31,128,.1)!important; }
+
+/* AOI Badge override */
+.toi-mapping-table .aoi-badge, .aoi-badge { background:#871f80!important; color:#fff!important; padding:4px 12px; border-radius:4px; font-size:12px; font-weight:500; }
+
+/* Progress bar */
+#employers-progress-bar::-webkit-progress-value { background:linear-gradient(90deg,#871f80,#a52a94); border-radius:4px; }
+#employers-progress-bar::-moz-progress-bar { background:linear-gradient(90deg,#871f80,#a52a94); border-radius:4px; }
+
+/* Person update form layout */
+#workbooks_update_user_form, #workbooks_get_user_form { display:grid; grid-template-columns:1fr 1fr; gap:15px; max-width:1000px; margin:10px 0; }
+#workbooks_update_user_form .form-column, #workbooks_get_user_form .form-column { background:#fff; padding:20px; border:1px solid #e0e0e0; border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+#workbooks_update_user_form .form-column h3, #workbooks_get_user_form .form-column h3 { margin-top:0; margin-bottom:20px; padding-bottom:10px; border-bottom:2px solid #871f80; color:#1d2327; font-size:16px; font-weight:600; }
+#workbooks_update_user_form p, #workbooks_get_user_form p { margin-bottom:15px; }
+#workbooks_update_user_form label, #workbooks_get_user_form label { display:block; font-weight:500; color:#2e2e2e; margin-bottom:5px; }
+#workbooks_update_user_form input[type=text],
+#workbooks_update_user_form input[type=email],
+#workbooks_update_user_form input[type=tel],
+#workbooks_update_user_form select,
+#workbooks_update_user_form textarea,
+#workbooks_get_user_form input[type=text],
+#workbooks_get_user_form input[type=email],
+#workbooks_get_user_form input[type=tel],
+#workbooks_get_user_form select,
+#workbooks_get_user_form textarea { width:100%; height:36px; padding:0 12px; border:1px solid #dcdcde; border-radius:4px; font-size:14px; line-height:1.4; transition:border-color .2s ease; background:#fff; }
+#workbooks_update_user_form textarea, #workbooks_get_user_form textarea { height:auto; padding:8px 12px; min-height:80px; }
+#workbooks_update_user_form input:focus,
+#workbooks_update_user_form select:focus,
+#workbooks_update_user_form textarea:focus,
+#workbooks_get_user_form input:focus,
+#workbooks_get_user_form select:focus,
+#workbooks_get_user_form textarea:focus { border-color:#871f80; outline:none; box-shadow:0 0 0 2px rgba(135,31,128,.1); }
+#workbooks_update_user_form fieldset, #workbooks_get_user_form fieldset { border:1px solid #e0e0e0; border-radius:4px; padding:15px; margin-bottom:15px; }
+#workbooks_update_user_form legend, #workbooks_get_user_form legend { font-weight:600; color:#2e2e2e; padding:0 10px; }
+#workbooks_update_user_form fieldset label, #workbooks_get_user_form fieldset label { font-weight:normal; margin-bottom:8px; }
+
+/* Settings submit area */
+#workbooks-settings-content .form-table { margin-bottom:0; }
+#workbooks-settings-content .submit { display:flex; align-items:center; gap:15px; margin:20px 0 0; padding:20px 0 0; border-top:1px solid #e0e0e0; }
+#workbooks-settings-content .submit .button { margin:0; }
+
+/* API status pill */
+.workbooks-api-status { display:inline-flex; align-items:center; margin-left:auto; }
+.workbooks-status-pill { background:#10b981; color:#fff; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:500; display:inline-flex; align-items:center; gap:6px; }
+.workbooks-status-pill.disconnected { background:#ef4444; }
+.workbooks-status-pill.testing { background:#f59e0b; }
+.workbooks-status-pill::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; opacity:.8; }
+
+/* Nav tab focus cleanup */
+.wrap.plugin-admin-content .nav-tab:focus, .wrap.plugin-admin-content .nav-tab:active { outline:none!important; box-shadow:none!important; }
+
+/* Test result */
+#workbooks_test_result { margin-top:0; padding:10px 0; font-size:13px; }
+
+/* Consistent labels */
+.wrap.plugin-admin-content label, #workbooks_update_user_form label, #webinar-registration-form label { font-weight:500; color:#2e2e2e; margin-bottom:5px; }
+.wrap.plugin-admin-content .form-table .description { color:#6b7280; font-size:12px; margin-top:5px; font-style:italic; }
+
+/* Unified submit spacing */
+.wrap.plugin-admin-content .submit, #workbooks_update_user_form .submit, #webinar-registration-form .submit { margin-top:20px; padding-top:15px; }
+
+/* Responsive */
+@media screen and (max-width:782px) {
+    #workbooks-settings-content .submit { flex-direction:column; align-items:flex-start; gap:10px; }
+    .workbooks-api-status { margin-left:0; margin-top:10px; }
+    .wrap.plugin-admin-content .form-table th, .wrap.plugin-admin-content .form-table td { display:block; width:100%; padding:8px 0; }
+    .wrap.plugin-admin-content .form-table th { font-weight:600; margin-bottom:5px; }
+    .wrap.plugin-admin-content .form-table input[type=text],
+    .wrap.plugin-admin-content .form-table input[type=url],
+    .wrap.plugin-admin-content .form-table input[type=email],
+    .wrap.plugin-admin-content .form-table select,
+    .wrap.plugin-admin-content .form-table textarea { max-width:100%!important; }
+    #workbooks_update_user_form { grid-template-columns:1fr; }
+}

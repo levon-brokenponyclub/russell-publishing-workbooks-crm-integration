@@ -1,0 +1,347 @@
+/* Side-by-side layout for shortcodes */
+.dtr-custom-checkbox-form legend {
+	text-align:left;
+	margin-bottom:30px;
+	font-weight:600;
+}
+
+body .dtr-shortcode-row.dtr-shortcode-row.dtr-shortcode-row {
+    display: flex !important;
+    gap: 2rem !important;
+    margin-bottom: 2rem !important;
+}
+body .dtr-shortcode-col.dtr-shortcode-col.dtr-shortcode-col {
+    flex: 1 1 50% !important;
+    max-width: 50% !important;
+}
+
+/* Custom toggle checkbox styles (from CodePen, scoped for DTR) */
+body .dtr.subscription.list.dtr.subscription.list.dtr.subscription.list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 35px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 25px !important;
+    margin-bottom: 0 !important;
+    background: #fff !important;
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+}
+body .dtr.subscription.list .list-item.list-item.list-item {
+    display: flex !important;
+    align-items: center !important;
+    background: #f5f5f5 !important;
+    padding: 15px 20px !important;
+    border-radius: 8px !important;
+    color: #666 !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+body .dtr.subscription.list .list-item.list-item.list-item.active {
+    background: #871f80 !important;
+    color: white !important;
+}
+
+body .dtr.subscription.list .list-item.list-item.list-item:before {
+    content: '' !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    margin-right: 10px !important;
+    font-size: 16px !important;
+    opacity: 0 !important;
+    transition: opacity 0.2s ease-in-out !important;
+}
+
+body .dtr.subscription.list .list-item.list-item.list-item.active:before {
+    content: '\f00c' !important;
+    opacity: 1 !important;
+}
+.dtr-account-form .dtr-form-group {
+    background:#fff !important;
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    padding:25px;
+}
+.dtr-account-form .dtr-form-group input,
+.dtr-account-form .dtr-form-group select {
+    background: #f5f5f5 !important;
+}
+
+body .check.check.check {
+    position: relative !important;
+    background: linear-gradient(90deg, #f19af3, #f099b5) !important;
+    line-height: 0 !important;
+    perspective: 400px !important;
+    display: inline-block !important;
+}
+body .check input[type="checkbox"],
+body .check label,
+body .check.check {
+    -webkit-appearance: none !important;
+       -moz-appearance: none !important;
+            appearance: none !important;
+    display: inline-block !important;
+    border-radius: 24px !important;
+    border: 0 !important;
+    transition: .35s ease-in-out !important;
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+}
+body .check label {
+    width: 2.8rem !important;
+    height: 28px !important;
+    background: #d7d7d7 !important;
+    overflow: hidden !important;
+    display: inline-block !important;
+    position: relative !important;
+}
+body .check input[type="checkbox"] {
+    position: absolute !important;
+    z-index: 1 !important;
+    width: 20px !important;
+    height: 20px !important;
+    top: 0.5px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    left: 4px !important;
+        background: linear-gradient(45deg, #dedede, #ffffff);
+    box-shadow: 0 4px 5px rgba(0,0,0,0.3) !important;
+    outline: none;
+}
+body .check input[type="checkbox"]:checked {
+    left: 1.45rem !important;
+}
+body .check input[type="checkbox"]:checked + label {
+    background: transparent !important;
+}
+body .check label::before,
+body .check label::after {
+    content: "· ·" !important;
+    position: absolute !important;
+    overflow: hidden !important;
+    left: .15rem !important;
+    top: .5rem !important;
+    height: 24px !important;
+    letter-spacing: -.04rem !important;
+    color: #9b9b9b !important;
+    z-index: 2 !important;
+    font-size: .6rem !important;
+    border-radius: 0 !important;
+    transform-origin: 0 0 -.5rem !important;
+    -webkit-backface-visibility: hidden !important;
+            backface-visibility: hidden !important;
+}
+body .check label::after {
+    content: "●" !important;
+    top: .65rem !important;
+    left: .3rem !important;
+    height: .24px !important;
+    width: .35rem !important;
+    font-size: .2rem !important;
+    transform-origin: 0 0 -.4rem !important;
+}
+body .check input[type="checkbox"]:checked + label::before,
+body .check input[type="checkbox"]:checked + label::after {
+    left: 1.55rem !important;
+    top: .4rem !important;
+    line-height: .24px !important;
+    transform: rotateY(360deg) !important;
+}
+body .check input[type="checkbox"]:checked + label::after {
+    height: .16rem !important;
+    top: .55rem !important;
+    left: 1.6rem !important;
+    font-size: .6rem !important;
+    line-height: 0 !important;
+}
+body .check-label-text.check-label-text.check-label-text {
+    margin-left: 0.75rem !important;
+    font-size: 18px !important;
+    vertical-align: middle !important;
+}
+
+body .check label::before,
+body .check label::after {
+    display: none !important;
+}
+
+/* Subscription Checkboxes Styles */
+.subscription-checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* @base-size */
+    padding: 32px; /* @base-size*2 */
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+}
+.subscription-checkboxes input[type='checkbox'] {
+    display: none;
+}
+.subscription-checkboxes label {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    margin-bottom: 0;
+    font-size: 18px;
+    padding: 8px 0;
+}
+.subscription-checkboxes label:before {
+    content: '';
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: #0073e6; /* @dtr-blue */
+    background: #fff; /* @white */
+    display: inline-block;
+    height: 20px; /* @base-size*1.25 */
+    width: 20px;  /* @base-size*1.25 */
+    border: 2px solid #b0b0b0; /* @dtr-grey-mid */
+    border-radius: 5px;
+    margin-right: 8px; /* @base-size*0.5 */
+    transition: border-color 0.2s, background 0.2s;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 18px;
+    font-size: 16px;
+    vertical-align: middle;
+}
+.subscription-checkboxes input[type='checkbox']:checked + label:before {
+    content: '\f00c'; /* FontAwesome check */
+    border-color: #0073e6; /* @dtr-blue */
+    background: #0073e6; /* @dtr-blue */
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.subscription-checkboxes label[for='select-all'] {
+    background: #f5f5f5; /* @dtr-grey-light */
+    border-radius: 5px;
+    padding: 8px 12px;
+}
+.subscription-checkboxes button[type='submit'] {
+    background: #0073e6; /* @dtr-blue */
+    color: #fff;
+    border-radius: 5px !important;
+    width: fit-content;
+    padding: 4px 24px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 16px;
+    position: relative;
+}
+.subscription-checkboxes button[type='submit']:after {
+    content: '\f01e';
+    font-family: "Font Awesome 6 Free";
+    font-weight: 300;
+    margin-left: 8px;
+}
+.workbooks-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* @base-size */
+    padding: 32px; /* @base-size*2 */
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+}
+
+.workbooks-checkboxes label {
+    background: #f5f5f5; /* @dtr-grey-light */
+    border-radius: 5px;
+    padding: 14px 16px; /* @base-size*0.25 @base-size */
+    color: #333333; /* .dtr-grey */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight:500;
+    position: relative;
+    transition: background 0.2s, color 0.2s;
+    gap:5px;
+}
+
+.workbooks-checkboxes label strong {
+    display:contents;
+    font-size:15px;
+    margin-bottom:5px;
+}
+
+.workbooks-checkboxes label:hover {
+    background:#009fe3;
+    color:#fff;
+}
+
+.workbooks-checkboxes label:hover:before{
+    color:#fff;
+    background-color:#fff;
+}
+
+.workbooks-checkboxes label:before {
+    content: '\f111';
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    background-color: #b0b0b0; /* @dtr-grey-mid */
+    color: #b0b0b0; /* @dtr-grey-mid */
+    margin-right: 10px; /* @base-size*0.25 */
+    font-size: 16px;
+    display: inline-block;
+    width: 24px;
+    height:24px;
+    min-width:24px;
+    text-align: center;
+    border-radius:50%;
+    line-height:26px;
+}
+
+.workbooks-checkboxes input[type='checkbox'] {
+    display: none;
+}
+
+.workbooks-checkboxes label:has(input[type='checkbox']:checked),
+.workbooks-checkboxes input[type='checkbox']:checked + label {
+    background: #871f80; /* @dtr-purple */
+    color: #fff;
+}
+
+.workbooks-checkboxes label:has(input[type='checkbox']:checked):before,
+.workbooks-checkboxes input[type='checkbox']:checked + label:before {
+    content: '\f00c';
+    color: #fff;
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    background-color: #4caf50; /* @dtr-grey-mid */
+    margin-right: 4px; /* @base-size*0.25 */
+    font-size: 14px;
+    display: inline-block;
+    width: 24px;
+    height:24px;
+    min-width:24px;
+    text-align: center;
+    border-radius: 50%;
+    line-height:26px;
+}
+
+.workbooks-checkboxes button[type='submit'] {
+    background: #0073e6; /* @dtr-blue */
+    color: #fff;
+    border-radius: 5px !important;
+    width: fit-content;
+    padding: 4px 24px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 16px;
+    position: relative;
+}
+
+.workbooks-checkboxes button[type='submit']:after {
+    content: '\f01e';
+    font-family: "Font Awesome 6 Free";
+    font-weight: 300;
+    margin-left: 8px;
+}

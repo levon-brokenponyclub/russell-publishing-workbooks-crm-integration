@@ -3,12 +3,262 @@
 ## Overview
 
 **Author**: Supersonic Playground / Levon Gravett  
-**Website**: [https://www.supersonicplayground.com](https://www.supersonicplayground.com)  
-**Version**: 1.4.8
+**Website**: https://www.supersonicplayground.com  
+**Version**: 2.0.0 (V2)
 
-A comprehensive WordPress plugin that delivers end-to-end integration between WordPress and DTR Workbooks CRM. Designed for publishers and event-driven organizations, it automates user registration, powers ACF-driven gated content, dynamically generates registration forms from content metadata, and manages person, employer, lead, and event/ticket creation—all with advanced error handling and deep debugging.
+A production-ready WordPress plugin that integrates WordPress with the DTR Workbooks CRM. V2 focuses on modular admin code, robust debugging that is gated for production, comprehensive gated-content and Ninja Forms integration (ACF-driven), and reliable Workbooks person/employer/ticket/lead creation and synchronization.
 
-This solution eliminates manual form editing, synchronizes CRM data in real-time, and ensures every interaction is tracked across webinars, whitepapers, reports, and all other gated content post types.
+---
+
+## Comprehensive Feature Summary
+
+A comprehensive WordPress plugin enabling seamless integration between WordPress and DTR Workbooks CRM. This solution powers automated user registration, advanced ACF-driven content gating, dynamic form generation from content metadata, robust event/ticket/lead creation, intelligent employer search, bidirectional account preference syncing, and detailed debugging across ALL gated content types (not just webinars).
+
+### 🔗 Core CRM Integration
+* Secure API wrapper with timeout/error surfacing & lock_version handling
+* Person create/update + verification fetch (optional) to confirm persistence
+* Always-create Sales Lead for every gated submission (ensures engagement capture)
+* Ticket / mailing list handling when event context present
+
+### 🧬 AOI / TOI Mapping
+* Automatic mapping from Topics of Interest selections to Areas of Interest fields
+* Genomics & biomarkers special-case logic (migration details in Changelog)
+
+### 🧾 Dynamic Gated Content & Forms
+* ACF-driven field definitions – zero manual Ninja Forms edits for new gated content fields
+* Unified membership & gated submission pipeline (duplicate handler callbacks removed)
+* Automatic extraction of ACF questions, sponsor opt-in, campaign references
+* Hidden field (post_id / campaign) resilience & logging (for debugging sessions)
+
+### 👤 Membership & My Account
+* My Account preference & AOI/TOI form synchronizes changes back to Workbooks
+* Admin updates mirror into user meta (bidirectional parity)
+* Optional WordPress user creation with stored Workbooks identifiers
+
+### 🏢 Employer Management
+* Custom table `wp_workbooks_employers` + transient cache
+* Daily cron + manual sync (batched API pull)
+* High‑performance server‑side Select2 endpoint with relevance ordering
+* JSON generation (canonical path `assets/json/employers.json` + legacy fallback)
+
+### 🔍 Employer Select2 Enhancements
+* Exact > starts-with > contains ordering
+* Paginated results (page/limit) with minimal counting for performance
+* Graceful empty dataset on nonce failure (avoids UI break)
+
+### 🧪 Observability & Logging
+* Central `logs/` directory (daily rolling + specialized debug logs)
+* Structured step logging for membership & account update flows
+* Optional verbose admin logs gated by plugin debug setting
+* Log reset workflow to prepare clean test baselines
+
+### 🛡️ Resilience & Migration
+* Backward-compatible employer JSON read/write helpers
+* Legacy nonce acceptance (`dtr_workbooks_nonce`) for public forms
+* Genomics field key migration (see Changelog) – removed from main body for clarity
+
+### 🧰 Tooling & Dev Experience
+* Deployment scripts & CI workflow scaffold
+* Archived legacy code catalogued (`archive/README-ARCHIVED-FILES.md`)
+* Clear plugin structure & helper abstraction layers
+
+---
+
+## Installation & Setup
+
+1. Copy the plugin directory to `/wp-content/plugins/dtr-workbooks-crm-integration/`.
+2. Activate the plugin via WordPress Admin → Plugins.
+3. Configure API settings: Plugins → Workbooks CRM (API URL, API Key). Save.
+4. Set `debug_mode` in plugin settings only when troubleshooting (see Debugging section).
+
+### Requirements
+
+- WordPress 5.0+  
+- PHP 7.4+  
+- cURL extension  
+- Ninja Forms (optional, required for Ninja Forms features)  
+- Advanced Custom Fields (ACF) for gated content features
+
+## Configuration
+
+- API URL / API Key: enter under plugin settings.  
+- Debug Mode: toggle under plugin settings. When enabled the plugin will write admin debug files in `admin/` (see notes below). In production, keep debug_mode disabled.
+
+## Debugging & Logs
+
+- Main plugin logs are located in:
+  - `wp-content/plugins/dtr-workbooks-crm-integration/logs/` (daily API and operational logs)
+  - `wp-content/plugins/dtr-workbooks-crm-integration/admin/connection-debug.log` (connection tests) — written only if `debug_mode` = true
+  - `wp-content/plugins/dtr-workbooks-crm-integration/admin/update-debug.log` (person update payloads/responses/verify fetches) — written only if `debug_mode` = true
+
+- Important: debug logs are gated. To enable admin debug logs, set plugin option `dtr_workbooks_options['debug_mode'] = true` via settings or admin UI. This avoids noisy logs in production.
+
+- Archival on disable: When `debug_mode` is turned off via the plugin settings, any existing admin debug logs in the `admin/` folder are moved to `admin/archive/` with a timestamped filename (so you keep historical logs without exposing them in the webroot).
+
+## Usage Guide
+
+### Gated Content & Ninja Forms Integration
+**Form & Field Setup**
+* Attach ACF field group to any gated content post type (webinar, report, whitepaper, etc.)
+* Add / modify fields – forms adapt automatically (no manual Ninja Forms edits)
+* Standard core + marketing + AOI/TOI + employer fields are auto-recognized
+
+**Registration Process**
+1. User submits dynamic form
+2. (Optional) WordPress user created / updated
+3. Fields mapped & sanitized → Workbooks person create/update
+4. Sales Lead always created
+5. Ticket / mailing list updated when event context present
+6. Debug logs written (if enabled)
+
+### Person Record Management
+Supported key field categories:
+* Personal: title, first name, last name, job title
+* Contact: email, telephone, country, town, postcode
+* Employer: free‑text employer name resolved to organisation (created if absent)
+* Preferences: marketing/news/events/webinars/third‑party
+* AOI/TOI: business, diseases, drugs & therapies, genomics, R&D, technology, tools & techniques
+
+Example Mapping Snippet:
+```php
+'person_personal_title' => 'person_personal_title',
+'employer_name'         => 'employer_name',
+'cf_person_aoi_biomarkers' => 'cf_person_biomarkers',
+'cf_person_aoi_genomics'   => 'cf_person_genomics',
+```
+
+### Employer Synchronization
+Automatic Sync Features:
+* Daily cron & manual trigger
+* Batch API retrieval → DB table + transient + regenerated JSON
+* Select2 endpoint reads from DB (paged) – JSON fallback for legacy code paths
+
+Sync Steps:
+1. Fetch batches from Workbooks
+2. Upsert into table
+3. Write JSON (new path + fallback)
+4. Update transient & last sync data
+
+### Webinar & Content Registration Flow
+1. User selects gated content / event
+2. ACF metadata (event IDs, sponsor, questions) loaded
+3. Submission handled by unified pipeline
+4. Person + ticket + lead operations executed
+5. Logging & optional verification fetch
+
+### My Account Updates
+* Frontend changes immediately synced to Workbooks
+* Admin preference edits mirrored back to user meta (keeps UI consistent)
+
+### Debugging Workflow (Typical)
+1. Enable debug mode (settings)
+2. Reset daily log
+3. Perform test submission (capture debug ID)
+4. Review specialized + daily logs
+5. Disable debug mode post‑diagnosis
+
+---
+
+## Developer Information
+
+### Plugin Structure (Current)
+```
+dtr-workbooks-crm-integration/
+├── dtr-workbooks-crm-integration.php
+├── includes/
+│   ├── class-acf-ninjaforms-merge.php
+│   ├── class-array-merge-safety.php
+│   ├── class-employer-sync.php
+│   ├── class-form-submission-override.php
+│   ├── class-helper-functions.php
+│   ├── class-loader.php
+│   ├── core/
+│   ├── form-handler-gated-content-reveal.php
+│   ├── form-handler-media-planner.php
+│   ├── form-handler-membership-registration.php
+│   ├── form-handler-webinars.php
+│   ├── form-submission-processors-ninjaform-hooks.php
+│   └── form-submission-processors-submission-fix.php
+├── shortcodes/
+│   ├── dtr-forgot-password.php
+│   ├── dtr-my-account-details.php
+│   └── dtr-shortcodes.php
+├── js/
+├── assets/
+│   └── json/
+│       └── employers.json
+├── logs/
+├── lib/
+│   └── workbooks_api.php
+├── scripts/
+│   ├── setup.sh
+│   ├── deploy.sh
+│   ├── post-commit-sync.sh
+│   ├── config.example.sh
+│   └── README.md
+```
+
+### Logging Helpers
+* `dtr_admin_log($message, $file)` – gated by debug mode
+* Daily operational log – automatic append (naming pattern `dtr-workbooks-YYYY-MM-DD.log`)
+
+Enable Debug Mode programmatically (optional):
+```php
+update_option('dtr_workbooks_options', array_merge(
+   get_option('dtr_workbooks_options', []),
+   ['debug_mode' => true]
+));
+```
+Disable afterward to reduce I/O.
+
+## Deployment
+* Scripts in `scripts/` (setup, deploy, post-commit sync) – optional CI
+* Ensure permissions allow writing to `logs/` and `assets/json/`
+
+
+## Changelog (Highlights)
+### 2.1.x (In Progress – September 2025)
+- **Unified Membership Registration Handler:** All membership and gated content registrations now use a single, robust handler for consistency and easier maintenance.
+- **Paginated Select2 Employer Search:** Employer search in admin and frontend now uses paginated Select2 with exact, starts-with, and contains ordering for faster, more relevant results.
+- **Employer JSON Relocation:** Employer data JSON is now stored at `assets/json/employers.json` with new helper functions for reading/writing, plus legacy fallback for compatibility.
+- **Central Logging & Log Reset:** All plugin logs are now consolidated, with a workflow for resetting logs to prepare for clean test runs and easier debugging.
+- **Admin ↔ User Preference & AOI Sync:** Improvements to ensure admin changes to user preferences and AOI fields are mirrored to user meta, and vice versa, for true bidirectional sync.
+- **Genomics Key Migration:** Logic for genomics field migration has been moved out of the main code body. The plugin now repairs incorrect legacy `cf_person_genomics_3744` keys and uses the canonical key, with an optional cleanup utility for old data.
+- **Responsive Tables:** Admin tables are now fully responsive, with columns auto-sizing and horizontal scrolling on small screens.
+- **Column Width Fixes:** First column adapts to content, second and third columns have a max width of 250px with ellipsis for overflow.
+- **Toggle Button for Workbooks Fields:** The "Show Workbooks API Fields for this User" link is now a button with improved JS toggle logic and accessibility.
+- **Ninja Forms Country Select:** The Ninja Forms - Full Country Names plugin now:
+   - Processes selects inside containers with `.full-iso-country-names`.
+   - Only logs the selected country (not all options) in the console, both on load and change.
+   - Handles both ISO code and full country name as selected value, with reverse lookup for code.
+   - Improved MutationObserver and logging for dynamic forms.
+
+## Custom Plugin: Ninja Forms - Full Country Names
+
+**Plugin Name:** Ninja Forms - Full Country Names  
+**Description:** Applies full country names to Ninja Forms country fields (both frontend and backend), and any select field with a class of 'full-iso-country-names'. Works with Ninja Forms 3.0+.
+
+### Features
+- Replaces ISO 3166-1 alpha-2 country codes with full country names in Ninja Forms submissions and emails.
+- Works for both default Ninja Forms country fields and any select with the class `full-iso-country-names`.
+- Includes a full mapping of all ISO country codes to names.
+- Enqueues a frontend JS file to update select fields in real time.
+
+### 2.0.0
+* Modular admin, gated debug logging, verification fetch after updates, stable ACF/Ninja Forms gating
+
+### 1.4.x Series (Summary)
+* Universal gated content integration; always-create sales lead
+* Enhanced AOI/TOI mapping & employer sync improvements
+* Dynamic ACF question extraction & sponsor opt-in handling
+* Performance & caching refinements for employer lookup
+
+## Support
+* Website: https://www.supersonicplayground.com  
+* Developer: Levon Gravett  
+
+## License
+Proprietary software developed by Supersonic Playground for DTR (Drug Target Review). All rights reserved.
 
 ---
 
@@ -25,16 +275,16 @@ This solution eliminates manual form editing, synchronizes CRM data in real-time
 ### 📝 **Gated Content Enhancements & Microanimation Additions**
 
 - **🔐 Enhanced Gated Content**: 
-  - Dynamic gated content generation based on post type.
-  - Streamlined content access tied to CRM campaign tracking.
+- Dynamic gated content generation based on post type.
+- Streamlined content access tied to CRM campaign tracking.
 
 - **🎨 User Interface Enhancements**: 
-  - Smooth button animations and micro-interactions.
-  - Improved content presentation for gated resources.
+- Smooth button animations and micro-interactions.
+- Improved content presentation for gated resources.
 
 - **👤 Account Management**: 
-  - Customizable dashboards for users to manage their profiles and preferences.
-  - Full integration of CRM-linked user data within WordPress accounts.
+ -Customizable dashboards for users to manage their profiles and preferences.
+- Full integration of CRM-linked user data within WordPress accounts.
 
 
 ### 🥷 **Advanced Ninja Forms & ACF-Powered Gated Content Integration**
@@ -415,7 +665,7 @@ wp_workbooks_employers
 dtr-workbooks-crm-integration/
 ├── dtr-workbooks-crm-integration.php (Main plugin file)
 ├── includes/
-│   ├── nf-user-register.php (Ninja Forms handler)
+│   ├── ninja-forms-membership-registration.php (Membership registration handler - Form 15)
 │   ├── ninja-forms-simple-hook.php (New Ninja Forms handler)
 │   ├── helper-functions.php (TOI/AOI mapping)
 │   ├── dtr-shortcodes.php (Shortcode functionality)
@@ -571,32 +821,98 @@ add_action('wp_ajax_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
 - **Prototype Person Creation**: Added basic form for creating a Workbooks person from WordPress.
 - **Early Error Handling**: Logged API success/failure to a basic debug file.
 
+### Major Updates (2025)
+- **AJAX-powered My Account Details**: The my-account details form now uses AJAX for instant feedback and animated button states, matching the UX of other shortcodes.
+- **Centralized AOI/TOI Mapping**: All mapping logic is now in `class-helper-functions.php` and used consistently across registration, shortcodes, and user update flows.
+- **UI Consistency**: All update buttons use `<input type="submit">` and have consistent animation and feedback.
+- **Email Address in Account Table**: The account details table now displays the user's email address (not editable).
+- **Robust Duplicate Detection**: Improved duplicate detection for both WordPress and Workbooks CRM, with exact email match checks.
+- **Improved Logging**: Enhanced debug and operational logging, with logs gated by debug mode and archived on disable.
+- **Employer Sync**: Daily and manual sync of employer data, with Select2 endpoint and JSON fallback.
+- **Dynamic Gated Content**: Forms for gated content are generated from ACF field groups, requiring no manual edits for new fields.
+- **Ninja Forms - Full Country Names Plugin**: Adds full country name support to Ninja Forms country fields and any select with the class `full-iso-country-names` (see below).
+
 ---
 
-## Support & Documentation
+## Plugin Folder Structure (excluding `archive/`)
 
-### Debugging
-Enable WordPress debugging and check the following log files:
-- `/wp-content/debug.log` - WordPress debug log
-- `/wp-content/plugins/dtr-workbooks-crm-integration/logs/` - Plugin-specific logs
-- `/wp-content/plugins/dtr-workbooks-crm-integration/includes/register-debug.log` - Registration debug log
+```
+dtr-workbooks-crm-integration/
+├── dtr-workbooks-crm-integration.php
+├── includes/
+│   ├── class-acf-ninjaforms-merge.php
+│   ├── class-array-merge-safety.php
+│   ├── class-employer-sync.php
+│   ├── class-form-submission-override.php
+│   ├── class-helper-functions.php
+│   ├── class-loader.php
+│   ├── core/
+│   ├── form-handler-gated-content-reveal.php
+│   ├── form-handler-media-planner.php
+│   ├── form-handler-membership-registration.php
+│   ├── form-handler-webinars.php
+│   ├── form-submission-processors-ninjaform-hooks.php
+│   └── form-submission-processors-submission-fix.php
+├── shortcodes/
+│   ├── dtr-forgot-password.php
+│   ├── dtr-my-account-details.php
+│   └── dtr-shortcodes.php
+├── js/
+├── assets/
+│   └── json/
+│       └── employers.json
+├── logs/
+├── lib/
+│   └── workbooks_api.php
+├── scripts/
+│   ├── setup.sh
+│   ├── deploy.sh
+│   ├── post-commit-sync.sh
+│   ├── config.example.sh
+│   └── README.md
+```
 
-### Common Issues
-1. **API Connection Failures**: Verify API credentials and network connectivity
-2. **Field Mapping Issues**: Check field naming conventions in forms and ACF
-3. **Duplicate Records**: Review email-based duplicate detection logic
-4. **Employer Sync Problems**: Ensure sufficient memory and execution time
+ninjafoms-full-country-names/
+├── ninjafoms-full-country-names.php
+├── nf-full-country-names.js
 
-### Support
-For technical support and customization requests:
-- **Website**: [https://www.supersonicplayground.com](https://www.supersonicplayground.com)
-- **Email**: Contact through the website
-- **Developer**: Levon Gravett
-- **Documentation**: Refer to inline code comments and debug logs
+---
+
+## Custom Plugin: Ninja Forms - Full Country Names
+
+**Plugin Name:** Ninja Forms - Full Country Names  
+**Description:** Applies full country names to Ninja Forms country fields (both frontend and backend), and any select field with a class of 'full-iso-country-names'. Works with Ninja Forms 3.0+.
+
+### Features
+- Replaces ISO 3166-1 alpha-2 country codes with full country names in Ninja Forms submissions and emails.
+- Works for both default Ninja Forms country fields and any select with the class `full-iso-country-names`.
+- Includes a full mapping of all ISO country codes to names.
+- Enqueues a frontend JS file to update select fields in real time.
+
+### File Structure
+```
+ninjafoms-full-country-names/
+├── ninjafoms-full-country-names.php
+├── nf-full-country-names.js
+```
+
+---
+
+## How to Use
+1. Upload both plugin folders to `/wp-content/plugins/`.
+2. Activate via the WordPress admin.
+3. Configure Workbooks CRM settings in the admin panel.
+4. For full country names in Ninja Forms, use a country field or a select with the class `full-iso-country-names`.
+
+---
+
+## For Developers
+- See each plugin's main PHP file for hooks, filters, and integration points.
+- All mapping logic for AOI/TOI is in `class-helper-functions.php`.
+- AJAX handlers for account and preference updates are in the main plugin and shortcodes.
+- Debug logs are in `/logs/` and `/admin/` (when debug mode is enabled).
 
 ---
 
 ## License
-
-This plugin is proprietary software developed by Supersonic Playground for DTR (Drug Target Review) and Levon Gravett.  
-All rights reserved.
+Proprietary software developed by Supersonic Playground for DTR (Drug Target Review). All rights reserved.

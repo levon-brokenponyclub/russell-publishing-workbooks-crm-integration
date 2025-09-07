@@ -1,2612 +1,2795 @@
 <?php
 /**
- * Plugin Name: DTR - Workbooks CRM API Integration
- * Description: Connects WordPress to DTR Workbooks CRM
- * Version: 1.4.7
- * Author: Supersonic Playground
+ * Plugin Name: DTR Workbooks CRM Integration
+ * Description: Enhanced WordPress plugin for DTR Workbooks CRM integration with comprehensive form handling, user registration, and lead management.
+ * Version: 2.0.0
+ * Author: SuperSonic Playground
  * Author URI: https://www.supersonicplayground.com
- * Text Domain: dtr-workbooks-crm-integration
+ * License: GPL v2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: dtr-workbooks
+ * Domain Path: /languages
+ * Requires at least: 5.0
+ * Tested up to: 6.3
+ * Requires PHP: 7.4
+ * Network: false
+ *
+ * @package DTR/WorkbooksIntegration
+ * @since 1.0.0
  */
 
-if (!defined('ABSPATH')) exit;
-
-// Debug: Plugin is loading
-error_log('DTR Workbooks Plugin Loading - File: ' . __FILE__);
-// Define plugin base path constant
-if (!defined('WORKBOOKS_NF_PATH')) {
-    define('WORKBOOKS_NF_PATH', plugin_dir_path(__FILE__));
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit('Direct access not permitted.');
 }
 
-// Include Workbooks API file safely
-if (file_exists(WORKBOOKS_NF_PATH . 'lib/workbooks_api.php')) {
-    require_once WORKBOOKS_NF_PATH . 'lib/workbooks_api.php';
+// Plugin constants
+// Bumped to 2.0.1 for cache-busting updated employer field script
+define('DTR_WORKBOOKS_VERSION', '2.0.1');
+define('DTR_WORKBOOKS_PLUGIN_FILE', __FILE__);
+define('DTR_WORKBOOKS_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('DTR_WORKBOOKS_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('DTR_WORKBOOKS_INCLUDES_DIR', DTR_WORKBOOKS_PLUGIN_DIR . 'includes/');
+define('DTR_WORKBOOKS_SHORTCODES_DIR', DTR_WORKBOOKS_PLUGIN_DIR . 'shortcodes/');
+define('DTR_WORKBOOKS_ASSETS_URL', DTR_WORKBOOKS_PLUGIN_URL . 'assets/');
+define('DTR_WORKBOOKS_LOG_DIR', DTR_WORKBOOKS_PLUGIN_DIR . 'logs/');
+
+// Include Workbooks API if available
+$workbooks_api = DTR_WORKBOOKS_PLUGIN_DIR . 'lib/workbooks_api.php';
+if (file_exists($workbooks_api)) {
+    require_once $workbooks_api;
 } else {
-    error_log('Workbooks API file not found at ' . WORKBOOKS_NF_PATH . 'lib/workbooks_api.php');
+    error_log('[DTR Workbooks] Workbooks API file not found: ' . $workbooks_api);
 }
 
-// Include helper functions first
-if (file_exists(WORKBOOKS_NF_PATH . 'includes/helper-functions.php')) {
-    require_once WORKBOOKS_NF_PATH . 'includes/helper-functions.php';
+// Include helper functions (canonical file only)
+$helper_class  = DTR_WORKBOOKS_INCLUDES_DIR . 'class-helper-functions.php';
+if (file_exists($helper_class)) {
+    require_once $helper_class;
+} else {
+    error_log('[DTR Workbooks] Helper functions file missing: ' . $helper_class);
 }
 
-// Include user meta fields
-if (file_exists(WORKBOOKS_NF_PATH . 'includes/dtr-shortcodes.php')) {
-    require_once WORKBOOKS_NF_PATH . 'includes/dtr-shortcodes.php';
-}
-
-// Include user meta fields
-if (file_exists(WORKBOOKS_NF_PATH . 'includes/user-meta-fields.php')) {
-    require_once WORKBOOKS_NF_PATH . 'includes/user-meta-fields.php';
-}
-
-// Include employer sync functionality
-if (file_exists(WORKBOOKS_NF_PATH . 'includes/workbooks-employer-sync.php')) {
-    require_once WORKBOOKS_NF_PATH . 'includes/workbooks-employer-sync.php';
-}
-
-// Include Ninja Forms country converter
-if (file_exists(WORKBOOKS_NF_PATH . 'includes/nf-country-converter.php')) {
-    require_once WORKBOOKS_NF_PATH . 'includes/nf-country-converter.php';
-}
-
-// Convert Ninja Forms country codes to full names before submission
-add_filter('ninja_forms_submit_data', function($form_data) {
-
-    $target_form_id = 15;              // Your form ID
-    $target_field_key = 'nf-field-148'; // Confirmed Country field ID
-
-    if (intval($form_data['id']) !== $target_form_id) {
-        return $form_data;
-    }
-
-    foreach ($form_data['fields'] as &$field) {
-        if (isset($field['key']) && $field['key'] === $target_field_key) {
-            $field['value'] = dtr_convert_country_code_to_name($field['value']);
+// Early define core logging helper so it exists before any init hooks fire
+if (!function_exists('dtr_custom_log')) {
+    function dtr_custom_log($message, $level = 'info') {
+        // Ensure log directory constant exists
+        if (!defined('DTR_WORKBOOKS_LOG_DIR')) return; // safety
+        $log_dir = DTR_WORKBOOKS_LOG_DIR;
+        if (!is_dir($log_dir)) {
+            // Attempt to create directory quietly
+            @wp_mkdir_p($log_dir);
         }
+        $date = date('Y-m-d');
+        $file = $log_dir . 'dtr-workbooks-' . $date . '.log';
+        $entry = '[' . date('Y-m-d H:i:s') . "] [$level] " . (is_scalar($message) ? $message : print_r($message, true)) . "\n";
+        @file_put_contents($file, $entry, FILE_APPEND);
     }
-
-    return $form_data;
-});
-
-// Debug logs for country selection in Ninja Forms frontend
-add_action('wp_footer', function() {
-    ?>
-    <script>
-    (function() {
-        let lastSelectedCountryLabel = '';
-
-        // Capture country dropdown changes by HTML ID
-        document.addEventListener('change', function(e) {
-            if (e.target && e.target.id === 'nf-field-148') { // Use the select element ID
-                lastSelectedCountryLabel = e.target.options[e.target.selectedIndex]?.text || '';
-                console.log('Country dropdown changed: ' + lastSelectedCountryLabel);
-            }
-        });
-
-        // Capture value at form submission
-        document.addEventListener('nfFormSubmitResponse', function(e) {
-            const field = Array.from(e.detail.formData.fields)
-                               .find(f => f.id === 'nf-field-148'); // Use ID match if needed
-            const label = lastSelectedCountryLabel || '- No country selected -';
-            const value = field ? field.value : '- Empty value submitted -';
-            console.log('Form submitted - Selected Country: ' + label + ' | Submitted value: ' + value);
-        });
-    })();
-    </script>
-    <?php
-});
-
-
-
-// Include Ninja Forms Webinar Handlder
-if (file_exists(WORKBOOKS_NF_PATH . 'includes/webinar-handler.php')) {
-    require_once WORKBOOKS_NF_PATH . 'includes/webinar-handler.php';
 }
 
-// Load Ninja Forms ACF questions handler
-if (file_exists(WORKBOOKS_NF_PATH . 'includes/acf-ninjaforms-questions.php')) {
-    require_once WORKBOOKS_NF_PATH . 'includes/acf-ninjaforms-questions.php';
-}
+// Include core functionality files
+$shortcode_files = [
+    'dtr-shortcodes.php',           // User preference management shortcodes
+    'dtr-my-account-details.php',   // Account management functionality
+    'dtr-forgot-password.php',      // Password recovery handling
+];
 
-// Load AJAX handler for Media Planner Test Form
-if (file_exists(WORKBOOKS_NF_PATH . 'includes/media-planner-ajax-handler.php')) {
-    require_once WORKBOOKS_NF_PATH . 'includes/media-planner-ajax-handler.php';
-}
-
-// Include media planner form
-if (file_exists(WORKBOOKS_NF_PATH . 'includes/media-planner-form.php')) {
-    require_once WORKBOOKS_NF_PATH . 'includes/media-planner-form.php';
-    error_log('Media Planner form included');
-} else {
-    error_log('Media Planner form NOT found at ' . WORKBOOKS_NF_PATH . 'includes/media-planner-form.php');
-}
-
-// Register Ninja Forms submission handler for Media Planner
-if (class_exists('DTR_Media_Planner_Handler')) {
-    add_action('ninja_forms_after_submission', ['DTR_Media_Planner_Handler', 'handle_form_submission'], 10, 1);
-    error_log('Media Planner Ninja Forms handler registered');
-} else {
-    error_log('DTR_Media_Planner_Handler class NOT found');
-}
-
-// Load AJAX handlers for gated content
-require_once WORKBOOKS_NF_PATH . 'admin/gated-content-ajax.php';
-
-// Get WorkbooksApi instance (API Key only)
-function get_workbooks_instance() {
-    $params = [
-        'application_name' => 'wp_workbooks_plugin',
-        'user_agent' => 'wp_workbooks_plugin/1.0',
-        'api_key' => get_option('workbooks_api_key'),
-        'service' => get_option('workbooks_api_url'),
-        'json_utf8_encoding' => true,
-        'request_timeout' => 30,
-        'verify_peer' => false,
-    ];
-    if ($logical_db = get_option('workbooks_logical_database_id')) {
-        $params['logical_database_id'] = $logical_db;
-    }
-    return new WorkbooksApi($params);
-}
-
-// Create database tables on activation
-register_activation_hook(__FILE__, 'workbooks_crm_create_tables');
-function workbooks_crm_create_tables() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'workbooks_employers';
-    $charset_collate = $wpdb->get_charset_collate();
-    
-    $sql = "CREATE TABLE $table_name (
-        id bigint(20) NOT NULL,
-        name varchar(255) NOT NULL,
-        last_updated datetime DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY  (id),
-        KEY name (name)
-    ) $charset_collate;";
-    
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    dbDelta($sql);
-}
-
-add_action('wp_enqueue_scripts', function() {
-    wp_enqueue_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
-    wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', ['jquery'], null, true);
-
-    wp_enqueue_script(
-        'workbooks-ninjaform-employers',
-        plugin_dir_url(__FILE__) . 'js/ninjaform-employers-field.js',
-        ['jquery', 'select2'],
-        null,
-        true
-    );
-
-    wp_localize_script('workbooks-ninjaform-employers', 'workbooks_ajax', [
-        'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce'    => wp_create_nonce('workbooks_nonce'),
-        'plugin_url' => plugin_dir_url(__FILE__)
-    ]);
-
-});
-
-// Enqueue custom JS for Ninja Form registration fields (Title, Marketing, Interests)
-// Only enqueue employer field JS (keep as before)
-add_action('wp_enqueue_scripts', function() {
-    wp_enqueue_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
-    wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', ['jquery'], null, true);
-    wp_enqueue_script(
-        'workbooks-ninjaform-employers',
-        plugin_dir_url(__FILE__) . 'js/ninjaform-employers-field.js',
-        ['jquery', 'select2'],
-        null,
-        true
-    );
-    wp_localize_script('workbooks-ninjaform-employers', 'workbooks_ajax', [
-        'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce'    => wp_create_nonce('workbooks_nonce'),
-        'plugin_url' => plugin_dir_url(__FILE__)
-    ]);
-});
-// Enqueue custom JS for copying ACF questions into Ninja Forms (placed at the end for clarity)
-/* add_action('wp_enqueue_scripts', function() {
-    wp_enqueue_script(
-        'acf-form-questions',
-        plugin_dir_url(__FILE__) . 'js/acf-form-questions.js',
-        [],
-        null,
-        true
-    );
-}, 30); */
-
-// AJAX handler for dynamic Workbooks titles
-add_action('wp_ajax_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
-add_action('wp_ajax_nopriv_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
-function dtr_ajax_get_workbooks_titles() {
-    if (!function_exists('workbooks_crm_get_personal_titles')) {
-        require_once __DIR__ . '/includes/helper-functions.php';
-    }
-    $titles = function_exists('workbooks_crm_get_personal_titles') ? array_values(workbooks_crm_get_personal_titles()) : [];
-    wp_send_json_success($titles);
-}
-// (Reverted) No Ninja Forms submission payload adjustment
-
-// Add admin menu page with gated content submenus
-add_action('admin_menu', function() {
-    // Top-level menu
-    add_menu_page(
-        'Workbooks CRM Settings',
-        'Workbooks CRM',
-        'manage_options',
-        'workbooks-crm-settings',
-        'workbooks_crm_settings_page',
-        'dashicons-admin-network',
-        25
-    );
-});
-
-// Enqueue admin scripts and styles for AJAX and UI (only on workbooks pages)
-add_action('admin_enqueue_scripts', function($hook) {
-    // Only include top-level and Gated Content admin pages
-    $workbooks_pages = [
-        'toplevel_page_workbooks-crm-settings',
-        'workbooks-crm_page_workbooks-gated-content'
-    ];
-    if (!in_array($hook, $workbooks_pages)) return;
-    
-    // Enqueue admin CSS
-    wp_enqueue_style('workbooks-admin-css', plugin_dir_url(__FILE__) . 'assets/admin.css', [], null);
-    
-    // Enqueue admin JS from js folder
-    wp_enqueue_script('workbooks-admin-js', plugin_dir_url(__FILE__) . 'js/admin.js', ['jquery'], null, true);
-    wp_localize_script('workbooks-admin-js', 'workbooks_ajax', [
-        'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('workbooks_nonce'),
-        'plugin_url' => plugin_dir_url(__FILE__)
-    ]);
-    
-    // Create single nonce for all AJAX calls
-    $ajax_nonce = wp_create_nonce('workbooks_nonce');
-
-    // Enqueue and localize webinar-endpoint.js for this page
-    wp_enqueue_script('workbooks-webinar-endpoint-js', plugin_dir_url(__FILE__) . 'js/webinar-endpoint.js', ['jquery'], null, true);
-    wp_localize_script('workbooks-webinar-endpoint-js', 'workbooks_ajax', [
-        'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce' => $ajax_nonce
-    ]);
-    
-    wp_enqueue_script('employers-sync', plugin_dir_url(__FILE__) . 'js/employers-sync.js', ['jquery'], null, true);
-    wp_localize_script('employers-sync', 'workbooks_ajax', [
-        'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce' => $ajax_nonce
-    ]);
-
-// Enqueue frontend scripts for webinar forms
-add_action('wp_enqueue_scripts', function() {
-    // Temporarily load on all pages to test - we'll restrict this later
-    error_log('🚀 DTR FRONTEND SCRIPTS: wp_enqueue_scripts hook fired at ' . date('Y-m-d H:i:s'));
-    
-    // Enqueue webinar endpoint script on frontend
-    wp_enqueue_script('workbooks-webinar-endpoint-js', plugin_dir_url(__FILE__) . 'js/webinar-endpoint.js', ['jquery'], time(), true);
-    wp_localize_script('workbooks-webinar-endpoint-js', 'workbooks_ajax', [
-        'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('workbooks_nonce')
-    ]);
-    
-    error_log('🎯 DTR WEBINAR SCRIPT: Enqueued with URL: ' . plugin_dir_url(__FILE__) . 'js/webinar-endpoint.js');
-}, 20);
-
-// Fallback: Force script inclusion in footer if enqueue doesn't work
-add_action('wp_footer', function() {
-    error_log('🦶 DTR FOOTER: wp_footer hook fired at ' . date('Y-m-d H:i:s'));
-    if (!wp_script_is('workbooks-webinar-endpoint-js', 'enqueued')) {
-        error_log('❌ DTR FALLBACK: Script not enqueued, adding manually to footer');
-        echo '<script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/webinar-endpoint.js?ver=' . time() . '"></script>';
-        echo '<script type="text/javascript">
-        var workbooks_ajax = {
-            ajax_url: "' . admin_url('admin-ajax.php') . '",
-            nonce: "' . wp_create_nonce('workbooks_nonce') . '"
-        };
-        </script>';
+foreach ($shortcode_files as $file) {
+    $file_path = DTR_WORKBOOKS_SHORTCODES_DIR . $file;
+    if (file_exists($file_path)) {
+        require_once $file_path;
     } else {
-        error_log('✅ DTR SUCCESS: Script properly enqueued');
+        error_log('[DTR Workbooks] Shortcode file not found: ' . $file_path);
     }
-}, 99);
-
-// AJAX handler for fetching webinar ACF data
-add_action('wp_ajax_fetch_webinar_acf_data', 'dtr_ajax_fetch_webinar_acf_data');
-add_action('wp_ajax_nopriv_fetch_webinar_acf_data', 'dtr_ajax_fetch_webinar_acf_data');
-add_action('wp_ajax_fetch_leadgen_acf_data', 'dtr_ajax_fetch_leadgen_acf_data');
-add_action('wp_ajax_nopriv_fetch_leadgen_acf_data', 'dtr_ajax_fetch_leadgen_acf_data');
-
-// Debug: AJAX actions registered
-error_log('DTR AJAX actions registered for fetch_leadgen_acf_data');
-
-// Test function to ensure AJAX is working
-add_action('wp_ajax_test_leadgen_ajax', 'dtr_test_leadgen_ajax');
-add_action('wp_ajax_nopriv_test_leadgen_ajax', 'dtr_test_leadgen_ajax');
-
-function dtr_test_leadgen_ajax() {
-    error_log('=== dtr_test_leadgen_ajax CALLED ===');
-    echo 'AJAX TEST SUCCESS';
-    wp_die(); // Use wp_die() instead of wp_send_json_success() for testing
-}
-function dtr_ajax_fetch_webinar_acf_data() {
-    check_ajax_referer('workbooks_nonce', 'nonce');
-    $post_id = intval($_POST['post_id'] ?? 0);
-    if (!$post_id) {
-        wp_send_json_error('Invalid post ID');
-        return;
-    }
-    $post = get_post($post_id);
-    if (!$post || $post->post_type !== 'webinars') {
-        wp_send_json_error('Webinar not found');
-        return;
-    }
-    $workbooks_reference = get_field('workbooks_webinar_reference', $post_id) ?: get_post_meta($post_id, 'workbooks_webinar_reference', true);
-    $campaign_reference = get_field('campaign_reference', $post_id) ?: get_post_meta($post_id, 'campaign_reference', true);
-    wp_send_json_success([
-        'workbooks_reference' => $workbooks_reference,
-        'campaign_reference' => $campaign_reference
-    ]);
 }
 
-function dtr_ajax_fetch_leadgen_acf_data() {
-    // IMMEDIATE debug logging
-    error_log('=== dtr_ajax_fetch_leadgen_acf_data CALLED ===');
-    error_log('POST data: ' . print_r($_POST, true));
+/**
+ * Main DTR Workbooks Integration Class
+ */
+class DTR_Workbooks_Integration {
     
-    // Simple debug logging to WordPress debug log
-    error_log('dtr_ajax_fetch_leadgen_acf_data called');
-    error_log('POST data: ' . print_r($_POST, true));
+    /**
+     * Plugin instance
+     *
+     * @var DTR_Workbooks_Integration
+     */
+    private static $instance = null;
     
-    // Create logs directory if it doesn't exist
-    $log_dir = plugin_dir_path(__FILE__) . 'logs';
-    if (!file_exists($log_dir)) {
-        wp_mkdir_p($log_dir);
-    }
-    $log_file = $log_dir . '/admin-lead-gen-debug.log';
+    /**
+     * Plugin options
+     *
+     * @var array
+     */
+    private $options = [];
     
-    // Custom logging function
-    $log_debug = function($message) use ($log_file) {
-        $timestamp = date('Y-m-d H:i:s');
-        $log_entry = "[$timestamp] $message" . PHP_EOL;
-        file_put_contents($log_file, $log_entry, FILE_APPEND | LOCK_EX);
-    };
+    /**
+     * Debug mode status
+     *
+     * @var bool
+     */
+    private $debug_mode = false;
     
-    // Add debug logging
-    $log_debug('dtr_ajax_fetch_leadgen_acf_data called with: ' . print_r($_POST, true));
+    /**
+     * Missing dependencies
+     *
+     * @var array
+     */
+    private $missing_dependencies = [];
     
-    // Simplified nonce check - try to make it more permissive
-    $nonce_valid = false;
-    if (isset($_POST['nonce'])) {
-        $nonce_valid = wp_verify_nonce($_POST['nonce'], 'workbooks_nonce');
-        $log_debug('Nonce check result: ' . ($nonce_valid ? 'VALID' : 'INVALID'));
-        $log_debug('Provided nonce: ' . $_POST['nonce']);
-        $log_debug('Expected nonce action: workbooks_nonce');
-    } else {
-        $log_debug('No nonce provided');
-    }
-    
-    // Continue even if nonce fails for debugging
-    if (!$nonce_valid) {
-        $log_debug('Nonce verification failed but continuing for debug');
-        // Don't return early, continue for debugging
-    }
-    
-    $post_id = intval($_POST['post_id'] ?? 0);
-    if (!$post_id) {
-        $log_debug('Invalid post ID provided: ' . ($post_id ?: 'empty'));
-        wp_send_json_error('Invalid post ID');
-        return;
-    }
-    $post = get_post($post_id);
-    if (!$post) {
-        $log_debug('Post not found for ID: ' . $post_id);
-        wp_send_json_error('Content not found');
-        return;
+    /**
+     * Get plugin instance
+     *
+     * @return DTR_Workbooks_Integration
+     */
+    public static function get_instance() {
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
     
-    // Check if this is a valid lead gen content type
-    $valid_types = ['post', 'publications', 'whitepapers'];
-    if (!in_array($post->post_type, $valid_types)) {
-        $log_debug('Invalid content type for lead generation: ' . $post->post_type);
-        wp_send_json_error('Invalid content type for lead generation');
-        return;
+    /**
+     * Constructor
+     */
+    private function __construct() {
+        $this->init();
     }
     
-    // Fetch ACF fields - check if gated content field group is active first
-    $workbooks_reference = '';
-    $campaign_reference = '';
-    
-    $log_debug("Checking ACF field groups for post $post_id");
-    
-    // Check if ACF is available
-    if (!function_exists('get_field')) {
-        $log_debug('ACF get_field function not available');
-        wp_send_json_error('ACF plugin not available');
-        return;
-    }
-    
-    // First, let's see what ACF fields are actually available for this post
-    $all_acf_fields = get_fields($post_id);
-    $log_debug('All ACF fields for post: ' . print_r($all_acf_fields, true));
-    
-    // Check if this post has the "Gated Content" field group and if restrict_post is enabled
-    $restrict_post = get_field('restrict_post', $post_id);
-    $log_debug("Restrict post setting: " . ($restrict_post ? 'true' : 'false'));
-    
-    $has_gated_content = false;
-    
-    if ($restrict_post) {
-        // Access the nested restricted_content_fields group
-        $restricted_content_fields = get_field('restricted_content_fields', $post_id);
-        $log_debug('Restricted content fields: ' . print_r($restricted_content_fields, true));
+    /**
+     * Initialize plugin
+     *
+     * @return void
+     */
+    private function init() {
+        // Load options
+        $this->options = get_option('dtr_workbooks_options', []);
+        $this->debug_mode = !empty($this->options['debug_mode']);
         
-        if (is_array($restricted_content_fields)) {
-            $has_gated_content = true;
+        // Add text domain loading at the right time
+        add_action('init', function() {
+            // Load plugin text domains in the correct order
+            load_plugin_textdomain('dtr-workbooks', false, dirname(plugin_basename(__FILE__)) . '/languages');
             
-            // Extract reference and campaign_reference from the nested group
-            if (isset($restricted_content_fields['reference'])) {
-                $workbooks_reference = $restricted_content_fields['reference'];
-                $log_debug("Found workbooks reference '$workbooks_reference' in restricted_content_fields.reference");
+            if (defined('NINJA_FORMS_DIR_PATH')) {
+                load_plugin_textdomain('ninja-forms', false, basename(NINJA_FORMS_DIR_PATH) . '/languages');
             }
             
-            if (isset($restricted_content_fields['campaign_reference'])) {
-                $campaign_reference = $restricted_content_fields['campaign_reference'];
-                $log_debug("Found campaign reference '$campaign_reference' in restricted_content_fields.campaign_reference");
+            if (defined('ACF_PATH')) {
+                load_plugin_textdomain('acf', false, basename(ACF_PATH) . '/languages');
             }
-        } else {
-            $log_debug('Restricted content fields group is not an array or is empty');
-        }
-    } else {
-        $log_debug('Restrict post is not enabled - checking for legacy field structure');
+        }, 1);
         
-        // Fallback: Check for legacy field structure (direct fields)
-        $workbooks_ref_fields = [
-            'workbooks_event_reference',
-            'workbooks_reference', 
-            'event_reference',
-            'reference',
-            'gated_content_workbooks_reference',
-            'gated_content_event_reference'
-        ];
+        // Add Ninja Forms submission data filter
+        add_filter('ninja_forms_submit_data', [$this, 'prepare_ninja_forms_submission'], 10, 1);
         
-        foreach ($workbooks_ref_fields as $field_name) {
-            $value = '';
-            // Try ACF first if available
-            if (function_exists('get_field')) {
-                $value = get_field($field_name, $post_id);
-            }
-            // Fallback to post meta
-            if (!$value) {
-                $value = get_post_meta($post_id, $field_name, true);
-            }
-            if ($value) {
-                $workbooks_reference = $value;
-                $has_gated_content = true;
-                $log_debug("Found workbooks reference '$value' in legacy field '$field_name' for post $post_id");
-                break;
-            }
-        }
+        // Fix for array merge issues in Ninja Forms
+        add_filter('ninja_forms_submission_array_merge', [$this, 'fix_array_merge'], 10, 2);
         
-        // Try common field names for Campaign reference
-        $campaign_ref_fields = [
-            'campaign_reference',
-            'campaign_ref',
-            'workbooks_campaign_reference',
-            'gated_content_campaign_reference',
-            'gated_content_campaign_ref'
-        ];
+        // Register hooks
+        register_activation_hook(__FILE__, [$this, 'activate']);
+        register_deactivation_hook(__FILE__, [$this, 'deactivate']);
+        register_uninstall_hook(__FILE__, [__CLASS__, 'uninstall']);
         
-        foreach ($campaign_ref_fields as $field_name) {
-            $value = '';
-            // Try ACF first
-            $value = get_field($field_name, $post_id);
-            // Fallback to post meta
-            if (!$value) {
-                $value = get_post_meta($post_id, $field_name, true);
-            }
-            if ($value) {
-                $campaign_reference = $value;
-                $log_debug("Found campaign reference '$value' in legacy field '$field_name' for post $post_id");
-                break;
-            }
+        // Initialize plugin components
+        add_action('plugins_loaded', [$this, 'load_plugin_components']);
+        add_action('init', [$this, 'init_plugin']);
+        add_action('admin_init', [$this, 'admin_init']);
+        add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
+        add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_scripts']);
+        
+        // Add admin menu
+        add_action('admin_menu', [$this, 'add_admin_menu']);
+        
+        // AJAX handlers
+        add_action('wp_ajax_sspg_test_workbooks_connection', [$this, 'test_workbooks_connection']);
+        add_action('wp_ajax_dtr_clear_logs', [$this, 'clear_logs']);
+        add_action('wp_ajax_dtr_export_logs', [$this, 'export_logs']);
+        add_action('wp_ajax_dtr_sync_test', [$this, 'sync_test']);
+        add_action('wp_ajax_dtr_retry_submission', [$this, 'retry_submission']);
+        add_action('wp_ajax_dtr_get_submission_details', [$this, 'get_submission_details']);
+    // Legacy genomics key cleanup (cf_person_genomics_3744 -> cf_person_genomics_3774)
+    add_action('wp_ajax_dtr_cleanup_genomics_meta', [$this, 'cleanup_genomics_meta']);
+        
+        // Custom logging
+        add_action('init', [$this, 'setup_custom_logging']);
+        
+        // Scheduled events
+        add_action('dtr_workbooks_cleanup', [$this, 'cleanup_old_logs']);
+        
+        // Initialize cleanup schedule
+        if (!wp_next_scheduled('dtr_workbooks_cleanup')) {
+            wp_schedule_event(time(), 'daily', 'dtr_workbooks_cleanup');
         }
     }
     
-    if (!$has_gated_content) {
-        $log_debug('No gated content fields found - ACF field group may not be active or restrict_post may be disabled');
-    }
-    
-    $log_debug("Final results - Workbooks reference: '$workbooks_reference', Campaign reference: '$campaign_reference'");
-    
-    // Let's also check the raw post meta to see what's actually stored
-    $all_post_meta = get_post_meta($post_id);
-    $log_debug('All post meta for this post: ' . print_r($all_post_meta, true));
-    
-    $response_data = [
-        'workbooks_reference' => $workbooks_reference ?: 'Not set',
-        'campaign_reference' => $campaign_reference ?: 'Not set',
-        'post_type' => $post->post_type,
-        'post_title' => $post->post_title,
-        'has_gated_content' => $has_gated_content,
-        'restrict_post' => $restrict_post,
-        'all_acf_fields' => $all_acf_fields,
-        'debug_info' => [
-            'acf_available' => function_exists('get_field'),
-            'gated_content_approach' => $restrict_post ? 'nested_conditional' : 'legacy_direct'
-        ]
-    ];
-    
-    $log_debug('Sending response: ' . print_r($response_data, true));
-    wp_send_json_success($response_data);
-}
+    /**
+     * Load plugin components
+     *
+     * @return void
+     */
+    public function load_plugin_components() {
+        // Always load employer sync endpoints early so public AJAX (ping, select2) works even if other deps missing
+    $employer_sync_path = DTR_WORKBOOKS_INCLUDES_DIR . 'class-employer-sync.php';
+        if (file_exists($employer_sync_path)) {
+            require_once $employer_sync_path; // safe to include twice later via load_includes (require_once)
+        }
 
-// AJAX handler for fetching Workbooks event details
-add_action('wp_ajax_fetch_workbooks_event', 'dtr_ajax_fetch_workbooks_event');
-add_action('wp_ajax_nopriv_fetch_workbooks_event', 'dtr_ajax_fetch_workbooks_event');
-add_action('wp_ajax_list_workbooks_events', 'dtr_ajax_list_workbooks_events');
-add_action('wp_ajax_nopriv_list_workbooks_events', 'dtr_ajax_list_workbooks_events');
-add_action('wp_ajax_submit_leadgen_form', 'dtr_ajax_submit_leadgen_form');
-add_action('wp_ajax_nopriv_submit_leadgen_form', 'dtr_ajax_submit_leadgen_form');
-function dtr_ajax_fetch_workbooks_event() {
-    check_ajax_referer('workbooks_nonce', 'nonce');
-    $event_ref = sanitize_text_field($_POST['event_ref'] ?? '');
-    if (!$event_ref) {
-        wp_send_json_error('Event reference is required');
-        return;
+        // Check dependencies (Ninja Forms / ACF) for the rest of the plugin
+        if (!$this->check_dependencies()) {
+            // Still provide notice in admin but keep lightweight endpoints active
+            add_action('admin_notices', [$this, 'dependency_notice']);
+            return; // Do not load heavy form handlers if deps missing
+        }
+
+        // Load required files (now that dependencies satisfied)
+        $this->load_includes();
+
+        // Initialize integrations
+        $this->init_integrations();
     }
-    $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
-    if (!$workbooks) {
-        wp_send_json_error('Workbooks API not available');
-        return;
-    }
-    try {
-        $filter_field = is_numeric($event_ref) ? 'id' : 'object_ref';
-        // Fetch the event with all columns
-        $event_result = $workbooks->assertGet('crm/events.api', [
-            '_start' => 0,
-            '_limit' => 1,
-            '_ff[]' => $filter_field,
-            '_ft[]' => 'eq',
-            '_fc[]' => $event_ref,
-            '_select_columns[]' => '*', // all columns
-        ]);
+    
+    /**
+     * Check plugin dependencies
+     *
+     * @return bool
+     */
+    private function check_dependencies() {
+        $dependencies = [
+            'ninja-forms/ninja-forms.php' => 'Ninja Forms',
+            'advanced-custom-fields/acf.php' => 'Advanced Custom Fields'
+        ];
         
-        // Debug: Log the search parameters and result
-        if (function_exists('workbooks_log')) {
-            workbooks_log("Event search - Field: {$filter_field}, Value: {$event_ref}, Results: " . count($event_result['data'] ?? []));
+        $missing = [];
+        foreach ($dependencies as $plugin => $name) {
+            if (!is_plugin_active($plugin)) {
+                $missing[] = $name;
+            }
         }
         
-        if (empty($event_result['data'][0])) {
-            // Try alternative search methods
-            if (is_numeric($event_ref)) {
-                // Try searching by object_ref as well
-                $alt_result = $workbooks->assertGet('crm/events.api', [
-                    '_start' => 0,
-                    '_limit' => 1,
-                    '_ff[]' => 'object_ref',
-                    '_ft[]' => 'eq',
-                    '_fc[]' => $event_ref,
-                    '_select_columns[]' => '*',
-                ]);
-                if (!empty($alt_result['data'][0])) {
-                    $event_result = $alt_result;
+        if (!empty($missing)) {
+            $this->missing_dependencies = $missing;
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Load include files
+     *
+     * @return void
+     */
+    private function load_includes() {
+        $includes = [
+            // Core safety utilities (must load first)
+            'class-array-merge-safety.php',
+            // Ninja Forms submission override layer
+            'class-form-submission-override.php',
+            // Submission processors
+            'form-submission-processors-submission-fix.php',
+            'form-submission-processors-ninjaform-hooks.php',
+            // Form handlers
+            'form-handler-webinars.php',
+            'form-handler-membership-registration.php',
+            'form-handler-gated-content-reveal.php',
+            'form-handler-media-planner.php',
+            // Support classes
+            'class-acf-ninjaforms-merge.php',
+            'class-employer-sync.php',
+            'class-helper-functions.php',
+            'class-nf-country-converter.php', // retained naming (formerly nf-country-converter.php)
+            // Shortcodes & account utilities
+            'dtr-shortcodes.php',
+            'dtr-my-account-details.php',
+            'dtr-forgot-password.php'
+        ];
+        
+        foreach ($includes as $file) {
+            $file_path = DTR_WORKBOOKS_INCLUDES_DIR . $file;
+            if (file_exists($file_path)) {
+                require_once $file_path;
+            } else {
+                $this->log_error("Failed to load include file: {$file}");
+            }
+        }
+    }
+    
+    /**
+     * Initialize integrations
+     *
+     * @return void
+     */
+    private function init_integrations() {
+        // Initialize form processors and handlers
+        if (function_exists('dtr_init_ninja_forms_hooks')) {
+            dtr_init_ninja_forms_hooks();
+        }
+        
+        if (function_exists('dtr_init_gated_content_hooks')) {
+            dtr_init_gated_content_hooks();
+        }
+        
+        if (function_exists('dtr_init_acf_questions_hooks')) {
+            dtr_init_acf_questions_hooks();
+        }
+    }
+    
+    /**
+     * Plugin initialization
+     *
+     * @return void
+     */
+    public function init_plugin() {
+        // Add proper text domain loading after init
+        add_action('init', function() {
+            load_plugin_textdomain('dtr-workbooks', false, dirname(plugin_basename(__FILE__)) . '/languages');
+        });
+        
+        // Create log directory if it doesn't exist
+        if (!is_dir(DTR_WORKBOOKS_LOG_DIR)) {
+            wp_mkdir_p(DTR_WORKBOOKS_LOG_DIR);
+            
+            // Add .htaccess for security
+            $htaccess_content = "Order Deny,Allow\nDeny from all\n";
+            file_put_contents(DTR_WORKBOOKS_LOG_DIR . '.htaccess', $htaccess_content);
+            
+            // Add index.php for security
+            file_put_contents(DTR_WORKBOOKS_LOG_DIR . 'index.php', '<?php // Silence is golden');
+        }
+        
+        // Setup custom capabilities
+        $this->setup_capabilities();
+
+        // One-time migration: move legacy admin log files into central logs directory
+        $legacy_admin_dir = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/';
+        if (is_dir($legacy_admin_dir)) {
+            $candidates = ['connection-debug.log','update-debug.log'];
+            foreach ($candidates as $fname) {
+                $old_path = $legacy_admin_dir . $fname;
+                $new_path = DTR_WORKBOOKS_LOG_DIR . $fname;
+                if (file_exists($old_path) && !file_exists($new_path)) {
+                    @rename($old_path, $new_path);
+                    dtr_custom_log("Migrated legacy admin log {$fname} to logs/ directory", 'info');
                 }
             }
-            
-            if (empty($event_result['data'][0])) {
-                wp_send_json_error("Event not found with {$filter_field}: {$event_ref}. Please verify the event exists in Workbooks.");
-                return;
-            }
         }
-        $event = $event_result['data'][0];
-
-        // Fetch all tabs/related records (e.g., attendees/registrants)
-        // Example: fetch attendees/registrants for the event
-        $attendees_result = $workbooks->assertGet('crm/event_attendees.api', [
-            '_ff[]' => 'event_id',
-            '_ft[]' => 'eq',
-            '_fc[]' => $event['id'],
-            '_select_columns[]' => '*',
-            '_limit' => 1000 // fetch up to 1000 attendees
-        ]);
-        $attendees = $attendees_result['data'] ?? [];
-        
-        // Debug: Log attendees count
-        if (function_exists('workbooks_log')) {
-            workbooks_log("Event {$event['id']} attendees found: " . count($attendees));
-        }
-
-        // You can add more related tabs here if needed (e.g., sponsors, sessions, etc.)
-
-        $response = [
-            'event' => $event,
-            'attendees' => $attendees,
-            // Add more related data here as needed
-        ];
-        wp_send_json_success($response);
-    } catch (Exception $e) {
-        if (function_exists('workbooks_log')) {
-            workbooks_log("Event fetch error for {$event_ref}: " . $e->getMessage());
-        }
-        wp_send_json_error('Error fetching event: ' . $e->getMessage());
-    }
-}
-
-function dtr_ajax_list_workbooks_events() {
-    check_ajax_referer('workbooks_nonce', 'nonce');
-    
-    $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
-    if (!$workbooks) {
-        wp_send_json_error('Workbooks API not available');
-        return;
     }
     
-    try {
-        // Fetch recent events (last 50)
-        $events_result = $workbooks->assertGet('crm/events.api', [
-            '_start' => 0,
-            '_limit' => 50,
-            '_select_columns[]' => ['id', 'name', 'object_ref', 'start_date', 'end_date', 'event_type', 'lock_version'],
-            '_sort_column' => 'id',
-            '_sort_direction' => 'DESC'
+    /**
+     * Admin initialization
+     *
+     * @return void
+     */
+    public function admin_init() {
+        // Register settings
+        register_setting('dtr_workbooks_options', 'dtr_workbooks_options', [
+            'sanitize_callback' => [$this, 'validate_options'],
+            'default' => [
+                'api_url' => '',
+                'api_key' => '',
+                'debug_mode' => false,
+                'enabled_forms' => [2, 15, 31],
+                'api_timeout' => 30,
+                'retry_attempts' => 3,
+                'log_retention_days' => 30
+            ]
         ]);
         
-        $events = $events_result['data'] ?? [];
+        // Add settings sections and fields
+        $this->setup_admin_settings();
+    }
+    
+    /**
+     * Setup admin settings sections and fields
+     *
+     * @return void
+     */
+    private function setup_admin_settings() {
+        // Workbooks API settings
+        add_settings_section(
+            'dtr_workbooks_api',
+            __('Workbooks API Configuration', 'dtr-workbooks'),
+            [$this, 'api_section_callback'],
+            'dtr_workbooks'
+        );
         
-        if (function_exists('workbooks_log')) {
-            workbooks_log("Listed " . count($events) . " recent events");
-        }
+        add_settings_field(
+            'api_url',
+            __('API URL', 'dtr-workbooks'),
+            [$this, 'api_url_field_callback'],
+            'dtr_workbooks',
+            'dtr_workbooks_api',
+            [
+                'label_for' => 'api_url',
+                'description' => __('The URL of your Workbooks API endpoint', 'dtr-workbooks'),
+                'placeholder' => 'https://russellpublishing-live.workbooks.com/'
+            ]
+        );
         
-        wp_send_json_success(['events' => $events]);
+        add_settings_field(
+            'api_key',
+            __('API Key', 'dtr-workbooks'),
+            [$this, 'api_key_field_callback'],
+            'dtr_workbooks',
+            'dtr_workbooks_api'
+        );
         
-    } catch (Exception $e) {
-        if (function_exists('workbooks_log')) {
-            workbooks_log("Error listing events: " . $e->getMessage());
-        }
-        wp_send_json_error('Error listing events: ' . $e->getMessage());
-    }
-}
-
-function dtr_ajax_submit_leadgen_form() {
-    check_ajax_referer('workbooks_nonce', 'nonce');
-    
-    // Sanitize form inputs
-    $post_id = intval($_POST['leadgen_post_id'] ?? 0);
-    $event_ref = sanitize_text_field($_POST['leadgen_event_ref'] ?? '');
-    $participant_email = sanitize_email($_POST['leadgen_participant_email'] ?? '');
-    $interest_reason = sanitize_textarea_field($_POST['leadgen_interest_reason'] ?? '');
-    $sponsor_optin = isset($_POST['leadgen_sponsor_optin']) ? 1 : 0;
-    $marketing_optin = isset($_POST['leadgen_marketing_optin']) ? 1 : 0;
-    
-    if (!$participant_email) {
-        wp_send_json_error('Email is required');
-        return;
-    }
-    
-    if (!$post_id && !$event_ref) {
-        wp_send_json_error('Either content selection or event reference is required');
-        return;
-    }
-    
-    $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
-    if (!$workbooks) {
-        wp_send_json_error('Workbooks API not available');
-        return;
+        // Form settings
+        add_settings_section(
+            'dtr_workbooks_forms',
+            __('Form Configuration', 'dtr-workbooks'),
+            [$this, 'forms_section_callback'],
+            'dtr_workbooks'
+        );
+        
+        add_settings_field(
+            'enabled_forms',
+            __('Enabled Forms', 'dtr-workbooks'),
+            [$this, 'enabled_forms_field_callback'],
+            'dtr_workbooks',
+            'dtr_workbooks_forms'
+        );
+        
+        // Debug settings
+        add_settings_section(
+            'dtr_workbooks_debug',
+            __('Debug & Logging', 'dtr-workbooks'),
+            [$this, 'debug_section_callback'],
+            'dtr_workbooks'
+        );
+        
+        add_settings_field(
+            'debug_mode',
+            __('Debug Mode', 'dtr-workbooks'),
+            [$this, 'debug_mode_field_callback'],
+            'dtr_workbooks',
+            'dtr_workbooks_debug'
+        );
     }
     
-    try {
-        // Get or create person record
-        $person_result = $workbooks->assertGet('crm/people.api', [
-            '_start' => 0,
-            '_limit' => 1,
-            '_ff[]' => 'main_location[email]',
-            '_ft[]' => 'eq',
-            '_fc[]' => $participant_email,
+    /**
+     * Enqueue frontend scripts and styles
+     *
+     * @return void
+     */
+    public function enqueue_scripts() {
+        // Enqueue frontend styles
+        wp_enqueue_style(
+            'dtr-workbooks-frontend',
+            DTR_WORKBOOKS_ASSETS_URL . 'css/frontend.css',
+            [],
+            DTR_WORKBOOKS_VERSION
+        );
+        
+        wp_enqueue_script(
+            'dtr-workbooks-frontend',
+            DTR_WORKBOOKS_ASSETS_URL . 'js/frontend.js',
+            ['jquery'],
+            DTR_WORKBOOKS_VERSION,
+            true
+        );
+        
+        // Localize script for AJAX
+        wp_localize_script('dtr-workbooks-frontend', 'dtr_workbooks_ajax', [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('dtr_workbooks_nonce'),
+            'debug_mode' => $this->debug_mode
         ]);
-        
-        $person_id = null;
-        if (!empty($person_result['data'][0])) {
-            $person_id = $person_result['data'][0]['id'];
-        } else {
-            // Create new person if not found
-            $person_data = [
-                'main_location[email]' => $participant_email,
-                'lead_source_type' => 'Lead Generation Form',
-                'cf_person_dtr_subscriber_type' => 'Lead',
-                'cf_person_is_person_active_or_inactive' => 'Active',
-                'cf_person_data_source_detail' => 'Lead Gen Form Submission',
-            ];
-            
-            if ($marketing_optin) {
-                $person_data['cf_person_dtr_news'] = 1;
-                $person_data['cf_person_dtr_events'] = 1;
+
+        // Conditional enqueue for employer select (registration form 15)
+        if (is_page(array('free-membership','membership','register')) || isset($_GET['dtr_reg_debug'])) {
+            // Ensure Select2 (try using WP core registered if available or fallback)
+            if (!wp_script_is('select2', 'registered')) {
+                wp_register_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', ['jquery'], '4.1.0', true);
+                wp_register_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css', [], '4.1.0');
             }
-            
-            $create_result = $workbooks->assertCreate('crm/people', [$person_data]);
-            if (!empty($create_result['data'][0]['id'])) {
-                $person_id = $create_result['data'][0]['id'];
+            wp_enqueue_script('select2');
+            wp_enqueue_style('select2');
+
+            // Use file modification time for more aggressive cache busting of employer field logic
+            $employers_js_path = DTR_WORKBOOKS_PLUGIN_DIR . 'js/ninjaform-employers-field.js';
+            $employers_js_ver = file_exists($employers_js_path) ? filemtime($employers_js_path) : DTR_WORKBOOKS_VERSION;
+            if (isset($_GET['dtr_employers_debug'])) { // force unique version when debugging
+                $employers_js_ver = time();
             }
+            wp_enqueue_script(
+                'dtr-nf-employers-field',
+                DTR_WORKBOOKS_PLUGIN_URL . 'js/ninjaform-employers-field.js',
+                ['jquery','select2'],
+                $employers_js_ver,
+                true
+            );
+
+            wp_localize_script('dtr-nf-employers-field','workbooks_ajax',[
+                'ajax_url' => admin_url('admin-ajax.php'),
+                // Use the same nonce action string that server endpoints verify ('workbooks_nonce')
+                'nonce' => wp_create_nonce('workbooks_nonce'),
+                'plugin_url' => DTR_WORKBOOKS_PLUGIN_URL,
+                'debug_mode' => $this->debug_mode
+            ]);
         }
-        
-        if (!$person_id) {
-            wp_send_json_error('Could not create or find person record');
+    }
+    
+    /**
+     * Enqueue admin scripts and styles
+     *
+     * @param string $hook Page hook
+     * @return void
+     */
+    public function admin_enqueue_scripts($hook) {
+        // Only load on our admin pages
+        if (strpos($hook, 'dtr-workbooks') === false) {
             return;
         }
         
-        // Create lead generation activity
-        $activity_data = [
-            'party_id' => $person_id,
-            'activity_type' => 'Lead Generation',
-            'subject' => 'Lead Gen Form Submission',
-            'description' => "Interest in content: " . ($post_id ? get_the_title($post_id) : "Event $event_ref"),
-        ];
+        wp_enqueue_style(
+            'dtr-workbooks-admin',
+            DTR_WORKBOOKS_ASSETS_URL . 'css/admin.css',
+            [],
+            DTR_WORKBOOKS_VERSION
+        );
         
-        if ($interest_reason) {
-            $activity_data['description'] .= "\nReason: " . $interest_reason;
-        }
+        wp_enqueue_script(
+            'dtr-workbooks-admin',
+            DTR_WORKBOOKS_ASSETS_URL . 'js/admin.js',
+            ['jquery', 'jquery-ui-tabs', 'jquery-ui-dialog'],
+            DTR_WORKBOOKS_VERSION,
+            true
+        );
         
-        if ($post_id) {
-            $activity_data['description'] .= "\nContent ID: $post_id";
-            $activity_data['description'] .= "\nContent Type: " . get_post_type($post_id);
-        }
-        
-        if ($event_ref) {
-            $activity_data['description'] .= "\nEvent Reference: $event_ref";
-        }
-        
-        $activity_data['description'] .= "\nSponsor Opt-in: " . ($sponsor_optin ? 'Yes' : 'No');
-        $activity_data['description'] .= "\nMarketing Opt-in: " . ($marketing_optin ? 'Yes' : 'No');
-        
-        $activity_result = $workbooks->assertCreate('crm/activities', [$activity_data]);
-        
-        if (function_exists('workbooks_log')) {
-            workbooks_log("Lead gen form submitted for $participant_email, Person ID: $person_id");
-        }
-        
-        wp_send_json_success('Lead generation form submitted successfully. Thank you for your interest!');
-        
-    } catch (Exception $e) {
-        if (function_exists('workbooks_log')) {
-            workbooks_log("Lead gen form error for $participant_email: " . $e->getMessage());
-        }
-        wp_send_json_error('Error submitting form: ' . $e->getMessage());
+        wp_localize_script('dtr-workbooks-admin', 'dtr_workbooks_admin', [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('workbooks_nonce'),
+            'strings' => [
+                'testing_connection' => __('Testing connection...', 'dtr-workbooks'),
+                'connection_success' => __('Connection successful!', 'dtr-workbooks'),
+                'connection_failed' => __('Connection failed!', 'dtr-workbooks'),
+                'clearing_logs' => __('Clearing logs...', 'dtr-workbooks'),
+                'logs_cleared' => __('Logs cleared successfully!', 'dtr-workbooks'),
+                'cleanup_running' => __('Running genomics key cleanup...', 'dtr-workbooks'),
+                'cleanup_done' => __('Genomics key cleanup completed.', 'dtr-workbooks')
+            ]
+        ]);
     }
-}
     
-    wp_enqueue_script('employers-sync', plugin_dir_url(__FILE__) . 'js/employers-sync.js', ['jquery'], null, true);
-    wp_localize_script('employers-sync', 'workbooks_ajax', [
-        'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('workbooks_nonce')
-    ]);
-});
+    /**
+     * Add admin menu
+     *
+     * @return void
+     */
+    public function add_admin_menu() {
+        add_menu_page(
+            __('DTR Workbooks', 'dtr-workbooks'),
+            __('DTR Workbooks', 'dtr-workbooks'),
+            'manage_options',
+            'dtr-workbooks',
+            [$this, 'admin_page'],
+            'dashicons-database-import',
+            30
+        );
 
-// Register plugin settings
-add_action('admin_init', function() {
-    register_setting('workbooks_crm_options', 'workbooks_api_url');
-    register_setting('workbooks_crm_options', 'workbooks_api_key');
-    register_setting('workbooks_crm_options', 'workbooks_logical_database_id');
-});
+    // (No explicit 'Welcome' submenu item; top-level menu opens the Welcome tab)
 
-// Settings page content
-function workbooks_crm_settings_page() {
-    ?>
-    <style>
-    .workbooks-admin-container {
-        display: flex;
-        gap: 20px;
-        margin-top: 20px;
+        // API Settings (new separate settings form page)
+        add_submenu_page(
+            'dtr-workbooks',
+            __('API Settings', 'dtr-workbooks'),
+            __('API Settings', 'dtr-workbooks'),
+            'manage_options',
+            'dtr-workbooks-api-settings',
+            [$this, 'admin_api_settings_page']
+        );
+
+        // Person Record (direct link to testing tab / person record tools)
+        add_submenu_page(
+            'dtr-workbooks',
+            __('Person Record', 'dtr-workbooks'),
+            __('Person Record', 'dtr-workbooks'),
+            'manage_options',
+            'dtr-workbooks-person',
+            [$this, 'admin_person_record_page']
+        );
+
+        // Registered Users listing
+        add_submenu_page(
+            'dtr-workbooks',
+            __('Registered Users', 'dtr-workbooks'),
+            __('Registered Users', 'dtr-workbooks'),
+            'manage_options',
+            'dtr-workbooks-users',
+            [$this, 'admin_registered_users_page']
+        );
+
+        // Gated Content overview
+        add_submenu_page(
+            'dtr-workbooks',
+            __('Gated Content', 'dtr-workbooks'),
+            __('Gated Content', 'dtr-workbooks'),
+            'manage_options',
+            'dtr-workbooks-gated',
+            [$this, 'admin_gated_content_page']
+        );
+
+        // TOI & AOI Mapping display
+        add_submenu_page(
+            'dtr-workbooks',
+            __('TOI & AOI Mapping', 'dtr-workbooks'),
+            __('TOI & AOI Mapping', 'dtr-workbooks'),
+            'manage_options',
+            'dtr-workbooks-mapping',
+            [$this, 'admin_toi_aoi_mapping_page']
+        );
     }
-    .workbooks-vertical-tabs {
-        flex: 0 0 240px;
-        background: #fff;
-        border: 1px solid #ccd0d4;
-        border-radius: 4px;
-        box-shadow: 0 1px 1px rgba(0,0,0,.04);
-    }
-    .workbooks-vertical-tabs .nav-tab {
-        display: block;
-        width: 100%;
-        margin: 0;
-        border: none;
-        border-bottom: 1px solid #ccd0d4;
-        border-radius: 0;
-        padding: 12px 15px;
-        text-decoration: none;
-        background: #f6f7f7;
-        color: #555;
-        font-weight: 400;
-        transition: all 0.2s ease;
-    }
-    .workbooks-vertical-tabs .nav-tab:last-child {
-        border-bottom: none;
-    }
-    .workbooks-vertical-tabs .nav-tab:hover {
-        background: #e6f3ff;
-        color: #0073aa;
-    }
-    .workbooks-vertical-tabs .nav-tab.nav-tab-active {
-        background: #0073aa;
-        color: #fff;
-        font-weight: 600;
-        border-left: 4px solid #005177;
-    }
-    .workbooks-content-area {
-        flex: 1;
-        background: #fff;
-        border: 1px solid #ccd0d4;
-        border-radius: 4px;
-        box-shadow: 0 1px 1px rgba(0,0,0,.04);
-        padding: 20px;
-        min-height: 600px;
-    }
-    .workbooks-tab-content {
-        display: none;
-    }
-    .workbooks-tab-content.active {
-        display: block !important;
-    }
-    </style>
-    <div class="wrap">
-        <h1>Workbooks CRM API Key Integration</h1>
-        <div class="workbooks-admin-container">
-            <nav class="workbooks-vertical-tabs">
-                <a href="#" class="nav-tab nav-tab-active" id="workbooks-settings-tab">Settings</a>
-                <a href="#" class="nav-tab" id="workbooks-person-tab">Person Record</a>
-                <a href="#" class="nav-tab" id="workbooks-gated-content-tab">Gated Content</a>
-                <a href="#" class="nav-tab" id="workbooks-webinar-tab">Webinar Registration</a>
-                <a href="#" class="nav-tab" id="workbooks-mediaplanner-tab">Media Planner Form</a>
-                <a href="#" class="nav-tab" id="workbooks-membership-tab">Membership Sign Up</a>
-                <a href="#" class="nav-tab" id="workbooks-employers-tab">Employers</a>
-                <a href="#" class="nav-tab" id="workbooks-ninja-users-tab">Ninja Form Users</a>
-                <a href="#" class="nav-tab" id="workbooks-topics-tab">Topics of Interest</a>
-            </nav>
-            <script>
-            jQuery(document).ready(function($) {
-                $('.workbooks-vertical-tabs .nav-tab').on('click', function(e) {
-                    e.preventDefault();
-                    var tabId = $(this).attr('id');
-                    // Remove active from all tabs
-                    $('.workbooks-vertical-tabs .nav-tab').removeClass('nav-tab-active');
-                    $(this).addClass('nav-tab-active');
-                    // Hide all tab contents
-                    $('.workbooks-content-area .workbooks-tab-content').removeClass('active').hide();
-                    // Show the selected tab content
-                    var contentId = tabId.replace('-tab', '-content');
-                    $('#' + contentId).addClass('active').show();
-                });
-                // Ensure only the first tab is visible on load
-                $('.workbooks-content-area .workbooks-tab-content').hide();
-                $('#workbooks-settings-content').addClass('active').show();
-            });
-            </script>
-            <div class="workbooks-content-area">
-                <!-- Settings Tab -->
-                <div id="workbooks-settings-content" class="workbooks-tab-content active">
-                <h2>Workbooks CRM Settings</h2>
-                <form method="post" action="options.php">
-                    <?php settings_fields('workbooks_crm_options'); ?>
-                    <input type="hidden" name="option_page" value="workbooks_crm_options">
-                    <input type="hidden" name="action" value="update">
-                    
-                    <table class="form-table">
-                        <tbody>
-                            <tr>
-                                <th scope="row"><label for="workbooks_api_url">API URL</label></th>
-                                <td>
-                                    <input name="workbooks_api_url" id="workbooks_api_url" type="url" value="https://russellpublishing-live.workbooks.com/" class="regular-text" required="">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><label for="workbooks_api_key">API Key</label></th>
-                                <td>
-                                    <input name="workbooks_api_key" id="workbooks_api_key" type="text" value="eb7f1-04a7d-9654d-01904-a6823-d10c0-fc4c5-d5b2c" class="regular-text" required="">
-                                </td>
-                            </tr>
-                            <!-- <tr>
-                                <th scope="row"><label for="workbooks_logical_database_id">Logical Database</label></th>
-                                <td>
-                                    <select name="workbooks_logical_database_id" id="workbooks_logical_database_id" disabled="">
-                                        <option value="">No database selection required</option>
-                                    </select>
-                                    <p class="description">Select your logical database (optional).</p>
-                                </td>
-                            </tr> -->
-                        </tbody>
-                    </table>
-                    
-                    <div class="submit">
-                        <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
-                        <button id="workbooks_test_connection" class="button button-secondary" type="button">Test Connection</button>
-                        <div class="workbooks-api-status">
-                            <span class="workbooks-status-pill" id="connection-status">Status: Connected</span>
-                        </div>
-                    </div>
-                </form>
-                
-                <div id="workbooks_test_result"></div>
-                </div>
-                <!-- Person Record Tab -->
-                <div id="workbooks-person-content" class="workbooks-tab-content">
-                    <h2>Update Fixed Workbooks Person Record (ID: 4208693)</h2>
-                    <?php
-                    // Handle Delete User and Generate Workbooks IDs actions for Ninja Forms Users tab
-                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                        // Delete user
-                        if (isset($_POST['delete_user_id']) && current_user_can('delete_users')) {
-                            $delete_user_id = intval($_POST['delete_user_id']);
-                            if ($delete_user_id && $delete_user_id !== get_current_user_id()) {
-                                require_once ABSPATH . 'wp-admin/includes/user.php';
-                                wp_delete_user($delete_user_id);
-                                echo '<div class="notice notice-success is-dismissible"><p>User ID ' . esc_html($delete_user_id) . ' deleted.</p></div>';
-                            } else {
-                                echo '<div class="notice notice-error is-dismissible"><p>Cannot delete this user.</p></div>';
-                            }
-                        }
-                        // Generate Workbooks IDs
-                        if (isset($_POST['generate_workbooks_ids_user_id']) && current_user_can('edit_users')) {
-                            $gen_user_id = intval($_POST['generate_workbooks_ids_user_id']);
-                            $user = get_userdata($gen_user_id);
-                            if ($user) {
-                                $first = get_user_meta($gen_user_id, 'first_name', true);
-                                $last = get_user_meta($gen_user_id, 'last_name', true);
-                                $email = $user->user_email;
-                                $employer = get_user_meta($gen_user_id, 'employer_name', true);
-                                $town = get_user_meta($gen_user_id, 'town', true);
-                                $country = get_user_meta($gen_user_id, 'country', true) ?: 'South Africa';
-                                $telephone = get_user_meta($gen_user_id, 'telephone', true);
-                                $postcode = get_user_meta($gen_user_id, 'postcode', true);
-                                $job_title = get_user_meta($gen_user_id, 'job_title', true);
-                                $title = get_user_meta($gen_user_id, 'person_personal_title', true);
-                                $payload = [
-                                    'person_first_name' => $first,
-                                    'person_last_name' => $last,
-                                    'main_location[email]' => $email,
-                                    'cf_person_claimed_employer' => $employer,
-                                    'created_through_reference' => 'wp_user_' . $gen_user_id,
-                                    'main_location[town]' => $town,
-                                    'main_location[country]' => $country,
-                                    'main_location[telephone]' => $telephone,
-                                    'main_location[postcode]' => $postcode,
-                                    'person_job_title' => $job_title,
-                                    'person_personal_title' => $title,
-                                    'cf_person_dtr_subscriber_type' => 'Prospect',
-                                    'cf_person_dtr_web_member' => 1,
-                                    'lead_source_type' => 'Online Registration',
-                                    'cf_person_is_person_active_or_inactive' => 'Active',
-                                    'cf_person_data_source_detail' => 'DTR Member Registration',
-                                ];
-                                $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
-                                if ($workbooks) {
-                                    try {
-                                        $result = $workbooks->assertCreate('crm/people', [$payload]);
-                                        if (!empty($result['data'][0]['id'])) {
-                                            update_user_meta($gen_user_id, 'workbooks_person_id', $result['data'][0]['id']);
-                                            update_user_meta($gen_user_id, 'workbooks_object_ref', $result['data'][0]['object_ref'] ?? '');
-                                            echo '<div class="notice notice-success is-dismissible"><p>Workbooks IDs generated for user ID ' . esc_html($gen_user_id) . '.</p></div>';
-                                        } else {
-                                            echo '<div class="notice notice-error is-dismissible"><p>Workbooks did not return an ID for user ID ' . esc_html($gen_user_id) . '.</p></div>';
-                                        }
-                                    } catch (Exception $e) {
-                                        echo '<div class="notice notice-error is-dismissible"><p>Workbooks error: ' . esc_html($e->getMessage()) . '</p></div>';
-                                    }
-                                } else {
-                                    echo '<div class="notice notice-error is-dismissible"><p>Workbooks API not available.</p></div>';
-                                }
-                            }
-                        }
-                    }
-                    // Display all Workbooks fields and values for current user (from Workbooks API, not just user meta)
-                    $current_user_id = get_current_user_id();
-                    $workbooks_person_id = get_user_meta($current_user_id, 'workbooks_person_id', true);
-                    $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
-                    $workbooks_data = [];
-                    if ($workbooks && $workbooks_person_id) {
-                        try {
-                            $result = $workbooks->assertGet('crm/people.api', [
-                                '_start' => 0,
-                                '_limit' => 1,
-                                '_ff[]' => 'id',
-                                '_ft[]' => 'eq',
-                                '_fc[]' => $workbooks_person_id
-                            ]);
-                            if (!empty($result['data'][0])) {
-                                $workbooks_data = $result['data'][0];
-                            }
-                        } catch (Exception $e) {
-                            echo '<div class="notice notice-error"><p>Could not fetch Workbooks record: ' . esc_html($e->getMessage()) . '</p></div>';
-                        }
-                    }
-                    echo '<div style="margin-bottom:10px;">';
-                    echo '<strong>Workbooks API Fields for this User:</strong>';
-                    if (!empty($workbooks_data)) {
-                        echo '<table class="widefat striped" style="margin-top:8px; max-width:900px;">';
-                        echo '<thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
-                        foreach ($workbooks_data as $field => $val) {
-                            if (is_array($val)) $val = json_encode($val);
-                            echo '<tr><td>' . esc_html($field) . '</td><td>' . esc_html(($val === '' ? '-' : $val)) . '</td></tr>';
-                        }
-                        echo '</tbody></table>';
-                    } else {
-                        echo '<em>No Workbooks record found for this user.</em>';
-                    }
-                    echo '</div>';
-                    ?>
-                    <form id="workbooks_update_user_form" method="post">
-                        <input type="hidden" name="workbooks_update_user" value="1">
-                        <?php
-                        $user_id = get_current_user_id();
-                        $user = get_userdata($user_id);
-                        $workbooks = get_workbooks_instance();
-                        $fixed_person_id = 4208693;
-                        $existing = $workbooks->assertGet('crm/people.api', [
-                            '_start' => 0,
-                            '_limit' => 1,
-                            '_ff[]' => 'id',
-                            '_ft[]' => 'eq',
-                            '_fc[]' => $fixed_person_id,
-                            '_select_columns[]' => [
-                                'id', 'lock_version',
-                                'person_title', 'person_first_name', 'person_last_name', 'person_job_title',
-                                'main_location[email]', 'main_location[telephone]', 'main_location[country]',
-                                'main_location[town]', 'main_location[postcode]',
-                                'employer_name'
-                            ]
-                        ]);
-                        $person = $existing['data'][0] ?? [];
-                        function get_field_value($person, $field, $user_id, $meta_key = '') {
-                            if (!empty($person[$field])) {
-                                return esc_attr($person[$field]);
-                            } elseif ($meta_key && $value = get_user_meta($user_id, $meta_key, true)) {
-                                return esc_attr($value);
-                            }
-                            return '';
-                        }
-                        if (!empty($person['id'])) {
-                            echo '<input type="hidden" name="person_id" value="' . esc_attr($person['id']) . '">';
-                            echo '<input type="hidden" name="lock_version" value="' . esc_attr($person['lock_version']) . '">';
-                        }
-                        ?>
-                        <p><label for="person_title">Title<br>
-                            <?php
-                            $titles = [
-                                'Dr.' => 'Dr.',
-                                'Master' => 'Master',
-                                'Miss' => 'Miss',
-                                'Mr.' => 'Mr.',
-                                'Mrs.' => 'Mrs.',
-                                'Ms.' => 'Ms.',
-                                'Prof.' => 'Prof.'
-                            ];
-                            $current_title = $person['person_personal_title'] ?? get_user_meta($user_id, 'person_personal_title', true);
-                            echo '<select id="person_title" name="person_personal_title">';
-                            echo '<option value="">-- Select --</option>';
-                            foreach ($titles as $value => $label) {
-                                $selected = ($current_title == $value) ? 'selected' : '';
-                                echo '<option value="' . esc_attr($value) . '" ' . $selected . '>' . esc_html($label) . '</option>';
-                            }
-                            echo '</select>';
-                            ?>
-                        </label></p>
-                        <p><label for="person_first_name">First Name<br>
-                            <input type="text" id="person_first_name" name="person_first_name" value="<?php echo get_field_value($person, 'person_first_name', $user_id, 'first_name'); ?>" class="regular-text"></label></p>
-                        <p><label for="person_last_name">Last Name<br>
-                            <input type="text" id="person_last_name" name="person_last_name" value="<?php echo get_field_value($person, 'person_last_name', $user_id, 'last_name'); ?>" class="regular-text"></label></p>
-                        <p><label for="person_job_title">Job Title<br>
-                            <input type="text" id="person_job_title" name="person_job_title" value="<?php echo get_field_value($person, 'person_job_title', $user_id, 'job_title'); ?>" class="regular-text"></label></p>
-                        <?php
-                        $dtr_fields = [
-                            'cf_person_dtr_news' => 'DTR News',
-                            'cf_person_dtr_events' => 'DTR Events',
-                            // 'cf_person_dtr_subscriber' => 'DTR Subscriber', // Not editable, set on registration
-                            'cf_person_dtr_third_party' => 'DTR Third Party',
-                            'cf_person_dtr_webinar' => 'DTR Webinar',
-                        ];
-                        $interests_fields = [
-                            'cf_person_business' => 'Business',
-                            'cf_person_diseases' => 'Diseases',
-                            'cf_person_drugs_therapies' => 'Drugs & Therapies',
-                            'cf_person_genomics_3774' => 'Genomics',
-                            'cf_person_research_development' => 'Research & Development',
-                            'cf_person_technology' => 'Technology',
-                            'cf_person_tools_techniques' => 'Tools & Techniques',
-                        ];
-                        ?>
-                        <fieldset style="margin-bottom:20px;">
-                            <legend><strong>Marketing Preferences</strong></legend>
-                            <?php foreach ($dtr_fields as $field => $label): ?>
-                                <?php
-                                $checked = get_user_meta($user_id, $field, true) || !empty($person[$field]);
-                                ?>
-                                <label style="display:block;">
-                                    <input type="checkbox" name="<?php echo esc_attr($field); ?>" value="1" <?php checked($checked); ?>>
-                                    <?php echo esc_html($label); ?>
-                                </label>
-                            <?php endforeach; ?>
-                        </fieldset>
-                        <fieldset style="margin-bottom:20px;">
-                            <legend><strong>Topics of Interest</strong></legend>
-                            <?php foreach ($interests_fields as $field => $label): ?>
-                                <?php
-                                $checked = get_user_meta($user_id, $field, true) || !empty($person[$field]);
-                                ?>
-                                <label style="display:block;">
-                                    <input type="checkbox" name="<?php echo esc_attr($field); ?>" value="1" <?php checked($checked); ?>>
-                                    <?php echo esc_html($label); ?>
-                                </label>
-                            <?php endforeach; ?>
-                        </fieldset>
-                        <p><label for="email">Email<br>
-                            <input type="email" id="email" name="email" value="<?php echo esc_attr($user->user_email); ?>" class="regular-text" readonly></label>
-                            <small>Email is read-only and taken from your WordPress user account.</small></p>
-                        <p><label for="employer">Employer<br>
-                            <select id="employer" name="employer">
-                                <option value="">-- Select Employer --</option>
-                                <option value="loading">Loading employers...</option>
-                            </select>
-                            <span id="employer-loading" style="display:none;">Loading...</span>
-                        </label></p>
-                        <p><label for="telephone">Telephone<br>
-                            <input type="text" id="telephone" name="telephone" value="<?php echo get_field_value($person, 'main_location[telephone]', $user_id); ?>" class="regular-text"></label></p>
-                        <p><label for="country">Country<br>
-                            <input type="text" id="country" name="country" value="<?php echo get_field_value($person, 'main_location[country]', $user_id); ?>" class="regular-text"></label></p>
-                        <p><label for="town">Town / City<br>
-                            <input type="text" id="town" name="town" value="<?php echo get_field_value($person, 'main_location[town]', $user_id); ?>" class="regular-text"></label></p>
-                        <p><label for="postcode">Post / Zip Code<br>
-                            <input type="text" id="postcode" name="postcode" value="<?php echo get_field_value($person, 'main_location[postcode]', $user_id); ?>" class="regular-text"></label></p>
-                        <?php submit_button('Update Person Record'); ?>
-                    </form>
-                </div>
-                <!-- Gated Content Section (Single Page, No Tabs) -->
-                <div id="workbooks-gated-content" class="workbooks-tab-content">
-                    <?php
-                        $gated_content_file = WORKBOOKS_NF_PATH . 'admin/gated-content.php';
-                        if (file_exists($gated_content_file)) {
-                            include $gated_content_file;
-                        } else {
-                            echo '<p><em>Gated content admin file not found.</em></p>';
-                        }
-                    ?>
-                </div>
-                <!-- Webinar Tab -->
-                <div id="workbooks-webinar-content" class="workbooks-tab-content">
-                    <?php
-                    $webinars = get_posts([
-                        'post_type'      => 'webinars',
-                        'post_status'    => 'publish',
-                        'posts_per_page' => -1,
-                        'orderby'        => 'date',
-                        'order'          => 'DESC',
-                    ]);
-                    $current_user_email = esc_attr(wp_get_current_user()->user_email);
-                    ?>
-                    <h2>Webinar Registration Endpoint</h2>
-                    <form id="webinar-registration-form" method="post">
-                        <p>
-                            <label for="workbooks_event_ref">Or Enter Workbooks Event ID or Reference:</label><br>
-                            <input type="text" id="workbooks_event_ref" name="workbooks_event_ref" class="regular-text" placeholder="Event ID or Reference (e.g. 5029)" />
-                            <button type="button" id="fetch-event-btn" class="button">Fetch Event Details</button>
-                        </p>
-                        <div id="event-fetch-response" style="margin-bottom: 15px; color: #444;"></div>
-                        <div id="event-fields-table-container" style="margin-bottom: 15px; display:none;"></div>
-                        <p>
-                            <label for="webinar_post_id">Select Webinar:</label><br>
-                            <select id="webinar_post_id" name="webinar_post_id" required>
-                                <option value="">-- Select a Webinar --</option>
-                                <?php foreach ($webinars as $webinar): ?>
-                                    <option value="<?php echo esc_attr($webinar->ID); ?>">
-                                        <?php echo esc_html($webinar->post_title); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </p>
-                        <div id="acf-info" style="margin-bottom: 15px; display:none;">
-                            <strong>Workbooks Webinar Reference:</strong> <span id="webinar_ref"></span><br>
-                            <strong>Campaign Reference:</strong> <span id="campaign_ref"></span>
-                        </div>
-                        <p>
-                            <label for="participant_email">Participant Email:</label><br>
-                            <input type="email" id="participant_email" name="participant_email" class="regular-text" required value="<?php echo $current_user_email; ?>" readonly>
-                        </p>
-                        <p>
-                            <label for="speaker_question">Speaker Question (optional):</label><br>
-                            <textarea id="speaker_question" name="speaker_question" rows="4" cols="50"></textarea>
-                        </p>
-                        <p>
-                            <label>
-                                <input type="checkbox" name="sponsor_optin" id="sponsor_optin" value="1">
-                                I agree to receive sponsor information (opt-in)
-                            </label>
-                        </p>
-                        <p><button type="submit" class="button button-primary">Submit Registration</button></p>
-                    </form>
-                    <div id="webinar-response" style="margin-top: 20px;"></div>
-                    <script>
-                    jQuery(document).ready(function($) {
-                        $('#fetch-event-btn').on('click', function(e) {
-                            e.preventDefault();
-                            var eventRef = $('#workbooks_event_ref').val();
-                            var $response = $('#event-fetch-response');
-                            var $tableContainer = $('#event-fields-table-container');
-                            $response.html('');
-                            $tableContainer.hide().html('');
-                            if (!eventRef) {
-                                $response.html('<span style="color:red;">Please enter an Event ID or Reference.</span>');
-                                return;
-                            }
-                            $response.html('Fetching event details...');
-                            $.ajax({
-                                url: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.ajax_url) ? workbooks_ajax.ajax_url : ajaxurl,
-                                method: 'POST',
-                                data: {
-                                    action: 'fetch_workbooks_event',
-                                    event_ref: eventRef,
-                                    nonce: (typeof workbooks_ajax !== 'undefined' && workbooks_ajax.nonce) ? workbooks_ajax.nonce : ''
-                                },
-                                dataType: 'json',
-                                success: function(response) {
-                                    $tableContainer.hide().html('');
-                                    if (response && response.success) {
-                                        var details = response.data;
-                                        var html = '<span style="color:green;">Event details fetched.</span>';
-                                        if (details && typeof details === 'object' && Object.keys(details).length > 0) {
-                                            html += '<table class="widefat striped" style="margin-top:8px; max-width:600px;">';
-                                            html += '<thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
-                                            for (var key in details) {
-                                                if (!details.hasOwnProperty(key)) continue;
-                                                var val = details[key];
-                                                if (typeof val === 'object') val = JSON.stringify(val);
-                                                html += '<tr><td>' + key + '</td><td>' + (val === '' ? '-' : val) + '</td></tr>';
-                                            }
-                                            html += '</tbody></table>';
-                                        } else {
-                                            html += '<div style="margin-top:10px;">No event details found for this reference.</div>';
-                                        }
-                                        $response.html(html);
-                                    } else {
-                                        $response.html('<span style="color:red;">Could not fetch event details.</span>');
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    $tableContainer.hide().html('');
-                                    $response.html('<span style="color:red;">AJAX error fetching event details.</span>');
-                                    if (xhr && xhr.responseText) {
-                                        // Optionally log or display debug info
-                                        console.error('AJAX error:', xhr.responseText);
-                                    }
-                                }
-                            });
-                        });
-                    });
-                    </script>
-                </div>
-                <!-- Media Planner Form Tab -->
-                <div id="workbooks-mediaplanner-content" class="workbooks-tab-content">
-                    <h2>Media Planner Form (Test Submission)</h2>
-                    <form id="media-planner-form" method="post">
-                        <p>
-                            <label for="mp_first_name">First Name:</label><br>
-                            <input type="text" id="mp_first_name" name="first_name" class="regular-text" placeholder="First Name" required>
-                        </p>
-                        <p>
-                            <label for="mp_last_name">Last Name:</label><br>
-                            <input type="text" id="mp_last_name" name="last_name" class="regular-text" placeholder="Last Name" required>
-                        </p>
-                        <p>
-                            <label for="mp_email_address">Email Address:</label><br>
-                            <input type="email" id="mp_email_address" name="email_address" class="regular-text" placeholder="Email Address" required>
-                        </p>
-                        <p>
-                            <label for="mp_job_title">Job Title:</label><br>
-                            <input type="text" id="mp_job_title" name="job_title" class="regular-text" placeholder="Job Title" required>
-                        </p>
-                        <p>
-                            <label for="mp_organisation">Organisation:</label><br>
-                            <input type="text" id="mp_organisation" name="organisation" class="regular-text" placeholder="Organisation" required>
-                        </p>
-                        <p>
-                            <label for="mp_town">Town:</label><br>
-                            <input type="text" id="mp_town" name="town" class="regular-text" placeholder="Town" required>
-                        </p>
-                        <p>
-                            <label for="mp_country">Country:</label><br>
-                            <input type="text" id="mp_country" name="country" class="regular-text" placeholder="Country" required>
-                        </p>
-                        <p>
-                            <label for="mp_telephone">Telephone:</label><br>
-                            <input type="text" id="mp_telephone" name="telephone" class="regular-text" placeholder="Telephone" required>
-                        </p>
-                        <p>
-                            <button type="submit" class="button button-primary">Submit</button>
-                        </p>
-                    </form>
-                    <div id="media-planner-result"></div>
-                    <style>
-                        /* Media Planner Form: Input Styles */
-                        #media-planner-form input[type="text"],
-                        #media-planner-form input[type="email"] {
-                            height: 36px !important;
-                            padding: 0 12px !important;
-                            border: 1px solid #dcdcde !important;
-                            border-radius: 4px !important;
-                            font-size: 14px !important;
-                            line-height: 1.4 !important;
-                            transition: border-color 0.2s ease !important;
-                            background: #ffffff !important;
-                            box-sizing: border-box;
-                            width: 100%;
-                            margin: 0 0 10px 0;
-                        }
 
-                        /* Media Planner Form: Button Style */
-                        #media-planner-form button[type="submit"] {
-                            height: 36px;
-                            padding: 0 16px !important;
-                            border-radius: 4px !important;
-                            font-size: 14px !important;
-                            font-weight: 500;
-                            text-decoration: none;
-                            cursor: pointer;
-                            transition: all 0.2s ease;
-                            border-width: 1px;
-                            border-style: solid;
-                            display: inline-flex;
-                            align-items: center;
-                            justify-content: center;
-                            line-height: 1;
-                            text-shadow: none !important;
-                            box-shadow: none !important;
-                            background: #007cba;
-                            color: #fff;
-                            border-color: #007cba;
-                        }
-                        #media-planner-form button[type="submit"]:hover {
-                            background: #005a9e;
-                            border-color: #005a9e;
-                        }
-                    </style>
-                    <script>
-                        jQuery(function($){
-                            console.log('✅ Media Planner Test Form JS loaded and ready to test');
-                            $('#media-planner-form').off('submit').on('submit', function(e){
-                                e.preventDefault();
-                                e.stopImmediatePropagation();
-                                var data = $(this).serialize();
-                                data += '&action=media_planner_test_submit&nonce=' + workbooks_ajax.nonce;
-                                $('#media-planner-result').html('Submitting...');
-                                $.post(workbooks_ajax.ajax_url, data, function(response){
-                                    if (response.success) {
-                                        $('#media-planner-result').html('<span style="color:green">' + response.data + '</span>');
-                                    } else {
-                                        $('#media-planner-result').html('<span style="color:red">' + response.data + '</span>');
-                                    }
-                                });
-                                return false;
-                            });
-                        });
-                    </script>
-                </div>
-                <!-- Membership Sign Up Tab -->
-                <div id="workbooks-membership-content" class="workbooks-tab-content">
-                    <h2>Membership Sign Up (Test Registration)</h2>
-                    <?php
-                    if (!current_user_can('manage_options')) {
-                        echo '<p>You do not have permission to use this form.</p>';
-                    } else {
-                        $msg = '';
-                        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['dtr_admin_test_reg_submit'])) {
-                            $first = sanitize_text_field($_POST['first_name'] ?? 'TestFirst');
-                            $last = sanitize_text_field($_POST['last_name'] ?? 'TestLast');
-                            $email = sanitize_email($_POST['email'] ?? 'testuser_' . time() . '@supersonicplayground.com');
-                            $employer = sanitize_text_field($_POST['employer'] ?? 'Supersonic Playground Ltd');
-                            $town = sanitize_text_field($_POST['town'] ?? 'London');
-                            $country = sanitize_text_field($_POST['country'] ?? 'United Kingdom');
-                            $telephone = sanitize_text_field($_POST['telephone'] ?? '0123456789');
-                            $postcode = sanitize_text_field($_POST['postcode'] ?? 'SE10 9XY');
-                            $job_title = sanitize_text_field($_POST['job_title'] ?? 'Developer');
-                            $title = sanitize_text_field($_POST['person_personal_title'] ?? 'Mr.');
-                            $test_user_id = email_exists($email);
-
-                            if (!$test_user_id) {
-                                $random_pass = wp_generate_password(12, false);
-                                $test_user_id = wp_create_user($email, $random_pass, $email);
-                                if (is_wp_error($test_user_id)) {
-                                    $msg = '<div class="error"><p>Could not create test user: ' . esc_html($test_user_id->get_error_message()) . '</p></div>';
-                                    if (function_exists('workbooks_log')) workbooks_log("Test registration failed: Could not create user $email: " . $test_user_id->get_error_message());
-                                }
-                            }
-
-                            if ($test_user_id && !is_wp_error($test_user_id)) {
-                                $meta_fields = [
-                                    'first_name' => $first,
-                                    'last_name' => $last,
-                                    'employer' => $employer,
-                                    'employer_name' => $employer,
-                                    'town' => $town,
-                                    'country' => $country,
-                                    'telephone' => $telephone,
-                                    'postcode' => $postcode,
-                                    'job_title' => $job_title,
-                                    'person_personal_title' => $title,
-                                    'created_via_ninja_form' => 1,
-                                    'cf_person_dtr_subscriber_type' => 'Prospect',
-                                    'cf_person_dtr_web_member' => 1,
-                                    'lead_source_type' => 'Online Registration',
-                                    'cf_person_is_person_active_or_inactive' => 'Active',
-                                    'cf_person_data_source_detail' => 'DTR Member Registration'
-                                ];
-                                $subs = [
-                                    'cf_person_dtr_news' => isset($_POST['cf_person_dtr_news']) ? 1 : 0,
-                                    'cf_person_dtr_events' => isset($_POST['cf_person_dtr_events']) ? 1 : 0,
-                                    // 'cf_person_dtr_subscriber' => isset($_POST['cf_person_dtr_subscriber']) ? 1 : 0, // Not editable, set on registration
-                                    'cf_person_dtr_third_party' => isset($_POST['cf_person_dtr_third_party']) ? 1 : 0,
-                                    'cf_person_dtr_webinar' => isset($_POST['cf_person_dtr_webinar']) ? 1 : 0
-                                ];
-                                $interests = [
-                                    'cf_person_business' => isset($_POST['cf_person_business']) ? 1 : 0,
-                                    'cf_person_diseases' => isset($_POST['cf_person_diseases']) ? 1 : 0,
-                                    'cf_person_drugs_therapies' => isset($_POST['cf_person_drugs_therapies']) ? 1 : 0,
-                                    'cf_person_genomics_3774' => isset($_POST['cf_person_genomics_3774']) ? 1 : 0,
-                                    'cf_person_research_development' => isset($_POST['cf_person_research_development']) ? 1 : 0,
-                                    'cf_person_technology' => isset($_POST['cf_person_technology']) ? 1 : 0,
-                                    'cf_person_tools_techniques' => isset($_POST['cf_person_tools_techniques']) ? 1 : 0
-                                ];
-                                foreach ($meta_fields as $key => $value) {
-                                    update_user_meta($test_user_id, $key, $value);
-                                }
-                                foreach ($subs as $key => $value) {
-                                    update_user_meta($test_user_id, $key, $value);
-                                }
-                                foreach ($interests as $key => $value) {
-                                    update_user_meta($test_user_id, $key, $value);
-                                }
-                                $workbooks = get_workbooks_instance();
-                                if (!$workbooks) {
-                                    $msg = '<div class="error"><p>Workbooks API initialization failed.</p></div>';
-                                    if (function_exists('workbooks_log')) workbooks_log("Test registration failed: Workbooks API initialization failed for $email");
-                                } else {
-                                    $person_id = get_user_meta($test_user_id, 'workbooks_person_id', true);
-                                    $payload = [
-                                        'person_first_name' => $first,
-                                        'person_last_name' => $last,
-                                        'main_location[email]' => $email,
-                                        'cf_person_claimed_employer' => $employer,
-                                        'created_through_reference' => 'wp_user_' . $test_user_id,
-                                        'main_location[town]' => $town,
-                                        'main_location[country]' => $country,
-                                        'main_location[telephone]' => $telephone,
-                                        'main_location[postcode]' => $postcode,
-                                        'person_job_title' => $job_title,
-                                        'person_personal_title' => $title,
-                                        'cf_person_dtr_subscriber_type' => 'Prospect',
-                                        'cf_person_dtr_web_member' => 1,
-                                        'lead_source_type' => 'Online Registration',
-                                        'cf_person_is_person_active_or_inactive' => 'Active',
-                                        'cf_person_data_source_detail' => 'DTR Member Registration'
-                                    ];
-                                    $payload = array_merge($payload, $subs, $interests);
-                                    $org_id = function_exists('workbooks_get_or_create_organisation_id') ? workbooks_get_or_create_organisation_id($employer) : null;
-                                    if ($org_id) {
-                                        $payload['main_employer'] = $org_id;
-                                    }
-                                    try {
-                                        if ($person_id) {
-                                            $payload['id'] = $person_id;
-                                            $existing = $workbooks->assertGet('crm/people', [
-                                                '_start' => 0,
-                                                '_limit' => 1,
-                                                '_ff[]' => 'id',
-                                                '_ft[]' => 'eq',
-                                                '_fc[]' => $person_id,
-                                                '_select_columns[]' => ['id', 'lock_version']
-                                            ]);
-                                            $lock_version = $existing['data'][0]['lock_version'] ?? null;
-                                            if ($lock_version !== null) {
-                                                $payload['lock_version'] = $lock_version;
-                                                $workbooks->assertUpdate('crm/people', [$payload]);
-                                                if (function_exists('workbooks_log')) workbooks_log("Updated Workbooks person ID $person_id for test user $email");
-                                            }
-                                        } else {
-                                            $result = $workbooks->assertCreate('crm/people', [$payload]);
-                                            if (!empty($result['data'][0]['id'])) {
-                                                update_user_meta($test_user_id, 'workbooks_person_id', $result['data'][0]['id']);
-                                                update_user_meta($test_user_id, 'workbooks_object_ref', $result['data'][0]['object_ref'] ?? '');
-                                                if (function_exists('workbooks_log')) workbooks_log("Created Workbooks person ID {$result['data'][0]['id']} for test user $email");
-                                            }
-                                        }
-                                        $msg = '<div class="updated"><p>Test registration created and synced to Workbooks for user ' . esc_html($email) . '.</p></div>';
-                                    } catch (Exception $e) {
-                                        $msg = '<div class="error"><p>Workbooks error: ' . esc_html($e->getMessage()) . '</p></div>';
-                                        if (function_exists('workbooks_log')) workbooks_log("Test registration failed for $email: " . $e->getMessage());
-                                    }
-                                }
-                            }
-                        }
-                        echo $msg;
-                        ?>
-                        <form method="post">
-                            <p><label>Title<br><input type="text" name="person_personal_title" value="Mr." readonly></label></p>
-                            <p><label>First Name<br><input type="text" name="first_name" value="TestFirst" readonly></label></p>
-                            <p><label>Last Name<br><input type="text" name="last_name" value="TestLast" readonly></label></p>
-                            <p><label>Email Address<br><input type="email" name="email" value="testuser_<?php echo time(); ?>@supersonicplayground.com" readonly></label></p>
-                            <p><label>Employer<br><input type="text" name="employer" value="Supersonic Playground Ltd" readonly></label></p>
-                            <p><label>Job Title<br><input type="text" name="job_title" value="Developer" readonly></label></p>
-                            <p><label>Town / City<br><input type="text" name="town" value="London" readonly></label></p>
-                            <p><label>Country<br><input type="text" name="country" value="United Kingdom" readonly></label></p>
-                            <p><label>Telephone<br><input type="text" name="telephone" value="0123456789" readonly></label></p>
-                            <p><label>Post / Zip Code<br><input type="text" name="postcode" value="SE10 9XY" readonly></label></p>
-                            <fieldset>
-                                <legend><strong>Subscriptions</strong></legend>
-                                <?php
-                                $subs = [
-                                    'cf_person_dtr_news' => 'DTR News',
-                                    'cf_person_dtr_events' => 'DTR Events',
-                                    // 'cf_person_dtr_subscriber' => 'DTR Subscriber', // Not editable, set on registration
-                                    'cf_person_dtr_third_party' => 'DTR Third Party',
-                                    'cf_person_dtr_webinar' => 'DTR Webinar',
-                                ];
-                                foreach ($subs as $k => $label): ?>
-                                    <label style="display:block;">
-                                        <input type="checkbox" name="<?php echo esc_attr($k); ?>" value="1" checked disabled>
-                                        <?php echo esc_html($label); ?>
-                                    </label>
-                                <?php endforeach; ?>
-                            </fieldset>
-                            <fieldset>
-                                <legend><strong>Interests</strong></legend>
-                                <?php
-                                $interests = [
-                                    'cf_person_business' => 'Business',
-                                    'cf_person_diseases' => 'Diseases',
-                                    'cf_person_drugs_therapies' => 'Drugs & Therapies',
-                                    'cf_person_genomics_3774' => 'Genomics',
-                                    'cf_person_research_development' => 'Research & Development',
-                                    'cf_person_technology' => 'Technology',
-                                    'cf_person_tools_techniques' => 'Tools & Techniques',
-                                ];
-                                foreach ($interests as $k => $label): ?>
-                                    <label style="display:block;">
-                                        <input type="checkbox" name="<?php echo esc_attr($k); ?>" value="1" checked disabled>
-                                        <?php echo esc_html($label); ?>
-                                    </label>
-                                <?php endforeach; ?>
-                            </fieldset>
-                            <fieldset>
-                                <legend><strong>DTR Required Fields (synced, not editable)</strong></legend>
-                                <label>Subscriber Type: <input type="text" value="Prospect" readonly></label><br>
-                                <label>Web Member: <input type="text" value="1" readonly></label><br>
-                                <label>Lead Source Type: <input type="text" value="Online Registration" readonly></label><br>
-                                <label>Active/Inactive: <input type="text" value="Active" readonly></label><br>
-                                <label>Data Source Detail: <input type="text" value="DTR Member Registration" readonly></label>
-                            </fieldset>
-                            <input type="submit" name="dtr_admin_test_reg_submit" value="Run Test Registration" class="button button-primary">
-                        </form>
-                    <?php } ?>
-                </div>
-                <!-- Employers Tab -->
-                <div id="workbooks-employers-content" class="workbooks-tab-content">
-                    <h2>Employers Sync</h2>
-                    <div class="employers-actions" style="margin-bottom:20px;">
-                        <button id="workbooks_sync_employers" class="button button-primary">Sync All Employers</button>
-                        <button id="workbooks_generate_json" class="button button-secondary">Generate JSON from Database</button>
-                        <button id="workbooks_load_employers" class="button">Load Employers List</button>
-                        <span id="employers-sync-status" style="margin-left:10px;"></span>
-                    </div>
-                    
-                    <div id="employers-sync-progress" style="margin-bottom:20px; display:none;">
-                        <progress id="employers-progress-bar" value="0" max="100" style="width:100%;"></progress>
-                        <p id="employers-progress-text">Starting sync...</p>
-                    </div>
-                    
-                    <div id="employers-search-container" style="margin-bottom:15px; display:none;">
-                        <input type="search" id="employer-search" placeholder="Search employers..." style="width:50%;">
-                        <button type="button" id="employer-search-btn" class="button">Search</button>
-                        <button type="button" id="employer-reset-btn" class="button">Reset</button>
-                        <p><span id="employer-count">0</span> employers found</p>
-                    </div>
-                    
-                    <div id="employers-table-container" style="display:none;">
-                        <table class="wp-list-table widefat fixed striped employers-table">
-                            <thead>
-                                <tr>
-                                    <th scope="col" width="10%">ID</th>
-                                    <th scope="col" width="60%">Name</th>
-                                    <th scope="col" width="20%">Last Updated</th>
-                                    <th scope="col" width="10%">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="employers-table-body">
-                                <tr>
-                                    <td colspan="4">No employers loaded yet.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div id="employers-pagination" style="margin-top:15px; display:none;">
-                        <button id="load-more-employers" class="button">Load More</button>
-                    </div>
-                    
-                    <div style="margin-top:20px;">
-                        <h3>Last Sync Information</h3>
-                        <?php
-                        $last_sync = get_option('workbooks_employers_last_sync');
-                        if ($last_sync) {
-                            echo '<p><strong>Last Sync:</strong> ' . date('Y-m-d H:i:s', $last_sync['time']) . '</p>';
-                            echo '<p><strong>Employers Count:</strong> ' . intval($last_sync['count']) . '</p>';
-                        } else {
-                            echo '<p>No sync has been performed yet.</p>';
-                        }
-                        ?>
-                        <p><strong>Next Scheduled Sync:</strong> 
-                        <?php
-                        $next_sync = wp_next_scheduled('workbooks_daily_employer_sync');
-                        echo $next_sync ? date('Y-m-d H:i:s', $next_sync) : 'Not scheduled';
-                        ?>
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Ninja Form Users Tab -->
-                <div id="workbooks-ninja-users-content" class="workbooks-tab-content">
-                    <h2>Users Created from Ninja Forms Submissions</h2>
-                    <?php
-                    $args = [
-                        'meta_key' => 'created_via_ninja_form',
-                        'meta_value' => 1,
-                        'orderby' => 'registered',
-                        'order' => 'DESC',
-                        'number' => 50,
-                    ];
-                    $users = get_users($args);
-                    if (empty($users)) {
-                        echo '<p>No users created via Ninja Forms found.</p>';
-                    } else {
-                        echo '<table class="wp-list-table widefat fixed striped">';
-                        echo '<thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Registered</th>
-                                <th>Workbooks Person ID</th>
-                                <th>Workbooks ID</th>
-                                <th>Employer</th>
-                            </tr>
-                        </thead><tbody>';
-
-                        foreach ($users as $user) {
-
-                            // Workbooks object_ref (Person ID) and Workbooks ID
-                            $workbooks_object_ref = get_user_meta($user->ID, 'workbooks_object_ref', true);
-                            // Fallback to person_object_ref if needed
-                            if (!$workbooks_object_ref) {
-                                $workbooks_object_ref = get_user_meta($user->ID, 'person_object_ref', true);
-                            }
-                            // If still not found, try to fetch from Workbooks API using workbooks_person_id
-                            if (!$workbooks_object_ref) {
-                                $workbooks_person_id = get_user_meta($user->ID, 'workbooks_person_id', true);
-                                $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
-                                if ($workbooks && $workbooks_person_id) {
-                                    try {
-                                        $result = $workbooks->assertGet('crm/people.api', [
-                                            '_start' => 0,
-                                            '_limit' => 1,
-                                            '_ff[]' => 'id',
-                                            '_ft[]' => 'eq',
-                                            '_fc[]' => $workbooks_person_id
-                                        ]);
-                                        if (!empty($result['data'][0]['object_ref'])) {
-                                            $workbooks_object_ref = $result['data'][0]['object_ref'];
-                                            // Optionally update user meta for future
-                                            update_user_meta($user->ID, 'workbooks_object_ref', $workbooks_object_ref);
-                                        }
-                                    } catch (Exception $e) {}
-                                }
-                            }
-                            $workbooks_id = get_user_meta($user->ID, 'workbooks_person_id', true);
-                            if (!$workbooks_id) {
-                                $workbooks_id = get_user_meta($user->ID, 'workbooks_id', true);
-                            }
-                            $employer = get_user_meta($user->ID, 'employer_name', true);
-                            $subscriptions = get_user_meta($user->ID, 'subscriptions', true);
-
-                            // Format subscriptions (if array, convert to comma-separated string)
-                            if (is_array($subscriptions)) {
-                                $subscriptions = implode(', ', $subscriptions);
-                            }
-
-                            echo '<tr>';
-                            echo '<td>' . esc_html($user->ID) . '</td>';
-                            echo '<td>' . esc_html($user->user_login) . '</td>';
-                            echo '<td>' . esc_html($user->user_email) . '</td>';
-                            echo '<td>' . esc_html(date('Y-m-d H:i', strtotime($user->user_registered))) . '</td>';
-                            echo '<td>' . esc_html($workbooks_object_ref ?: '-') . '</td>';
-                            echo '<td>' . esc_html($workbooks_id ?: '-') . '</td>';
-                            echo '<td>' . esc_html($employer ?: '-') . '</td>';
-                            echo '</tr>';
-
-                            // Sync, Delete, and Generate IDs button row
-                            echo '<tr><td colspan="7">';
-                            echo '<form method="post" style="display:inline-block; margin-right:10px;">';
-                            echo '<input type="hidden" name="workbooks_sync_user_id" value="' . esc_attr($user->ID) . '">';
-                            submit_button('Sync to Workbooks', 'small', 'workbooks_sync_to_workbooks', false);
-                            echo '</form>';
-                            echo '<form method="post" style="display:inline-block; margin-right:10px;" onsubmit="return confirm(\'Are you sure you want to delete this user?\');">';
-                            echo '<input type="hidden" name="delete_user_id" value="' . esc_attr($user->ID) . '">';
-                            submit_button('Delete User', 'delete', 'delete_user', false);
-                            echo '</form>';
-                            if (empty($object_ref) || empty($workbooks_id)) {
-                                echo '<form method="post" style="display:inline-block;">';
-                                echo '<input type="hidden" name="generate_workbooks_ids_user_id" value="' . esc_attr($user->ID) . '">';
-                                submit_button('Generate Workbooks IDs', 'secondary', 'generate_workbooks_ids', false);
-                                echo '</form>';
-                            }
-                            echo '</td></tr>';
-                        }
-
-                        echo '</tbody></table>';
-                    }
-                    ?>
-                </div>
-
-                <!-- Topics of Interest Tab -->
-                <div id="workbooks-topics-content" class="workbooks-tab-content">
-                    <h2>Topics of Interest (TOI) and Areas of Interest (AOI) Mapping</h2>
-                    <p>This table shows all available Topics of Interest and their corresponding Areas of Interest mappings. When a user selects a TOI during registration, the corresponding AOI fields will be set to 1 in Workbooks.</p>
-                    
-                    <?php
-                    // Include helper functions
-                    if (file_exists(WORKBOOKS_NF_PATH . 'includes/helper-functions.php')) {
-                        require_once WORKBOOKS_NF_PATH . 'includes/helper-functions.php';
-                    }
-                    
-                    // Get all TOI options and AOI field names
-                    $toi_options = function_exists('dtr_get_all_toi_options') ? dtr_get_all_toi_options() : [];
-                    $aoi_field_names = function_exists('dtr_get_aoi_field_names') ? dtr_get_aoi_field_names() : [];
-                    
-                    if (empty($toi_options)) {
-                        echo '<p>No TOI options available.</p>';
-                    } else {
-                echo '<style>
-                    .toi-mapping-table th { background-color: #f1f1f1; }
-                    .toi-field-name { font-family: monospace; font-size: 0.9em; color: #666; }
-                    .aoi-badges { display: flex; flex-wrap: wrap; gap: 5px; }
-                    .aoi-badge { background-color: #0073aa; color: white; padding: 2px 8px; border-radius: 3px; font-size: 0.85em; }
-                    .no-mapping { color: #999; font-style: italic; }
-                </style>';
-                
-                echo '<table class="wp-list-table widefat fixed striped toi-mapping-table">';
-                echo '<thead>
-                    <tr>
-                        <th style="width: 30%;">Topic of Interest (TOI)</th>
-                        <th style="width: 70%;">Mapped Areas of Interest (AOI)</th>
-                    </tr>
-                </thead><tbody>';
-
-                foreach ($toi_options as $toi_field => $toi_name) {
-                    // Get the AOI mapping for this single TOI
-                    $aoi_mapping = function_exists('dtr_map_toi_to_aoi') ? dtr_map_toi_to_aoi([$toi_field]) : [];
-                    
-                    // Find which AOI fields are set to 1
-                    $mapped_aois = [];
-                    foreach ($aoi_mapping as $aoi_field => $value) {
-                        if ($value == 1 && isset($aoi_field_names[$aoi_field])) {
-                            $mapped_aois[] = $aoi_field_names[$aoi_field];
-                        }
-                    }
-                    
-                    // Count the number of mapped AOIs
-                    $aoi_count = count($mapped_aois);
-                    $toi_display_name = $toi_name . ' AOI (' . $aoi_count . ')';
-                    
-                    echo '<tr>';
-                    echo '<td><strong>' . esc_html($toi_display_name) . '</strong><br><span class="toi-field-name">' . esc_html($toi_field) . '</span></td>';
-                    echo '<td>';
-                    if (empty($mapped_aois)) {
-                        echo '<span class="no-mapping">No AOI mappings configured</span>';
-                    } else {
-                        echo '<div class="aoi-badges">';
-                        foreach ($mapped_aois as $aoi_name) {
-                            echo '<span class="aoi-badge">' . esc_html($aoi_name) . '</span>';
-                        }
-                        echo '</div>';
-                    }
-                    echo '</td>';
-                    echo '</tr>';
-                }
-
-                echo '</tbody></table>';
-                
-                echo '<h3 style="margin-top: 30px;">Available AOI Fields</h3>';
-                echo '<p>These are all the available Areas of Interest fields that can be mapped to Topics of Interest:</p>';
-                echo '<ul>';
-                foreach ($aoi_field_names as $aoi_field => $aoi_name) {
-                    echo '<li><strong>' . esc_html($aoi_name) . '</strong> <span class="toi-field-name">(' . esc_html($aoi_field) . ')</span></li>';
-                }
-                echo '</ul>';
-            }
-            ?>
-        </div>
-
-        <!-- Tab UI Script -->
+    /**
+     * API Settings page (separate from Welcome)
+     */
+    public function admin_api_settings_page() {
+        echo '<div class="wrap plugin-admin-content">';
+        echo '<h1>'.esc_html__('API Settings','dtr-workbooks').'</h1>';
+        $api_settings_file = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/content-api-settings.php';
+        if (file_exists($api_settings_file)) {
+            // Include settings form markup
+            include $api_settings_file; // phpcs:ignore WordPressVIPMinimum.Files.IncludingFile.UsingVariable
+        } else {
+            echo '<p>'.esc_html__('API Settings content file missing (admin/content-api-settings.php).','dtr-workbooks').'</p>';
+        }
+        // Provide minimal inline JS for Test Connection button (reused from main page)
+        ?>
         <script>
-        jQuery(document).ready(function($) {
-            console.log('Workbooks admin page JavaScript loaded');
-            
-            $('.nav-tab').click(function(e) {
-                e.preventDefault();
-                console.log('Tab clicked:', $(this).attr('id'));
-                
-                $('.nav-tab').removeClass('nav-tab-active');
-                $(this).addClass('nav-tab-active');
-                $('.workbooks-tab-content').removeClass('active');
-
-                var tabId = $(this).attr('id');
-                var contentId = '';
-                
-                if (tabId === 'workbooks-settings-tab') {
-                    contentId = 'workbooks-settings-content';
-                } else if (tabId === 'workbooks-person-tab') {
-                    contentId = 'workbooks-person-content';
-                    fetchOrganisations();
-                } else if (tabId === 'workbooks-gated-content-tab') {
-                    contentId = 'workbooks-gated-content';
-                } else if (tabId === 'workbooks-gated-articles-tab') {
-                    contentId = 'workbooks-gated-articles-content';
-                } else if (tabId === 'workbooks-gated-whitepapers-tab') {
-                    contentId = 'workbooks-gated-whitepapers-content';
-                } else if (tabId === 'workbooks-gated-news-tab') {
-                    contentId = 'workbooks-gated-news-content';
-                } else if (tabId === 'workbooks-gated-events-tab') {
-                    contentId = 'workbooks-gated-events-content';
-                } else if (tabId === 'workbooks-webinar-tab') {
-                    contentId = 'workbooks-webinar-content';
-                } else if (tabId === 'workbooks-mediaplanner-tab') {
-                    contentId = 'workbooks-mediaplanner-content';
-                } else if (tabId === 'workbooks-membership-tab') {
-                    contentId = 'workbooks-membership-content';
-                } else if (tabId === 'workbooks-employers-tab') {
-                    contentId = 'workbooks-employers-content';
-                } else if (tabId === 'workbooks-ninja-users-tab') {
-                    contentId = 'workbooks-ninja-users-content';
-                } else if (tabId === 'workbooks-topics-tab') {
-                    contentId = 'workbooks-topics-content';
-                }
-                
-                if (contentId) {
-                    console.log('Showing content:', contentId);
-                    $('#' + contentId).addClass('active');
-                } else {
-                    console.error('No content ID found for tab:', tabId);
-                }
-            });
-
-            // Fetch organisations for Person Record tab
-            function fetchOrganisations() {
-                console.log('Fetching organisations');
-                if (typeof workbooks_ajax === 'undefined') {
-                    console.log('workbooks_ajax not available');
-                    return;
-                }
-                
-                $('#employer-loading').show();
-                $.getJSON(workbooks_ajax.plugin_url + 'employers.json', function(data) {
-                    var $select = $('#employer');
-                    $select.empty().append('<option value="">-- Select Employer --</option>');
-                    $('#employer-loading').hide();
-                    if (data && Array.isArray(data)) {
-                        $.each(data, function(index, org) {
-                            $select.append('<option value="' + org.name + '">' + org.name + '</option>');
-                        });
+        jQuery(function($){
+            var ajaxurl = dtr_workbooks_admin.ajax_url; var nonce = dtr_workbooks_admin.nonce;
+            $('#test-connection').off('click.dtr').on('click.dtr', function(){
+                var $button = $(this); var $result = $('#connection-result');
+                $button.prop('disabled', true); $result.html('<span style="color:#666;">Testing connection...</span>');
+                $.ajax({
+                    url: ajaxurl, type: 'POST', data: {action:'sspg_test_workbooks_connection', nonce: nonce}, dataType:'json'
+                }).done(function(resp){
+                    if(resp && resp.success){
+                        $result.html('<span style="color:green;">✓ '+(resp.data && resp.data.message ? resp.data.message : 'Connection successful')+'</span>');
                     } else {
-                        console.error('Invalid or empty employers.json data');
-                        fetchOrganisationsFromAjax();
+                        var msg = resp && resp.data && resp.data.message ? resp.data.message : 'Connection test failed';
+                        $result.html('<span style="color:red;">✗ '+msg+'</span>');
                     }
-                }).fail(function() {
-                    console.error('Failed to load employers.json');
-                    fetchOrganisationsFromAjax();
-                });
-            }
-
-            // Fallback function to fetch organisations via AJAX
-            function fetchOrganisationsFromAjax() {
-                $('#employer-loading').show();
-                $.post(workbooks_ajax.ajax_url, {
-                    action: 'fetch_workbooks_organisations',
-                    nonce: workbooks_ajax.nonce,
-                }, function(response) {
-                    var $select = $('#employer');
-                    $select.empty().append('<option value="">-- Select Employer --</option>');
-                    $('#employer-loading').hide();
-                    if (response.success && response.data.length) {
-                        $.each(response.data, function(index, org) {
-                            $select.append('<option value="' + org.name + '">' + org.name + '</option>');
-                        });
-                    } else {
-                        console.error('Error loading organisations:', response.data);
-                        $select.append('<option value="">No employers found</option>');
-                    }
-                }).fail(function() {
-                    console.error('AJAX request failed for organisations');
-                    $('#employer-loading').hide();
-                    $('#employer').append('<option value="">Error loading employers</option>');
-                });
-            }
-
-            // Handle Generate JSON button click
-            $('#workbooks_generate_json').on('click', function() {
-                var $button = $(this);
-                var $status = $('#employers-sync-status');
-                
-                $button.prop('disabled', true);
-                $status.html('<span style="color:#666;">Generating JSON...</span>');
-                
-                $.post(workbooks_ajax.ajax_url, {
-                    action: 'workbooks_generate_employers_json',
-                    nonce: workbooks_ajax.nonce
-                }, function(response) {
-                    if (response.success) {
-                        $status.html('<span style="color:green;">' + response.data + '</span>');
-                    } else {
-                        $status.html('<span style="color:red;">Error: ' + response.data + '</span>');
-                    }
-                    $button.prop('disabled', false);
-                }).fail(function() {
-                    $status.html('<span style="color:red;">Request failed. Please try again.</span>');
-                    $button.prop('disabled', false);
-                });
-            });
-
-            // Fetch logical databases
-            function fetchDatabases() {
-                $.post(workbooks_ajax.ajax_url, {
-                    action: 'fetch_workbooks_databases',
-                    nonce: workbooks_ajax.nonce,
-                }, function(response) {
-                    var $select = $('#workbooks_logical_database_id');
-                    $select.empty();
-                    if (response.success) {
-                        if (response.data.no_selection_required) {
-                            $select.append('<option value="">No database selection required</option>');
-                            $select.prop('disabled', true);
-                        } else if (response.data.length) {
-                            $select.append('<option value="">-- Select a Logical Database --</option>');
-                            $.each(response.data, function(index, db) {
-                                $select.append('<option value="' + db.logical_database_id + '">' + db.name + '</option>');
-                            });
-                            $select.prop('disabled', false);
-                            // Set the saved value if it exists
-                            var savedValue = <?php echo json_encode(esc_attr(get_option('workbooks_logical_database_id'))); ?>;
-                            if (savedValue) {
-                                $select.val(savedValue);
-                            }
-                        } else {
-                            $select.append('<option value="">No databases found</option>');
-                            $select.prop('disabled', true);
-                        }
-                    } else {
-                        $select.append('<option value="">Error loading databases</option>');
-                        console.error('Error loading databases:', response.data);
-                        $select.prop('disabled', true);
-                    }
-                });
-            }
-            
-            // Fetch databases on page load
-            fetchDatabases();
-            
-            // Fetch organisations when Person Record tab is active
-            if ($('#workbooks-person-content').is(':visible')) {
-                fetchOrganisations();
-            }
-            
-            // Fetch organisations when Person Record tab is clicked
-            $('#workbooks-person-tab').click(function() {
-                fetchOrganisations();
-            });
-            
-            // Update form submission to use AJAX
-            $('#workbooks_update_user_form').on('submit', function(e) {
-                e.preventDefault();
-                var formData = $(this).serialize();
-                formData += '&action=workbooks_update_user&nonce=' + workbooks_ajax.nonce;
-                
-                $.post(workbooks_ajax.ajax_url, formData, function(response) {
-                    if (response.success) {
-                        alert('Success: ' + response.data);
-                    } else {
-                        alert('Error: ' + response.data);
-                    }
-                }).fail(function() {
-                    alert('Request failed. Please try again.');
-                });
-            });
-            
-            // Test connection button
-            $('#workbooks_test_connection').on('click', function() {
-                var $button = $(this);
-                var $result = $('#workbooks_test_result');
-                
-                $button.prop('disabled', true);
-                $result.html('<span style="color:#666;">Testing connection...</span>');
-                
-                $.post(workbooks_ajax.ajax_url, {
-                    action: 'workbooks_test_connection',
-                    nonce: workbooks_ajax.nonce
-                }, function(response) {
-                    if (response.success) {
-                        $result.html('<span style="color:green;">Success: ' + response.data + '</span>');
-                    } else {
-                        $result.html('<span style="color:red;">Error: ' + response.data + '</span>');
-                    }
-                    $button.prop('disabled', false);
-                }).fail(function() {
-                    $result.html('<span style="color:red;">Request failed. Please check your settings and try again.</span>');
+                }).fail(function(){
+                    $result.html('<span style="color:red;">✗ Connection test failed</span>');
+                }).always(function(){
                     $button.prop('disabled', false);
                 });
             });
         });
         </script>
-            </div> <!-- /workbooks-content-area -->
-        </div> <!-- /workbooks-admin-container -->
-    </div> <!-- /wrap -->
-    <?php
-}
-
-// Ajax: fetch logical databases (for dropdown)
-add_action('wp_ajax_fetch_workbooks_databases', function() {
-    check_ajax_referer('workbooks_nonce', 'nonce');
-    $api_key = get_option('workbooks_api_key');
-    $api_url = get_option('workbooks_api_url');
-    if (!$api_key || !$api_url) {
-        wp_send_json_error('Missing API URL or Key');
-    }
-    $workbooks = new WorkbooksApi([
-        'application_name' => 'wp_workbooks_plugin',
-        'user_agent' => 'wp_workbooks_plugin/1.0',
-        'service' => $api_url,
-        'json_utf8_encoding' => true,
-        'request_timeout' => 30,
-        'verify_peer' => false,
-    ]);
-    $login_response = $workbooks->login(['api_key' => $api_key]);
-    if ($login_response['http_status'] == WorkbooksApi::HTTP_STATUS_FORBIDDEN && !empty($login_response['response']['databases'])) {
-        wp_send_json_success($login_response['response']['databases']);
-    } elseif ($login_response['http_status'] == WorkbooksApi::HTTP_STATUS_OK) {
-        wp_send_json_success(['no_selection_required' => true]);
-    } else {
-        wp_send_json_error('Login failed: ' . print_r($login_response, true));
-    }
-});
-
-// Ajax: update person record & WP user meta
-add_action('wp_ajax_workbooks_update_user', function() {
-    check_ajax_referer('workbooks_nonce', 'nonce');
-    if (!current_user_can('manage_options')) {
-        wp_send_json_error('Permission denied.');
-    }
-    $user_id = get_current_user_id();
-    $user = get_userdata($user_id);
-    if (!$user) {
-        wp_send_json_error('User not found.');
-    }
-    // Sanitize input
-    $person_id    = sanitize_text_field($_POST['person_id'] ?? '');
-    $lock_version = sanitize_text_field($_POST['lock_version'] ?? '');
-    $first_name = sanitize_text_field($_POST['person_first_name'] ?? '');
-    $last_name  = sanitize_text_field($_POST['person_last_name'] ?? '');
-    $title      = sanitize_text_field($_POST['person_personal_title'] ?? ''); // Correct field name from form
-    $job_title  = sanitize_text_field($_POST['person_job_title'] ?? '');
-    $email      = $user->user_email;  // readonly from WP user
-    $telephone  = sanitize_text_field($_POST['telephone'] ?? '');
-    $country    = sanitize_text_field($_POST['country'] ?? '');
-    $town       = sanitize_text_field($_POST['town'] ?? '');
-    $postcode   = sanitize_text_field($_POST['postcode'] ?? '');
-    $employer_name = sanitize_text_field($_POST['employer_name'] ?? '');
-    $payload = [
-        'name' => trim("$first_name $last_name"),
-        'person_first_name' => $first_name,
-        'person_last_name' => $last_name,
-        'person_personal_title' => $title, // Correct Workbooks field for title
-        'person_job_title' => $job_title,
-        'main_location[email]' => $email,
-        'main_location[telephone]' => $telephone,
-        'main_location[country]' => 'South Africa', // Always use full country name for Workbooks
-        'main_location[town]' => $town,
-        'main_location[postcode]' => $postcode,
-        'created_through_reference' => 'wp_user_' . $user_id,
-    ];
-    // DTR marketing preferences
-    $dtr_fields = [
-        'cf_person_dtr_news',
-        'cf_person_dtr_events',
-        // 'cf_person_dtr_subscriber' => 'DTR Subscriber', // Not editable, set on registration
-        'cf_person_dtr_third_party',
-        'cf_person_dtr_webinar',
-    ];
-    foreach ($dtr_fields as $field) {
-        $value = isset($_POST[$field]) ? 1 : 0;
-        update_user_meta($user_id, $field, $value);
-        $payload[$field] = $value;
-    }
-
-    // DTR areas of interest (interests checkboxes)
-    $interests_fields = [
-        'cf_person_business',
-        'cf_person_diseases',
-        'cf_person_drugs_therapies',
-        'cf_person_genomics',
-        'cf_person_research_development',
-        'cf_person_technology',
-        'cf_person_tools_techniques',
-    ];
-    foreach ($interests_fields as $field) {
-        $value = isset($_POST[$field]) ? 1 : 0;
-        update_user_meta($user_id, $field, $value);
-        $payload[$field] = $value;
-    }
-    // Add employer organisation ID
-    $organisation_id = workbooks_get_or_create_organisation_id($employer_name);
-    if ($organisation_id) {
-        $payload['main_employer'] = $organisation_id;
-    }
-    if ($person_id && $lock_version) {
-        $payload['id'] = $person_id;
-        $payload['lock_version'] = $lock_version;
-    }
-    $workbooks = get_workbooks_instance();
-    try {
-        $objs = [$payload];
-        if ($person_id && $lock_version) {
-            $response = $workbooks->assertUpdate('crm/people', $objs);
-        } else {
-            $response = $workbooks->assertCreate('crm/people', $objs);
-        }
-        // Update WP user meta
-        update_user_meta($user_id, 'first_name', $first_name);
-        update_user_meta($user_id, 'last_name', $last_name);
-        update_user_meta($user_id, 'person_personal_title', $title); // Save correct meta key
-        update_user_meta($user_id, 'job_title', $job_title);
-        update_user_meta($user_id, 'telephone', $telephone);
-        update_user_meta($user_id, 'country', $country);
-        update_user_meta($user_id, 'town', $town);
-        update_user_meta($user_id, 'postcode', $postcode);
-        if ($employer_name) {
-            update_user_meta($user_id, 'employer_name', $employer_name);
-        }
-        wp_send_json_success('Workbooks record updated and user meta saved.');
-    } catch (Exception $e) {
-        wp_send_json_error('Exception: ' . $e->getMessage());
-    }
-});
-
-// Include AJAX handlers for webinars and ACF fields
-if (file_exists(WORKBOOKS_NF_PATH . 'includes/ajax-handlers.php')) {
-    require_once WORKBOOKS_NF_PATH . 'includes/ajax-handlers.php';
-}
-
-
-// --- Ninja Forms User Registration and Workbooks Sync ---
-// Hook into Ninja Forms submission - TEMPORARILY DISABLED
-// add_action('ninja_forms_after_submission', 'dtr_ninja_forms_submission_handler', 10, 1);
-
-// AJAX handlers for manual calls
-add_action('wp_ajax_nopriv_dtr_ninja_register_user', 'dtr_ninja_register_user_handler');
-add_action('wp_ajax_dtr_ninja_register_user', 'dtr_ninja_register_user_handler');
-
-if (!function_exists('dtr_ninja_register_user_handler')) {
-function dtr_ninja_register_user_handler() {
-    // Add error logging
-    try {
-        // Log full POST for debugging
-        if (function_exists('workbooks_log')) workbooks_log('NF POST: ' . print_r($_POST, true));
-        
-        // Validate nonce if sent
-        if (isset($_POST['nonce']) && !wp_verify_nonce($_POST['nonce'], 'workbooks_nonce')) {
-            wp_send_json_error('Invalid nonce.');
-        }
-    
-    $email = sanitize_email($_POST['email'] ?? '');
-    if (!$email || email_exists($email)) {
-        wp_send_json_error('Email is required and must not already exist.');
+        <?php
+        echo '</div>';
     }
     
-    $first = sanitize_text_field($_POST['first_name'] ?? '');
-    $last = sanitize_text_field($_POST['last_name'] ?? '');
-    $employer = sanitize_text_field($_POST['employer'] ?? '');
-    $town = sanitize_text_field($_POST['town'] ?? '');
-    $country = 'South Africa'; // Always use full country name for Workbooks
-    $telephone = sanitize_text_field($_POST['telephone'] ?? '');
-    $postcode = sanitize_text_field($_POST['postcode'] ?? '');
-    $job_title = sanitize_text_field($_POST['job_title'] ?? '');
-    
-    // Handle title from field ID 291 (from debug log)
-    $title = '';
-    if (isset($_POST['fields']) && isset($_POST['fields']['291'])) {
-        $title = sanitize_text_field($_POST['fields']['291']);
-        if (function_exists('workbooks_log')) workbooks_log('Title from fields[291]: ' . $title);
-    } else {
-        $title = sanitize_text_field($_POST['person_personal_title'] ?? $_POST['title'] ?? '');
-        if (function_exists('workbooks_log')) workbooks_log('Title from direct POST: ' . $title);
-    }
-    
-    if (function_exists('workbooks_log')) workbooks_log('Final title value: ' . $title);
-    
-    $random_pass = wp_generate_password(12, false);
-    $user_id = wp_create_user($email, $random_pass, $email);
-    if (is_wp_error($user_id)) {
-        wp_send_json_error('Could not create user: ' . $user_id->get_error_message());
-    }
-    
-    // Map Ninja Forms checkbox values to DTR fields
-    $dtr_fields = [
-        'cf_person_dtr_news' => 'newsletter-news-articles-and-analysis-by-email',
-        'cf_person_dtr_events' => 'event-information-about-events-by-email',
-        'cf_person_dtr_third_party' => 'third-party-application-notes-product-developments-and-updates-from-our-trusted-partners-by-email',
-        'cf_person_dtr_webinar' => 'webinar-information-about-webinars-by-email',
-    ];
-    
-    $interests_fields = [
-        'cf_person_business' => 'business',
-        'cf_person_diseases' => 'diseases',
-        'cf_person_drugs_therapies' => 'drugs-and-therapies',
-        'cf_person_genomics' => 'genomics',
-        'cf_person_research_development' => 'research-and-development',
-        'cf_person_technology' => 'technology',
-        'cf_person_tools_techniques' => 'tools-and-techniques',
-    ];
-    
-    $meta_fields = [
-        'first_name' => $first,
-        'last_name' => $last,
-        'employer' => $employer,
-        'employer_name' => $employer, // Keep this for WP meta
-        'town' => $town,
-        'country' => $country,
-        'telephone' => $telephone,
-        'postcode' => $postcode,
-        'job_title' => $job_title,
-        'person_personal_title' => $title,
-        'created_via_ninja_form' => 1,
-        'cf_person_dtr_subscriber_type' => 'Prospect',
-        'cf_person_dtr_web_member' => 1,
-        'lead_source_type' => 'Online Registration',
-        'cf_person_is_person_active_or_inactive' => 'Active',
-        'cf_person_data_source_detail' => 'DTR Member Registration'
-    ];
-    
-    foreach ($meta_fields as $k => $v) {
-        update_user_meta($user_id, $k, $v);
-    }
-    
-    // Handle marketing preferences from fields structure
-    $nf_marketing = [];
-    if (isset($_POST['fields'])) {
-        // Look for marketing preference fields in the fields array
-        foreach ($_POST['fields'] as $field_id => $field_value) {
-            if (is_array($field_value)) {
-                $nf_marketing = array_merge($nf_marketing, $field_value);
-            } elseif (!empty($field_value) && in_array($field_value, array_values($dtr_fields))) {
-                $nf_marketing[] = $field_value;
-            }
-        }
-    }
-    // Also check direct POST values
-    if (isset($_POST['marketing_preferences'])) {
-        $nf_marketing = array_merge($nf_marketing, (array)$_POST['marketing_preferences']);
-    }
-    
-    foreach ($dtr_fields as $field => $nf_value) {
-        $value = in_array($nf_value, $nf_marketing) ? 1 : 0;
-        update_user_meta($user_id, $field, $value);
-    }
-    
-    // Handle interests from fields structure
-    $nf_interests = [];
-    if (isset($_POST['fields'])) {
-        // Look for interest fields in the fields array
-        foreach ($_POST['fields'] as $field_id => $field_value) {
-            if (is_array($field_value)) {
-                $nf_interests = array_merge($nf_interests, $field_value);
-            } elseif (!empty($field_value) && in_array($field_value, array_values($interests_fields))) {
-                $nf_interests[] = $field_value;
-            }
-        }
-    }
-    // Also check direct POST values
-    if (isset($_POST['select_interest'])) {
-        $nf_interests = array_merge($nf_interests, (array)$_POST['select_interest']);
-    }
-    
-    $selected_toi_fields = [];
-    foreach ($interests_fields as $field => $nf_value) {
-        $value = in_array($nf_value, $nf_interests) ? 1 : 0;
-        update_user_meta($user_id, $field, $value);
-        if ($value) $selected_toi_fields[] = $field;
-    }
-    
-    // Map TOI to AOI and save AOI fields
-    if (function_exists('dtr_map_toi_to_aoi') && !empty($selected_toi_fields)) {
-        $aoi_mapping = dtr_map_toi_to_aoi($selected_toi_fields);
-        foreach ($aoi_mapping as $aoi_field => $aoi_value) {
-            update_user_meta($user_id, $aoi_field, $aoi_value);
-        }
-        if (function_exists('workbooks_log')) {
-            workbooks_log('TOI to AOI mapping applied for user ' . $user_id . ': ' . print_r($aoi_mapping, true));
-        }
-    }
-    
-    // Prepare Workbooks payload
-    $payload = [
-        'person_first_name' => $first,
-        'person_last_name' => $last,
-        'name' => trim("$first $last"),
-        'main_location[email]' => $email,
-        'employer_name' => $employer, // Use editable employer_name field
-        'created_through_reference' => 'wp_user_' . $user_id,
-        'main_location[town]' => $town,
-        'main_location[country]' => 'South Africa',
-        'main_location[telephone]' => $telephone,
-        'main_location[postcode]' => $postcode,
-        'person_job_title' => $job_title,
-        'person_personal_title' => $title,
-        'cf_person_dtr_subscriber_type' => 'Prospect',
-        'cf_person_dtr_web_member' => 1,
-        'lead_source_type' => 'Online Registration',
-        'cf_person_is_person_active_or_inactive' => 'Active',
-        'cf_person_data_source_detail' => 'DTR Member Registration'
-    ];
-    
-    // Add marketing preferences to payload
-    foreach ($dtr_fields as $field => $nf_value) {
-        $payload[$field] = get_user_meta($user_id, $field, true) ? 1 : 0;
-    }
-    
-    // Add interests to payload
-    foreach ($interests_fields as $field => $nf_value) {
-        $payload[$field] = get_user_meta($user_id, $field, true) ? 1 : 0;
-    }
-    
-    // Include AOI fields in Workbooks payload
-    if (function_exists('dtr_get_aoi_field_names')) {
-        $aoi_fields = array_keys(dtr_get_aoi_field_names());
-        foreach ($aoi_fields as $aoi_field) {
-            $payload[$aoi_field] = get_user_meta($user_id, $aoi_field, true) ? 1 : 0;
-        }
-    }
-    
-    // Add organisation if available
-    $org_id = function_exists('workbooks_get_or_create_organisation_id') ? workbooks_get_or_create_organisation_id($employer) : null;
-    if ($org_id) {
-        $payload['main_employer'] = $org_id;
-    }
-    
-    // Log payload for debugging
-    if (function_exists('workbooks_log')) {
-        workbooks_log('Workbooks payload: ' . print_r($payload, true));
-    }
-    
-    $workbooks = get_workbooks_instance();
-    if (!$workbooks) {
-        wp_send_json_error('Workbooks API initialization failed.');
-    }
-    
-    try {
-        if (function_exists('workbooks_log')) workbooks_log('Attempting Workbooks API call...');
-        $result = $workbooks->assertCreate('crm/people', [$payload]);
-        if (function_exists('workbooks_log')) workbooks_log('Workbooks API call successful');
-        
-        if (!empty($result['data'][0]['id'])) {
-            update_user_meta($user_id, 'workbooks_person_id', $result['data'][0]['id']);
-            update_user_meta($user_id, 'workbooks_object_ref', $result['data'][0]['object_ref'] ?? '');
-            if (function_exists('workbooks_log')) workbooks_log('User meta updated with Workbooks IDs');
-        }
-        // Log full response for debugging
-        if (function_exists('workbooks_log')) workbooks_log('Workbooks person create response: ' . print_r($result, true));
-        wp_send_json_success([
-            'user_id' => $user_id, 
-            'workbooks_person_id' => $result['data'][0]['id'] ?? '', 
-            'workbooks_object_ref' => $result['data'][0]['object_ref'] ?? '', 
-            'workbooks_response' => $result
-        ]);
-    } catch (Exception $e) {
-        if (function_exists('workbooks_log')) workbooks_log('Workbooks error: ' . $e->getMessage());
-        if (function_exists('workbooks_log')) workbooks_log('Full exception: ' . print_r($e, true));
-        wp_send_json_error('Workbooks error: ' . $e->getMessage());
-    }
-} catch (Exception $global_e) {
-    if (function_exists('workbooks_log')) workbooks_log('Global error in registration handler: ' . $global_e->getMessage());
-    if (function_exists('workbooks_log')) workbooks_log('Global exception: ' . print_r($global_e, true));
-    wp_send_json_error('Registration error: ' . $global_e->getMessage());
-}
-}
-}
-
-// Ninja Forms submission handler - converts form data to AJAX format and calls the main handler
-if (!function_exists('dtr_ninja_forms_submission_handler')) {
-function dtr_ninja_forms_submission_handler($form_data) {
-    if (function_exists('workbooks_log')) workbooks_log('=== Ninja Forms submission detected ===');
-    if (function_exists('workbooks_log')) workbooks_log('Form data: ' . print_r($form_data, true));
-    
-    // Only process form ID 15 (registration form)
-    if (!isset($form_data['form_id']) || $form_data['form_id'] != 15) {
-        if (function_exists('workbooks_log')) workbooks_log('Skipping form - not registration form (ID 15)');
-        return;
-    }
-    
-    // Extract fields by key
-    $fields = [];
-    foreach ($form_data['fields'] as $field) {
-        $fields[$field['key']] = $field['value'];
-    }
-    
-    if (function_exists('workbooks_log')) workbooks_log('Extracted fields: ' . print_r($fields, true));
-    
-    // Convert to $_POST format that the AJAX handler expects
-    $backup_post = $_POST;
-    $_POST = [
-        'first' => $fields['first_name'] ?? '',
-        'last' => $fields['last_name'] ?? '',
-        'email' => $fields['email_address'] ?? '',
-        'employer' => $fields['employer'] ?? '',
-        'title' => $fields['title'] ?? '',
-        'telephone' => $fields['telephone'] ?? '',
-        'country' => $fields['country'] ?? '',
-        'town' => $fields['town'] ?? '',
-        'postcode' => $fields['postcode'] ?? '',
-        'job_title' => $fields['job_title'] ?? '',
-        'marketing_preferences' => $fields['marketing_preferences'] ?? [],
-        'topics_of_interest' => $fields['topics_of_interest'] ?? [],
-        'action' => 'dtr_ninja_register_user'
-    ];
-    
-    if (function_exists('workbooks_log')) workbooks_log('Converted POST data: ' . print_r($_POST, true));
-    
-    // Capture output instead of sending JSON response
-    ob_start();
-    try {
-        dtr_ninja_register_user_handler();
-        $output = ob_get_clean();
-        if (function_exists('workbooks_log')) workbooks_log('Handler completed successfully. Output: ' . $output);
-    } catch (Exception $e) {
-        ob_end_clean();
-        if (function_exists('workbooks_log')) workbooks_log('Handler failed: ' . $e->getMessage());
-    }
-    
-    // Restore original $_POST
-    $_POST = $backup_post;
-    
-    if (function_exists('workbooks_log')) workbooks_log('=== Ninja Forms submission processing complete ===');
-}
-}
-
-// Re-enable to load the disabled integration (action hooks are commented out)
-if (file_exists(WORKBOOKS_NF_PATH . 'includes/ninjaforms-workbooks-integration.php')) {
-    require_once WORKBOOKS_NF_PATH . 'includes/ninjaforms-workbooks-integration.php';
-}
-
-// Temporarily disable the old nf-user-register.php to prevent conflicts
-require_once WORKBOOKS_NF_PATH . 'includes/nf-user-register.php';
-require_once WORKBOOKS_NF_PATH . 'includes/workbooks-user-sync.php';
-
-// Gated Content page functions
-function workbooks_gated_content_main_page() {
-    ?>
-    <div class="wrap">
-        <h1>Gated Content Management</h1>
-        <p>Manage gated content settings for different post types. Use the submenu items to configure individual post types.</p>
-        
-        <div class="workbooks-gated-overview">
-            <h2>Overview</h2>
-            <div class="gated-stats">
+    /**
+     * Main admin page
+     *
+     * @return void
+     */
+    public function admin_page() {
+        ?>
+        <div class="wrap plugin-admin-content">
+            <h1><?php _e('DTR Workbooks CRM Integration', 'dtr-workbooks'); ?></h1>
+            
+            <div class="nav-tab-wrapper">
+                <a href="#welcome" class="nav-tab nav-tab-active"><?php _e('Welcome', 'dtr-workbooks'); ?></a>
+                <a href="#knowledge-base" class="nav-tab"><?php _e('Knowledge Base', 'dtr-workbooks'); ?></a>
+            </div>
+            <div id="dtr-toi-aoi-matrix" style="display:none;"><?php echo json_encode(function_exists('dtr_get_toi_to_aoi_matrix') ? dtr_get_toi_to_aoi_matrix() : new stdClass()); ?></div>
+            <div id="welcome" class="tab-content active">
+                <h2>Welcome to the DTR Workbooks Integration System</h2>
+                <p>To confirm that everything is working correctly, you need to complete these steps always</p>
+                <ol>
+                    <li>Test API Connection</li>
+                    <li>My Account - Update Profile Details</li>
+                    <li>My Account - Update Marketing Preferences</li>
+                    <li>My Account - Update Topics of Interest</li>
+                </ol>
+                <p>If all is working correctly, then you can rest assured that you are in safe hands and all systems are a go…</p>
+            </div>
+            <!-- Knowledge Base -->
+            <div id="knowledge-base" class="tab-content" style="margin-top:0; display:none;">
                 <?php
-                $post_types = ['articles', 'whitepapers', 'news', 'events'];
-                foreach ($post_types as $post_type) {
-                    $posts = get_posts([
-                        'post_type' => $post_type,
-                        'posts_per_page' => -1,
-                        'post_status' => 'publish',
-                        'meta_query' => [
-                            [
-                                'key' => 'gate_content',
-                                'value' => '1',
-                                'compare' => '='
-                            ]
-                        ]
-                    ]);
-                    $count = count($posts);
-                    $total = wp_count_posts($post_type)->publish;
-                    
-                    echo '<div class="stat-box">';
-                    echo '<h3>' . ucfirst($post_type) . '</h3>';
-                    echo '<p><strong>' . $count . '</strong> gated out of <strong>' . $total . '</strong> total</p>';
-                    echo '<a href="admin.php?page=workbooks-gated-' . $post_type . '" class="button">Manage ' . ucfirst($post_type) . '</a>';
-                    echo '</div>';
+                $kb_file = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/content-knowledge-base.php';
+                if (file_exists($kb_file)) {
+                    // Buffer include to avoid stray DOCTYPE/HTML tags breaking admin layout; strip outer html/body if present
+                    ob_start();
+                    include $kb_file;
+                    $kb_html = ob_get_clean();
+                    // If full document provided, attempt to extract inner .wrap content
+                    if (strpos($kb_html, '<body') !== false && preg_match('/<body[^>]*>([\s\S]*?)<\/body>/i', $kb_html, $m)) {
+                        $kb_html = $m[1];
+                    }
+                    echo $kb_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped (already authored markup)
+                } else {
+                    echo '<p>'.esc_html__('Knowledge Base file missing: admin/content-knowledge-base.php','dtr-workbooks').'</p>';
                 }
                 ?>
             </div>
         </div>
-        
+
         <style>
-        .gated-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .stat-box {
-            background: #fff;
-            border: 1px solid #ccd0d4;
-            border-radius: 4px;
-            padding: 20px;
-            text-align: center;
-        }
-        .stat-box h3 {
-            margin-top: 0;
-            color: #23282d;
-        }
-        .stat-box p {
-            font-size: 16px;
-            margin: 15px 0;
+        #knowledge-base {padding-top:0 !important;}
+        .tab-content { padding-top: 20px; }
+        .test-section { margin-bottom: 30px; padding: 20px; background: #fff; border: 1px solid #ccd0d4; border-radius: 4px; }
+        .test-section h3 { margin-top: 0; }
+        .notice { margin: 15px 0; }
+        section#kb.kb details.kb-item {
+        font-size:15px !important;
+        background:#eee !important;
+        display:flex !important;
+        gap:10px !important;
+        flex-direction:column !important;
+        padding:11px 20px 3px !important;
+        margin-bottom:15px !important;
         }
         </style>
-    </div>
-    <?php
-}
 
-function workbooks_gated_articles_page() {
-    workbooks_render_gated_content_page('articles');
-}
+        <script>
+        jQuery(document).ready(function($) {
+            // === AOI Mapping Debug (admin only) ===
+            let dtrToiToAoiMatrix = {};
+            try {
+                dtrToiToAoiMatrix = JSON.parse(document.getElementById('dtr-toi-aoi-matrix').textContent) || {};
+            } catch(e) {
+                console.warn('[DTR AOI MATRIX] JSON parse failed', e);
+                dtrToiToAoiMatrix = {};
+            }
+            // Raw matrix before transformation
+            console.log('[DTR AOI MATRIX RAW]', dtrToiToAoiMatrix);
+            // Transform PHP associative structure (values can be map of {aoi:1}) to flat arrays of AOI keys
+            Object.keys(dtrToiToAoiMatrix).forEach(k => {
+                if (!Array.isArray(dtrToiToAoiMatrix[k])) {
+                    dtrToiToAoiMatrix[k] = Object.keys(dtrToiToAoiMatrix[k] || {});
+                }
+            });
+            // Per-key counts summary to quickly spot empties
+            const perKeyCounts = {};
+            Object.keys(dtrToiToAoiMatrix).forEach(k => { perKeyCounts[k] = dtrToiToAoiMatrix[k].length; });
+            console.log('[DTR AOI MATRIX SUMMARY] counts per TOI key:', perKeyCounts);
+            // Immediate visibility into Drugs & Therapies mapping content
+            console.log('[DTR AOI MATRIX] drugs & therapies entry (post-transform):', dtrToiToAoiMatrix['cf_person_drugs_therapies']);
+            const allToiSelectors = Object.keys(dtrToiToAoiMatrix).map(k => 'input[type="checkbox"][name="'+k+'"]').join(',');
+            function recomputeAoiFromSelections(){
+                const selected = [];
+                Object.keys(dtrToiToAoiMatrix).forEach(k => { if ($('input[name="'+k+'"]').is(':checked')) selected.push(k); });
+                const aoi = {};
+                selected.forEach(k => { (dtrToiToAoiMatrix[k]||[]).forEach(a => { aoi[a] = 1; }); });
+                const aoiList = Object.keys(aoi);
+                return {selected, aoi: aoiList, aoiCount: aoiList.length};
+            }
+            $(document).on('change', allToiSelectors, function(){
+                const field = this.name;
+                const isChecked = $(this).is(':checked');
+                if (dtrToiToAoiMatrix[field]) {
+                    console.log('[DTR AOI DEBUG] TOI', field, isChecked ? 'selected' : 'deselected', 'affects', dtrToiToAoiMatrix[field].length, 'AOI:', dtrToiToAoiMatrix[field]);
+                } else {
+                    console.warn('[DTR AOI DEBUG] TOI', field, 'had no matrix entry');
+                }
+                const aggregate = recomputeAoiFromSelections();
+                console.log('[DTR AOI DEBUG] Aggregate AOI ('+aggregate.aoiCount+') from', aggregate.selected.length, 'TOI:', aggregate.selected, '=>', aggregate.aoi);
+            });
+            // Focused logging for Drugs & Therapies to diagnose mapping delivery
+            $(document).on('change','input[type="checkbox"][name="cf_person_drugs_therapies"]', function(){
+                const on = $(this).is(':checked');
+                const expected = dtrToiToAoiMatrix['cf_person_drugs_therapies'] || [];
+                const agg = recomputeAoiFromSelections();
+                console.log('[DTR AOI FOCUS][Drugs & Therapies] toggled', on ? 'ON':'OFF', '\nExpected AOI ('+expected.length+'):', expected, '\nAggregate AOI Now ('+agg.aoiCount+'):', agg.aoi);
+            });
+            // Initial log on load if any pre-checked
+            setTimeout(()=>{
+                const initAgg = recomputeAoiFromSelections();
+                if (initAgg.selected.length) {
+                    console.log('[DTR AOI DEBUG] Initial TOI -> AOI mapping. TOI selected:', initAgg.selected, 'Derived AOI ('+initAgg.aoiCount+'):', initAgg.aoi);
+                } else {
+                    console.log('[DTR AOI DEBUG] No TOI initially selected. Matrix keys:', Object.keys(dtrToiToAoiMatrix).length);
+                }
+            },100);
+            // === /AOI Mapping Debug ===
+            // Toggle Workbooks API Fields table
+            $('#toggle-workbooks-fields').on('click', function(e) {
+                e.preventDefault();
+                var $table = $('#workbooks-fields-table');
+                if ($table.is(':visible')) {
+                    $table.slideUp(150);
+                    $(this).text('Show Workbooks API Fields for this User');
+                } else {
+                    $table.slideDown(150);
+                    $(this).text('Hide Workbooks API Fields for this User');
+                }
+            });
+            // Initialize variables from localized script
+            var ajaxurl = dtr_workbooks_admin.ajax_url;
+            var nonce = dtr_workbooks_admin.nonce;
+            
+            // Get active tab from URL hash or localStorage
+            function getActiveTab() {
+                var hash = window.location.hash || localStorage.getItem('dtr_workbooks_active_tab') || '#welcome';
+                return hash.substring(1);
+            }
 
-function workbooks_gated_whitepapers_page() {
-    workbooks_render_gated_content_page('whitepapers');
-}
+            // Set active tab
+            function setActiveTab(tab) {
+                $('.nav-tab').removeClass('nav-tab-active');
+                $('a[href="#' + tab + '"]').addClass('nav-tab-active');
+                $('.tab-content').hide();
+                $('#' + tab).show();
+                localStorage.setItem('dtr_workbooks_active_tab', '#' + tab);
+                window.location.hash = '#' + tab;
+            }
+            
+            // Tab switching
+            $('.nav-tab').click(function(e) {
+                e.preventDefault();
+                var target = $(this).attr('href').substring(1);
+                setActiveTab(target);
+            });
 
-function workbooks_gated_news_page() {
-    workbooks_render_gated_content_page('news');
-}
+            // Set initial active tab
+            setActiveTab(getActiveTab());
 
-function workbooks_gated_events_page() {
-    workbooks_render_gated_content_page('events');
-}
+            // Handle person record form submission
+            $('#workbooks_update_user_form').submit(function(e) {
+                e.preventDefault();
+                var $form = $(this);
+                var $submitButton = $('#submit-person-record');
+                
+                $submitButton.prop('disabled', true);
+                
+                $.ajax({
+                    url: window.location.href,
+                    type: 'POST',
+                    data: $form.serialize(),
+                    success: function(response) {
+                        // Try to detect a stale lock_version error and reload the form if needed
+                        var mustReload = false;
+                        try {
+                            // If response is JSON, check for mustReloadForm
+                            if (typeof response === 'object' && response !== null && response.mustReloadForm) {
+                                mustReload = true;
+                            } else if (typeof response === 'string' && response.indexOf('mustReloadForm') !== -1) {
+                                mustReload = true;
+                            }
+                        } catch (e) {}
 
-function workbooks_render_gated_content_page($current_post_type) {
-    ?>
-    <div class="wrap workbooks-tab-content">
-        <h2 class="workbooks-tab-content"><?php echo ucfirst($current_post_type); ?> Gated Content</h2>
-        <?php
-        // Include the single post type template
-        if (file_exists(WORKBOOKS_NF_PATH . 'admin/gated-content-single.php')) {
-            include WORKBOOKS_NF_PATH . 'admin/gated-content-single.php';
-        } else {
-            echo '<p>Gated content template not found.</p>';
+                        if (mustReload) {
+                            // Reload the page or the #testing tab to get the latest lock_version and data
+                            location.reload();
+                            return;
+                        }
+
+                        // The response will contain the entire page HTML
+                        // Extract just the testing tab content and notices
+                        var $responseHtml = $(response);
+                        var $newContent = $responseHtml.find('#testing');
+                        var $notices = $responseHtml.find('.notice');
+
+                        // Update the tab content
+                        $('#testing').html($newContent.html());
+
+                        // Show notices at the top of the form
+                        if ($notices.length) {
+                            $notices.insertBefore('#workbooks_update_user_form');
+                        }
+
+                        // Ensure we stay on testing tab
+                        setActiveTab('testing');
+                    },
+                    error: function() {
+                        $('<div class="notice notice-error is-dismissible"><p>An error occurred while updating the record.</p></div>')
+                            .insertBefore('#workbooks_update_user_form');
+                    },
+                    complete: function() {
+                        $submitButton.prop('disabled', false);
+                    }
+                });
+            });
+
+            // Test Connection
+            $('#test-connection').click(function() {
+                var $button = $(this);
+                var $result = $('#connection-result');
+                
+                // Disable button and show loading state
+                $button.prop('disabled', true);
+                $result.html('<span style="color:#666;">Testing connection...</span>');
+                
+                // Make AJAX request
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {
+                        action: 'sspg_test_workbooks_connection',
+                        nonce: nonce
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            $result.html('<span style="color:green;">✓ ' + response.data.message + '</span>');
+                        } else {
+                            $result.html('<span style="color:red;">✗ ' + (response.data.message || 'Connection test failed') + '</span>');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', status, error);
+                        $result.html('<span style="color:red;">✗ Connection test failed: ' + error + '</span>');
+                    },
+                    complete: function() {
+                        $button.prop('disabled', false);
+                    }
+                })
+                .done(function(response) {
+                    if (response.success) {
+                        $result.html('<span style="color:green;">✓ ' + response.data.message + '</span>');
+                    } else {
+                        $result.html('<span style="color:red;">✗ ' + response.data.message + '</span>');
+                    }
+                })
+                .fail(function() {
+                    $result.html('<span style="color:red;">✗ Connection test failed</span>');
+                })
+                .always(function() {
+                    $button.prop('disabled', false);
+                });
+            });
+
+            // Test Sync
+            $('#test-sync').click(function() {
+                var $button = $(this);
+                var $result = $('#sync-result');
+                
+                $button.prop('disabled', true);
+                $result.html('<span style="color:#666;">Testing sync...</span>');
+                
+                $.post(ajaxurl, {
+                    action: 'dtr_sync_test',
+                    nonce: dtr_workbooks_admin.nonce
+                })
+                .done(function(response) {
+                    if (response.success) {
+                        $result.html('<span style="color:green;">✓ ' + response.data.message + '</span>');
+                    } else {
+                        $result.html('<span style="color:red;">✗ ' + response.data.message + '</span>');
+                    }
+                })
+                .fail(function() {
+                    $result.html('<span style="color:red;">✗ Sync test failed</span>');
+                })
+                .always(function() {
+                    $button.prop('disabled', false);
+                });
+            });
+
+            // Genomics key cleanup
+            $('#run-genomics-cleanup').on('click', function(e){
+                e.preventDefault();
+                var $btn = $(this); var $res = $('#genomics-cleanup-result');
+                $btn.prop('disabled', true); $res.text(dtr_workbooks_admin.strings.cleanup_running);
+                $.post(ajaxurl, {action:'dtr_cleanup_genomics_meta', nonce: nonce}, function(resp){
+                    if(resp && resp.success){
+                        $res.text(dtr_workbooks_admin.strings.cleanup_done + ' Migrated: '+resp.data.migrated+' Deleted old: '+resp.data.deleted);
+                    } else {
+                        $res.text('Cleanup failed: '+(resp && resp.data ? resp.data : 'unknown error'));
+                    }
+                }).fail(function(){
+                    $res.text('Cleanup AJAX error');
+                }).always(function(){
+                    $btn.prop('disabled', false);
+                });
+            });
+        });
+        </script>
+    <?php if (function_exists('dtr_get_toi_to_aoi_matrix')): ?>
+    <?php 
+        // Prepare AOI matrix JSON for inline consumption (avoid esc_html which broke JSON parsing)
+        $dtr_aoi_matrix_export = dtr_get_toi_to_aoi_matrix();
+        if (function_exists('dtr_admin_log')) {
+            dtr_admin_log('[AOI MATRIX EXPORT] keys=' . implode(',', array_keys($dtr_aoi_matrix_export)) . ' count=' . count($dtr_aoi_matrix_export));
         }
+    ?>
+    <script type="application/json" id="dtr-toi-aoi-matrix"><?php echo wp_json_encode($dtr_aoi_matrix_export, JSON_UNESCAPED_SLASHES); ?></script>
+    <?php endif; ?>
+        <?php
+    }
+
+    /**
+     * AJAX: Cleanup legacy genomics meta key across users
+     */
+    public function cleanup_genomics_meta() {
+        check_ajax_referer('workbooks_nonce', 'nonce');
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Permission denied');
+        }
+        global $wpdb;
+        $old_key = 'cf_person_genomics_3744';
+        $new_key = 'cf_person_genomics_3774';
+        // Find users with old key set
+        $rows = $wpdb->get_results($wpdb->prepare("SELECT user_id, meta_value FROM {$wpdb->usermeta} WHERE meta_key = %s", $old_key));
+        $migrated = 0; $deleted = 0;
+        foreach ($rows as $row) {
+            $has_new = get_user_meta($row->user_id, $new_key, true);
+            if (!$has_new && intval($row->meta_value) === 1) {
+                update_user_meta($row->user_id, $new_key, 1);
+                $migrated++;
+            }
+            delete_user_meta($row->user_id, $old_key);
+            $deleted++;
+        }
+        wp_send_json_success(['migrated' => $migrated, 'deleted' => $deleted]);
+    }
+
+    /**
+     * Person Record page (redirects/forces focus to Testing tab UI within main page construct)
+     */
+    public function admin_person_record_page() {
+        $file = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/content-person-record.php';
+        echo '<div class="wrap plugin-admin-content"><h1>'.esc_html__('Person Record','dtr-workbooks').'</h1>';
+        if (file_exists($file)) {
+            include $file;
+        } else {
+            echo '<p>'.esc_html__('The file admin/content-person-record.php was not found.','dtr-workbooks').'</p>';
+        }
+        echo '</div>';
+    }
+
+    /**
+     * Registered Users page (lightweight listing with Workbooks ID/meta snapshot)
+     */
+    public function admin_registered_users_page() {
+        $file = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/content-member-registrations.php';
+        echo '<div class="wrap plugin-admin-content"><h1>'.esc_html__('Registered Users','dtr-workbooks').'</h1>';
+        if (file_exists($file)) {
+            include $file;
+        } else {
+            echo '<p>'.esc_html__('The file admin/content-member-registrations.php was not found.','dtr-workbooks').'</p>';
+        }
+        echo '</div>';
+    }
+
+    /**
+     * Gated Content page (placeholder / basic diagnostic until expanded)
+     */
+    public function admin_gated_content_page() {
+        echo '<div class="wrap plugin-admin-content"><h1>'.esc_html__('Gated Content','dtr-workbooks').'</h1>';
+        if (!function_exists('dtr_init_gated_content_hooks')) {
+            echo '<p>'.esc_html__('Gated content hooks not loaded (dependency missing or feature disabled).','dtr-workbooks').'</p></div>'; return; }
+        // Placeholder – future enhancement: list recent gated content access events / meta.
+        echo '<p>'.esc_html__('This section will provide analytics and recent access logs for gated content.','dtr-workbooks').'</p>';
+        echo '</div>';
+    }
+
+    /**
+     * TOI & AOI Mapping page (displays matrix for transparency)
+     */
+    public function admin_toi_aoi_mapping_page() {
+        echo '<div class="wrap plugin-admin-content"><h1>'.esc_html__('TOI & AOI Mapping','dtr-workbooks').'</h1>';
+        if (!function_exists('dtr_get_toi_to_aoi_matrix')) { echo '<p>'.esc_html__('Mapping function not available.','dtr-workbooks').'</p></div>'; return; }
+        $matrix = dtr_get_toi_to_aoi_matrix();
+        if (empty($matrix)) { echo '<p>'.esc_html__('No mapping entries defined.','dtr-workbooks').'</p></div>'; return; }
+        echo '<table class="widefat striped" style="max-width:1100px;">';
+        echo '<thead><tr><th>'.esc_html__('TOI Field','dtr-workbooks').'</th><th>'.esc_html__('Mapped AOI Fields','dtr-workbooks').'</th><th>'.esc_html__('Count','dtr-workbooks').'</th></tr></thead><tbody>';
+        foreach ($matrix as $toi => $aoiSet) {
+            $aoiKeys = array_keys($aoiSet);
+            echo '<tr>'
+                .'<td><code>'.esc_html($toi).'</code></td>'
+                .'<td style="font-family:monospace;white-space:normal;">'.esc_html(implode(', ', $aoiKeys)).'</td>'
+                .'<td>'.count($aoiKeys).'</td>'
+                .'</tr>';
+        }
+        echo '</tbody></table>';
+        echo '<p style="margin-top:12px;">'.esc_html__('Matrix source: dtr_get_toi_to_aoi_matrix()','dtr-workbooks').'</p>';
+        echo '</div>';
+    }
+    
+    /**
+     * Logs page
+     *
+     * @return void
+     */
+    public function logs_page() {
+        $log_files = $this->get_log_files();
         ?>
-    </div>
-    <?php
+        <div class="wrap plugin-admin-content">
+            <h1><?php _e('DTR Workbooks Logs', 'dtr-workbooks'); ?></h1>
+            
+            <div class="log-viewer">
+                <select id="log-selector">
+                    <option value=""><?php _e('Select a log file', 'dtr-workbooks'); ?></option>
+                    <?php foreach ($log_files as $file => $info): ?>
+                        <option value="<?php echo esc_attr($file); ?>">
+                            <?php echo esc_html($file); ?> (<?php echo esc_html($info['size_formatted']); ?>)
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                
+                <button type="button" id="view-log" class="button">
+                    <?php _e('View Log', 'dtr-workbooks'); ?>
+                </button>
+                
+                <button type="button" id="clear-logs" class="button">
+                    <?php _e('Clear All Logs', 'dtr-workbooks'); ?>
+                </button>
+            </div>
+            
+            <div id="log-content" style="margin-top: 20px;"></div>
+        </div>
+        <?php
+    }
+    
+    /**
+     * System status page
+     *
+     * @return void
+     */
+    public function status_page() {
+        $status = $this->get_system_status();
+        ?>
+        <div class="wrap plugin-admin-content">
+            <h1><?php _e('DTR Workbooks System Status', 'dtr-workbooks'); ?></h1>
+            
+            <table class="widefat">
+                <thead>
+                    <tr>
+                        <th><?php _e('Component', 'dtr-workbooks'); ?></th>
+                        <th><?php _e('Status', 'dtr-workbooks'); ?></th>
+                        <th><?php _e('Details', 'dtr-workbooks'); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?php _e('Plugin Version', 'dtr-workbooks'); ?></td>
+                        <td><?php echo esc_html(DTR_WORKBOOKS_VERSION); ?></td>
+                        <td><?php _e('Current plugin version', 'dtr-workbooks'); ?></td>
+                    </tr>
+                    <tr>
+                        <td><?php _e('WordPress Version', 'dtr-workbooks'); ?></td>
+                        <td><?php echo esc_html(get_bloginfo('version')); ?></td>
+                        <td><?php _e('Current WordPress version', 'dtr-workbooks'); ?></td>
+                    </tr>
+                    <tr>
+                        <td><?php _e('PHP Version', 'dtr-workbooks'); ?></td>
+                        <td><?php echo esc_html(PHP_VERSION); ?></td>
+                        <td><?php echo version_compare(PHP_VERSION, '7.4', '>=') ? __('Compatible', 'dtr-workbooks') : __('Needs update', 'dtr-workbooks'); ?></td>
+                    </tr>
+                    <?php foreach ($status['dependencies'] as $dependency => $info): ?>
+                        <tr>
+                            <td><?php echo esc_html($info['name']); ?></td>
+                            <td>
+                                <span class="status-<?php echo $info['active'] ? 'active' : 'inactive'; ?>">
+                                    <?php echo $info['active'] ? __('Active', 'dtr-workbooks') : __('Inactive', 'dtr-workbooks'); ?>
+                                </span>
+                            </td>
+                            <td><?php echo esc_html($info['version'] ?: __('Version unknown', 'dtr-workbooks')); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php
+    }
+    
+    /**
+     * Setup custom logging
+     *
+     * @return void
+     */
+    public function setup_custom_logging() {
+        if (!function_exists('dtr_custom_log')) {
+            /**
+             * Custom logging function
+             *
+             * @param string $message Log message
+             * @param string $level Log level
+             * @return void
+             */
+            function dtr_custom_log($message, $level = 'info') {
+                $log_file = DTR_WORKBOOKS_LOG_DIR . 'dtr-workbooks-' . date('Y-m-d') . '.log';
+                $timestamp = current_time('Y-m-d H:i:s');
+                $log_entry = "[{$timestamp}] [{$level}] {$message}" . PHP_EOL;
+                
+                file_put_contents($log_file, $log_entry, FILE_APPEND | LOCK_EX);
+            }
+        }
+    }
+    
+    /**
+     * Setup custom capabilities
+     *
+     * @return void
+     */
+    private function setup_capabilities() {
+        $role = get_role('administrator');
+        if ($role) {
+            $role->add_cap('manage_dtr_workbooks');
+            $role->add_cap('view_dtr_workbooks_logs');
+        }
+    }
+    
+    /**
+     * AJAX handler for testing Workbooks connection
+     *
+     * @return void
+     */
+    public function test_workbooks_connection() {
+        check_ajax_referer('workbooks_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_die(__('Insufficient permissions', 'dtr-workbooks'));
+        }
+        
+        // Initialize debug log
+        $debug_log = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/connection-debug.log';
+        $log_dir = dirname($debug_log);
+        
+        // Ensure the admin directory exists
+        if (!is_dir($log_dir)) {
+            wp_mkdir_p($log_dir);
+        }
+        
+    // Start debug logging (gated by debug_mode)
+    $debug_entry = date('[Y-m-d H:i:s]') . " Starting connection test...\n";
+    dtr_admin_log($debug_entry, 'connection-debug.log');
+        
+        try {
+            // Log current settings
+            $options = get_option('dtr_workbooks_options', []);
+            $debug_entry = date('[Y-m-d H:i:s]') . " Current settings:\n";
+            $debug_entry .= "API URL: " . ($options['api_url'] ?? 'not set') . "\n";
+            $debug_entry .= "API Key: " . (empty($options['api_key']) ? 'not set' : 'set') . "\n";
+            dtr_admin_log($debug_entry, 'connection-debug.log');
+            
+            // Check if Workbooks API class exists - FIXED CLASS NAME
+            if (!class_exists('WorkbooksApi')) {
+                $error = 'WorkbooksApi class not found. Please check if the API file is properly included.';
+                dtr_admin_log(date('[Y-m-d H:i:s]') . " Error: {$error}\n", 'connection-debug.log');
+                wp_send_json_error(['message' => __($error, 'dtr-workbooks')]);
+                return;
+            }
+
+            dtr_admin_log(date('[Y-m-d H:i:s]') . " Attempting to get Workbooks instance...\n", 'connection-debug.log');
+            
+            // Get Workbooks instance
+            $workbooks = get_workbooks_instance();
+            
+            if ($workbooks === false) {
+                $error = 'Failed to initialize Workbooks connection. Check connection-debug.log for details.';
+                dtr_admin_log(date('[Y-m-d H:i:s]') . " Error: Failed to get Workbooks instance\n", 'connection-debug.log');
+                wp_send_json_error([
+                    'message' => __($error, 'dtr-workbooks'),
+                    'debug_log' => DTR_WORKBOOKS_PLUGIN_URL . 'admin/connection-debug.log'
+                ]);
+                return;
+            }
+            
+            dtr_admin_log(date('[Y-m-d H:i:s]') . " Successfully got Workbooks instance\n", 'connection-debug.log');
+
+            // Log successful initialization
+            dtr_admin_log(date('[Y-m-d H:i:s]') . " Workbooks instance initialized successfully\n", 'connection-debug.log');
+            
+            // Test connection by fetching a single person record
+            $response = $workbooks->assertGet('crm/people', ['_limit' => 1]);
+            
+            // Log API response (gated by debug_mode)
+            $debug_entry = date('[Y-m-d H:i:s]') . " API Response:\n" . print_r($response, true) . "\n";
+            dtr_admin_log($debug_entry, 'connection-debug.log');
+            
+            if (isset($response['data'])) {
+                update_option('dtr_workbooks_last_connection_test', time());
+                $success = 'Connection successful! API is working correctly.';
+                dtr_admin_log(date('[Y-m-d H:i:s]') . " Success: {$success}\n", 'connection-debug.log');
+                wp_send_json_success([
+                    'message' => __($success, 'dtr-workbooks'),
+                    'response' => $response
+                ]);
+            } else {
+                $error = 'API responded but data format unexpected.';
+                dtr_admin_log(date('[Y-m-d H:i:s]') . " Error: {$error}\n", 'connection-debug.log');
+                wp_send_json_error(['message' => __($error, 'dtr-workbooks')]);
+            }
+        } catch (Exception $e) {
+            // Log detailed error information
+            $error_entry = sprintf(
+                "[%s] Exception:\nMessage: %s\nFile: %s\nLine: %d\nStack Trace:\n%s\n",
+                date('Y-m-d H:i:s'),
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine(),
+                $e->getTraceAsString()
+            );
+            dtr_admin_log($error_entry, 'connection-debug.log');
+            
+            // Also log to regular debug log
+            dtr_custom_log('Connection test failed: ' . $e->getMessage(), 'error');
+            
+            wp_send_json_error([
+                'message' => 'Connection failed: ' . $e->getMessage(),
+                'debug_log' => DTR_WORKBOOKS_PLUGIN_URL . 'admin/connection-debug.log'
+            ]);
+        }
+    }
+    
+    /**
+     * AJAX handler for clearing logs
+     *
+     * @return void
+     */
+    public function clear_logs() {
+        check_ajax_referer('dtr_workbooks_admin_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_die(__('Insufficient permissions', 'dtr-workbooks'));
+        }
+        
+        $log_files = glob(DTR_WORKBOOKS_LOG_DIR . '*.log*');
+        $deleted = 0;
+        
+        foreach ($log_files as $file) {
+            if (unlink($file)) {
+                $deleted++;
+            }
+        }
+        
+        if ($deleted > 0) {
+            dtr_custom_log("Cleared {$deleted} log files");
+            wp_send_json_success(['message' => sprintf(__('Cleared %d log files', 'dtr-workbooks'), $deleted)]);
+        } else {
+            wp_send_json_error(['message' => __('No log files to clear', 'dtr-workbooks')]);
+        }
+    }
+    
+    /**
+     * AJAX handler for exporting logs
+     *
+     * @return void
+     */
+    public function export_logs() {
+        check_ajax_referer('dtr_workbooks_admin_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_die(__('Insufficient permissions', 'dtr-workbooks'));
+        }
+        
+        $log_files = glob(DTR_WORKBOOKS_LOG_DIR . '*.log');
+        
+        if (empty($log_files)) {
+            wp_send_json_error(['message' => __('No log files to export', 'dtr-workbooks')]);
+        }
+        
+        // Create a zip file with all logs
+        $zip_file = DTR_WORKBOOKS_LOG_DIR . 'dtr-logs-export-' . date('Y-m-d-H-i-s') . '.zip';
+        
+        if (class_exists('ZipArchive')) {
+            $zip = new ZipArchive();
+            if ($zip->open($zip_file, ZipArchive::CREATE) === TRUE) {
+                foreach ($log_files as $file) {
+                    $zip->addFile($file, basename($file));
+                }
+                $zip->close();
+                
+                $download_url = DTR_WORKBOOKS_PLUGIN_URL . 'logs/' . basename($zip_file);
+                wp_send_json_success(['download_url' => $download_url]);
+            } else {
+                wp_send_json_error(['message' => __('Failed to create zip file', 'dtr-workbooks')]);
+            }
+        } else {
+            wp_send_json_error(['message' => __('ZipArchive not available', 'dtr-workbooks')]);
+        }
+    }
+    
+    /**
+     * AJAX handler for sync test
+     *
+     * @return void
+     */
+    public function sync_test() {
+        check_ajax_referer('dtr_workbooks_admin_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_die(__('Insufficient permissions', 'dtr-workbooks'));
+        }
+        
+        // Test data sync with sample data
+        $test_data = [
+            'email' => 'test@example.com',
+            'first_name' => 'Test',
+            'last_name' => 'User',
+            'company' => 'Test Company'
+        ];
+        
+        if (function_exists('dtr_create_workbooks_person')) {
+            $result = dtr_create_workbooks_person($test_data, 'SYNC-TEST');
+            
+            if ($result && isset($result['success']) && $result['success']) {
+                wp_send_json_success(['message' => __('Sync test successful', 'dtr-workbooks')]);
+            } else {
+                wp_send_json_error(['message' => $result['message'] ?? __('Sync test failed', 'dtr-workbooks')]);
+            }
+        } else {
+            wp_send_json_error(['message' => __('Workbooks integration function not available', 'dtr-workbooks')]);
+        }
+    }
+    
+    /**
+     * AJAX handler for retrying submission
+     *
+     * @return void
+     */
+    public function retry_submission() {
+        check_ajax_referer('dtr_workbooks_admin_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_die(__('Insufficient permissions', 'dtr-workbooks'));
+        }
+        
+        $submission_id = intval($_POST['submission_id'] ?? 0);
+        
+        if (!$submission_id) {
+            wp_send_json_error(['message' => __('Invalid submission ID', 'dtr-workbooks')]);
+        }
+        
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'dtr_workbooks_submissions';
+        
+        $submission = $wpdb->get_row($wpdb->prepare(
+            "SELECT * FROM {$table_name} WHERE id = %d",
+            $submission_id
+        ));
+        
+        if (!$submission) {
+            wp_send_json_error(['message' => __('Submission not found', 'dtr-workbooks')]);
+        }
+        
+        $submission_data = json_decode($submission->submission_data, true);
+        
+        // Retry processing based on form type
+        $success = false;
+        if ($submission->form_id == 15) {
+            $success = function_exists('dtr_process_user_registration') 
+                ? dtr_process_user_registration($submission_data, $submission->form_id)
+                : false;
+        } elseif ($submission->form_id == 2) {
+            $success = function_exists('dtr_process_webinar_registration') 
+                ? dtr_process_webinar_registration($submission_data, $submission->form_id)
+                : false;
+        } else {
+            $success = function_exists('dtr_process_lead_generation') 
+                ? dtr_process_lead_generation($submission_data, $submission->form_id)
+                : false;
+        }
+        
+        if ($success) {
+            $wpdb->update(
+                $table_name,
+                ['status' => 'completed', 'error_message' => null],
+                ['id' => $submission_id]
+            );
+            wp_send_json_success(['message' => __('Submission retry successful', 'dtr-workbooks')]);
+        } else {
+            wp_send_json_error(['message' => __('Submission retry failed', 'dtr-workbooks')]);
+        }
+    }
+    
+    /**
+     * AJAX handler for getting submission details
+     *
+     * @return void
+     */
+    public function get_submission_details() {
+        check_ajax_referer('dtr_workbooks_admin_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_die(__('Insufficient permissions', 'dtr-workbooks'));
+        }
+        
+        $submission_id = intval($_POST['submission_id'] ?? 0);
+        
+        if (!$submission_id) {
+            wp_send_json_error(['message' => __('Invalid submission ID', 'dtr-workbooks')]);
+        }
+        
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'dtr_workbooks_submissions';
+        
+        $submission = $wpdb->get_row($wpdb->prepare(
+            "SELECT * FROM {$table_name} WHERE id = %d",
+            $submission_id
+        ));
+        
+        if (!$submission) {
+            wp_send_json_error(['message' => __('Submission not found', 'dtr-workbooks')]);
+        }
+        
+        wp_send_json_success([
+            'submission' => $submission,
+            'formatted_data' => json_decode($submission->submission_data, true)
+        ]);
+    }
+    
+    /**
+     * Get log files information
+     *
+     * @return array
+     */
+    private function get_log_files() {
+        $log_files = glob(DTR_WORKBOOKS_LOG_DIR . '*.log*');
+        $files = [];
+        
+        foreach ($log_files as $file) {
+            $filename = basename($file);
+            $files[$filename] = [
+                'size' => filesize($file),
+                'size_formatted' => size_format(filesize($file)),
+                'modified' => filemtime($file)
+            ];
+        }
+        
+        return $files;
+    }
+    
+    /**
+     * Get system status information
+     *
+     * @return array
+     */
+    private function get_system_status() {
+        $dependencies = [
+            'ninja-forms/ninja-forms.php' => 'Ninja Forms',
+            'advanced-custom-fields/acf.php' => 'Advanced Custom Fields'
+        ];
+        
+        $status = ['dependencies' => []];
+        
+        foreach ($dependencies as $plugin => $name) {
+            $status['dependencies'][$plugin] = [
+                'name' => $name,
+                'active' => is_plugin_active($plugin),
+                'version' => $this->get_plugin_version($plugin)
+            ];
+        }
+        
+        return $status;
+    }
+    
+    /**
+     * Get plugin version
+     *
+     * @param string $plugin_file Plugin file path
+     * @return string
+     */
+    private function get_plugin_version($plugin_file) {
+        if (!is_plugin_active($plugin_file)) {
+            return '';
+        }
+        
+        $plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin_file, false, false);
+        return $plugin_data['Version'] ?? '';
+    }
+    
+    /**
+     * Cleanup old log files
+     *
+     * @return void
+     */
+    public function cleanup_old_logs() {
+        $retention_days = $this->options['log_retention_days'] ?? 30;
+        $cutoff_time = time() - ($retention_days * 24 * 60 * 60);
+        
+        $log_files = glob(DTR_WORKBOOKS_LOG_DIR . '*.log*');
+        $deleted = 0;
+        
+        foreach ($log_files as $file) {
+            if (filemtime($file) < $cutoff_time) {
+                if (unlink($file)) {
+                    $deleted++;
+                }
+            }
+        }
+        
+        if ($deleted > 0) {
+            dtr_custom_log("Cleanup: Deleted {$deleted} old log files");
+        }
+    }
+    
+    /**
+     * Validate plugin options
+     *
+     * @param array $input Raw input options
+     * @return array Validated options
+     */
+    public function validate_options($input) {
+        $validated = [];
+        
+        // API URL validation
+        if (isset($input['api_url'])) {
+            $validated['api_url'] = esc_url_raw($input['api_url']);
+        }
+        
+        // API Key validation
+        if (isset($input['api_key'])) {
+            $validated['api_key'] = sanitize_text_field($input['api_key']);
+        }
+        
+        // Debug mode validation
+        $validated['debug_mode'] = !empty($input['debug_mode']);
+        
+        // Enabled forms validation
+        if (isset($input['enabled_forms']) && is_array($input['enabled_forms'])) {
+            $validated['enabled_forms'] = array_map('intval', $input['enabled_forms']);
+        }
+        
+        // API timeout validation
+        if (isset($input['api_timeout'])) {
+            $timeout = intval($input['api_timeout']);
+            $validated['api_timeout'] = ($timeout >= 5 && $timeout <= 300) ? $timeout : 30;
+        }
+        
+        // Retry attempts validation
+        if (isset($input['retry_attempts'])) {
+            $attempts = intval($input['retry_attempts']);
+            $validated['retry_attempts'] = ($attempts >= 0 && $attempts <= 10) ? $attempts : 3;
+        }
+        
+        // Log retention validation
+        if (isset($input['log_retention_days'])) {
+            $days = intval($input['log_retention_days']);
+            $validated['log_retention_days'] = ($days >= 1 && $days <= 365) ? $days : 30;
+        }
+
+        // If debug_mode is being turned off, archive existing admin log files
+        try {
+            $previous = get_option('dtr_workbooks_options', []);
+            $prev_debug = !empty($previous['debug_mode']);
+            $new_debug = !empty($validated['debug_mode']);
+
+            if ($prev_debug && !$new_debug) {
+                $admin_dir = plugin_dir_path(__FILE__) . 'admin/';
+                $archive_dir = $admin_dir . 'archive/';
+
+                if (!is_dir($admin_dir)) {
+                    // nothing to archive
+                } else {
+                    if (!is_dir($archive_dir)) {
+                        wp_mkdir_p($archive_dir);
+                    }
+
+                    $files = glob($admin_dir . '*.log');
+                    $timestamp = date('Ymd_His');
+                    foreach ($files as $file) {
+                        if (!is_file($file)) {
+                            continue;
+                        }
+                        $base = basename($file);
+                        $dest = $archive_dir . $timestamp . '_' . $base;
+                        // Move the file out of the webroot admin folder
+                        @rename($file, $dest);
+                    }
+
+                    // Log the archive action to the persistent custom log
+                    if (function_exists('dtr_custom_log')) {
+                        dtr_custom_log("Archived admin logs to: {$archive_dir}");
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            // non-fatal; don't block saving options
+            if (function_exists('dtr_custom_log')) {
+                dtr_custom_log('Failed to archive admin logs: ' . $e->getMessage(), 'error');
+            }
+        }
+
+        return $validated;
+    }
+    
+    /**
+     * Create database tables
+     *
+     * @return void
+     */
+    private function create_database_tables() {
+        global $wpdb;
+        
+        $charset_collate = $wpdb->get_charset_collate();
+        
+        // Submissions table
+        $submissions_table = $wpdb->prefix . 'dtr_workbooks_submissions';
+        $submissions_sql = "CREATE TABLE $submissions_table (
+            id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            form_id int(11) NOT NULL,
+            submission_data longtext NOT NULL,
+            workbooks_person_id varchar(255) DEFAULT NULL,
+            status varchar(50) DEFAULT 'pending',
+            error_message text DEFAULT NULL,
+            created_at datetime DEFAULT CURRENT_TIMESTAMP,
+            updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY form_id (form_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) $charset_collate;";
+        
+        // Sync log table
+        $sync_log_table = $wpdb->prefix . 'dtr_workbooks_sync_log';
+        $sync_log_sql = "CREATE TABLE $sync_log_table (
+            id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            operation varchar(100) NOT NULL,
+            object_type varchar(50) NOT NULL,
+            object_id varchar(255) NOT NULL,
+            status varchar(50) NOT NULL,
+            request_data longtext DEFAULT NULL,
+            response_data longtext DEFAULT NULL,
+            error_message text DEFAULT NULL,
+            execution_time float DEFAULT NULL,
+            created_at datetime DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY operation (operation),
+            KEY object_type (object_type),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) $charset_collate;";
+        
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        dbDelta($submissions_sql);
+        dbDelta($sync_log_sql);
+    }
+    
+    /**
+     * Log error message
+     *
+     * @param string $message Error message
+     * @return void
+     */
+    private function log_error($message) {
+        if (function_exists('dtr_custom_log')) {
+            dtr_custom_log($message, 'error');
+        } else {
+            error_log('[DTR Workbooks] ' . $message);
+        }
+    }
+    
+    /**
+     * Display dependency notice
+     *
+     * @return void
+     */
+    public function dependency_notice() {
+        if (!empty($this->missing_dependencies)) {
+            $plugins = implode(', ', $this->missing_dependencies);
+            echo '<div class="notice notice-error"><p>';
+            printf(
+                __('DTR Workbooks Integration requires the following plugins: %s', 'dtr-workbooks'),
+                '<strong>' . $plugins . '</strong>'
+            );
+            echo '</p></div>';
+        }
+    }
+    
+    /**
+     * Plugin activation
+     *
+     * @return void
+     */
+    public function activate() {
+        // Create database tables
+        $this->create_database_tables();
+        
+        // Set default options
+        $default_options = [
+            'debug_mode' => true,
+            'enabled_forms' => [2, 15, 31],
+            'api_timeout' => 30,
+            'retry_attempts' => 3,
+            'log_retention_days' => 30
+        ];
+        
+        add_option('dtr_workbooks_options', $default_options);
+        
+        // Create log directory
+        if (!is_dir(DTR_WORKBOOKS_LOG_DIR)) {
+            wp_mkdir_p(DTR_WORKBOOKS_LOG_DIR);
+            file_put_contents(DTR_WORKBOOKS_LOG_DIR . '.htaccess', "Order Deny,Allow\nDeny from all\n");
+            file_put_contents(DTR_WORKBOOKS_LOG_DIR . 'index.php', '<?php // Silence is golden');
+        }
+        
+        // Setup capabilities
+        $this->setup_capabilities();
+        
+        // Log activation
+        dtr_custom_log('DTR Workbooks Integration plugin activated');
+        
+        // Flush rewrite rules
+        flush_rewrite_rules();
+    }
+    
+    /**
+     * Plugin deactivation
+     *
+     * @return void
+     */
+    public function deactivate() {
+        // Clear scheduled events
+        wp_clear_scheduled_hook('dtr_workbooks_cleanup');
+        
+        // Log deactivation
+        dtr_custom_log('DTR Workbooks Integration plugin deactivated');
+        
+        // Flush rewrite rules
+        flush_rewrite_rules();
+    }
+    
+    /**
+     * Plugin uninstall
+     *
+     * @return void
+        
+        // Log deactivation
+        dtr_custom_log('DTR Workbooks Integration plugin deactivated');
+        
+        // Flush rewrite rules
+        flush_rewrite_rules();
+    }
+    
+    /**
+     * Plugin uninstall
+     *
+     * @return void
+     */
+    public static function uninstall() {
+        // Remove options
+        delete_option('dtr_workbooks_options');
+        delete_option('dtr_workbooks_last_connection_test');
+        
+        // Remove custom capabilities
+        $role = get_role('administrator');
+        if ($role) {
+            $role->remove_cap('manage_dtr_workbooks');
+            $role->remove_cap('view_dtr_workbooks_logs');
+        }
+        
+        // Remove database tables
+        global $wpdb;
+        $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}dtr_workbooks_submissions");
+        $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}dtr_workbooks_sync_log");
+        
+        // Remove log directory
+        $log_dir = plugin_dir_path(__FILE__) . 'logs/';
+        if (is_dir($log_dir)) {
+            $files = glob($log_dir . '*');
+            foreach ($files as $file) {
+                if (is_file($file)) {
+                    unlink($file);
+                }
+            }
+            rmdir($log_dir);
+        }
+    }
+    
+    // Settings field callbacks
+    public function api_section_callback() {
+        echo '<p>' . __('Configure your Workbooks API connection settings.', 'dtr-workbooks') . '</p>';
+    }
+    
+    public function api_url_field_callback($args) {
+        $value = $this->options['api_url'] ?? '';
+        echo '<input type="url" id="api_url" name="dtr_workbooks_options[api_url]" value="' . esc_attr($value) . '" class="regular-text" placeholder="' . esc_attr($args['placeholder']) . '" required />';
+        if (isset($args['description'])) {
+            echo '<p class="description">' . esc_html($args['description']) . '</p>';
+        }
+    }
+    
+    public function api_key_field_callback($args) {
+        $value = $this->options['api_key'] ?? '';
+        echo '<input type="password" id="api_key" name="dtr_workbooks_options[api_key]" value="' . esc_attr($value) . '" class="regular-text" required autocomplete="new-password" />';
+        echo '<p class="description">' . __('Your Workbooks API key', 'dtr-workbooks') . '</p>';
+    }
+    
+    public function forms_section_callback() {
+        echo '<p>' . __('Configure which forms should be processed by the integration.', 'dtr-workbooks') . '</p>';
+    }
+    
+    public function enabled_forms_field_callback() {
+        $enabled_forms = $this->options['enabled_forms'] ?? [2, 15, 31];
+        $available_forms = [2 => 'Webinar Form', 15 => 'Registration Form', 31 => 'Lead Gen Form'];
+        
+        foreach ($available_forms as $form_id => $form_name) {
+            $checked = in_array($form_id, $enabled_forms) ? 'checked' : '';
+            echo '<label><input type="checkbox" name="dtr_workbooks_options[enabled_forms][]" value="' . $form_id . '" ' . $checked . ' /> ' . $form_name . '</label><br />';
+        }
+    }
+    
+    public function debug_section_callback() {
+        echo '<p>' . __('Configure debug and logging settings.', 'dtr-workbooks') . '</p>';
+    }
+    
+    public function debug_mode_field_callback() {
+        $checked = !empty($this->options['debug_mode']) ? 'checked' : '';
+        echo '<label><input type="checkbox" name="dtr_workbooks_options[debug_mode]" value="1" ' . $checked . ' /> ' . __('Enable debug mode', 'dtr-workbooks') . '</label>';
+    }
+
+    /**
+     * Prepare Ninja Forms submission data
+     * Ensures all required arrays are initialized
+     *
+     * @param array $data Form submission data
+     * @return array Modified form data
+     */
+    public function prepare_ninja_forms_submission($data) {
+        // Initialize required arrays if they don't exist
+        if (!isset($data['fields'])) {
+            $data['fields'] = [];
+        }
+        
+        if (!isset($data['extra'])) {
+            $data['extra'] = [];
+        }
+        
+        // Ensure the fields array is not null
+        if ($data['fields'] === null) {
+            $data['fields'] = [];
+        }
+        
+        // Log submission data in debug mode
+        if ($this->debug_mode) {
+            dtr_custom_log("Ninja Forms submission data: " . print_r($data, true));
+        }
+        
+        // Handle membership registration for form 15
+        if (isset($data['id']) && intval($data['id']) === 15) {
+            $this->handle_membership_registration($data);
+        }
+        
+        return $data;
+    }
+    
+    /**
+     * Fix array merge issues in Ninja Forms
+     *
+     * @param array|null $array1 First array
+     * @param array|null $array2 Second array
+     * @return array Merged array
+     */
+    public function fix_array_merge($array1, $array2) {
+        // Ensure both parameters are arrays
+        $array1 = is_array($array1) ? $array1 : [];
+        $array2 = is_array($array2) ? $array2 : [];
+        
+        // Merge arrays safely
+        return array_merge($array1, $array2);
+    }
+    
+    /**
+     * Handle membership registration processing for form 15
+     *
+     * @param array $form_data Form submission data
+     * @return void
+     */
+    private function handle_membership_registration($form_data) {
+        try {
+            $debug_id = 'REG-' . uniqid();
+            $this->log_membership_registration("[{$debug_id}] ====== MEMBER REGISTRATION ======");
+            $this->log_membership_registration("[{$debug_id}] [ENTRY] Processing membership registration for form 15");
+
+            // Extract field data
+            $fields = $form_data['fields'] ?? [];
+            $flat = [];
+            foreach ($fields as $field) {
+                if (isset($field['key'])) $flat[$field['key']] = $field['value'] ?? '';
+                if (isset($field['id'])) $flat[$field['id']] = $field['value'] ?? '';
+            }
+
+            // Collect and validate data
+            $data = [
+                'email' => sanitize_email($this->get_field_value($flat, ['email_address', '144'])),
+                'password' => $this->get_field_value($flat, ['password', '221']),
+                'first_name' => sanitize_text_field($this->get_field_value($flat, ['first_name', '142'])),
+                'last_name' => sanitize_text_field($this->get_field_value($flat, ['last_name', '143'])),
+                'employer' => sanitize_text_field($this->get_field_value($flat, ['employer', '218'])),
+                'title' => sanitize_text_field($this->get_field_value($flat, ['title', '141'])),
+                'telephone' => sanitize_text_field($this->get_field_value($flat, ['telephone', '146'])),
+                'country' => sanitize_text_field($this->get_field_value($flat, ['country', '148'], 'South Africa')),
+                'town' => sanitize_text_field($this->get_field_value($flat, ['town', '149'])),
+                'postcode' => sanitize_text_field($this->get_field_value($flat, ['postcode', '150'])),
+                'job_title' => sanitize_text_field($this->get_field_value($flat, ['job_title', '147'])),
+                'marketing_selected' => $this->to_array($this->get_field_value($flat, ['marketing_preferences', '153'])),
+                'toi_selected' => $this->to_array($this->get_field_value($flat, ['topics_of_interest', '154']))
+            ];
+
+            // 1. Block if WP user exists
+            if (!$data['email'] || !is_email($data['email']) || !$data['password'] || !$data['first_name'] || !$data['last_name']) {
+                $this->log_membership_registration("[{$debug_id}] [ERROR] Missing required fields");
+                return;
+            }
+            if (username_exists($data['email']) || email_exists($data['email'])) {
+                $this->log_membership_registration("[{$debug_id}] [WARNING] User already exists for email: {$data['email']}");
+                // TODO: Optionally trigger front-end error here (Ninja Forms validation)
+                return;
+            }
+
+            // 2. Check Workbooks for existing person
+            $workbooks = get_workbooks_instance();
+            $workbooks_person_id = null;
+            $workbooks_ref = null;
+            $duplicate_workbooks = false;
+            if ($workbooks) {
+                try {
+                    $this->log_membership_registration("[{$debug_id}] [DEBUG] Checking Workbooks for existing person with email: {$data['email']}");
+                    $search = $workbooks->assertGet('crm/people', ['main_location[email]' => $data['email'], '_limit' => 1]);
+                    if (!empty($search['data'][0]['id'])) {
+                        $found_email = strtolower(trim($search['data'][0]['main_location[email]'] ?? ''));
+                        $input_email = strtolower(trim($data['email']));
+                        if ($found_email === $input_email) {
+                            $workbooks_person_id = $search['data'][0]['id'];
+                            $workbooks_ref = $search['data'][0]['object_ref'] ?? '';
+                            $duplicate_workbooks = true;
+                            $this->log_membership_registration("[{$debug_id}] [DUPLICATE] Person already exists in Workbooks with ID: {$workbooks_person_id}, ref: {$workbooks_ref}");
+                        } else {
+                            $this->log_membership_registration("[{$debug_id}] [DEBUG] Workbooks search returned a person, but email did not match exactly. Found: '{$found_email}', Expected: '{$input_email}'");
+                        }
+                    }
+                } catch (Exception $e) {
+                    $this->log_membership_registration("[{$debug_id}] [ERROR] Workbooks search failed: " . $e->getMessage());
+                }
+            } else {
+                $this->log_membership_registration("[{$debug_id}] [WARNING] Workbooks API instance not available");
+            }
+
+            // 3. Create WP user
+            $user_id = wp_create_user($data['email'], $data['password'], $data['email']);
+            if (is_wp_error($user_id)) {
+                $this->log_membership_registration("[{$debug_id}] [ERROR] WP user creation failed: " . $user_id->get_error_message());
+                return;
+            }
+            $this->log_membership_registration("[{$debug_id}] [SUCCESS] WP user created with ID: {$user_id}");
+
+            // Set core user meta
+            $core_meta = [
+                'created_via_ninja_form' => 1,
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'employer' => $data['employer'],
+                'employer_name' => $data['employer'],
+                'cf_person_claimed_employer' => $data['employer'],
+                'person_personal_title' => $data['title'],
+                'telephone' => $data['telephone'],
+                'country' => $data['country'],
+                'town' => $data['town'],
+                'postcode' => $data['postcode'],
+                'job_title' => $data['job_title'],
+                'cf_person_dtr_subscriber_type' => 'Prospect',
+                'cf_person_dtr_web_member' => 1,
+                'lead_source_type' => 'Online Registration',
+                'cf_person_is_person_active_or_inactive' => 'Active',
+                'cf_person_data_source_detail' => 'DTR Web Member Signup'
+            ];
+            foreach ($core_meta as $key => $value) {
+                update_user_meta($user_id, $key, $value);
+            }
+
+            // Apply marketing preferences
+            $marketing_fields = ['cf_person_dtr_news', 'cf_person_dtr_events', 'cf_person_dtr_third_party', 'cf_person_dtr_webinar'];
+            foreach ($marketing_fields as $mf) {
+                update_user_meta($user_id, $mf, in_array($mf, $data['marketing_selected'], true) ? 1 : 0);
+            }
+
+            // Apply topics of interest
+            $toi_fields = ['cf_person_business', 'cf_person_diseases', 'cf_person_drugs_therapies', 'cf_person_genomics_3774', 'cf_person_research_development', 'cf_person_technology', 'cf_person_tools_techniques'];
+            foreach ($toi_fields as $tf) {
+                update_user_meta($user_id, $tf, in_array($tf, $data['toi_selected'], true) ? 1 : 0);
+            }
+
+            // 4. Link to Workbooks (existing or new)
+            if ($workbooks && $duplicate_workbooks) {
+                update_user_meta($user_id, 'workbooks_person_id', $workbooks_person_id);
+                if ($workbooks_ref) update_user_meta($user_id, 'workbooks_object_ref', $workbooks_ref);
+                update_user_meta($user_id, 'workbooks_existing_person', 1);
+                $this->log_membership_registration("[{$debug_id}] [LINKED] Linked WP user to existing Workbooks person ID: {$workbooks_person_id}");
+            } elseif ($workbooks) {
+                // Create new Workbooks person
+                $this->log_membership_registration("[{$debug_id}] [DEBUG] No existing Workbooks person found - creating new");
+                $this->sync_to_workbooks($workbooks, $user_id, $data, $debug_id);
+            }
+
+            // Log detailed summary
+            $this->log_detailed_summary($user_id, $data, $debug_id);
+
+        } catch (Exception $e) {
+            $this->log_membership_registration('[FATAL] Exception in membership registration: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Get field value from flattened fields array
+     *
+     * @param array $flat Flattened fields
+     * @param array $candidates Field keys to check
+     * @param string $default Default value
+     * @return string
+     */
+    private function get_field_value($flat, $candidates, $default = '') {
+        foreach ($candidates as $key) {
+            if (isset($flat[$key]) && $flat[$key] !== '') {
+                return $flat[$key];
+            }
+        }
+        return $default;
+    }
+    
+    /**
+     * Convert value to array
+     *
+     * @param mixed $val Value to convert
+     * @return array
+     */
+    private function to_array($val) {
+        if (is_array($val)) return $val;
+        if ($val === '' || $val === null) return [];
+        return [$val];
+    }
+    
+    /**
+     * Sync user to Workbooks
+     *
+     * @param object $workbooks Workbooks API instance
+     * @param int $user_id WordPress user ID
+     * @param array $data User data
+     * @param string $debug_id Debug ID for logging
+     * @return void
+     */
+    private function sync_to_workbooks($workbooks, $user_id, $data, $debug_id) {
+        try {
+            $this->log_membership_registration("[{$debug_id}] [DEBUG] Starting Workbooks sync");
+            $this->log_membership_registration("[{$debug_id}] [DEBUG] Searching for existing person with email: {$data['email']}");
+            
+            // Check for existing person
+            $search = $workbooks->assertGet('crm/people', ['main_location[email]' => $data['email'], '_limit' => 1]);
+            if (!empty($search['data'][0]['id'])) {
+                $found_email = strtolower(trim($search['data'][0]['main_location[email]'] ?? ''));
+                $input_email = strtolower(trim($data['email']));
+                if ($found_email === $input_email) {
+                    $existing_id = $search['data'][0]['id'];
+                    $existing_ref = $search['data'][0]['object_ref'] ?? '';
+                    $this->log_membership_registration("[{$debug_id}] [DUPLICATE] Person already exists in Workbooks with ID: {$existing_id}, ref: {$existing_ref}");
+                    $this->log_membership_registration("[{$debug_id}] [DUPLICATE] Linking WordPress user {$user_id} to existing Workbooks person {$existing_id}");
+                    update_user_meta($user_id, 'workbooks_person_id', $existing_id);
+                    if ($existing_ref) update_user_meta($user_id, 'workbooks_object_ref', $existing_ref);
+                    update_user_meta($user_id, 'workbooks_existing_person', 1);
+                    $this->log_membership_registration("[{$debug_id}] [DUPLICATE] No new Workbooks person created - linked to existing");
+                    return;
+                } else {
+                    $this->log_membership_registration("[{$debug_id}] [DEBUG] Workbooks search returned a person, but email did not match exactly. Found: '{$found_email}', Expected: '{$input_email}'");
+                }
+            }
+            $this->log_membership_registration("[{$debug_id}] [DEBUG] No existing person found - creating new Workbooks person");
+            
+            // Build Workbooks payload
+            $employer = isset($data['employer']) ? sanitize_text_field($data['employer']) : '';
+            $payload = [
+                'person_first_name' => $data['first_name'],
+                'person_last_name' => $data['last_name'],
+                'name' => trim($data['first_name'] . ' ' . $data['last_name']),
+                'main_location[email]' => $data['email'],
+                'created_through_reference' => 'wp_user_' . $user_id,
+                'person_personal_title' => $data['title'],
+                'person_job_title' => $data['job_title'],
+                'main_location[telephone]' => $data['telephone'],
+                'main_location[country]' => $data['country'],
+                'main_location[town]' => $data['town'],
+                'main_location[postcode]' => $data['postcode'],
+                'employer_name' => $employer,
+                'cf_person_claimed_employer' => $employer,
+                'cf_person_dtr_subscriber_type' => 'Prospect',
+                // 'cf_person_dtr_subscriber' => 1, // Commented out as requested
+                'cf_person_dtr_web_member' => 1,
+                'lead_source_type' => 'Online Registration',
+                'cf_person_is_person_active_or_inactive' => 'Active',
+                'cf_person_data_source_detail' => 'DTR Web Member Signup'
+            ];
+            
+            // Add marketing preferences
+            $marketing_fields = ['cf_person_dtr_news', 'cf_person_dtr_events', 'cf_person_dtr_third_party', 'cf_person_dtr_webinar'];
+            foreach ($marketing_fields as $mf) {
+                $payload[$mf] = in_array($mf, $data['marketing_selected'], true) ? 1 : 0;
+            }
+
+            // Add topics of interest (TOI)
+            $toi_fields = ['cf_person_business', 'cf_person_diseases', 'cf_person_drugs_therapies', 'cf_person_genomics_3774', 'cf_person_research_development', 'cf_person_technology', 'cf_person_tools_techniques'];
+            foreach ($toi_fields as $tf) {
+                $payload[$tf] = in_array($tf, $data['toi_selected'], true) ? 1 : 0;
+            }
+
+            // Add AOI mapping (Areas of Interest) based on TOI selection using centralized mapping
+            $aoi_debug = [];
+            if (function_exists('dtr_get_toi_to_aoi_matrix') && function_exists('dtr_get_aoi_field_names') && function_exists('dtr_normalize_toi_key')) {
+                $normalized_selected = array_map('dtr_normalize_toi_key', $data['toi_selected']);
+                $matrix = dtr_get_toi_to_aoi_matrix();
+                $aoi_fields = array_keys(dtr_get_aoi_field_names());
+                $aoi_map = array_fill_keys($aoi_fields, 0);
+                foreach ($normalized_selected as $toi_field) {
+                    if (isset($matrix[$toi_field])) {
+                        foreach ($matrix[$toi_field] as $aoi_field => $value) {
+                            $aoi_map[$aoi_field] = $value;
+                        }
+                    }
+                }
+                foreach ($aoi_map as $aoi_key => $val) {
+                    if ($val) {
+                        $payload[$aoi_key] = 1;
+                        $aoi_debug[] = $aoi_key;
+                    }
+                }
+            }
+            
+            // Create person in Workbooks
+            $this->log_membership_registration("[{$debug_id}] [DEBUG] Sending create request to Workbooks API");
+            $payloads = [$payload];
+            $resp = $workbooks->assertCreate('crm/people', $payloads);
+            
+            if (!empty($resp['affected_objects'][0]['id'])) {
+                $person_id = $resp['affected_objects'][0]['id'];
+                $person_ref = $resp['affected_objects'][0]['object_ref'] ?? '';
+                
+                update_user_meta($user_id, 'workbooks_person_id', $person_id);
+                if ($person_ref) update_user_meta($user_id, 'workbooks_object_ref', $person_ref);
+                
+                $this->log_membership_registration("[{$debug_id}] [SUCCESS] NEW person created in Workbooks with ID: {$person_id}, ref: {$person_ref}");
+            } else {
+                $this->log_membership_registration("[{$debug_id}] [ERROR] Workbooks create response missing ID - response: " . wp_json_encode($resp));
+            }
+            
+        } catch (Exception $e) {
+            $this->log_membership_registration("[{$debug_id}] [ERROR] Workbooks sync failed: " . $e->getMessage());
+            // Don't rollback WP user on Workbooks failure - just log it
+        }
+    }
+    
+    /**
+     * Log detailed registration summary
+     *
+     * @param int $user_id WordPress user ID
+     * @param array $data User data
+     * @param string $debug_id Debug ID for logging
+     * @return void
+     */
+    private function log_detailed_summary($user_id, $data, $debug_id) {
+        $marketing_map = [
+            'cf_person_dtr_news' => 'Newsletter',
+            'cf_person_dtr_events' => 'Event',
+            'cf_person_dtr_third_party' => 'Third party',
+            'cf_person_dtr_webinar' => 'Webinar'
+        ];
+        
+        $toi_map = [
+            'cf_person_business' => 'Business',
+            'cf_person_diseases' => 'Diseases',
+            'cf_person_drugs_therapies' => 'Drugs & Therapies',
+            'cf_person_genomics_3774' => 'Genomics',
+            'cf_person_research_development' => 'Research & Development',
+            'cf_person_technology' => 'Technology',
+            'cf_person_tools_techniques' => 'Tools & Techniques'
+        ];
+        
+        $workbooks_person_id = get_user_meta($user_id, 'workbooks_person_id', true);
+        $workbooks_ref = get_user_meta($user_id, 'workbooks_object_ref', true);
+        $duplicate_flag = (int) get_user_meta($user_id, 'workbooks_existing_person', true) === 1;
+
+        $this->log_membership_registration('==== MEMBER REGISTRATION =====');
+        $this->log_membership_registration('User Details:');
+        $this->log_membership_registration('First Name: ' . ($data['first_name'] ?? ''));
+        $this->log_membership_registration('Last Name: ' . ($data['last_name'] ?? ''));
+        $this->log_membership_registration('Email Address: ' . ($data['email'] ?? ''));
+        $this->log_membership_registration('Telephone Number: ' . ($data['telephone'] ?? ''));
+        $this->log_membership_registration('Job Title: ' . ($data['job_title'] ?? ''));
+        $this->log_membership_registration('Employer: ' . ($data['employer'] ?? ''));
+        $this->log_membership_registration('Country: ' . ($data['country'] ?? ''));
+        $this->log_membership_registration('Town: ' . ($data['town'] ?? ''));
+        $this->log_membership_registration('Post Code: ' . ($data['postcode'] ?? ''));
+        $this->log_membership_registration('');
+        $this->log_membership_registration('---- MARKETING COMMUNICATION ----');
+
+        $marketing_summary = [];
+        foreach ($marketing_map as $meta_key => $label) {
+            $val = (int) get_user_meta($user_id, $meta_key, true) === 1 ? 'Yes' : 'No';
+            $this->log_membership_registration($label . ': - ' . $val);
+            $marketing_summary[] = $label . '=' . $val;
+        }
+
+        $this->log_membership_registration('');
+        $this->log_membership_registration('---- TOPICS OF INTEREST ----');
+
+        $toi_summary = [];
+        foreach ($toi_map as $meta_key => $label) {
+            $val = (int) get_user_meta($user_id, $meta_key, true) === 1 ? 'Yes' : 'No';
+            $this->log_membership_registration($label . ': - ' . $val);
+            $toi_summary[] = $label . '=' . $val;
+        }
+
+        $this->log_membership_registration('');
+        $this->log_membership_registration('---- AREAS OF INTEREST ----');
+        // AOI debug output
+        if (function_exists('dtr_map_toi_to_aoi')) {
+            $aoi_map = dtr_map_toi_to_aoi($data['toi_selected']);
+            $aoi_summary = [];
+            foreach ($aoi_map as $aoi_key => $val) {
+                if ($val) {
+                    $this->log_membership_registration($aoi_key . ': - Yes');
+                    $aoi_summary[] = $aoi_key . '=Yes';
+                } else {
+                    $aoi_summary[] = $aoi_key . '=No';
+                }
+            }
+        }
+
+        $this->log_membership_registration('');
+        $this->log_membership_registration('---- WORDPRESS/WORKBOOKS ----');
+        $this->log_membership_registration("SUCCESS: WordPress user created with ID: {$user_id}");
+
+        if ($workbooks_person_id) {
+            if ($duplicate_flag) {
+                $this->log_membership_registration("SUCCESS: Linked to existing Workbooks person with ID: {$workbooks_person_id}");
+            } else {
+                $this->log_membership_registration("SUCCESS: New Workbooks person created with ID: {$workbooks_person_id}");
+            }
+        } else {
+            $this->log_membership_registration("WARNING: No Workbooks person ID available");
+        }
+
+        if ($workbooks_ref) $this->log_membership_registration('Workbooks Person Ref: ' . $workbooks_ref);
+        if ($duplicate_flag) $this->log_membership_registration('Duplicate Detected: YES (existing person linked)');
+
+        $this->log_membership_registration('');
+        $this->log_membership_registration('Communication Preferences: ' . implode(', ', $marketing_summary));
+        $this->log_membership_registration('Topics of Interest: ' . implode(', ', $toi_summary));
+        if (isset($aoi_summary)) {
+            $this->log_membership_registration('Areas of Interest: ' . implode(', ', $aoi_summary));
+        }
+        $this->log_membership_registration('');
+        $this->log_membership_registration('==== MEMBER REGISTRATION SUCCESSFUL =====');
+        $this->log_membership_registration('Member registration successful - Fucking Celebrate Good Times Come On!!!');
+    }
+    
+    /**
+     * Log membership registration messages
+     *
+     * @param string $message Message to log
+     * @return void
+     */
+    private function log_membership_registration($message) {
+        $timestamp = current_time('Y-m-d H:i:s');
+        $log_line = "{$timestamp} [Membership-Reg] {$message}\n";
+        
+        // Log to membership registration debug file
+        if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+            $log_file = DTR_WORKBOOKS_LOG_DIR . 'member-registration-debug.log';
+            file_put_contents($log_file, $log_line, FILE_APPEND | LOCK_EX);
+        }
+        
+        // Also log to main plugin log
+        dtr_custom_log($message);
+    }
 }
 
-// Enqueue admin JS for gated content articles page only
-add_action('admin_enqueue_scripts', function($hook) {
-    if (isset($_GET['page']) && $_GET['page'] === 'workbooks-gated-articles') {
-        wp_enqueue_script(
-            'gated-content-admin',
-            plugins_url('assets/gated-content-admin.js', __FILE__),
-            array('jquery'),
-            null,
-            true
-        );
-        wp_localize_script('gated-content-admin', 'gatedContentNonce', array(
-            'nonce' => wp_create_nonce('gated_content_nonce')
-        ));
-    }
-});
+// Initialize the plugin
+DTR_Workbooks_Integration::get_instance();
 
-// Include simple Ninja Forms webinar hook
-// Clean ninja forms webinar hook that works exactly like the successful form
-if (file_exists(WORKBOOKS_NF_PATH . 'includes/ninja-forms-simple-hook.php')) {
-    require_once WORKBOOKS_NF_PATH . 'includes/ninja-forms-simple-hook.php';
+/**
+ * Get Workbooks API instance
+ *
+ * @return WorkbooksApi|false
+ */
+function get_workbooks_instance() {
+    $debug_log = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/connection-debug.log';
+    
+    try {
+        $options = get_option('dtr_workbooks_options', []);
+        $api_url = $options['api_url'] ?? '';
+        $api_key = $options['api_key'] ?? '';
+        
+        // Ensure the admin directory exists
+        $log_dir = dirname($debug_log);
+        if (!is_dir($log_dir)) {
+            wp_mkdir_p($log_dir);
+        }
+
+        dtr_admin_log(date('[Y-m-d H:i:s]') . " Getting options: API URL = {$api_url}, API Key = " . (empty($api_key) ? 'empty' : 'set') . "\n", 'connection-debug.log');
+
+        if (empty($api_url) || empty($api_key)) {
+            dtr_admin_log(date('[Y-m-d H:i:s]') . " Error: API credentials not configured\n", 'connection-debug.log');
+            return false;
+        }
+
+        // Check if WorkbooksApi class exists
+        if (!class_exists('WorkbooksApi')) {
+            dtr_admin_log(date('[Y-m-d H:i:s]') . " Error: WorkbooksApi class not found\n", 'connection-debug.log');
+            return false;
+        }
+
+        dtr_admin_log(date('[Y-m-d H:i:s]') . " Initializing WorkbooksApi...\n", 'connection-debug.log');
+        
+        // Initialize Workbooks API according to the official documentation
+        $workbooks = new WorkbooksApi([
+            'application_name' => 'DTR Workbooks Integration',
+            'user_agent' => 'DTR-WordPress-Plugin/2.0.0',
+            'service' => rtrim($api_url, '/'),
+            'api_key' => $api_key,
+            'verify_peer' => true,
+            'connect_timeout' => $options['api_timeout'] ?? 30,
+            'request_timeout' => $options['api_timeout'] ?? 30,
+            'logger_callback' => ['WorkbooksApi', 'logAllToStdout'] // Enable logging for debugging
+        ]);
+        
+        file_put_contents($debug_log, date('[Y-m-d H:i:s]') . " WorkbooksApi initialized successfully\n", FILE_APPEND);
+        
+        return $workbooks;
+        
+    } catch (Exception $e) {
+        $error_msg = "Failed to initialize Workbooks API: " . $e->getMessage();
+        file_put_contents($debug_log, date('[Y-m-d H:i:s]') . " Exception: {$error_msg}\n", FILE_APPEND);
+        
+        if (function_exists('dtr_custom_log')) {
+            dtr_custom_log($error_msg, 'error');
+        }
+        
+        return false;
+    }
+}
+
+/**
+ * Core Workbooks API functions
+ */
+
+/**
+ * Create a person in Workbooks
+ *
+ * @param array $data Person data
+ * @param string $debug_id Debug identifier
+ * @return array Result array
+ */
+function dtr_create_workbooks_person($data, $debug_id = '') {
+    $options = get_option('dtr_workbooks_options', []);
+    $workbooks = get_workbooks_instance();
+    
+    if ($workbooks === false) {
+        return ['success' => false, 'message' => 'Failed to initialize Workbooks API'];
+    }
+    
+    try {
+        // Prepare person data for Workbooks API
+        $person_data = [
+            'name' => trim(($data['first_name'] ?? '') . ' ' . ($data['last_name'] ?? '')),
+            'person_first_name' => $data['first_name'] ?? '',
+            'person_last_name' => $data['last_name'] ?? '',
+            'main_location[email]' => $data['email'] ?? '',
+            'main_location[telephone]' => $data['phone'] ?? '',
+            'organisation_name' => $data['company'] ?? '',
+            'lead_source' => $data['lead_source'] ?? 'Website Form'
+        ];
+        
+        // Remove empty fields
+        $person_data = array_filter($person_data, function($value) {
+            return !empty($value);
+        });
+        
+        dtr_custom_log("Creating person in Workbooks: " . print_r($person_data, true));
+        
+        $response = $workbooks->assertCreate('crm/people', [$person_data]);
+        
+        if (isset($response['affected_objects'][0]['id'])) {
+            $person_id = $response['affected_objects'][0]['id'];
+            dtr_custom_log("Person created successfully. ID: {$person_id}");
+            return ['success' => true, 'person_id' => $person_id, 'data' => $response];
+        } else {
+            dtr_custom_log("Person creation failed: " . print_r($response, true), 'error');
+            return ['success' => false, 'message' => 'Person creation failed'];
+        }
+        
+    } catch (Exception $e) {
+        dtr_custom_log("Person creation error: " . $e->getMessage(), 'error');
+        return ['success' => false, 'message' => $e->getMessage()];
+    }
+}
+
+/**
+ * Create a ticket in Workbooks
+ *
+ * @param int $person_id Person ID
+ * @param string $event_reference Event reference
+ * @param string $debug_id Debug identifier
+ * @return array Result array
+ */
+function dtr_create_workbooks_ticket($person_id, $event_reference, $debug_id = '') {
+    $workbooks = get_workbooks_instance();
+    
+    if ($workbooks === false) {
+        return ['success' => false, 'message' => 'Failed to initialize Workbooks API'];
+    }
+    
+    try {
+        $ticket_data = [
+            'name' => 'Webinar Registration: ' . $event_reference,
+            'party_id' => $person_id,
+            'category' => 'Event Registration',
+            'status' => 'Open',
+            'description' => 'Webinar registration for: ' . $event_reference
+        ];
+        
+        dtr_custom_log("Creating ticket in Workbooks: " . print_r($ticket_data, true));
+        
+        $response = $workbooks->assertCreate('crm/cases', [$ticket_data]);
+        
+        if (isset($response['affected_objects'][0]['id'])) {
+            $ticket_id = $response['affected_objects'][0]['id'];
+            dtr_custom_log("Ticket created successfully. ID: {$ticket_id}");
+            return ['success' => true, 'ticket_id' => $ticket_id, 'data' => $response];
+        } else {
+            dtr_custom_log("Ticket creation failed: " . print_r($response, true), 'error');
+            return ['success' => false, 'message' => 'Ticket creation failed'];
+        }
+        
+    } catch (Exception $e) {
+        dtr_custom_log("Ticket creation error: " . $e->getMessage(), 'error');
+        return ['success' => false, 'message' => $e->getMessage()];
+    }
+}
+
+/**
+ * Add person to mailing list
+ *
+ * @param array $data Person data
+ * @param string $debug_id Debug identifier
+ * @return array Result array
+ */
+function dtr_add_to_mailing_list($data, $debug_id = '') {
+    $workbooks = get_workbooks_instance();
+    
+    if ($workbooks === false) {
+        return ['success' => false, 'message' => 'Failed to initialize Workbooks API'];
+    }
+    
+    try {
+        // This would typically involve finding existing marketing lists and adding the person
+        // For now, we'll just log the attempt
+        dtr_custom_log("Adding to mailing list: " . ($data['email'] ?? 'No email provided'));
+        
+        // Implementation would depend on your specific Workbooks setup and marketing lists
+        // Example: Find marketing list and add person as subscriber
+        
+        return ['success' => true, 'message' => 'Added to mailing list (placeholder implementation)'];
+        
+    } catch (Exception $e) {
+        dtr_custom_log("Mailing list error: " . $e->getMessage(), 'error');
+        return ['success' => false, 'message' => $e->getMessage()];
+    }
+}
+
+/**
+ * Process lead generation form
+ *
+ * @param array $form_data Form data
+ * @param int $form_id Form ID
+ * @param string $debug_id Debug identifier
+ * @return bool Success status
+ */
+function dtr_process_lead_generation($form_data, $form_id, $debug_id = '') {
+    dtr_custom_log("Processing lead generation form {$form_id}");
+    
+    // Extract contact information
+    $contact_data = [
+        'email' => $form_data['email'] ?? '',
+        'first_name' => $form_data['first_name'] ?? '',
+        'last_name' => $form_data['last_name'] ?? '',
+        'company' => $form_data['company'] ?? '',
+        'phone' => $form_data['phone'] ?? '',
+        'lead_source' => 'Website Form'
+    ];
+    
+    // Create person in Workbooks
+    $result = dtr_create_workbooks_person($contact_data, $debug_id);
+    
+    if ($result['success']) {
+        // Add to mailing list
+        dtr_add_to_mailing_list($contact_data, $debug_id);
+        dtr_custom_log("Lead generation processing completed successfully");
+        return true;
+    } else {
+        dtr_custom_log("Lead generation processing failed: " . $result['message'], 'error');
+        return false;
+    }
+}
+
+/**
+ * Process user registration form
+ *
+ * @param array $form_data Form data
+ * @param int $form_id Form ID
+ * @param string $debug_id Debug identifier
+ * @return bool Success status
+ */
+// NOTE: The basic dtr_process_user_registration() implementation previously here
+// has been removed to allow the enhanced version in includes/nf-user-register.php
+// to load without a fatal redeclare error.
+// All references (e.g. retry handler) now resolve to the enhanced implementation.
+
+/**
+ * Process webinar registration form
+ *
+ * @param array $form_data Form data
+ * @param int $form_id Form ID
+ * @param string $debug_id Debug identifier
+ * @return bool Success status
+ */
+function dtr_process_webinar_registration($form_data, $form_id, $debug_id = '') {
+    dtr_custom_log("Processing webinar registration form {$form_id}");
+    
+    // Extract contact information
+    $contact_data = [
+        'email' => $form_data['email'] ?? '',
+        'first_name' => $form_data['first_name'] ?? '',
+        'last_name' => $form_data['last_name'] ?? '',
+        'company' => $form_data['company'] ?? '',
+        'phone' => $form_data['phone'] ?? '',
+        'lead_source' => 'Webinar Registration'
+    ];
+    
+    // Create person in Workbooks
+    $result = dtr_create_workbooks_person($contact_data, $debug_id);
+    
+    if ($result['success']) {
+        $person_id = $result['person_id'];
+        
+        // Create ticket for webinar registration
+        $event_reference = $form_data['webinar_name'] ?? $form_data['event_name'] ?? 'Webinar';
+        $ticket_result = dtr_create_workbooks_ticket($person_id, $event_reference, $debug_id);
+        
+        // Add to mailing list
+        dtr_add_to_mailing_list($contact_data, $debug_id);
+        
+        dtr_custom_log("Webinar registration processing completed successfully");
+        return true;
+    } else {
+        dtr_custom_log("Webinar registration processing failed: " . $result['message'], 'error');
+        return false;
+    }
+}
+
+/**
+ * Store failed submission for retry
+ *
+ * @param int $form_id Form ID
+ * @param array $submission_data Submission data
+ * @param string $error_message Error message
+ * @return void
+ */
+function dtr_store_failed_submission($form_id, $submission_data, $error_message) {
+    global $wpdb;
+    
+    $table_name = $wpdb->prefix . 'dtr_workbooks_submissions';
+    
+    $wpdb->insert(
+        $table_name,
+        [
+            'form_id' => $form_id,
+            'submission_data' => wp_json_encode($submission_data),
+            'status' => 'failed',
+            'error_message' => $error_message,
+            'created_at' => current_time('mysql')
+        ],
+        ['%d', '%s', '%s', '%s', '%s']
+    );
+    
+    if ($wpdb->last_error) {
+        dtr_custom_log('Database error storing failed submission: ' . $wpdb->last_error, 'error');
+    }
+}
+
+/**
+ * Log sync operation
+ *
+ * @param string $operation Operation type
+ * @param string $object_type Object type
+ * @param string $object_id Object ID
+ * @param string $status Status
+ * @param array $request_data Request data
+ * @param array $response_data Response data
+ * @param string $error_message Error message
+ * @param float $execution_time Execution time
+ * @return void
+ */
+function dtr_log_sync_operation($operation, $object_type, $object_id, $status, $request_data = null, $response_data = null, $error_message = null, $execution_time = null) {
+    global $wpdb;
+    
+    $table_name = $wpdb->prefix . 'dtr_workbooks_sync_log';
+    
+    $wpdb->insert(
+        $table_name,
+        [
+            'operation' => $operation,
+            'object_type' => $object_type,
+            'object_id' => $object_id,
+            'status' => $status,
+            'request_data' => $request_data ? wp_json_encode($request_data) : null,
+            'response_data' => $response_data ? wp_json_encode($response_data) : null,
+            'error_message' => $error_message,
+            'execution_time' => $execution_time,
+            'created_at' => current_time('mysql')
+        ],
+        ['%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%s']
+    );
+    
+    if ($wpdb->last_error) {
+        dtr_custom_log('Database error logging sync operation: ' . $wpdb->last_error, 'error');
+    }
+}
+
+/**
+ * Get Workbooks person by email
+ *
+ * @param string $email Email address
+ * @return array|false Person data or false if not found
+ */
+function dtr_get_workbooks_person_by_email($email) {
+    $workbooks = get_workbooks_instance();
+    
+    if ($workbooks === false) {
+        return false;
+    }
+    
+    try {
+        $response = $workbooks->get('crm/people', [
+            '_filters[]' => ['main_location[email]', 'eq', $email],
+            '_limit' => 1,
+            '_select_columns[]' => ['id', 'name', 'main_location[email]', 'lock_version']
+        ]);
+        
+        if (isset($response['data']) && !empty($response['data'])) {
+            return $response['data'][0];
+        }
+        
+        return false;
+        
+    } catch (Exception $e) {
+        dtr_custom_log("Error fetching person by email: " . $e->getMessage(), 'error');
+        return false;
+    }
+}
+
+/**
+ * Update existing Workbooks person
+ *
+ * @param int $person_id Person ID
+ * @param int $lock_version Lock version
+ * @param array $data Update data
+ * @return array Result array
+ */
+function dtr_update_workbooks_person($person_id, $lock_version, $data) {
+    $workbooks = get_workbooks_instance();
+    
+    if ($workbooks === false) {
+        return ['success' => false, 'message' => 'Failed to initialize Workbooks API'];
+    }
+    
+    try {
+        $update_data = array_merge($data, [
+            'id' => $person_id,
+            'lock_version' => $lock_version
+        ]);
+        
+        dtr_custom_log("Updating person in Workbooks: " . print_r($update_data, true));
+        
+        $response = $workbooks->assertUpdate('crm/people', [$update_data]);
+        
+        if (isset($response['affected_objects'][0]['id'])) {
+            dtr_custom_log("Person updated successfully. ID: {$person_id}");
+            return ['success' => true, 'person_id' => $person_id, 'data' => $response];
+        } else {
+            dtr_custom_log("Person update failed: " . print_r($response, true), 'error');
+            return ['success' => false, 'message' => 'Person update failed'];
+        }
+        
+    } catch (Exception $e) {
+        dtr_custom_log("Person update error: " . $e->getMessage(), 'error');
+        return ['success' => false, 'message' => $e->getMessage()];
+    }
 }
 
 ?>
