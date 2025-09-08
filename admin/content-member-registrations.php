@@ -87,6 +87,7 @@ if (empty($users)) {
             <th>Workbooks Person ID</th>
             <th>Workbooks ID</th>
             <th>Employer</th>
+            <th>Subscriptions</th>
         </tr>
     </thead><tbody>';
     foreach ($users as $user) {
@@ -118,20 +119,21 @@ if (empty($users)) {
             $workbooks_id = get_user_meta($user->ID, 'workbooks_id', true);
         }
         $employer = get_user_meta($user->ID, 'employer_name', true);
-    // $subscriptions = get_user_meta($user->ID, 'subscriptions', true);
-    // if (is_array($subscriptions)) {
-    //     $subscriptions = implode(', ', $subscriptions);
-    // }
-    echo '<tr>';
-    echo '<td>' . esc_html($user->ID) . '</td>';
-    echo '<td>' . esc_html($user->user_login) . '</td>';
-    echo '<td>' . esc_html($user->user_email) . '</td>';
-    echo '<td>' . esc_html(date('Y-m-d H:i', strtotime($user->user_registered))) . '</td>';
-    echo '<td>' . esc_html($workbooks_object_ref ?: '-') . '</td>';
-    echo '<td>' . esc_html($workbooks_id ?: '-') . '</td>';
-    echo '<td>' . esc_html($employer ?: '-') . '</td>';
-    echo '</tr>';
-    echo '<tr><td colspan="7">';
+        $subscriptions = get_user_meta($user->ID, 'subscriptions', true);
+        if (is_array($subscriptions)) {
+            $subscriptions = implode(', ', $subscriptions);
+        }
+        echo '<tr>';
+        echo '<td>' . esc_html($user->ID) . '</td>';
+        echo '<td>' . esc_html($user->user_login) . '</td>';
+        echo '<td>' . esc_html($user->user_email) . '</td>';
+        echo '<td>' . esc_html(date('Y-m-d H:i', strtotime($user->user_registered))) . '</td>';
+        echo '<td>' . esc_html($workbooks_object_ref ?: '-') . '</td>';
+        echo '<td>' . esc_html($workbooks_id ?: '-') . '</td>';
+        echo '<td>' . esc_html($employer ?: '-') . '</td>';
+        echo '<td>' . esc_html($subscriptions ?: '-') . '</td>';
+        echo '</tr>';
+        echo '<tr><td colspan="8">';
         echo '<form method="post" style="display:inline-block; margin-right:10px;">';
         echo '<input type="hidden" name="workbooks_sync_user_id" value="' . esc_attr($user->ID) . '">';
         submit_button('Sync to Workbooks', 'button-primary', 'workbooks_sync_to_workbooks', false);

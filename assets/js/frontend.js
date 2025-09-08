@@ -1,5 +1,5 @@
 /* DTR Workbooks Frontend Scripts */
-(function($) {
+/* (function($) {
     'use strict';
 
     // Debug flag
@@ -71,4 +71,4 @@
         });
     }
 
-})(jQuery);
+})(jQuery); */

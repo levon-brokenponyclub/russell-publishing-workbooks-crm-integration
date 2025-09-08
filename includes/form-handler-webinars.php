@@ -1,282 +1,427 @@
 <?php
+// Register admin-post handler for test form submissions
+add_action('admin_post_dtr_test_webinar_registration', 'dtr_handle_test_webinar_registration');
+add_action('admin_post_nopriv_dtr_test_webinar_registration', 'dtr_handle_test_webinar_registration');
+
+function dtr_handle_test_webinar_registration() {
+    // Collect POST data using old field names and structure
+    $registration_data = [
+        'post_id' => isset($_POST['post_id']) ? intval($_POST['post_id']) : 0,
+        'email' => isset($_POST['email']) ? sanitize_email($_POST['email']) : '',
+        'speaker_question' => isset($_POST['speaker_question']) ? sanitize_text_field($_POST['speaker_question']) : '',
+        'cf_mailing_list_member_sponsor_1_optin' => !empty($_POST['cf_mailing_list_member_sponsor_1_optin']) ? 1 : 0,
+        'first_name' => isset($_POST['first_name']) ? sanitize_text_field($_POST['first_name']) : '',
+        'last_name' => isset($_POST['last_name']) ? sanitize_text_field($_POST['last_name']) : '',
+        'event_id' => isset($_POST['event_id']) ? intval($_POST['event_id']) : '',
+    ];
+
+    // Log the registration data and steps in the requested format
+    $log_file = __DIR__ . '/../admin/admin-webinar-debug.log';
+    $log_entry = '';
+    $result_info = [
+        'webinar_title' => '',
+        'post_id' => $registration_data['post_id'] ?? '',
+        'email_address' => $registration_data['email'] ?? '',
+        'question_for_speaker' => $registration_data['speaker_question'] ?? '',
+        'add_questions' => '',
+        'cf_mailing_list_member_sponsor_1_optin' => $registration_data['cf_mailing_list_member_sponsor_1_optin'] ?? '',
+        'ticket_id' => '',
+        'person_id' => '',
+        'event_id' => $registration_data['event_id'] ?? '',
+        'success' => ''
+    ];
+    $step_lines = [];
+    $step_lines[] = '[' . date('Y-m-d H:i:s') . '] ✅ STEP 1: Processing Webinar Form (ID ' . ($registration_data['post_id'] ?? '') . ')';
+    $log_entry .= "[webinar_title] => {$result_info['webinar_title']}\n";
+    $log_entry .= "[post_id] => {$result_info['post_id']}\n";
+    $log_entry .= "[email_address] => {$result_info['email_address']}\n";
+    $log_entry .= "[question_for_speaker] => {$result_info['question_for_speaker']}\n";
+    $log_entry .= "[add_questions] => {$result_info['add_questions']}\n";
+    $log_entry .= "[cf_mailing_list_member_sponsor_1_optin] => {$result_info['cf_mailing_list_member_sponsor_1_optin']}\n";
+    $log_entry .= "[ticket_id] => {$result_info['ticket_id']}\n";
+    $log_entry .= "[person_id] => {$result_info['person_id']}\n";
+    $log_entry .= "[event_id] => {$result_info['event_id']}\n";
+    $log_entry .= "[success] => {$result_info['success']}\n";
+    $log_entry .= "\n";
+    $log_entry .= $step_lines[0] . "\n";
+    file_put_contents($log_file, $log_entry, FILE_APPEND);
+    $debug_report = [];
+
+    $result = dtr_register_workbooks_webinar(
+        $registration_data['post_id'],
+        $registration_data['email'],
+        $registration_data['first_name'],
+        $registration_data['last_name'],
+        $registration_data['speaker_question'],
+        $registration_data['cf_mailing_list_member_sponsor_1_optin'],
+        [], // add_questions (empty for now)
+        null,
+        $debug_report
+    );
+
+    // Output a simple result page
+    echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Webinar Registration Result</title></head><body>';
+    if (!empty($result['success'])) {
+        echo '<h2 style="color:green;">Registration Successful!</h2>';
+    } else {
+        echo '<h2 style="color:red;">Registration Failed</h2>';
+        if (!empty($debug_report['error'])) {
+            echo '<p>Error: ' . esc_html($debug_report['error']) . '</p>';
+        }
+    }
+    echo '<pre style="background:#f8f8f8;padding:1em;">';
+    print_r($debug_report);
+    echo '</pre>';
+    echo '<p><a href="javascript:history.back()">Back to form</a></p>';
+    echo '</body></html>';
+    exit;
+}
 /**
  * Core Webinar Registration Handler & Mailing List Updater
- * Handles registration of webinar attendees in Workbooks CRM and mailing lists.
- *
- * @package DTR/Webinar
- * @since 1.0.0
  */
 
-if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly
-}
+if (!defined('ABSPATH')) exit;
 
-/**
- * Process webinar registration submission
- *
- * @param array $form_data The form submission data
- * @param int $form_id The form ID
- * @param string $debug_id Debug identifier for logging
- * @return bool Success status
- */
-function dtr_process_webinar_registration($form_data, $form_id, $debug_id = '') {
-    // Initialize default model data for Ninja Forms compatibility
-    global $dtr_form_model;
-    $dtr_form_model = [
-        'fields' => [
-            'email' => ['value' => ''],
-            'sponsor_optin' => ['value' => 0],
-            'speaker_question' => ['value' => '']
-        ]
-    ];
-    if (!is_array($form_data) || empty($form_data)) {
-        dtr_log_debug("Webinar registration failed: Invalid form data", $debug_id);
-        return false;
-    }
-
-    // Validate required dependencies
-    if (!function_exists('dtr_create_workbooks_person') || 
-        !function_exists('dtr_create_workbooks_ticket') || 
-        !function_exists('dtr_add_to_mailing_list')) {
-        dtr_log_debug("Webinar registration failed: Required functions missing", $debug_id);
-        return false;
-    }
-
-    dtr_log_debug("Starting webinar registration process", $debug_id);
-    dtr_log_debug("Form data: " . print_r($form_data, true), $debug_id);
-
-    // Map Ninja Forms fields to expected model
-    if ($form_data && isset($form_data['fields'])) {
-        foreach ($form_data['fields'] as $field_id => $field) {
-            switch ($field_id) {
-                case 'nf-field-387': // Speaker question field
-                    $dtr_form_model['fields']['speaker_question']['value'] = $field['value'] ?? '';
-                    break;
-                case 'nf-field-58': // Sponsor opt-in field
-                    $dtr_form_model['fields']['sponsor_optin']['value'] = !empty($field['value']) ? 1 : 0;
-                    break;
-                case 'nf-field-384': // Email field
-                    $dtr_form_model['fields']['email']['value'] = $field['value'] ?? '';
-                    break;
-            }
+// Unified debug logging function for webinars (step-by-step, to webinar-debug.log)
+if (!function_exists('dtr_webinar_debug')) {
+    function dtr_webinar_debug($message) {
+        $debug_log_file = defined('WORKBOOKS_NF_PATH')
+            ? WORKBOOKS_NF_PATH . 'logs/webinar-debug.log'
+            : __DIR__ . '/webinar-debug.log';
+        $logs_dir = dirname($debug_log_file);
+        if (!file_exists($logs_dir)) {
+            if (function_exists('wp_mkdir_p')) wp_mkdir_p($logs_dir);
+            else mkdir($logs_dir, 0777, true);
         }
-    }
-
-    try {
-        // Step 1: Create person in Workbooks
-        $person_result = dtr_create_workbooks_person($form_data, $debug_id);
-        if (!$person_result || !isset($person_result['success']) || !$person_result['success']) {
-            throw new Exception("Failed to create person in Workbooks: " . 
-                ($person_result['message'] ?? 'Unknown error'));
+        if (is_dir($logs_dir) && is_writable($logs_dir)) {
+            $log_entry = "[" . date('Y-m-d H:i:s') . "] $message\n";
+            error_log($log_entry, 3, $debug_log_file);
         }
-
-        $person_id = $person_result['person_id'] ?? null;
-        if (!$person_id) {
-            throw new Exception("Person created but ID not returned");
-        }
-
-        dtr_log_debug("Person created successfully. ID: {$person_id}", $debug_id);
-
-        // Step 2: Get event reference for ticket creation
-        $event_reference = dtr_get_event_reference_from_form($form_data, $debug_id);
-        if (!$event_reference) {
-            throw new Exception("Could not determine event reference from form data");
-        }
-
-        // Step 3: Create webinar ticket
-        $ticket_result = dtr_create_workbooks_ticket($person_id, $event_reference, $debug_id);
-        if (!$ticket_result || !isset($ticket_result['success']) || !$ticket_result['success']) {
-            throw new Exception("Failed to create webinar ticket: " . 
-                ($ticket_result['message'] ?? 'Unknown error'));
-        }
-
-        dtr_log_debug("Webinar ticket created successfully", $debug_id);
-
-        // Step 4: Add to mailing list
-        $mailing_result = dtr_add_to_mailing_list($form_data, $debug_id);
-        if (!$mailing_result || !isset($mailing_result['success']) || !$mailing_result['success']) {
-            dtr_log_debug("Warning: Failed to add to mailing list: " . 
-                ($mailing_result['message'] ?? 'Unknown error'), $debug_id);
-            // Note: Not throwing exception here as webinar registration was successful
-        }
-
-        // Step 5: Process ACF questions if present
-        dtr_process_webinar_questions($form_data, $person_id, $debug_id);
-
-        dtr_log_debug("Webinar registration completed successfully", $debug_id);
-        return true;
-
-    } catch (Exception $e) {
-        dtr_log_debug("Webinar registration failed: " . $e->getMessage(), $debug_id);
-        return false;
     }
 }
 
 /**
- * Extract event reference from form data
- *
- * @param array $form_data Form submission data
- * @param string $debug_id Debug identifier
- * @return string|null Event reference or null if not found
+ * Core Webinar Registration Handler
  */
-function dtr_get_event_reference_from_form($form_data, $debug_id = '') {
-    $event_reference = null;
-
-    // Check for event reference in various possible locations
-    $possible_keys = ['event_reference', 'webinar_reference', 'reference'];
-    
-    foreach ($possible_keys as $key) {
-        if (isset($form_data[$key]) && !empty($form_data[$key])) {
-            $event_reference = sanitize_text_field($form_data[$key]);
-            break;
-        }
-    }
-
-    // If not found in direct fields, check meta fields
-    if (!$event_reference && isset($form_data['fields']) && is_array($form_data['fields'])) {
-        foreach ($form_data['fields'] as $field) {
-            if (isset($field['key']) && in_array($field['key'], $possible_keys) && 
-                isset($field['value']) && !empty($field['value'])) {
-                $event_reference = sanitize_text_field($field['value']);
-                break;
-            }
-        }
-    }
-
-    // Try ACF field lookup as fallback
-    if (!$event_reference && function_exists('get_field')) {
-        $event_reference = get_field('event_reference');
-    }
-
-    dtr_log_debug("Event reference extracted: " . ($event_reference ?: 'Not found'), $debug_id);
-    return $event_reference;
-}
-
-/**
- * Process webinar-specific questions from ACF
- *
- * @param array $form_data Form submission data
- * @param int $person_id Workbooks person ID
- * @param string $debug_id Debug identifier
- * @return void
- */
-function dtr_process_webinar_questions($form_data, $person_id, $debug_id = '') {
-    if (!function_exists('get_field') || !function_exists('update_field')) {
-        dtr_log_debug("ACF functions not available for question processing", $debug_id);
-        return;
-    }
-
-    // Get existing ACF questions and form model data
-    $acf_questions = get_field('add_questions') ?: [];
-    $form_questions = dtr_extract_questions_from_form($form_data);
-    
-    // Debug output for form model
-    dtr_log_debug("Form model data: " . print_r($dtr_form_model, true), $debug_id);
-    
-    if (empty($form_questions)) {
-        dtr_log_debug("No questions found in form data", $debug_id);
-        return;
-    }
-
-    // Merge questions, avoiding duplicates
-    $updated_questions = dtr_merge_questions($acf_questions, $form_questions, $debug_id);
-    
-    // Update ACF field
-    $update_result = update_field('add_questions', $updated_questions);
-    
-    if ($update_result) {
-        dtr_log_debug("Questions updated successfully. Total count: " . count($updated_questions), $debug_id);
+function dtr_register_workbooks_webinar(
+    $post_id, $email, $first_name = '', $last_name = '', $speaker_question = '', $cf_mailing_list_member_sponsor_1_optin = 0, $add_questions = [], $debug_id = null, &$debug_report = null
+) {
+    $step = 1;
+    if ($post_id && $email) {
+        dtr_webinar_debug("✅ STEP {$step}: Processing Webinar Form (ID $post_id)");
     } else {
-        dtr_log_debug("Failed to update ACF questions", $debug_id);
+        dtr_webinar_debug("❌ STEP {$step}: Processing Webinar Form (ID $post_id) - Missing post_id or email");
+        if (is_array($debug_report)) $debug_report['error'] = 'missing post_id or email';
+        dtr_webinar_debug("🎉 FINAL RESULT: WEBINAR REGISTRATION FAILED!");
+        return false;
     }
-}
+    $step++;
 
-/**
- * Extract questions from form data
- *
- * @param array $form_data Form submission data
- * @return array Extracted questions
- */
-function dtr_extract_questions_from_form($form_data) {
-    $questions = [];
-    
-    if (!isset($form_data['fields']) || !is_array($form_data['fields'])) {
-        return $questions;
-    }
-
-    foreach ($form_data['fields'] as $field) {
-        if (!isset($field['type']) || $field['type'] !== 'textarea' || 
-            !isset($field['value']) || empty(trim($field['value']))) {
-            continue;
-        }
-
-        $question_text = sanitize_textarea_field($field['value']);
-        $label = isset($field['label']) ? sanitize_text_field($field['label']) : 'Question';
-
-        $questions[] = [
-            'question' => $label,
-            'answer' => $question_text
-        ];
-    }
-
-    return $questions;
-}
-
-/**
- * Merge new questions with existing ones, avoiding duplicates
- *
- * @param array $existing_questions Existing ACF questions
- * @param array $new_questions New questions from form
- * @param string $debug_id Debug identifier
- * @return array Merged questions
- */
-function dtr_merge_questions($existing_questions, $new_questions, $debug_id = '') {
-    $existing_questions = is_array($existing_questions) ? $existing_questions : [];
-    
-    foreach ($new_questions as $new_question) {
-        $is_duplicate = false;
-        
-        foreach ($existing_questions as $existing_question) {
-            if (isset($existing_question['question'], $existing_question['answer'], 
-                      $new_question['question'], $new_question['answer']) &&
-                $existing_question['question'] === $new_question['question'] &&
-                $existing_question['answer'] === $new_question['answer']) {
-                $is_duplicate = true;
-                break;
+    // Merge ACF questions and main question
+    $acf_questions = [];
+    $webinar_fields = function_exists('get_field') ? get_field('webinar_fields', $post_id) : null;
+    if (is_array($webinar_fields) && !empty($webinar_fields['add_questions'])) {
+        foreach ($webinar_fields['add_questions'] as $acf_question_row) {
+            if (!empty($acf_question_row['question_title'])) {
+                $acf_questions[] = trim($acf_question_row['question_title']);
             }
         }
-        
-        if (!$is_duplicate) {
-            $existing_questions[] = $new_question;
-            dtr_log_debug("Added new question: " . $new_question['question'], $debug_id);
-        } else {
-            dtr_log_debug("Skipped duplicate question: " . $new_question['question'], $debug_id);
+    }
+    $all_questions = $acf_questions;
+    if (!empty($speaker_question)) {
+        $all_questions[] = $speaker_question;
+    }
+    $merged_questions = implode("\n", $all_questions);
+
+    // Use WP user if logged in for names
+    if (is_user_logged_in()) {
+        $current_user = wp_get_current_user();
+        if (empty($email)) {
+            $email = $current_user->user_email;
+        }
+        if (empty($first_name)) {
+            $first_name = $current_user->user_firstname ?: $current_user->display_name;
+        }
+        if (empty($last_name)) {
+            $last_name = $current_user->user_lastname;
         }
     }
+    if (is_array($debug_report)) $debug_report['resolved_names'] = [$first_name, $last_name];
 
-    return $existing_questions;
+    // Try to get Workbooks event reference
+    $event_ref = function_exists('get_field') ? (
+        get_field('workbooks_reference', $post_id)
+        ?: get_post_meta($post_id, 'workbooks_reference', true)
+        ?: get_field('reference', $post_id)
+        ?: get_post_meta($post_id, 'reference', true)
+    ) : null;
+
+    if (!$event_ref && is_array($webinar_fields) && !empty($webinar_fields['workbook_reference'])) {
+        $event_ref = $webinar_fields['workbook_reference'];
+    }
+
+    if (!$event_ref) {
+        dtr_webinar_debug("❌ STEP {$step}: Missing Workbooks event reference for post $post_id");
+        if (is_array($debug_report)) $debug_report['error'] = 'missing event_ref';
+        dtr_webinar_debug("🎉 FINAL RESULT: WEBINAR REGISTRATION FAILED!");
+        return false;
+    }
+    if (!preg_match('/(\d+)$/', $event_ref, $matches)) {
+        dtr_webinar_debug("❌ STEP {$step}: Could not extract event_id from reference: $event_ref");
+        if (is_array($debug_report)) $debug_report['error'] = 'could not extract event_id';
+        dtr_webinar_debug("🎉 FINAL RESULT: WEBINAR REGISTRATION FAILED!");
+        return false;
+    }
+    $event_id = $matches[1];
+
+    $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+    if (!$workbooks) {
+        dtr_webinar_debug("❌ STEP {$step}: Workbooks instance not available.");
+        if (is_array($debug_report)) $debug_report['error'] = 'no workbooks instance';
+        dtr_webinar_debug("🎉 FINAL RESULT: WEBINAR REGISTRATION FAILED!");
+        return false;
+    }
+    $step++;
+
+    // STEP 2: Person created/updated (use submitted person_id if present)
+    $person_id = null;
+    $person_step_success = false;
+    $person_step_reason = '';
+    if (!empty($registration_data['person_id'])) {
+        $person_id = intval($registration_data['person_id']);
+        $person_step_success = true;
+        dtr_webinar_debug("✅ STEP {$step}: Used submitted person_id $person_id");
+    } else {
+        try {
+            $person_result = $workbooks->assertGet('crm/people.api', [
+                '_start' => 0, '_limit' => 1,
+                '_ff[]' => 'main_location[email]', '_ft[]' => 'eq', '_fc[]' => $email,
+                '_select_columns[]' => ['id', 'object_ref']
+            ]);
+            if (!empty($person_result['data'][0]['id'])) {
+                $person_id = $person_result['data'][0]['id'];
+                $person_step_success = true;
+            }
+        } catch (Exception $e) {
+            $person_step_reason = $e->getMessage();
+        }
+        if (!$person_id) {
+            try {
+                $payload = [
+                    'main_location[email]' => $email,
+                    'person_first_name' => $first_name,
+                    'person_last_name' => $last_name,
+                ];
+                $payloads = [$payload];
+                $create_person = $workbooks->assertCreate('crm/people', $payloads);
+                if (!empty($create_person['data'][0]['id'])) {
+                    $person_id = $create_person['data'][0]['id'];
+                    $person_step_success = true;
+                } else {
+                    $person_step_reason = 'Person create returned no ID';
+                }
+            } catch (Exception $e) {
+                $person_step_reason = $e->getMessage();
+            }
+        }
+        if ($person_step_success) {
+            dtr_webinar_debug("✅ STEP {$step}: Person created/updated");
+        } else {
+            dtr_webinar_debug("❌ STEP {$step}: Person created/updated - $person_step_reason");
+            dtr_webinar_debug("🎉 FINAL RESULT: WEBINAR REGISTRATION FAILED!");
+            return false;
+        }
+    }
+    $step++;
+
+    // STEP 3: Ticket Created/Updated (fields match successful submission reference)
+    $ticket_payload = [[
+        'event_id' => $event_id,
+        'person_id' => $person_id,
+        'name' => trim(($first_name . ' ' . $last_name)) ?: $email,
+        'status' => 'Registered',
+        // Use correct Workbooks custom fields as per your successful debug
+        'cf_event_ticket_speaker_questions' => $speaker_question,
+        'cf_event_ticket_sponsor_optin' => (bool)$cf_mailing_list_member_sponsor_1_optin
+    ]];
+
+    $ticket_result = null;
+    $ticket_step_success = false;
+    $ticket_step_reason = '';
+    try {
+        $ticket_result = $workbooks->create('event/tickets.api', $ticket_payload);
+        if (!empty($ticket_result['affected_objects'][0]['id'])) {
+            $ticket_step_success = true;
+        } else {
+            $ticket_step_reason = 'No ticket ID returned';
+        }
+    } catch (Exception $e) {
+        $ticket_step_reason = $e->getMessage();
+    }
+    if ($ticket_step_success) {
+        dtr_webinar_debug("✅ STEP {$step}: Ticket Created/Updated");
+    } else {
+        dtr_webinar_debug("❌ STEP {$step}: Ticket Created/Updated - $ticket_step_reason");
+        dtr_webinar_debug("🎉 FINAL RESULT: WEBINAR REGISTRATION FAILED!");
+        return false;
+    }
+    $step++;
+
+    // STEP 4: Added to Mailing List
+    $ticket_id = $ticket_result['affected_objects'][0]['id'] ?? null;
+    $ml_step_success = false;
+    $ml_step_reason = '';
+    try {
+        $ml_result = dtr_update_mailing_list_member(
+            $workbooks,
+            $event_id,
+            $person_id,
+            (int)$cf_mailing_list_member_sponsor_1_optin,
+            $merged_questions,
+            $debug_id,
+            $debug_report
+        );
+        if ($ml_result === true || is_array($ml_result)) {
+            $ml_step_success = true;
+        } else {
+            $ml_step_reason = 'Failed to update/create mailing list entry';
+        }
+    } catch (Exception $e) {
+        $ml_step_reason = $e->getMessage();
+    }
+    if ($ml_step_success) {
+        dtr_webinar_debug("✅ STEP {$step}: Added to Mailing List");
+    } else {
+        dtr_webinar_debug("❌ STEP {$step}: Added to Mailing List - $ml_step_reason");
+        dtr_webinar_debug("🎉 FINAL RESULT: WEBINAR REGISTRATION FAILED!");
+        return false;
+    }
+    $step++;
+
+    // STEP 5: Speaker Question
+    dtr_webinar_debug("✅ STEP {$step}: Speaker Question = $speaker_question");
+    $step++;
+
+    // STEP 6: Sponsor Optin
+    $optin_str = $cf_mailing_list_member_sponsor_1_optin ? 'Yes' : 'No';
+    dtr_webinar_debug("✅ STEP {$step}: Sponsor Optin = $optin_str");
+    $step++;
+
+    // FINAL RESULT
+    dtr_webinar_debug("🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!");
+
+    // RESULT INFORMATION
+    $webinar_title_final = '';
+    if (!empty($debug_report['debug_raw_fields']['webinar_title'])) {
+        $webinar_title_final = $debug_report['debug_raw_fields']['webinar_title'];
+    } elseif (!empty($webinar_fields['webinar_title'])) {
+        $webinar_title_final = $webinar_fields['webinar_title'];
+    }
+    $result_info = [
+        'webinar_title' => $webinar_title_final,
+        'post_id' => $post_id,
+        'email_address' => $email,
+        'question_for_speaker' => $speaker_question,
+        'add_questions' => is_array($add_questions) ? implode(", ", $add_questions) : $add_questions,
+        'cf_mailing_list_member_sponsor_1_optin' => $cf_mailing_list_member_sponsor_1_optin,
+        'ticket_id' => $ticket_id,
+        'person_id' => $person_id,
+        'event_id' => $event_id,
+        'success' => true
+    ];
+    $result_lines = [];
+    foreach ($result_info as $k => $v) {
+        $result_lines[] = "[$k] => $v";
+    }
+    dtr_webinar_debug("\nRESULT INFORMATION:\n" . implode("\n", $result_lines));
+    return [
+        'success' => true,
+        'ticket_id' => $ticket_id,
+        'person_id' => $person_id,
+        'event_id' => $event_id,
+        'debug_id' => $debug_id
+    ];
 }
 
 /**
- * Log debug information with consistent formatting
- *
- * @param string $message Debug message
- * @param string $debug_id Debug identifier
- * @return void
+ * Update or create a Mailing List Entry (Member) in Workbooks for webinars
  */
-function dtr_log_debug($message, $debug_id = '') {
-    if (!function_exists('error_log')) {
-        return;
-    }
+function dtr_update_mailing_list_member($workbooks, $event_id, $person_id, $cf_mailing_list_member_sponsor_1_optin, $speaker_question, $debug_id = null, &$debug_report = null) {
+    dtr_webinar_debug("ℹ️ Updating Mailing List Entry for event_id=$event_id, person_id=$person_id");
+    try {
+        $event = $workbooks->assertGet('event/events.api', [
+            '_start' => 0,
+            '_limit' => 1,
+            '_ff[]' => 'id',
+            '_ft[]' => 'eq',
+            '_fc[]' => $event_id,
+            '_select_columns[]' => ['id', 'mailing_list_id']
+        ]);
+        $mailing_list_id = $event['data'][0]['mailing_list_id'] ?? null;
+        if (!$mailing_list_id) {
+            dtr_webinar_debug("❌ Mailing list not found for event_id=$event_id");
+            if (is_array($debug_report)) $debug_report['mailing_list_id'] = 'not found';
+            return false;
+        }
 
-    $timestamp = current_time('Y-m-d H:i:s');
-    $prefix = $debug_id ? "[{$debug_id}]" : '[DTR-Webinar]';
-    $formatted_message = "{$timestamp} {$prefix} {$message}";
-    
-    error_log($formatted_message);
-    
-    // Also log to custom DTR log if function exists
-    if (function_exists('dtr_custom_log')) {
-        dtr_custom_log($formatted_message);
+        $person = $workbooks->assertGet('crm/people.api', [
+            '_start' => 0,
+            '_limit' => 1,
+            '_ff[]' => 'id',
+            '_ft[]' => 'eq',
+            '_fc[]' => $person_id,
+            '_select_columns[]' => ['id', 'main_location[email]']
+        ]);
+        $email = $person['data'][0]['main_location[email]'] ?? null;
+        if (!$email) {
+            dtr_webinar_debug("❌ No email found for person_id=$person_id");
+            if (is_array($debug_report)) $debug_report['mlm_email'] = 'not found';
+            return false;
+        }
+
+        $search_params = [
+            '_start' => 0,
+            '_limit' => 1,
+            '_ff[]' => ['mailing_list_id', 'email'],
+            '_ft[]' => ['eq', 'eq'],
+            '_fc[]' => [$mailing_list_id, $email],
+            '_select_columns[]' => ['id', 'lock_version']
+        ];
+        $entry_result = $workbooks->assertGet('email/mailing_list_entries.api', $search_params);
+        $entry_id = $entry_result['data'][0]['id'] ?? null;
+
+        $payload = [
+            'mailing_list_id' => $mailing_list_id,
+            'email' => $email,
+            'cf_mailing_list_member_sponsor_1_opt_in' => $cf_mailing_list_member_sponsor_1_optin ? 1 : 0,
+            'cf_mailing_list_member_speaker_questions' => $speaker_question
+        ];
+
+        if ($entry_id) {
+            try {
+                $lock_version = $entry_result['data'][0]['lock_version'] ?? 0;
+                $update_result = $workbooks->assertUpdate('email/mailing_list_entries.api', [
+                    array_merge(['id' => $entry_id, 'lock_version' => $lock_version], $payload)
+                ]);
+                dtr_webinar_debug("ℹ️ Mailing List Entry updated for $email");
+                return $update_result;
+            } catch (Exception $e) {
+                dtr_webinar_debug("❌ Exception during Mailing List Entry update: " . $e->getMessage());
+                return false;
+            }
+        } else {
+            try {
+                $create_result = $workbooks->assertCreate('email/mailing_list_entries.api', [$payload]);
+                dtr_webinar_debug("ℹ️ Mailing List Entry created for $email");
+                return $create_result;
+            } catch (Exception $e) {
+                dtr_webinar_debug("❌ Exception during Mailing List Entry create: " . $e->getMessage());
+                return false;
+            }
+        }
+    } catch (Exception $e) {
+        dtr_webinar_debug("❌ Exception in dtr_update_mailing_list_member: " . $e->getMessage());
+        return false;
     }
 }
+?>

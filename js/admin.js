@@ -18,8 +18,6 @@ jQuery(document).ready(function($) {
         });
     });
 
-    // Employer dropdown logic removed (plain text input is now used)
-
     // Handle the person record update form submission via AJAX
     $('#workbooks_update_user_form').on('submit', function(e) {
         e.preventDefault();

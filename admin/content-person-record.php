@@ -257,27 +257,8 @@ if ($workbooks && $workbooks_person_id) {
     }
 }
 echo '<div style="margin-bottom:10px;">';
-echo '<button type="button" id="toggle-workbooks-fields" class="button button-primary" style="margin-bottom:8px;">Show Workbooks API Fields for this User</button>';
-echo '<div id="workbooks-fields-table" class="wp-list-table widefat fixed striped" style="display:none;">';
-?>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var btn = document.getElementById('toggle-workbooks-fields');
-    var table = document.getElementById('workbooks-fields-table');
-    if (btn && table) {
-        btn.addEventListener('click', function() {
-            if (table.style.display === 'none' || table.style.display === '') {
-                table.style.display = 'block';
-                btn.textContent = 'Hide Workbooks API Fields for this User';
-            } else {
-                table.style.display = 'none';
-                btn.textContent = 'Show Workbooks API Fields for this User';
-            }
-        });
-    }
-});
-</script>
-<?php
+echo '<a href="#" id="toggle-workbooks-fields" style="display:inline-block;margin-bottom:8px;font-weight:bold;">Show Workbooks API Fields for this User</a>';
+echo '<div id="workbooks-fields-table" style="display:none;">';
 if (!empty($workbooks_data)) {
     echo '<table class="widefat striped" style="margin-top:8px; max-width:900px;">';
     echo '<thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
@@ -293,12 +274,11 @@ echo '</div>';
 echo '</div>';
 // Manual Workbooks Person ID update form
 ?>
-<h2 style="margin-bottom:0;">Set/Update Workbooks Person ID for your account:</h2>
-<form id="workbooks_get_user_form" method="post" style="margin-bottom:40px;">
-    <input type="number" name="manual_workbooks_person_id" id="manual_workbooks_person_id" min="1" step="1" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'workbooks_person_id', true)); ?>">
-    <button type="submit" name="set_workbooks_person_id" class="button">Update ID</button>
+<form id="workbooks_get_user_form" method="post" style="margin-bottom:20px;">
+    <label for="manual_workbooks_person_id"><strong>Set/Update Workbooks Person ID for your account:</strong></label><br>
+    <input type="number" name="manual_workbooks_person_id" id="manual_workbooks_person_id" min="1" step="1" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'workbooks_person_id', true)); ?>" style="width:200px;">
+    <button type="submit" name="set_workbooks_person_id" class="button button-primary">Update ID</button>
 </form>
-<h2 style="margin-bottom:0;">Person Record Fields</h2>
 <form id="workbooks_update_user_form" method="post">
     <?php wp_nonce_field('dtr_update_person', 'dtr_update_nonce'); ?>
     <input type="hidden" name="workbooks_update_user" value="1">

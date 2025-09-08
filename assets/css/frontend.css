@@ -396,10 +396,10 @@ nf-field .nf-field-container.checkbox-container label {
   line-height: 50px !important;
 }
 .select2-container--default .select2-selection--single .select2-selection__arrow {
-  height: 50px;
+  height: 48px !important;
   position: absolute;
-  top: 1px;
-  right: 10px;
+  top: 0px !important;
+  right: 10px !important;
   width: 20px;
 }
 

@@ -1,8 +1,13 @@
 <?php
+// TEMP: Confirm dispatcher file is loaded
+if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+    $file = DTR_WORKBOOKS_LOG_DIR . 'live-webinar-debug.log';
+    file_put_contents($file, date('c') . " -- form-submission-processors-ninjaform-hooks.php loaded\n", FILE_APPEND | LOCK_EX);
+}
 /**
  * DTR Ninja Forms Clean Hook - Unified form handler
  * 
- * (c) 2024 BrokenPonyClub
+ * (c) 2025 BrokenPonyClub
  */
 
 /**
@@ -13,6 +18,12 @@
  */
 function dtr_get_form_data_summary($form_data) {
     $summary = [];
+
+    // Add form ID for easier debugging
+    $form_id = $form_data['form_id'] ?? ($form_data['id'] ?? null);
+    if ($form_id) {
+        $summary[] = "Form ID: " . $form_id;
+    }
 
     if (isset($form_data['fields']) && is_array($form_data['fields'])) {
         $summary[] = "Fields: " . count($form_data['fields']);
@@ -199,6 +210,12 @@ function dtr_init_ninja_forms_hooks() {
 }
 
 function dtr_dispatch_ninja_forms_submission($form_data) {
+    // TEMP: Confirm dispatcher is called
+    error_log('dtr_dispatch_ninja_forms_submission called for form_id=' . ($form_data['form_id'] ?? ($form_data['id'] ?? '')));
+    if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+        $file = DTR_WORKBOOKS_LOG_DIR . 'live-webinar-debug.log';
+        file_put_contents($file, date('c') . " -- dtr_dispatch_ninja_forms_submission called for form_id=" . ($form_data['form_id'] ?? ($form_data['id'] ?? '')) . "\n", FILE_APPEND | LOCK_EX);
+    }
     $debug_id = 'NF-' . uniqid();
     $form_id = $form_data['form_id'] ?? ($form_data['id'] ?? null);
     dtr_log_ninja_forms('Dispatch submission for form_id=' . $form_id, $debug_id);

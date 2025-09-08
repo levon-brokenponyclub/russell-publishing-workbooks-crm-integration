@@ -47,3 +47,1819 @@
 [2025-09-07 19:39:03] Initializing WorkbooksApi...
 [2025-09-07 19:43:43] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
 [2025-09-07 19:43:43] Initializing WorkbooksApi...
+[2025-09-07 22:45:26] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-07 22:45:26] Initializing WorkbooksApi...
+[2025-09-07 22:47:00] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-07 22:47:00] Initializing WorkbooksApi...
+[2025-09-07 22:47:36] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-07 22:47:36] Initializing WorkbooksApi...
+[2025-09-07 22:47:39] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-07 22:47:39] Initializing WorkbooksApi...
+[2025-09-07 22:47:55] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-07 22:47:55] Initializing WorkbooksApi...
+[2025-09-07 23:00:13] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-07 23:00:13] Initializing WorkbooksApi...
+[2025-09-07 23:08:40] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-07 23:08:40] Initializing WorkbooksApi...
+[2025-09-07 23:08:43] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-07 23:08:43] Initializing WorkbooksApi...
+[2025-09-08 05:26:38] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 05:26:38] Initializing WorkbooksApi...
+[2025-09-08 05:26:41] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 05:26:41] Initializing WorkbooksApi...
+[2025-09-08 05:26:50] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 05:26:50] Initializing WorkbooksApi...
+[2025-09-08 05:27:01] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 05:27:01] Initializing WorkbooksApi...
+[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[2025-09-08 07:25:20] Starting connection test...
+[2025-09-08 07:25:20] Current settings:
+API URL: https://russellpublishing-live.workbooks.com
+API Key: set
+[2025-09-08 07:25:20] Attempting to get Workbooks instance...
+[2025-09-08 07:25:20] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:25:20] Initializing WorkbooksApi...
+[2025-09-08 07:25:20] Successfully got Workbooks instance
+[2025-09-08 07:25:20] Workbooks instance initialized successfully
+[2025-09-08 07:25:29] API Response:
+Array
+(
+    [success] => 1
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [cf_person_force24_lead_score] => 
+                    [cf_person_dtr_nurture_track] => 
+                    [cf_person_2022_spex] => 0.0 GBP 1
+                    [cf_person_dtr_assumed_website_aoi] => 
+                    [cf_person_nf_assumed_aoi] => Research & Development
+                    [alternate_names] => 
+                    [cf_person_iar_webinar] => 
+                    [created_by_user[login_name]] => tmartin@russellpublishing.com
+                    [main_location[alternate_email]] => 
+                    [cf_person_iar_areas_of_interest_316] => 
+                    [cf_person_ias24_declined] => 
+                    [cf_person_dtr_ord_sign_off_only] => 
+                    [cf_person_location__name] => 
+                    [cf_person_dtr_subscriber] => 
+                    [main_location[street_address]] => 90 - 100 Magnesium Drive,
+                    [cf_person_world_region] => Asia/Pacific (inc. Australia)
+                    [queue_entry[queue[name]]] => Data Team
+                    [cf_person_it_all_brand_unsubscribe] => 
+                    [created_by] => 79406
+                    [cf_person_iar_subscriber] => 
+                    [cf_person_translational_science] => 
+                    [owner[person_name]] => Jane Monk
+                    [cf_person_les_lubwama] => 
+                    [cf_person_drug_discovery_processes] => 
+                    [cf_person_analysis] => 
+                    [cf_person_ias24_sponsor] => 
+                    [cf_person_epr_news] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [cf_person_tony_portelli] => 
+                    [cf_person_authentication_blocked] => 
+                    [cf_person_fbpa24_speaker] => 
+                    [cf_person_epr_eligible_for_communications_after_30_days] => 
+                    [cf_person_insights_7_days_score] => 
+                    [cf_person_epr_no_postal] => 
+                    [cf_person_it_engagement] => Unknown
+                    [imported] => 
+                    [cf_person_insights_employees] => 
+                    [home_location[county_province_state]] => 
+                    [cf_person_epr_subscriber_type] => 
+                    [main_location[email]] => van.tran@qantas.com.au
+                    [type] => Private::Crm::Person
+                    [cf_person_temp_exclusion] => 
+                    [cf_person_screening_sequencing] => 
+                    [cf_person_epr_web_member] => 
+                    [cf_person_iar_manual_advertiser_type] => 
+                    [cf_person_force24_nt_deletion] => 
+                    [cf_person_epr_webinar_aoi] => 
+                    [categories] => 
+                    [cf_person_nic_losardo] => 
+                    [cf_person_grr_eligible_for_communications_after_30_days] => 
+                    [cf_person_last_login_ip_address] => 
+                    [cf_person_iar_core_audience] => 
+                    [cf_person_it_editorial_type] => 
+                    [_can_chaccess] => 1
+                    [cf_person_iar_web_member] => 
+                    [cf_person_epr_nurture_track] => 
+                    [cf_person_grr_ord_sign_off_only] => 
+                    [cf_person_sponsor_optin] => 
+                    [cf_person_nf_fig23] => 
+                    [cf_person_joanna_kirby] => 
+                    [cf_person_it_assumed_website_aoi] => 
+                    [cf_person_insights_last_visit] => 
+                    [cf_person_it_areas_of_interest_318] => 
+                    [cf_person_external_event_exhibitors] => 
+                    [cf_person_dtr_all_brand_unsubscribe] => 
+                    [updated_at] => Sun Mar 09 12:09:12 UTC 2025
+                    [cf_person_imaging] => 
+                    [spouse_name] => 
+                    [cf_person_fraser_owen] => 
+                    [compliance_channels] => 
+                    [_preload_linked_item_association_for_cf_person_location] => 
+                    [cf_person_verification_picklist] => 
+                    [cf_person_epr_assumed_aoi] => 
+                    [cf_person_nf_webinar_aoi] => 
+                    [cf_person_iar_tdm] => 
+                    [cf_person_it_no_postal] => 
+                    [cf_person_it_third_party] => 
+                    [cf_person_dtr_advertiser_type] => 
+                    [main_location[telephone]] => 
+                    [cf_person_cell_gene_therapy] => 
+                    [cf_person_nf_subscriber_type] => Lapsed
+                    [website] => 
+                    [cf_person_nf_news] => 
+                    [cf_person_targets] => 
+                    [cf_person_iar_subscriber_type] => 
+                    [cf_person_epr_tdm] => 
+                    [cf_person_2023_total] => 0.0 GBP 1
+                    [cf_person_iar_brand_unsubscribe] => 
+                    [cf_person_nf_core_audience] => 
+                    [cf_person_iar_engagement] => Unknown
+                    [cf_person_ias24_speaker] => 
+                    [employer_name] => Snap Fresh
+                    [cf_person_grr_news_and_events] => 
+                    [cf_person_dan_birchmore] => 
+                    [cf_person_nf_ord_sign_off_only] => 
+                    [linked_item_association_for_cf_person_nf_online_aoi] => 
+                    [cf_person_last_issue_sent] => 
+                    [twitter_url] => 
+                    [home_location[mobile]] => 
+                    [cf_person_clinical_trials] => 
+                    [cf_person_nf_leadgen_aoi] => 
+                    [cf_person_nf_order_fulfilment_client_survey] => 
+                    [cf_person_ias24_attended] => 
+                    [cf_person_registered] => 
+                    [cf_person_dtr_third_party] => 
+                    [cf_person_dtr_engagement] => Unknown
+                    [cf_person_insights_today_score] => 
+                    [cf_person_editorial_contact_type] => 
+                    [cf_person_dtr_areas_of_interest_v2] => 
+                    [cf_person_assays] => 
+                    [cf_person_iar_news_and_events] => 
+                    [cf_person_epr_events] => 
+                    [person_suffix] => 
+                    [cf_person_dtr_webinar_aoi] => 
+                    [cf_person_claimed_employer] => 
+                    [cf_person_first_login_time] => 
+                    [cf_person_it_advertiser_type] => 
+                    [cf_person_nf_engagement] => None
+                    [cf_person_dtr_eligible_for_communications_after_30_days] => 
+                    [cf_person_nf_assumed_website_aoi] => 
+                    [cf_person_nf_advertiser_type] => 
+                    [main_location[county_province_state]] => 
+                    [cf_person_act_urn] => 
+                    [queue_entry[queue_id]] => 538
+                    [cf_person_2022_digital] => 0.0 GBP 1
+                    [is_deleted] => 
+                    [cf_person_confidence_level] => 
+                    [cf_person_stem_cells] => 
+                    [lead_source_type] => Written Registration
+                    [cf_person_insight_yesterday_score] => 
+                    [cf_person_it_events] => 
+                    [cf_person_2023_digital] => 0.0 GBP 1
+                    [cf_person_ias25_declined] => 
+                    [cf_person_grr_news] => 
+                    [cf_person_jess_russell] => 
+                    [cf_person_grr_conference_attended] => 
+                    [cf_person_nf_webinar] => 
+                    [cf_person_iar_eligible_for_communications_after_30_days] => 
+                    [cf_person_informatics] => 
+                    [cf_person_nf_online_aoi] => 
+                    [special_requirements] => 
+                    [home_location[telephone]] => 
+                    [cf_person_ias25_registered] => 
+                    [created_through] => Import
+                    [industry] => 
+                    [cf_person_iar_assumed_website_aoi] => 
+                    [home_location[country]] => 
+                    [cf_person_grr_no_postal] => 
+                    [cf_person_brand] => NF Subscriber, NF Subscriber
+                    [cf_person_workbooks] => 1
+                    [cf_person_insights_industry] => 
+                    [cf_person_grr_webinar] => 
+                    [cf_person_grr_subscribers] => 
+                    [image_url] => 
+                    [cf_person_dtr_therapeutic_aoi] => 
+                    [person_job_role] => Scientist/Technologist
+                    [_link_or_create_employer] => 
+                    [cf_person_nf_web_member] => 
+                    [cf_person_conference_source] => 
+                    [cf_person_fbpa25_attended] => 
+                    [cf_person_nf_subscriber] => 1
+                    [cf_person_grr_assumed_aoi] => 
+                    [cf_person_grr_all_brand_unsubscribe] => 
+                    [object_ref] => PERS-108856
+                    [cf_person_dtr_editorial_type] => 
+                    [cf_person_grr_tdm] => 
+                    [cf_person_epr_order_fulfilment_client_survey] => 
+                    [object_url] => https://russellpublishing-live.workbooks.com/link/3cDMzUTM/PERS-108856
+                    [cf_person_grr_conference_source] => 
+                    [_can_read] => 1
+                    [cf_person_research_development] => 
+                    [cf_person_epr_2] => 
+                    [cf_person_nf_eligible_for_communications_after_30_days] => 
+                    [cf_person_iar_iaos23] => 
+                    [cf_person_it_subscriber] => 
+                    [cf_person_nf_editorial_type] => 
+                    [created_by_user[person_name]] => Tim Martin
+                    [party_notes] => 
+                    [cf_person_nurture_track] => 
+                    [cf_person_iar_editorial_type] => 
+                    [cf_person_epr_leadgen_aoi] => 
+                    [cf_person_toxicology] => 
+                    [sync_with_mailer] => 
+                    [_preload_linked_item_association_for_cf_person_nf_online_aoi] => 
+                    [cf_person_iar_nurture_track] => 
+                    [marketing_campaign[name]] => 
+                    [cf_person_2023_spex] => 0.0 GBP 1
+                    [cf_person_ias25_speaker] => 
+                    [cf_person_insights_30_days_score] => 
+                    [home_location[town]] => 
+                    [cf_person_epr_foba23] => 
+                    [cf_person_science_primary_secondary_audience] => 
+                    [cf_person_business] => 
+                    [main_location[fax]] => 
+                    [id] => 380365
+                    [cf_person_grr_manual_advertiser_type] => 
+                    [cf_person_epr_areas_of_interest_310] => 
+                    [cf_person_biomarkers] => 
+                    [cf_person_epr_all_brand_unsubscribe] => 
+                    [organisation_annual_revenue] =>   0
+                    [cf_person_dtr_news_and_events] => 
+                    [cf_person_iar_order_fulfilment_client_survey] => 
+                    [linked_item_association_for_cf_person_location] => 
+                    [main_location_id] => 384969
+                    [cf_person_grr_third_party] => 
+                    [cf_person_genomics_3774] => 
+                    [name] => Van Tran
+                    [mailchimp_last_synchronised_at] => 
+                    [cf_person_epr_third_party] => 
+                    [cf_person_grr_subscriber_type] => 
+                    [cf_person_client_nps] => 
+                    [cf_person_act_company_name] => Snap Fresh
+                    [cf_person_ias25_sponsor] => 
+                    [cf_person_insights_yesterday_score] => 
+                    [cf_person_grr_events] => 
+                    [cf_person_fbpa25_declined] => 
+                    [cf_person_nf_third_party] => 1
+                    [cf_person_andy_holland] => 
+                    [cf_person_grr_webinar_aoi] => 
+                    [cf_person_grr_dr23] => 
+                    [assistant_phone] => 
+                    [cf_person_duplicate_person] => 
+                    [home_location[postcode]] => 
+                    [cf_person_nf_events] => 
+                    [cf_person_iar_zmember_reference] => 
+                    [cf_person_dtr_order_fulfilment_client_survey] => 
+                    [cf_person_2023_print] => 0.0 GBP 1
+                    [gdpr_compliant] => 
+                    [cf_person_ias25_attended] => 
+                    [cf_person_ias24_registered] => 
+                    [cf_person_lab_automation] => 
+                    [cf_person_iar_all_brand_unsubscribe] => 
+                    [cf_person_it_webinar] => 
+                    [cf_person_delegate_blacklist] => 
+                    [created_at] => Tue Jun 19 22:12:16 UTC 2018
+                    [main_location[country]] => Australia
+                    [lock_version] => 25
+                    [cf_person_act_info_source] => 
+                    [no_post_soliciting] => 
+                    [cf_person_technology] => 
+                    [cf_person_it_news_and_events] => 
+                    [cf_person_manual_advertiser_type] => 
+                    [cf_person_is_person_active_or_inactive] => Active
+                    [person_last_name] => Van Tran
+                    [cf_person_nf_nurture_track] => 
+                    [cf_person_location] => 
+                    [email_opt_in] => 
+                    [cf_person_nf_industry_sector_worked] => 
+                    [cf_person_iar_events] => 
+                    [cf_person_it_assumed_aoi] => 
+                    [cf_person_2022_print] => 0.0 GBP 1
+                    [linkedin_url] => 
+                    [cf_person_dtr_subscriber_type] => 
+                    [home_location[fax]] => 
+                    [cf_person_dtr_webinar] => 
+                    [cf_person_fbpa25_registered] => 
+                    [cf_person_nf_news_and_events] => 1
+                    [cf_person_conference_attendee_type] => 
+                    [home_location[alternate_email]] => 
+                    [cf_person_insights_revenue] => 
+                    [cf_person_genomics] => 
+                    [cf_person_nf_manual_advertiser_type] => 
+                    [cf_person_grr_order_fulfilment_client_survey] => 
+                    [cf_person_grr_brand_unsubscribe] => 
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [person_middle_name] => 
+                    [cf_person_iar_webinar_aoi] => 
+                    [cf_person_nf_zmember_reference] => 12940
+                    [cf_person_it_conference_attended] => 
+                    [main_location[town]] => Crestmead
+                    [cf_person_fbpa25_speaker] => 
+                    [cf_person_fbpa24_registered] => 
+                    [watched] => 
+                    [updated_by] => 122326
+                    [cf_person_iar_conference_attended] => 
+                    [cf_person_data_matching_picklist] => 
+                    [cf_person_iar_advertiser_type] => 
+                    [cf_person_it_its23] => 
+                    [queue_entry[updated_at]] => Wed Jan 09 13:09:54 UTC 2019
+                    [employer_link] => 297165
+                    [cf_person_epr_engagement] => Unknown
+                    [cf_person_nf_areas_of_interest_312] => Analysis, Fraud/Authenticity/Safety, Health & Nutrition, Packaging/Labelling, Production/Processing, Research & Development
+                    [cf_person_epr_zmember_reference] => 
+                    [person_personal_title] => 
+                    [owner[login_name]] => jmonk@russellpublishing.com
+                    [cf_person_molecular_diagnostics] => 
+                    [cf_person_it_nurture_track] => 
+                    [cf_person_it_news] => 
+                    [cf_person_it_zmember_reference] => 
+                    [cf_person_send_media_pack] => 
+                    [preferred_language] => 
+                    [photo_url] => 
+                    [cf_person_job_level] => Mid Level
+                    [cf_person_insights_first_source] => 
+                    [cf_person_grr_leadgen_aoi] => 
+                    [cf_person_epr_webinar] => 
+                    [cf_person_insights_first_visit] => 
+                    [cf_person_diseases] => 
+                    [cf_person_it_mode_of_transport_interest] => 
+                    [cf_person_epr_subscriber] => 
+                    [cf_person_dtr_core_audience] => 
+                    [cf_person_zoe_bryant] => 
+                    [cf_person_tools_techniques] => 
+                    [cf_person_epr_assumed_website_aoi] => 
+                    [cf_person_grr_editorial_type] => 
+                    [cf_person_epr_advertiser_type] => 
+                    [cf_person_dtr_news] => 
+                    [_can_modify] => 1
+                    [cf_person_dtr_web_member] => 
+                    [cf_person_iar_leadgen_aoi] => 
+                    [owner_id] => 83156
+                    [cf_person_nf_online_aoi__name] => 
+                    [cf_person_ryan_clarke] => 
+                    [cf_person_insights_first_term] => 
+                    [cf_person_insights_background] => 
+                    [logo_url] => 
+                    [cf_person_dtr_manual_advertiser_type] => 
+                    [cf_person_grr_web_member] => 
+                    [cf_person_lead_event_reference] => 
+                    [cf_person_data_matching] => 
+                    [cf_person_fbpa24_attended] => 
+                    [biography] => 
+                    [cf_person_it_webinar_aoi] => 
+                    [cf_person_nf_no_postal] => 
+                    [cf_person_dtr_no_postal] => 
+                    [cf_person_iar_assumed_aoi] => 
+                    [compliance_special_categories] => 
+                    [cf_person_grr_areas_of_interest_314] => 
+                    [cf_person_iar_third_party] => 
+                    [skype_name] => 
+                    [home_location[street_address]] => 
+                    [cf_person_epr_ord_sign_off_only] => 
+                    [main_location[alternate_telephone]] => +61 414 819 077
+                    [cf_person_hit_to_lead] => 
+                    [main_location[mobile]] => 
+                    [cf_person_confidence_score_rating] => 
+                    [cf_person_fbpa24_sponsor] => 
+                    [cf_person_conference_attended] => 
+                    [cf_person_beau_bailey] => 
+                    [marketing_campaign_id] => 
+                    [person_job_title] => R&D Food Technologist
+                    [cf_person_dtr_tdm] => 
+                    [cf_person_insights_first_medium] => 
+                    [cf_person_grr_zmember_reference] => 
+                    [_can_chown] => 1
+                    [cf_person_artificial_intelligencemachine_learning] => 
+                    [cf_person_fbpa25_sponsor] => 
+                    [cf_person_iar_ias23] => 
+                    [cf_person_grr_engagement] => Unknown
+                    [cf_person_iar_conference_source] => 
+                    [cf_person_iar_news] => 
+                    [cf_person_iar_brand_unsubscribe_2106] => 
+                    [cf_person_personalised_medicine] => 
+                    [_can_delete] => 1
+                    [cf_person_insights_total_score] => 
+                    [cf_person_sam_pirani] => 
+                    [cf_person_grr_core_audience] => 
+                    [cf_person_it_subscriber_type] => 
+                    [created_through_reference] => 
+                    [cf_person_2022_total] => 0.0 GBP 1
+                    [cf_person_idbs_potential_speaker] => 
+                    [cf_person_dtr_zmember_reference] => 
+                    [assistant_name] => 
+                    [cf_person_linkedin_url] => 
+                    [main_location[email_address_undeliverable]] => 1
+                    [no_email_soliciting] => 
+                    [cf_person_grr_nurture_track] => 
+                    [person_salutation] => 
+                    [cf_person_dtr_assumed_aoi] => 
+                    [cf_person_preclinical_research] => 
+                    [cf_person_last_login_time] => 
+                    [cf_person_insights_first_content] => 
+                    [cf_person_interests] => 
+                    [main_location[postcode]] => QLD 4132
+                    [cf_person_it_leadgen_aoi] => 
+                    [cf_person_act_company_type] => Manufacturer Food/Beverages
+                    [no_phone_soliciting] => 
+                    [cf_person_epr_sales_contact] => 
+                    [cf_person_fbpa24_declined] => 
+                    [cf_person_grr_assumed_website_aoi] => 
+                    [assigned_to] => 538
+                    [cf_person_epr_core_audience] => 
+                    [cf_person_suzy_baverstock] => 
+                    [cf_person_epr_editorial_type] => 
+                    [person_first_name] => 
+                    [cf_person_drugs_therapies] => 
+                    [cf_person_confidence_score_date] => 
+                    [cf_person_dtr_events] => 
+                    [cf_person_data_source_detail] => Act Controlled Requested Written Subscriptions
+                    [cf_person_iar_no_postal] => 
+                    [cf_person_epr_news_and_events] => 
+                    [facebook_url] => 
+                    [home_location[alternate_telephone]] => 
+                    [descriptor] => Van Tran - Snap Fresh
+                    [cf_person_grr_advertiser_type] => 
+                    [cf_person_dtr_leadgen_aoi] => 
+                    [organisation_num_employees] => 
+                    [cf_person_transport_primary_secondary_audience] => 
+                    [cf_person_nf_all_brand_unsubscribe] => 
+                    [cf_person_iar_ord_sign_off_only] => 
+                    [cf_person_insights_link] => 
+                    [home_location[email]] => 
+                    [cf_person_nf_tdm] => 
+                    [cf_person_insights_first_campaign] => 
+                    [cf_person_it_conference_source] => 
+                )
+
+        )
+
+    [total] => 478304
+)
+
+[2025-09-08 07:25:29] Success: Connection successful! API is working correctly.
+[2025-09-08 07:26:36] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:26:36] Initializing WorkbooksApi...
+[2025-09-08 07:27:09] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:27:09] Initializing WorkbooksApi...
+[2025-09-08 07:27:12] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:27:12] Initializing WorkbooksApi...
+[2025-09-08 07:27:34] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:27:34] Initializing WorkbooksApi...
+[2025-09-08 07:27:36] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:27:36] Initializing WorkbooksApi...
+[2025-09-08 07:28:10] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:28:10] Initializing WorkbooksApi...
+[2025-09-08 07:28:35] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:28:35] Initializing WorkbooksApi...
+[2025-09-08 07:29:08] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:29:08] Initializing WorkbooksApi...
+[2025-09-08 07:29:11] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:29:11] Initializing WorkbooksApi...
+[2025-09-08 07:29:24] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:29:24] Initializing WorkbooksApi...
+[2025-09-08 07:29:26] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:29:26] Initializing WorkbooksApi...
+[2025-09-08 07:36:26] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:36:26] Initializing WorkbooksApi...
+[2025-09-08 07:36:29] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:36:29] Initializing WorkbooksApi...
+[2025-09-08 07:39:56] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:39:56] Initializing WorkbooksApi...
+[2025-09-08 07:57:35] Starting connection test...
+[2025-09-08 07:57:35] Current settings:
+API URL: https://russellpublishing-live.workbooks.com
+API Key: set
+[2025-09-08 07:57:35] Attempting to get Workbooks instance...
+[2025-09-08 07:57:35] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 07:57:35] Initializing WorkbooksApi...
+[2025-09-08 07:57:35] Successfully got Workbooks instance
+[2025-09-08 07:57:35] Workbooks instance initialized successfully
+[2025-09-08 07:57:45] API Response:
+Array
+(
+    [success] => 1
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [cf_person_idbs_potential_speaker] => 
+                    [cf_person_ias24_attended] => 
+                    [cf_person_nf_news_and_events] => 1
+                    [cf_person_biomarkers] => 
+                    [alternate_names] => 
+                    [cf_person_dtr_zmember_reference] => 
+                    [created_by_user[login_name]] => tmartin@russellpublishing.com
+                    [cf_person_dtr_areas_of_interest_v2] => 
+                    [main_location[alternate_email]] => 
+                    [cf_person_epr_assumed_aoi] => 
+                    [main_location[street_address]] => 90 - 100 Magnesium Drive,
+                    [cf_person_iar_news_and_events] => 
+                    [queue_entry[queue[name]]] => Data Team
+                    [created_by] => 79406
+                    [cf_person_last_login_time] => 
+                    [cf_person_it_leadgen_aoi] => 
+                    [cf_person_act_company_type] => Manufacturer Food/Beverages
+                    [cf_person_nf_industry_sector_worked] => 
+                    [cf_person_dtr_eligible_for_communications_after_30_days] => 
+                    [cf_person_nf_assumed_website_aoi] => 
+                    [cf_person_it_advertiser_type] => 
+                    [cf_person_nf_nurture_track] => 
+                    [cf_person_nf_advertiser_type] => 
+                    [owner[person_name]] => Jane Monk
+                    [cf_person_iar_engagement] => Unknown
+                    [cf_person_insights_first_visit] => 
+                    [cf_person_fbpa25_registered] => 
+                    [cf_person_drugs_therapies] => 
+                    [cf_person_conference_attendee_type] => 
+                    [cf_person_dtr_events] => 
+                    [cf_person_data_source_detail] => Act Controlled Requested Written Subscriptions
+                    [cf_person_grr_news] => 
+                    [cf_person_nf_order_fulfilment_client_survey] => 
+                    [cf_person_dtr_leadgen_aoi] => 
+                    [cf_person_nf_events] => 
+                    [imported] => 
+                    [home_location[county_province_state]] => 
+                    [cf_person_iar_eligible_for_communications_after_30_days] => 
+                    [cf_person_iar_ord_sign_off_only] => 
+                    [_preload_linked_item_association_for_cf_person_location] => 
+                    [main_location[email]] => van.tran@qantas.com.au
+                    [type] => Private::Crm::Person
+                    [cf_person_dtr_engagement] => Unknown
+                    [cf_person_it_conference_source] => 
+                    [cf_person_grr_no_postal] => 
+                    [cf_person_brand] => NF Subscriber, NF Subscriber
+                    [cf_person_fbpa25_speaker] => 
+                    [cf_person_fbpa24_registered] => 
+                    [cf_person_iar_assumed_website_aoi] => 
+                    [cf_person_insights_background] => 
+                    [categories] => 
+                    [cf_person_grr_subscribers] => 
+                    [cf_person_nf_engagement] => None
+                    [_can_chaccess] => 1
+                    [cf_person_dtr_ord_sign_off_only] => 
+                    [cf_person_authentication_blocked] => 
+                    [cf_person_force24_lead_score] => 
+                    [cf_person_it_nurture_track] => 
+                    [cf_person_dtr_subscriber] => 
+                    [cf_person_it_all_brand_unsubscribe] => 
+                    [skype_name] => 
+                    [cf_person_dtr_editorial_type] => 
+                    [cf_person_insights_last_visit] => 
+                    [cf_person_translational_science] => 
+                    [cf_person_jess_russell] => 
+                    [cf_person_insights_first_campaign] => 
+                    [cf_person_nf_online_aoi__name] => 
+                    [updated_at] => Sun Mar 09 12:09:12 UTC 2025
+                    [spouse_name] => 
+                    [cf_person_epr_news] => 
+                    [cf_person_it_mode_of_transport_interest] => 
+                    [cf_person_nf_eligible_for_communications_after_30_days] => 
+                    [cf_person_iar_iaos23] => 
+                    [compliance_channels] => 
+                    [cf_person_it_subscriber] => 
+                    [cf_person_nf_editorial_type] => 
+                    [cf_person_workbooks] => 1
+                    [created_by_user[person_name]] => Tim Martin
+                    [cf_person_iar_editorial_type] => 
+                    [main_location[telephone]] => 
+                    [cf_person_screening_sequencing] => 
+                    [website] => 
+                    [cf_person_epr_web_member] => 
+                    [cf_person_epr_foba23] => 
+                    [cf_person_epr_areas_of_interest_310] => 
+                    [employer_name] => Snap Fresh
+                    [cf_person_ias25_registered] => 
+                    [cf_person_insights_total_score] => 
+                    [cf_person_epr_webinar_aoi] => 
+                    [cf_person_grr_assumed_aoi] => 
+                    [twitter_url] => 
+                    [home_location[mobile]] => 
+                    [cf_person_epr_order_fulfilment_client_survey] => 
+                    [cf_person_iar_web_member] => 
+                    [cf_person_linkedin_url] => 
+                    [cf_person_grr_ord_sign_off_only] => 
+                    [cf_person_lead_event_reference] => 
+                    [cf_person_fbpa24_attended] => 
+                    [cf_person_grr_third_party] => 
+                    [cf_person_interests] => 
+                    [cf_person_epr_third_party] => 
+                    [cf_person_insights_first_term] => 
+                    [cf_person_epr_2] => 
+                    [cf_person_dtr_all_brand_unsubscribe] => 
+                    [cf_person_grr_subscriber_type] => 
+                    [person_suffix] => 
+                    [cf_person_claimed_employer] => 
+                    [cf_person_imaging] => 
+                    [cf_person_grr_dr23] => 
+                    [cf_person_2022_total] => 0.0 GBP 1
+                    [cf_person_conference_attended] => 
+                    [cf_person_nf_webinar_aoi] => 
+                    [main_location[county_province_state]] => 
+                    [cf_person_fbpa24_sponsor] => 
+                    [cf_person_duplicate_person] => 
+                    [queue_entry[queue_id]] => 538
+                    [cf_person_science_primary_secondary_audience] => 
+                    [cf_person_ias24_registered] => 
+                    [is_deleted] => 
+                    [lead_source_type] => Written Registration
+                    [cf_person_cell_gene_therapy] => 
+                    [cf_person_targets] => 
+                    [cf_person_fbpa25_sponsor] => 
+                    [cf_person_insights_link] => 
+                    [cf_person_iar_order_fulfilment_client_survey] => 
+                    [cf_person_nf_ord_sign_off_only] => 
+                    [special_requirements] => 
+                    [cf_person_it_news_and_events] => 
+                    [home_location[telephone]] => 
+                    [cf_person_last_issue_sent] => 
+                    [created_through] => Import
+                    [industry] => 
+                    [cf_person_iar_events] => 
+                    [home_location[country]] => 
+                    [_preload_linked_item_association_for_cf_person_nf_online_aoi] => 
+                    [cf_person_grr_nurture_track] => 
+                    [cf_person_dtr_subscriber_type] => 
+                    [cf_person_dtr_third_party] => 
+                    [cf_person_editorial_contact_type] => 
+                    [cf_person_sam_pirani] => 
+                    [cf_person_andy_holland] => 
+                    [person_job_role] => Scientist/Technologist
+                    [cf_person_dtr_order_fulfilment_client_survey] => 
+                    [cf_person_epr_events] => 
+                    [_link_or_create_employer] => 
+                    [cf_person_epr_sales_contact] => 
+                    [cf_person_fbpa24_declined] => 
+                    [cf_person_ias24_sponsor] => 
+                    [cf_person_dtr_webinar_aoi] => 
+                    [object_ref] => PERS-108856
+                    [cf_person_2022_spex] => 0.0 GBP 1
+                    [cf_person_first_login_time] => 
+                    [cf_person_delegate_blacklist] => 
+                    [image_url] => 
+                    [cf_person_stem_cells] => 
+                    [object_url] => https://russellpublishing-live.workbooks.com/link/3cDMzUTM/PERS-108856
+                    [_can_read] => 1
+                    [cf_person_insights_7_days_score] => 
+                    [cf_person_it_events] => 
+                    [cf_person_insights_employees] => 
+                    [cf_person_data_matching_picklist] => 
+                    [cf_person_iar_advertiser_type] => 
+                    [cf_person_it_its23] => 
+                    [cf_person_grr_conference_attended] => 
+                    [cf_person_confidence_score_date] => 
+                    [cf_person_nf_areas_of_interest_312] => Analysis, Fraud/Authenticity/Safety, Health & Nutrition, Packaging/Labelling, Production/Processing, Research & Development
+                    [party_notes] => 
+                    [cf_person_it_assumed_aoi] => 
+                    [sync_with_mailer] => 
+                    [cf_person_informatics] => 
+                    [cf_person_act_info_source] => 
+                    [marketing_campaign[name]] => 
+                    [cf_person_preclinical_research] => 
+                    [home_location[town]] => 
+                    [cf_person_dtr_nurture_track] => 
+                    [main_location[fax]] => 
+                    [id] => 380365
+                    [cf_person_grr_order_fulfilment_client_survey] => 
+                    [organisation_annual_revenue] =>   0
+                    [cf_person_dtr_therapeutic_aoi] => 
+                    [cf_person_nf_web_member] => 
+                    [cf_person_epr_assumed_website_aoi] => 
+                    [cf_person_epr_subscriber] => 
+                    [main_location_id] => 384969
+                    [cf_person_dtr_core_audience] => 
+                    [cf_person_grr_editorial_type] => 
+                    [cf_person_epr_advertiser_type] => 
+                    [cf_person_grr_all_brand_unsubscribe] => 
+                    [cf_person_world_region] => Asia/Pacific (inc. Australia)
+                    [name] => Van Tran
+                    [mailchimp_last_synchronised_at] => 
+                    [cf_person_epr_engagement] => Unknown
+                    [cf_person_grr_conference_source] => 
+                    [cf_person_fbpa24_speaker] => 
+                    [cf_person_research_development] => 
+                    [cf_person_grr_brand_unsubscribe] => 
+                    [cf_person_nf_all_brand_unsubscribe] => 
+                    [cf_person_dtr_tdm] => 
+                    [cf_person_insights_first_content] => 
+                    [assistant_phone] => 
+                    [home_location[postcode]] => 
+                    [cf_person_send_media_pack] => 
+                    [cf_person_nurture_track] => 
+                    [gdpr_compliant] => 
+                    [cf_person_ias24_speaker] => 
+                    [cf_person_epr_leadgen_aoi] => 
+                    [cf_person_toxicology] => 
+                    [cf_person_nf_no_postal] => 
+                    [created_at] => Tue Jun 19 22:12:16 UTC 2018
+                    [cf_person_dtr_no_postal] => 
+                    [main_location[country]] => Australia
+                    [cf_person_business] => 
+                    [cf_person_temp_exclusion] => 
+                    [lock_version] => 25
+                    [cf_person_iar_third_party] => 
+                    [cf_person_grr_areas_of_interest_314] => 
+                    [no_post_soliciting] => 
+                    [cf_person_grr_manual_advertiser_type] => 
+                    [cf_person_zoe_bryant] => 
+                    [cf_person_iar_manual_advertiser_type] => 
+                    [cf_person_epr_all_brand_unsubscribe] => 
+                    [person_last_name] => Van Tran
+                    [cf_person_dtr_news_and_events] => 
+                    [cf_person_insights_today_score] => 
+                    [cf_person_drug_discovery_processes] => 
+                    [email_opt_in] => 
+                    [cf_person_nic_losardo] => 
+                    [cf_person_epr_nurture_track] => 
+                    [cf_person_nf_tdm] => 
+                    [cf_person_2023_total] => 0.0 GBP 1
+                    [cf_person_genomics_3774] => 
+                    [linkedin_url] => 
+                    [home_location[fax]] => 
+                    [cf_person_act_urn] => 
+                    [cf_person_ryan_clarke] => 
+                    [cf_person_client_nps] => 
+                    [home_location[alternate_email]] => 
+                    [cf_person_act_company_name] => Snap Fresh
+                    [cf_person_insights_first_source] => 
+                    [linked_item_association_for_cf_person_nf_online_aoi] => 
+                    [cf_person_iar_news] => 
+                    [cf_person_iar_ias23] => 
+                    [cf_person_iar_brand_unsubscribe_2106] => 
+                    [cf_person_grr_webinar_aoi] => 
+                    [cf_person_external_event_exhibitors] => 
+                    [cf_person_insight_yesterday_score] => 
+                    [cf_person_iar_assumed_aoi] => 
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [person_middle_name] => 
+                    [cf_person_iar_zmember_reference] => 
+                    [cf_person_lab_automation] => 
+                    [cf_person_grr_core_audience] => 
+                    [cf_person_it_subscriber_type] => 
+                    [cf_person_fraser_owen] => 
+                    [main_location[town]] => Crestmead
+                    [cf_person_iar_all_brand_unsubscribe] => 
+                    [cf_person_it_webinar] => 
+                    [cf_person_verification_picklist] => 
+                    [watched] => 
+                    [cf_person_analysis] => 
+                    [updated_by] => 122326
+                    [cf_person_last_login_ip_address] => 
+                    [queue_entry[updated_at]] => Wed Jan 09 13:09:54 UTC 2019
+                    [employer_link] => 297165
+                    [person_personal_title] => 
+                    [owner[login_name]] => jmonk@russellpublishing.com
+                    [cf_person_technology] => 
+                    [cf_person_grr_webinar] => 
+                    [cf_person_beau_bailey] => 
+                    [cf_person_manual_advertiser_type] => 
+                    [cf_person_2022_digital] => 0.0 GBP 1
+                    [cf_person_is_person_active_or_inactive] => Active
+                    [cf_person_insights_industry] => 
+                    [cf_person_grr_assumed_website_aoi] => 
+                    [cf_person_epr_core_audience] => 
+                    [cf_person_dan_birchmore] => 
+                    [preferred_language] => 
+                    [photo_url] => 
+                    [cf_person_2023_digital] => 0.0 GBP 1
+                    [cf_person_epr_editorial_type] => 
+                    [cf_person_nf_leadgen_aoi] => 
+                    [cf_person_grr_engagement] => Unknown
+                    [cf_person_iar_no_postal] => 
+                    [cf_person_epr_news_and_events] => 
+                    [cf_person_dtr_webinar] => 
+                    [cf_person_genomics] => 
+                    [cf_person_grr_advertiser_type] => 
+                    [cf_person_nf_online_aoi] => 
+                    [cf_person_iar_tdm] => 
+                    [cf_person_nf_manual_advertiser_type] => 
+                    [cf_person_iar_webinar_aoi] => 
+                    [cf_person_dtr_assumed_aoi] => 
+                    [cf_person_nf_news] => 
+                    [cf_person_it_conference_attended] => 
+                    [_can_modify] => 1
+                    [cf_person_nf_zmember_reference] => 12940
+                    [cf_person_ias25_declined] => 
+                    [cf_person_iar_webinar] => 
+                    [cf_person_dtr_assumed_website_aoi] => 
+                    [owner_id] => 83156
+                    [cf_person_registered] => 
+                    [cf_person_nf_subscriber] => 1
+                    [cf_person_iar_areas_of_interest_316] => 
+                    [cf_person_iar_conference_attended] => 
+                    [cf_person_ias24_declined] => 
+                    [cf_person_confidence_level] => 
+                    [cf_person_location__name] => 
+                    [cf_person_epr_zmember_reference] => 
+                    [cf_person_suzy_baverstock] => 
+                    [cf_person_clinical_trials] => 
+                    [cf_person_molecular_diagnostics] => 
+                    [logo_url] => 
+                    [cf_person_insights_30_days_score] => 
+                    [cf_person_iar_subscriber] => 
+                    [cf_person_it_news] => 
+                    [biography] => 
+                    [cf_person_it_zmember_reference] => 
+                    [cf_person_assays] => 
+                    [compliance_special_categories] => 
+                    [home_location[street_address]] => 
+                    [cf_person_job_level] => Mid Level
+                    [cf_person_transport_primary_secondary_audience] => 
+                    [main_location[alternate_telephone]] => +61 414 819 077
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [main_location[mobile]] => 
+                    [cf_person_grr_leadgen_aoi] => 
+                    [cf_person_epr_webinar] => 
+                    [cf_person_epr_no_postal] => 
+                    [cf_person_fbpa25_attended] => 
+                    [cf_person_diseases] => 
+                    [cf_person_conference_source] => 
+                    [cf_person_epr_eligible_for_communications_after_30_days] => 
+                    [cf_person_grr_events] => 
+                    [cf_person_2023_spex] => 0.0 GBP 1
+                    [marketing_campaign_id] => 
+                    [cf_person_epr_subscriber_type] => 
+                    [cf_person_tools_techniques] => 
+                    [person_job_title] => R&D Food Technologist
+                    [cf_person_nf_assumed_aoi] => Research & Development
+                    [cf_person_insights_yesterday_score] => 
+                    [_can_chown] => 1
+                    [cf_person_dtr_news] => 
+                    [cf_person_dtr_web_member] => 
+                    [cf_person_nf_webinar] => 
+                    [cf_person_iar_leadgen_aoi] => 
+                    [cf_person_grr_eligible_for_communications_after_30_days] => 
+                    [cf_person_iar_core_audience] => 
+                    [cf_person_it_editorial_type] => 
+                    [linked_item_association_for_cf_person_location] => 
+                    [cf_person_les_lubwama] => 
+                    [_can_delete] => 1
+                    [cf_person_sponsor_optin] => 
+                    [cf_person_grr_web_member] => 
+                    [created_through_reference] => 
+                    [cf_person_dtr_manual_advertiser_type] => 
+                    [cf_person_insights_first_medium] => 
+                    [cf_person_data_matching] => 
+                    [cf_person_ias25_speaker] => 
+                    [cf_person_it_assumed_website_aoi] => 
+                    [cf_person_nf_fig23] => 
+                    [assistant_name] => 
+                    [main_location[email_address_undeliverable]] => 1
+                    [cf_person_iar_nurture_track] => 
+                    [cf_person_nf_third_party] => 1
+                    [cf_person_it_areas_of_interest_318] => 
+                    [cf_person_it_webinar_aoi] => 
+                    [no_email_soliciting] => 
+                    [cf_person_tony_portelli] => 
+                    [person_salutation] => 
+                    [cf_person_it_engagement] => Unknown
+                    [main_location[postcode]] => QLD 4132
+                    [cf_person_epr_ord_sign_off_only] => 
+                    [cf_person_2023_print] => 0.0 GBP 1
+                    [no_phone_soliciting] => 
+                    [cf_person_hit_to_lead] => 
+                    [cf_person_confidence_score_rating] => 
+                    [assigned_to] => 538
+                    [cf_person_grr_tdm] => 
+                    [cf_person_it_third_party] => 
+                    [person_first_name] => 
+                    [cf_person_dtr_advertiser_type] => 
+                    [cf_person_it_no_postal] => 
+                    [cf_person_epr_tdm] => 
+                    [cf_person_nf_subscriber_type] => Lapsed
+                    [cf_person_force24_nt_deletion] => 
+                    [cf_person_insights_revenue] => 
+                    [cf_person_iar_subscriber_type] => 
+                    [cf_person_grr_zmember_reference] => 
+                    [cf_person_artificial_intelligencemachine_learning] => 
+                    [cf_person_nf_core_audience] => 
+                    [facebook_url] => 
+                    [home_location[alternate_telephone]] => 
+                    [cf_person_fbpa25_declined] => 
+                    [descriptor] => Van Tran - Snap Fresh
+                    [cf_person_ias25_sponsor] => 
+                    [cf_person_iar_brand_unsubscribe] => 
+                    [organisation_num_employees] => 
+                    [cf_person_location] => 
+                    [cf_person_grr_news_and_events] => 
+                    [cf_person_iar_conference_source] => 
+                    [home_location[email]] => 
+                    [cf_person_joanna_kirby] => 
+                    [cf_person_2022_print] => 0.0 GBP 1
+                    [cf_person_personalised_medicine] => 
+                    [cf_person_ias25_attended] => 
+                )
+
+        )
+
+    [total] => 478307
+)
+
+[2025-09-08 07:57:45] Success: Connection successful! API is working correctly.
+[2025-09-08 09:57:58] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 09:57:58] Initializing WorkbooksApi...
+[2025-09-08 09:58:01] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 09:58:01] Initializing WorkbooksApi...
+[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[2025-09-08 10:22:55] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 10:22:55] Initializing WorkbooksApi...
+[2025-09-08 10:25:37] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 10:25:37] Initializing WorkbooksApi...
+[2025-09-08 10:25:38] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 10:25:38] Initializing WorkbooksApi...
+[2025-09-08 12:56:53] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 12:56:53] Initializing WorkbooksApi...
+[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[2025-09-08 19:00:36] Starting connection test...
+[2025-09-08 19:00:36] Current settings:
+API URL: https://russellpublishing-live.workbooks.com
+API Key: set
+[2025-09-08 19:00:36] Attempting to get Workbooks instance...
+[2025-09-08 19:00:36] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 19:00:36] Initializing WorkbooksApi...
+[2025-09-08 19:00:36] Successfully got Workbooks instance
+[2025-09-08 19:00:36] Workbooks instance initialized successfully
+[2025-09-08 19:00:46] API Response:
+Array
+(
+    [success] => 1
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [cf_person_nf_news_and_events] => 1
+                    [cf_person_nf_news] => 
+                    [cf_person_insights_link] => 
+                    [cf_person_nf_core_audience] => 
+                    [cf_person_imaging] => 
+                    [alternate_names] => 
+                    [created_by_user[login_name]] => tmartin@russellpublishing.com
+                    [cf_person_grr_conference_source] => 
+                    [main_location[alternate_email]] => 
+                    [cf_person_ryan_clarke] => 
+                    [cf_person_grr_eligible_for_communications_after_30_days] => 
+                    [cf_person_2022_spex] => 0.0 GBP 1
+                    [cf_person_nf_nurture_track] => 
+                    [main_location[street_address]] => 90 - 100 Magnesium Drive,
+                    [cf_person_grr_zmember_reference] => 
+                    [queue_entry[queue[name]]] => Data Team
+                    [created_by] => 79406
+                    [cf_person_epr_foba23] => 
+                    [owner[person_name]] => Jane Monk
+                    [cf_person_ias25_sponsor] => 
+                    [cf_person_insights_first_content] => 
+                    [cf_person_dtr_eligible_for_communications_after_30_days] => 
+                    [cf_person_it_engagement] => Unknown
+                    [cf_person_grr_conference_attended] => 
+                    [linked_item_association_for_cf_person_nf_online_aoi] => 
+                    [cf_person_nf_events] => 
+                    [cf_person_insights_30_days_score] => 
+                    [cf_person_iar_all_brand_unsubscribe] => 
+                    [cf_person_world_region] => Asia/Pacific (inc. Australia)
+                    [cf_person_it_subscriber] => 
+                    [cf_person_epr_webinar] => 
+                    [imported] => 
+                    [cf_person_jess_russell] => 
+                    [cf_person_epr_subscriber] => 
+                    [home_location[county_province_state]] => 
+                    [cf_person_personalised_medicine] => 
+                    [cf_person_grr_nurture_track] => 
+                    [main_location[email]] => van.tran@qantas.com.au
+                    [type] => Private::Crm::Person
+                    [cf_person_nf_areas_of_interest_312] => Analysis, Fraud/Authenticity/Safety, Health & Nutrition, Packaging/Labelling, Production/Processing, Research & Development
+                    [cf_person_epr_tdm] => 
+                    [cf_person_iar_news_and_events] => 
+                    [cf_person_job_level] => Mid Level
+                    [cf_person_conference_attended] => 
+                    [cf_person_verification_picklist] => 
+                    [cf_person_it_news_and_events] => 
+                    [cf_person_dtr_subscriber] => 
+                    [cf_person_dtr_assumed_website_aoi] => 
+                    [cf_person_data_source_detail] => Act Controlled Requested Written Subscriptions
+                    [cf_person_fbpa24_speaker] => 
+                    [cf_person_it_subscriber_type] => 
+                    [categories] => 
+                    [cf_person_fbpa25_attended] => 
+                    [cf_person_grr_order_fulfilment_client_survey] => 
+                    [cf_person_iar_subscriber_type] => 
+                    [cf_person_nf_zmember_reference] => 12940
+                    [_can_chaccess] => 1
+                    [cf_person_nf_editorial_type] => 
+                    [cf_person_iar_conference_source] => 
+                    [cf_person_dtr_web_member] => 
+                    [cf_person_grr_brand_unsubscribe] => 
+                    [cf_person_insights_7_days_score] => 
+                    [cf_person_grr_editorial_type] => 
+                    [cf_person_epr_events] => 
+                    [skype_name] => 
+                    [cf_person_ias25_declined] => 
+                    [cf_person_genomics_3774] => 
+                    [cf_person_insights_last_visit] => 
+                    [cf_person_grr_engagement] => Unknown
+                    [cf_person_epr_eligible_for_communications_after_30_days] => 
+                    [cf_person_epr_webinar_aoi] => 
+                    [cf_person_nf_webinar] => 
+                    [cf_person_dtr_order_fulfilment_client_survey] => 
+                    [cf_person_grr_news_and_events] => 
+                    [updated_at] => Sun Mar 09 12:09:12 UTC 2025
+                    [spouse_name] => 
+                    [cf_person_grr_webinar] => 
+                    [cf_person_iar_manual_advertiser_type] => 
+                    [cf_person_act_company_name] => Snap Fresh
+                    [compliance_channels] => 
+                    [cf_person_dtr_leadgen_aoi] => 
+                    [cf_person_molecular_diagnostics] => 
+                    [cf_person_force24_nt_deletion] => 
+                    [created_by_user[person_name]] => Tim Martin
+                    [cf_person_epr_areas_of_interest_310] => 
+                    [cf_person_dtr_webinar_aoi] => 
+                    [cf_person_epr_sales_contact] => 
+                    [main_location[telephone]] => 
+                    [cf_person_grr_events] => 
+                    [_preload_linked_item_association_for_cf_person_location] => 
+                    [website] => 
+                    [cf_person_dtr_no_postal] => 
+                    [cf_person_epr_leadgen_aoi] => 
+                    [cf_person_nurture_track] => 
+                    [employer_name] => Snap Fresh
+                    [cf_person_epr_2] => 
+                    [cf_person_grr_news] => 
+                    [cf_person_iar_conference_attended] => 
+                    [twitter_url] => 
+                    [home_location[mobile]] => 
+                    [cf_person_location] => 
+                    [cf_person_it_webinar] => 
+                    [cf_person_it_no_postal] => 
+                    [cf_person_epr_news] => 
+                    [cf_person_epr_engagement] => Unknown
+                    [cf_person_iar_news] => 
+                    [cf_person_analysis] => 
+                    [cf_person_iar_areas_of_interest_316] => 
+                    [cf_person_it_events] => 
+                    [person_suffix] => 
+                    [cf_person_claimed_employer] => 
+                    [cf_person_grr_no_postal] => 
+                    [cf_person_lab_automation] => 
+                    [cf_person_dtr_assumed_aoi] => 
+                    [main_location[county_province_state]] => 
+                    [cf_person_dtr_areas_of_interest_v2] => 
+                    [queue_entry[queue_id]] => 538
+                    [is_deleted] => 
+                    [lead_source_type] => Written Registration
+                    [cf_person_iar_events] => 
+                    [cf_person_fbpa24_registered] => 
+                    [cf_person_tony_portelli] => 
+                    [cf_person_nf_eligible_for_communications_after_30_days] => 
+                    [cf_person_nf_ord_sign_off_only] => 
+                    [cf_person_2022_digital] => 0.0 GBP 1
+                    [cf_person_iar_engagement] => Unknown
+                    [cf_person_business] => 
+                    [cf_person_grr_manual_advertiser_type] => 
+                    [cf_person_last_login_ip_address] => 
+                    [cf_person_nf_subscriber] => 1
+                    [cf_person_nf_all_brand_unsubscribe] => 
+                    [special_requirements] => 
+                    [home_location[telephone]] => 
+                    [cf_person_artificial_intelligencemachine_learning] => 
+                    [created_through] => Import
+                    [industry] => 
+                    [cf_person_external_event_exhibitors] => 
+                    [home_location[country]] => 
+                    [cf_person_data_matching_picklist] => 
+                    [cf_person_dtr_ord_sign_off_only] => 
+                    [cf_person_science_primary_secondary_audience] => 
+                    [cf_person_nf_manual_advertiser_type] => 
+                    [cf_person_grr_areas_of_interest_314] => 
+                    [cf_person_2023_print] => 0.0 GBP 1
+                    [person_job_role] => Scientist/Technologist
+                    [cf_person_nf_fig23] => 
+                    [_link_or_create_employer] => 
+                    [cf_person_epr_web_member] => 
+                    [cf_person_fbpa25_declined] => 
+                    [object_ref] => PERS-108856
+                    [cf_person_dtr_manual_advertiser_type] => 
+                    [image_url] => 
+                    [object_url] => https://russellpublishing-live.workbooks.com/link/3cDMzUTM/PERS-108856
+                    [cf_person_location__name] => 
+                    [cf_person_idbs_potential_speaker] => 
+                    [_can_read] => 1
+                    [cf_person_ias25_speaker] => 
+                    [cf_person_it_third_party] => 
+                    [cf_person_it_nurture_track] => 
+                    [cf_person_nf_assumed_aoi] => Research & Development
+                    [cf_person_epr_third_party] => 
+                    [cf_person_iar_brand_unsubscribe] => 
+                    [cf_person_biomarkers] => 
+                    [cf_person_editorial_contact_type] => 
+                    [party_notes] => 
+                    [cf_person_iar_subscriber] => 
+                    [cf_person_dtr_news_and_events] => 
+                    [cf_person_it_conference_attended] => 
+                    [sync_with_mailer] => 
+                    [cf_person_conference_attendee_type] => 
+                    [cf_person_confidence_score_date] => 
+                    [cf_person_brand] => NF Subscriber, NF Subscriber
+                    [cf_person_data_matching] => 
+                    [cf_person_epr_ord_sign_off_only] => 
+                    [marketing_campaign[name]] => 
+                    [cf_person_fbpa24_sponsor] => 
+                    [cf_person_dtr_engagement] => Unknown
+                    [cf_person_iar_advertiser_type] => 
+                    [home_location[town]] => 
+                    [cf_person_dtr_subscriber_type] => 
+                    [cf_person_sponsor_optin] => 
+                    [cf_person_epr_order_fulfilment_client_survey] => 
+                    [main_location[fax]] => 
+                    [id] => 380365
+                    [cf_person_nf_subscriber_type] => Lapsed
+                    [cf_person_iar_webinar_aoi] => 
+                    [_preload_linked_item_association_for_cf_person_nf_online_aoi] => 
+                    [cf_person_grr_subscriber_type] => 
+                    [cf_person_drugs_therapies] => 
+                    [cf_person_epr_core_audience] => 
+                    [organisation_annual_revenue] =>   0
+                    [cf_person_insights_background] => 
+                    [cf_person_nic_losardo] => 
+                    [cf_person_dtr_nurture_track] => 
+                    [cf_person_manual_advertiser_type] => 
+                    [cf_person_authentication_blocked] => 
+                    [main_location_id] => 384969
+                    [cf_person_delegate_blacklist] => 
+                    [cf_person_grr_subscribers] => 
+                    [cf_person_it_webinar_aoi] => 
+                    [name] => Van Tran
+                    [mailchimp_last_synchronised_at] => 
+                    [linked_item_association_for_cf_person_location] => 
+                    [cf_person_it_news] => 
+                    [cf_person_act_info_source] => 
+                    [cf_person_cell_gene_therapy] => 
+                    [cf_person_iar_assumed_aoi] => 
+                    [cf_person_iar_webinar] => 
+                    [cf_person_it_areas_of_interest_318] => 
+                    [cf_person_first_login_time] => 
+                    [cf_person_translational_science] => 
+                    [cf_person_assays] => 
+                    [assistant_phone] => 
+                    [cf_person_act_urn] => 
+                    [home_location[postcode]] => 
+                    [gdpr_compliant] => 
+                    [cf_person_toxicology] => 
+                    [cf_person_les_lubwama] => 
+                    [cf_person_dtr_zmember_reference] => 
+                    [cf_person_dtr_webinar] => 
+                    [cf_person_fbpa25_sponsor] => 
+                    [created_at] => Tue Jun 19 22:12:16 UTC 2018
+                    [main_location[country]] => Australia
+                    [cf_person_dtr_editorial_type] => 
+                    [cf_person_targets] => 
+                    [lock_version] => 25
+                    [cf_person_insight_yesterday_score] => 
+                    [no_post_soliciting] => 
+                    [cf_person_dtr_core_audience] => 
+                    [cf_person_iar_no_postal] => 
+                    [cf_person_fbpa24_attended] => 
+                    [person_last_name] => Van Tran
+                    [cf_person_dtr_therapeutic_aoi] => 
+                    [email_opt_in] => 
+                    [cf_person_workbooks] => 1
+                    [cf_person_2023_total] => 0.0 GBP 1
+                    [cf_person_ias24_attended] => 
+                    [cf_person_nf_third_party] => 1
+                    [cf_person_interests] => 
+                    [linkedin_url] => 
+                    [home_location[fax]] => 
+                    [cf_person_iar_core_audience] => 
+                    [cf_person_it_conference_source] => 
+                    [cf_person_confidence_level] => 
+                    [home_location[alternate_email]] => 
+                    [cf_person_nf_no_postal] => 
+                    [cf_person_dtr_all_brand_unsubscribe] => 
+                    [cf_person_2022_print] => 0.0 GBP 1
+                    [cf_person_it_assumed_aoi] => 
+                    [cf_person_iar_leadgen_aoi] => 
+                    [cf_person_epr_editorial_type] => 
+                    [cf_person_nf_tdm] => 
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [cf_person_nf_assumed_website_aoi] => 
+                    [cf_person_last_issue_sent] => 
+                    [person_middle_name] => 
+                    [cf_person_insights_revenue] => 
+                    [cf_person_beau_bailey] => 
+                    [cf_person_epr_all_brand_unsubscribe] => 
+                    [main_location[town]] => Crestmead
+                    [cf_person_it_leadgen_aoi] => 
+                    [cf_person_dtr_advertiser_type] => 
+                    [cf_person_fbpa25_speaker] => 
+                    [watched] => 
+                    [updated_by] => 122326
+                    [cf_person_nf_leadgen_aoi] => 
+                    [queue_entry[updated_at]] => Wed Jan 09 13:09:54 UTC 2019
+                    [employer_link] => 297165
+                    [cf_person_grr_dr23] => 
+                    [cf_person_nf_industry_sector_worked] => 
+                    [person_personal_title] => 
+                    [owner[login_name]] => jmonk@russellpublishing.com
+                    [cf_person_joanna_kirby] => 
+                    [cf_person_iar_assumed_website_aoi] => 
+                    [cf_person_grr_all_brand_unsubscribe] => 
+                    [cf_person_preclinical_research] => 
+                    [preferred_language] => 
+                    [photo_url] => 
+                    [cf_person_2023_digital] => 0.0 GBP 1
+                    [cf_person_grr_web_member] => 
+                    [cf_person_insights_today_score] => 
+                    [cf_person_temp_exclusion] => 
+                    [cf_person_dtr_events] => 
+                    [cf_person_grr_assumed_aoi] => 
+                    [cf_person_linkedin_url] => 
+                    [cf_person_epr_advertiser_type] => 
+                    [cf_person_epr_no_postal] => 
+                    [cf_person_it_all_brand_unsubscribe] => 
+                    [cf_person_epr_nurture_track] => 
+                    [cf_person_epr_news_and_events] => 
+                    [_can_modify] => 1
+                    [cf_person_iar_nurture_track] => 
+                    [cf_person_send_media_pack] => 
+                    [cf_person_insights_first_campaign] => 
+                    [cf_person_grr_leadgen_aoi] => 
+                    [cf_person_grr_third_party] => 
+                    [cf_person_clinical_trials] => 
+                    [owner_id] => 83156
+                    [cf_person_iar_third_party] => 
+                    [cf_person_dtr_third_party] => 
+                    [cf_person_hit_to_lead] => 
+                    [cf_person_it_editorial_type] => 
+                    [cf_person_informatics] => 
+                    [cf_person_conference_source] => 
+                    [cf_person_insights_total_score] => 
+                    [cf_person_iar_editorial_type] => 
+                    [cf_person_it_assumed_website_aoi] => 
+                    [logo_url] => 
+                    [cf_person_fbpa25_registered] => 
+                    [cf_person_suzy_baverstock] => 
+                    [cf_person_insights_employees] => 
+                    [cf_person_nf_advertiser_type] => 
+                    [cf_person_nf_webinar_aoi] => 
+                    [cf_person_nf_online_aoi] => 
+                    [cf_person_grr_tdm] => 
+                    [biography] => 
+                    [cf_person_fraser_owen] => 
+                    [cf_person_grr_advertiser_type] => 
+                    [cf_person_research_development] => 
+                    [compliance_special_categories] => 
+                    [cf_person_ias25_attended] => 
+                    [cf_person_sam_pirani] => 
+                    [cf_person_it_advertiser_type] => 
+                    [cf_person_diseases] => 
+                    [cf_person_is_person_active_or_inactive] => Active
+                    [cf_person_epr_assumed_aoi] => 
+                    [home_location[street_address]] => 
+                    [cf_person_dtr_news] => 
+                    [main_location[alternate_telephone]] => +61 414 819 077
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [cf_person_force24_lead_score] => 
+                    [main_location[mobile]] => 
+                    [cf_person_duplicate_person] => 
+                    [cf_person_registered] => 
+                    [cf_person_technology] => 
+                    [cf_person_ias25_registered] => 
+                    [marketing_campaign_id] => 
+                    [cf_person_iar_ias23] => 
+                    [cf_person_fbpa24_declined] => 
+                    [cf_person_insights_yesterday_score] => 
+                    [person_job_title] => R&D Food Technologist
+                    [cf_person_insights_first_source] => 
+                    [_can_chown] => 1
+                    [cf_person_iar_order_fulfilment_client_survey] => 
+                    [cf_person_client_nps] => 
+                    [cf_person_nf_order_fulfilment_client_survey] => 
+                    [cf_person_insights_first_visit] => 
+                    [cf_person_tools_techniques] => 
+                    [cf_person_genomics] => 
+                    [cf_person_ias24_sponsor] => 
+                    [cf_person_iar_web_member] => 
+                    [cf_person_grr_assumed_website_aoi] => 
+                    [_can_delete] => 1
+                    [cf_person_zoe_bryant] => 
+                    [cf_person_epr_zmember_reference] => 
+                    [cf_person_epr_subscriber_type] => 
+                    [cf_person_iar_ord_sign_off_only] => 
+                    [created_through_reference] => 
+                    [cf_person_iar_tdm] => 
+                    [cf_person_ias24_registered] => 
+                    [assistant_name] => 
+                    [cf_person_ias24_speaker] => 
+                    [main_location[email_address_undeliverable]] => 1
+                    [cf_person_iar_iaos23] => 
+                    [no_email_soliciting] => 
+                    [cf_person_nf_web_member] => 
+                    [person_salutation] => 
+                    [cf_person_insights_first_term] => 
+                    [cf_person_confidence_score_rating] => 
+                    [cf_person_2022_total] => 0.0 GBP 1
+                    [cf_person_transport_primary_secondary_audience] => 
+                    [main_location[postcode]] => QLD 4132
+                    [cf_person_iar_eligible_for_communications_after_30_days] => 
+                    [cf_person_grr_ord_sign_off_only] => 
+                    [cf_person_lead_event_reference] => 
+                    [cf_person_ias24_declined] => 
+                    [cf_person_insights_industry] => 
+                    [cf_person_last_login_time] => 
+                    [no_phone_soliciting] => 
+                    [assigned_to] => 538
+                    [cf_person_it_its23] => 
+                    [cf_person_it_mode_of_transport_interest] => 
+                    [person_first_name] => 
+                    [cf_person_grr_core_audience] => 
+                    [cf_person_nf_engagement] => None
+                    [cf_person_stem_cells] => 
+                    [cf_person_iar_zmember_reference] => 
+                    [cf_person_grr_webinar_aoi] => 
+                    [cf_person_nf_online_aoi__name] => 
+                    [facebook_url] => 
+                    [home_location[alternate_telephone]] => 
+                    [descriptor] => Van Tran - Snap Fresh
+                    [cf_person_2023_spex] => 0.0 GBP 1
+                    [cf_person_drug_discovery_processes] => 
+                    [organisation_num_employees] => 
+                    [cf_person_dan_birchmore] => 
+                    [cf_person_act_company_type] => Manufacturer Food/Beverages
+                    [cf_person_andy_holland] => 
+                    [cf_person_insights_first_medium] => 
+                    [home_location[email]] => 
+                    [cf_person_epr_assumed_website_aoi] => 
+                    [cf_person_screening_sequencing] => 
+                    [cf_person_dtr_tdm] => 
+                    [cf_person_it_zmember_reference] => 
+                    [cf_person_iar_brand_unsubscribe_2106] => 
+                )
+
+        )
+
+    [total] => 478278
+)
+
+[2025-09-08 19:00:46] Success: Connection successful! API is working correctly.
+[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[2025-09-08 19:33:31] Starting connection test...
+[2025-09-08 19:33:31] Current settings:
+API URL: https://russellpublishing-live.workbooks.com
+API Key: set
+[2025-09-08 19:33:31] Attempting to get Workbooks instance...
+[2025-09-08 19:33:31] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 19:33:31] Initializing WorkbooksApi...
+[2025-09-08 19:33:31] Successfully got Workbooks instance
+[2025-09-08 19:33:31] Workbooks instance initialized successfully
+[2025-09-08 19:33:40] API Response:
+Array
+(
+    [success] => 1
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [cf_person_iar_assumed_website_aoi] => 
+                    [alternate_names] => 
+                    [cf_person_first_login_time] => 
+                    [cf_person_nf_assumed_aoi] => Research & Development
+                    [created_by_user[login_name]] => tmartin@russellpublishing.com
+                    [main_location[alternate_email]] => 
+                    [cf_person_grr_conference_attended] => 
+                    [cf_person_2023_digital] => 0.0 GBP 1
+                    [cf_person_iar_all_brand_unsubscribe] => 
+                    [main_location[street_address]] => 90 - 100 Magnesium Drive,
+                    [cf_person_insights_employees] => 
+                    [queue_entry[queue[name]]] => Data Team
+                    [created_by] => 79406
+                    [cf_person_grr_nurture_track] => 
+                    [cf_person_world_region] => Asia/Pacific (inc. Australia)
+                    [cf_person_epr_advertiser_type] => 
+                    [cf_person_personalised_medicine] => 
+                    [cf_person_sponsor_optin] => 
+                    [cf_person_dtr_engagement] => Unknown
+                    [owner[person_name]] => Jane Monk
+                    [cf_person_epr_order_fulfilment_client_survey] => 
+                    [cf_person_conference_attended] => 
+                    [cf_person_job_level] => Mid Level
+                    [cf_person_epr_no_postal] => 
+                    [cf_person_genomics] => 
+                    [cf_person_fbpa24_speaker] => 
+                    [cf_person_verification_picklist] => 
+                    [cf_person_epr_news_and_events] => 
+                    [cf_person_dtr_subscriber] => 
+                    [cf_person_iar_web_member] => 
+                    [cf_person_fbpa25_attended] => 
+                    [cf_person_iar_tdm] => 
+                    [cf_person_delegate_blacklist] => 
+                    [cf_person_nf_zmember_reference] => 12940
+                    [cf_person_grr_third_party] => 
+                    [imported] => 
+                    [home_location[county_province_state]] => 
+                    [cf_person_grr_brand_unsubscribe] => 
+                    [cf_person_iar_third_party] => 
+                    [cf_person_iar_conference_source] => 
+                    [cf_person_nf_web_member] => 
+                    [main_location[email]] => van.tran@qantas.com.au
+                    [type] => Private::Crm::Person
+                    [cf_person_ias25_declined] => 
+                    [cf_person_it_editorial_type] => 
+                    [cf_person_iar_editorial_type] => 
+                    [cf_person_genomics_3774] => 
+                    [cf_person_it_assumed_website_aoi] => 
+                    [cf_person_nf_online_aoi] => 
+                    [cf_person_iar_assumed_aoi] => 
+                    [cf_person_nf_advertiser_type] => 
+                    [cf_person_epr_webinar_aoi] => 
+                    [categories] => 
+                    [cf_person_grr_advertiser_type] => 
+                    [cf_person_iar_manual_advertiser_type] => 
+                    [cf_person_it_advertiser_type] => 
+                    [_can_chaccess] => 1
+                    [cf_person_duplicate_person] => 
+                    [cf_person_molecular_diagnostics] => 
+                    [cf_person_epr_sales_contact] => 
+                    [cf_person_les_lubwama] => 
+                    [cf_person_dtr_leadgen_aoi] => 
+                    [skype_name] => 
+                    [cf_person_dtr_webinar_aoi] => 
+                    [cf_person_insights_last_visit] => 
+                    [cf_person_iar_ias23] => 
+                    [cf_person_drug_discovery_processes] => 
+                    [cf_person_act_company_type] => Manufacturer Food/Beverages
+                    [updated_at] => Sun Mar 09 12:09:12 UTC 2025
+                    [spouse_name] => 
+                    [cf_person_epr_leadgen_aoi] => 
+                    [cf_person_nurture_track] => 
+                    [compliance_channels] => 
+                    [cf_person_nf_tdm] => 
+                    [cf_person_workbooks] => 1
+                    [cf_person_ias24_sponsor] => 
+                    [cf_person_iar_conference_attended] => 
+                    [cf_person_nf_news] => 
+                    [created_by_user[person_name]] => Tim Martin
+                    [cf_person_imaging] => 
+                    [main_location[telephone]] => 
+                    [cf_person_insights_today_score] => 
+                    [cf_person_grr_assumed_website_aoi] => 
+                    [cf_person_grr_conference_source] => 
+                    [website] => 
+                    [cf_person_it_assumed_aoi] => 
+                    [cf_person_ias24_registered] => 
+                    [cf_person_epr_subscriber_type] => 
+                    [cf_person_ias24_speaker] => 
+                    [employer_name] => Snap Fresh
+                    [cf_person_iar_iaos23] => 
+                    [cf_person_2022_total] => 0.0 GBP 1
+                    [twitter_url] => 
+                    [home_location[mobile]] => 
+                    [cf_person_beau_bailey] => 
+                    [cf_person_iar_eligible_for_communications_after_30_days] => 
+                    [cf_person_nf_events] => 
+                    [cf_person_ias24_declined] => 
+                    [cf_person_it_its23] => 
+                    [cf_person_grr_core_audience] => 
+                    [cf_person_epr_webinar] => 
+                    [cf_person_fbpa24_registered] => 
+                    [cf_person_nf_ord_sign_off_only] => 
+                    [person_suffix] => 
+                    [cf_person_nf_online_aoi__name] => 
+                    [cf_person_joanna_kirby] => 
+                    [cf_person_claimed_employer] => 
+                    [cf_person_business] => 
+                    [cf_person_2023_spex] => 0.0 GBP 1
+                    [cf_person_grr_manual_advertiser_type] => 
+                    [cf_person_insights_first_medium] => 
+                    [cf_person_data_source_detail] => Act Controlled Requested Written Subscriptions
+                    [main_location[county_province_state]] => 
+                    [queue_entry[queue_id]] => 538
+                    [cf_person_insights_industry] => 
+                    [cf_person_epr_assumed_website_aoi] => 
+                    [is_deleted] => 
+                    [cf_person_external_event_exhibitors] => 
+                    [lead_source_type] => Written Registration
+                    [cf_person_iar_brand_unsubscribe_2106] => 
+                    [cf_person_dtr_ord_sign_off_only] => 
+                    [cf_person_grr_assumed_aoi] => 
+                    [cf_person_nf_manual_advertiser_type] => 
+                    [cf_person_nf_news_and_events] => 1
+                    [cf_person_nf_core_audience] => 
+                    [cf_person_dtr_web_member] => 
+                    [cf_person_epr_events] => 
+                    [cf_person_grr_eligible_for_communications_after_30_days] => 
+                    [special_requirements] => 
+                    [cf_person_2022_spex] => 0.0 GBP 1
+                    [home_location[telephone]] => 
+                    [cf_person_fbpa25_declined] => 
+                    [cf_person_send_media_pack] => 
+                    [cf_person_dtr_manual_advertiser_type] => 
+                    [created_through] => Import
+                    [industry] => 
+                    [cf_person_nf_webinar] => 
+                    [home_location[country]] => 
+                    [cf_person_epr_foba23] => 
+                    [cf_person_ias25_speaker] => 
+                    [cf_person_act_company_name] => Snap Fresh
+                    [cf_person_it_nurture_track] => 
+                    [cf_person_dtr_eligible_for_communications_after_30_days] => 
+                    [person_job_role] => Scientist/Technologist
+                    [linked_item_association_for_cf_person_nf_online_aoi] => 
+                    [cf_person_epr_tdm] => 
+                    [cf_person_suzy_baverstock] => 
+                    [_link_or_create_employer] => 
+                    [cf_person_editorial_contact_type] => 
+                    [object_ref] => PERS-108856
+                    [cf_person_conference_attendee_type] => 
+                    [cf_person_it_subscriber] => 
+                    [cf_person_dtr_news_and_events] => 
+                    [cf_person_fbpa24_sponsor] => 
+                    [cf_person_confidence_score_date] => 
+                    [image_url] => 
+                    [cf_person_epr_subscriber] => 
+                    [cf_person_data_matching] => 
+                    [cf_person_insights_30_days_score] => 
+                    [cf_person_nf_areas_of_interest_312] => Analysis, Fraud/Authenticity/Safety, Health & Nutrition, Packaging/Labelling, Production/Processing, Research & Development
+                    [cf_person_epr_ord_sign_off_only] => 
+                    [cf_person_authentication_blocked] => 
+                    [cf_person_epr_assumed_aoi] => 
+                    [object_url] => https://russellpublishing-live.workbooks.com/link/3cDMzUTM/PERS-108856
+                    [cf_person_iar_news_and_events] => 
+                    [_can_read] => 1
+                    [cf_person_iar_webinar_aoi] => 
+                    [cf_person_dtr_assumed_website_aoi] => 
+                    [cf_person_it_webinar] => 
+                    [cf_person_insights_background] => 
+                    [cf_person_it_news_and_events] => 
+                    [cf_person_drugs_therapies] => 
+                    [cf_person_epr_news] => 
+                    [cf_person_dtr_nurture_track] => 
+                    [cf_person_nic_losardo] => 
+                    [cf_person_it_subscriber_type] => 
+                    [party_notes] => 
+                    [cf_person_iar_subscriber_type] => 
+                    [cf_person_manual_advertiser_type] => 
+                    [cf_person_nf_editorial_type] => 
+                    [sync_with_mailer] => 
+                    [cf_person_last_login_ip_address] => 
+                    [cf_person_iar_order_fulfilment_client_survey] => 
+                    [cf_person_grr_editorial_type] => 
+                    [marketing_campaign[name]] => 
+                    [cf_person_it_webinar_aoi] => 
+                    [cf_person_nf_order_fulfilment_client_survey] => 
+                    [home_location[town]] => 
+                    [cf_person_act_info_source] => 
+                    [cf_person_it_events] => 
+                    [main_location[fax]] => 
+                    [id] => 380365
+                    [cf_person_insights_yesterday_score] => 
+                    [cf_person_epr_eligible_for_communications_after_30_days] => 
+                    [cf_person_lab_automation] => 
+                    [cf_person_grr_news_and_events] => 
+                    [organisation_annual_revenue] =>   0
+                    [cf_person_zoe_bryant] => 
+                    [cf_person_grr_webinar] => 
+                    [cf_person_translational_science] => 
+                    [main_location_id] => 384969
+                    [name] => Van Tran
+                    [cf_person_fbpa25_sponsor] => 
+                    [cf_person_transport_primary_secondary_audience] => 
+                    [mailchimp_last_synchronised_at] => 
+                    [cf_person_dtr_zmember_reference] => 
+                    [cf_person_epr_areas_of_interest_310] => 
+                    [cf_person_dtr_webinar] => 
+                    [cf_person_grr_events] => 
+                    [cf_person_targets] => 
+                    [cf_person_nf_all_brand_unsubscribe] => 
+                    [cf_person_dtr_no_postal] => 
+                    [cf_person_artificial_intelligencemachine_learning] => 
+                    [cf_person_fbpa24_attended] => 
+                    [assistant_phone] => 
+                    [home_location[postcode]] => 
+                    [cf_person_dtr_therapeutic_aoi] => 
+                    [gdpr_compliant] => 
+                    [cf_person_last_login_time] => 
+                    [cf_person_nf_engagement] => None
+                    [cf_person_grr_news] => 
+                    [cf_person_location] => 
+                    [cf_person_it_no_postal] => 
+                    [cf_person_epr_web_member] => 
+                    [created_at] => Tue Jun 19 22:12:16 UTC 2018
+                    [main_location[country]] => Australia
+                    [cf_person_insights_revenue] => 
+                    [cf_person_iar_news] => 
+                    [lock_version] => 25
+                    [cf_person_confidence_level] => 
+                    [no_post_soliciting] => 
+                    [cf_person_iar_areas_of_interest_316] => 
+                    [cf_person_dtr_all_brand_unsubscribe] => 
+                    [cf_person_andy_holland] => 
+                    [person_last_name] => Van Tran
+                    [cf_person_iar_leadgen_aoi] => 
+                    [cf_person_insights_first_term] => 
+                    [email_opt_in] => 
+                    [cf_person_grr_no_postal] => 
+                    [cf_person_idbs_potential_speaker] => 
+                    [_preload_linked_item_association_for_cf_person_location] => 
+                    [cf_person_dtr_areas_of_interest_v2] => 
+                    [linkedin_url] => 
+                    [home_location[fax]] => 
+                    [cf_person_fbpa25_speaker] => 
+                    [cf_person_ryan_clarke] => 
+                    [cf_person_it_leadgen_aoi] => 
+                    [cf_person_biomarkers] => 
+                    [home_location[alternate_email]] => 
+                    [cf_person_nf_leadgen_aoi] => 
+                    [cf_person_iar_events] => 
+                    [cf_person_nf_industry_sector_worked] => 
+                    [cf_person_it_conference_attended] => 
+                    [cf_person_nf_eligible_for_communications_after_30_days] => 
+                    [cf_person_2022_digital] => 0.0 GBP 1
+                    [cf_person_linkedin_url] => 
+                    [cf_person_it_engagement] => Unknown
+                    [updated_by_user[login_name]] => fbutler@russellpublishing.com
+                    [person_middle_name] => 
+                    [cf_person_grr_all_brand_unsubscribe] => 
+                    [cf_person_nf_subscriber] => 1
+                    [main_location[town]] => Crestmead
+                    [watched] => 
+                    [updated_by] => 122326
+                    [cf_person_temp_exclusion] => 
+                    [cf_person_insights_first_visit] => 
+                    [queue_entry[updated_at]] => Wed Jan 09 13:09:54 UTC 2019
+                    [employer_link] => 297165
+                    [cf_person_data_matching_picklist] => 
+                    [cf_person_registered] => 
+                    [cf_person_jess_russell] => 
+                    [cf_person_grr_areas_of_interest_314] => 
+                    [cf_person_dtr_events] => 
+                    [cf_person_2023_print] => 0.0 GBP 1
+                    [person_personal_title] => 
+                    [owner[login_name]] => jmonk@russellpublishing.com
+                    [cf_person_nf_fig23] => 
+                    [cf_person_it_news] => 
+                    [cf_person_insights_first_campaign] => 
+                    [cf_person_cell_gene_therapy] => 
+                    [cf_person_epr_nurture_track] => 
+                    [preferred_language] => 
+                    [cf_person_iar_nurture_track] => 
+                    [photo_url] => 
+                    [cf_person_assays] => 
+                    [cf_person_grr_order_fulfilment_client_survey] => 
+                    [cf_person_grr_leadgen_aoi] => 
+                    [cf_person_location__name] => 
+                    [cf_person_it_third_party] => 
+                    [cf_person_dtr_third_party] => 
+                    [cf_person_toxicology] => 
+                    [cf_person_conference_source] => 
+                    [cf_person_epr_third_party] => 
+                    [cf_person_iar_brand_unsubscribe] => 
+                    [cf_person_fbpa25_registered] => 
+                    [cf_person_grr_engagement] => Unknown
+                    [cf_person_iar_subscriber] => 
+                    [cf_person_nf_webinar_aoi] => 
+                    [cf_person_dtr_order_fulfilment_client_survey] => 
+                    [cf_person_ias25_attended] => 
+                    [cf_person_fraser_owen] => 
+                    [cf_person_brand] => NF Subscriber, NF Subscriber
+                    [_can_modify] => 1
+                    [cf_person_research_development] => 
+                    [cf_person_sam_pirani] => 
+                    [cf_person_iar_advertiser_type] => 
+                    [cf_person_diseases] => 
+                    [owner_id] => 83156
+                    [cf_person_force24_nt_deletion] => 
+                    [cf_person_dtr_subscriber_type] => 
+                    [cf_person_dtr_news] => 
+                    [cf_person_force24_lead_score] => 
+                    [cf_person_nf_subscriber_type] => Lapsed
+                    [cf_person_ias25_registered] => 
+                    [logo_url] => 
+                    [cf_person_grr_subscriber_type] => 
+                    [cf_person_technology] => 
+                    [cf_person_epr_core_audience] => 
+                    [cf_person_interests] => 
+                    [cf_person_fbpa24_declined] => 
+                    [cf_person_it_conference_source] => 
+                    [biography] => 
+                    [compliance_special_categories] => 
+                    [cf_person_analysis] => 
+                    [cf_person_epr_2] => 
+                    [cf_person_client_nps] => 
+                    [cf_person_grr_subscribers] => 
+                    [linked_item_association_for_cf_person_location] => 
+                    [home_location[street_address]] => 
+                    [cf_person_insights_7_days_score] => 
+                    [main_location[alternate_telephone]] => +61 414 819 077
+                    [cf_person_tools_techniques] => 
+                    [updated_by_user[person_name]] => Frankie Butler
+                    [cf_person_last_issue_sent] => 
+                    [main_location[mobile]] => 
+                    [cf_person_iar_webinar] => 
+                    [cf_person_epr_all_brand_unsubscribe] => 
+                    [cf_person_insights_total_score] => 
+                    [cf_person_it_areas_of_interest_318] => 
+                    [cf_person_epr_engagement] => Unknown
+                    [marketing_campaign_id] => 
+                    [cf_person_epr_zmember_reference] => 
+                    [cf_person_iar_ord_sign_off_only] => 
+                    [person_job_title] => R&D Food Technologist
+                    [cf_person_act_urn] => 
+                    [_can_chown] => 1
+                    [_preload_linked_item_association_for_cf_person_nf_online_aoi] => 
+                    [cf_person_confidence_score_rating] => 
+                    [cf_person_dtr_editorial_type] => 
+                    [cf_person_lead_event_reference] => 
+                    [cf_person_dtr_assumed_aoi] => 
+                    [cf_person_grr_ord_sign_off_only] => 
+                    [cf_person_insight_yesterday_score] => 
+                    [_can_delete] => 1
+                    [cf_person_insights_first_source] => 
+                    [cf_person_dtr_core_audience] => 
+                    [cf_person_preclinical_research] => 
+                    [created_through_reference] => 
+                    [cf_person_iar_no_postal] => 
+                    [cf_person_grr_web_member] => 
+                    [cf_person_it_mode_of_transport_interest] => 
+                    [cf_person_tony_portelli] => 
+                    [assistant_name] => 
+                    [main_location[email_address_undeliverable]] => 1
+                    [cf_person_iar_engagement] => Unknown
+                    [cf_person_ias24_attended] => 
+                    [no_email_soliciting] => 
+                    [cf_person_stem_cells] => 
+                    [person_salutation] => 
+                    [cf_person_2023_total] => 0.0 GBP 1
+                    [cf_person_dtr_tdm] => 
+                    [cf_person_iar_zmember_reference] => 
+                    [cf_person_grr_webinar_aoi] => 
+                    [cf_person_nf_third_party] => 1
+                    [main_location[postcode]] => QLD 4132
+                    [cf_person_iar_core_audience] => 
+                    [cf_person_it_all_brand_unsubscribe] => 
+                    [cf_person_2022_print] => 0.0 GBP 1
+                    [cf_person_dan_birchmore] => 
+                    [no_phone_soliciting] => 
+                    [cf_person_insights_link] => 
+                    [cf_person_nf_no_postal] => 
+                    [cf_person_science_primary_secondary_audience] => 
+                    [assigned_to] => 538
+                    [cf_person_epr_editorial_type] => 
+                    [cf_person_screening_sequencing] => 
+                    [cf_person_clinical_trials] => 
+                    [person_first_name] => 
+                    [cf_person_it_zmember_reference] => 
+                    [cf_person_nf_assumed_website_aoi] => 
+                    [cf_person_hit_to_lead] => 
+                    [cf_person_informatics] => 
+                    [facebook_url] => 
+                    [home_location[alternate_telephone]] => 
+                    [cf_person_nf_nurture_track] => 
+                    [descriptor] => Van Tran - Snap Fresh
+                    [cf_person_dtr_advertiser_type] => 
+                    [organisation_num_employees] => 
+                    [cf_person_grr_tdm] => 
+                    [cf_person_grr_zmember_reference] => 
+                    [cf_person_grr_dr23] => 
+                    [home_location[email]] => 
+                    [cf_person_insights_first_content] => 
+                    [cf_person_is_person_active_or_inactive] => Active
+                    [cf_person_ias25_sponsor] => 
+                )
+
+        )
+
+    [total] => 478279
+)
+
+[2025-09-08 19:33:40] Success: Connection successful! API is working correctly.
+[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[2025-09-08 21:15:52] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 21:15:52] Initializing WorkbooksApi...
+[2025-09-08 21:15:54] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 21:15:54] Initializing WorkbooksApi...
+[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[2025-09-08 21:48:16] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 21:48:16] Initializing WorkbooksApi...
+[AOI MATRIX EXPORT] keys=cf_person_business,cf_person_diseases,cf_person_drugs_therapies,cf_person_genomics_3774,cf_person_research_development,cf_person_technology,cf_person_tools_techniques count=7[2025-09-08 21:51:03] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 21:51:03] Initializing WorkbooksApi...
+[2025-09-08 21:58:02] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 21:58:02] Initializing WorkbooksApi...
+[2025-09-08 21:58:03] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 21:58:03] Initializing WorkbooksApi...
+[2025-09-08 21:58:21] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 21:58:21] Initializing WorkbooksApi...
+[2025-09-08 21:58:38] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 21:58:38] Initializing WorkbooksApi...
+[2025-09-08 21:58:39] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 21:58:39] Initializing WorkbooksApi...
+[2025-09-08 21:59:52] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 21:59:52] Initializing WorkbooksApi...
+[2025-09-08 21:59:55] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 21:59:55] Initializing WorkbooksApi...
+[2025-09-08 22:00:07] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 22:00:07] Initializing WorkbooksApi...
+[2025-09-08 22:00:17] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 22:00:17] Initializing WorkbooksApi...
+[2025-09-08 22:01:11] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 22:01:11] Initializing WorkbooksApi...
+[2025-09-08 22:03:14] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 22:03:14] Initializing WorkbooksApi...
+[2025-09-08 22:18:45] Getting options: API URL = https://russellpublishing-live.workbooks.com, API Key = set
+[2025-09-08 22:18:45] Initializing WorkbooksApi...

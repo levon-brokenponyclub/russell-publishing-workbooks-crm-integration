@@ -1,4 +1,4 @@
-(function($) {
+/* (function($) {
     'use strict';
 
     // Wait for document ready
@@ -49,3 +49,4 @@
     });
 
 })(jQuery);
+ */

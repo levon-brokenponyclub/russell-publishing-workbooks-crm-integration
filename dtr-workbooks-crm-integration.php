@@ -23,6 +23,7 @@ if (!defined('ABSPATH')) {
     exit('Direct access not permitted.');
 }
 
+
 // Plugin constants
 // Bumped to 2.0.1 for cache-busting updated employer field script
 define('DTR_WORKBOOKS_VERSION', '2.0.1');
@@ -33,6 +34,9 @@ define('DTR_WORKBOOKS_INCLUDES_DIR', DTR_WORKBOOKS_PLUGIN_DIR . 'includes/');
 define('DTR_WORKBOOKS_SHORTCODES_DIR', DTR_WORKBOOKS_PLUGIN_DIR . 'shortcodes/');
 define('DTR_WORKBOOKS_ASSETS_URL', DTR_WORKBOOKS_PLUGIN_URL . 'assets/');
 define('DTR_WORKBOOKS_LOG_DIR', DTR_WORKBOOKS_PLUGIN_DIR . 'logs/');
+
+// Always load the webinar form handler for admin-post requests
+require_once DTR_WORKBOOKS_INCLUDES_DIR . 'form-handler-webinars.php';
 
 // Include Workbooks API if available
 $workbooks_api = DTR_WORKBOOKS_PLUGIN_DIR . 'lib/workbooks_api.php';
@@ -48,6 +52,14 @@ if (file_exists($helper_class)) {
     require_once $helper_class;
 } else {
     error_log('[DTR Workbooks] Helper functions file missing: ' . $helper_class);
+}
+
+// Include the admin employer sync wrapper class
+$admin_employer_sync_class = DTR_WORKBOOKS_INCLUDES_DIR . 'class-admin-employer-sync.php';
+if (file_exists($admin_employer_sync_class)) {
+    require_once $admin_employer_sync_class;
+} else {
+    error_log('[DTR Workbooks] Admin Employer Sync class file missing: ' . $admin_employer_sync_class);
 }
 
 // Early define core logging helper so it exists before any init hooks fire
@@ -82,7 +94,6 @@ foreach ($shortcode_files as $file) {
         error_log('[DTR Workbooks] Shortcode file not found: ' . $file_path);
     }
 }
-
 /**
  * Main DTR Workbooks Integration Class
  */
@@ -265,14 +276,14 @@ class DTR_Workbooks_Integration {
             'class-array-merge-safety.php',
             // Ninja Forms submission override layer
             'class-form-submission-override.php',
-            // Submission processors
-            'form-submission-processors-submission-fix.php',
-            'form-submission-processors-ninjaform-hooks.php',
             // Form handlers
             'form-handler-webinars.php',
             'form-handler-membership-registration.php',
             'form-handler-gated-content-reveal.php',
             'form-handler-media-planner.php',
+            // Submission processors
+            'form-submission-processors-submission-fix.php',
+            'form-submission-processors-ninjaform-hooks.php',
             // Support classes
             'class-acf-ninjaforms-merge.php',
             'class-employer-sync.php',
@@ -521,14 +532,14 @@ class DTR_Workbooks_Integration {
         if (strpos($hook, 'dtr-workbooks') === false) {
             return;
         }
-        
+
         wp_enqueue_style(
             'dtr-workbooks-admin',
             DTR_WORKBOOKS_ASSETS_URL . 'css/admin.css',
             [],
             DTR_WORKBOOKS_VERSION
         );
-        
+
         wp_enqueue_script(
             'dtr-workbooks-admin',
             DTR_WORKBOOKS_ASSETS_URL . 'js/admin.js',
@@ -536,7 +547,7 @@ class DTR_Workbooks_Integration {
             DTR_WORKBOOKS_VERSION,
             true
         );
-        
+
         wp_localize_script('dtr-workbooks-admin', 'dtr_workbooks_admin', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('workbooks_nonce'),
@@ -550,6 +561,17 @@ class DTR_Workbooks_Integration {
                 'cleanup_done' => __('Genomics key cleanup completed.', 'dtr-workbooks')
             ]
         ]);
+
+        // Enqueue admin-employers-sync.js only on Employer Sync page
+        if ($hook === 'toplevel_page_dtr-workbooks-employer-sync' || $hook === 'dtr-workbooks_page_dtr-workbooks-employer-sync') {
+            wp_enqueue_script(
+                'admin-employers-sync',
+                DTR_WORKBOOKS_ASSETS_URL . 'js/admin-employers-sync.js',
+                ['jquery'],
+                DTR_WORKBOOKS_VERSION,
+                true
+            );
+        }
     }
     
     /**
@@ -590,6 +612,7 @@ class DTR_Workbooks_Integration {
             [$this, 'admin_person_record_page']
         );
 
+
         // Registered Users listing
         add_submenu_page(
             'dtr-workbooks',
@@ -598,6 +621,16 @@ class DTR_Workbooks_Integration {
             'manage_options',
             'dtr-workbooks-users',
             [$this, 'admin_registered_users_page']
+        );
+
+        // Employer Sync page
+        add_submenu_page(
+            'dtr-workbooks',
+            __('Employer Sync', 'dtr-workbooks'),
+            __('Employer Sync', 'dtr-workbooks'),
+            'manage_options',
+            'dtr-workbooks-employer-sync',
+            [$this, 'admin_employer_sync_page']
         );
 
         // Gated Content overview
@@ -672,10 +705,10 @@ class DTR_Workbooks_Integration {
         ?>
         <div class="wrap plugin-admin-content">
             <h1><?php _e('DTR Workbooks CRM Integration', 'dtr-workbooks'); ?></h1>
-            
             <div class="nav-tab-wrapper">
                 <a href="#welcome" class="nav-tab nav-tab-active"><?php _e('Welcome', 'dtr-workbooks'); ?></a>
                 <a href="#knowledge-base" class="nav-tab"><?php _e('Knowledge Base', 'dtr-workbooks'); ?></a>
+                <a href="#test-webinar" class="nav-tab"><?php _e('Test Webinar Registration', 'dtr-workbooks'); ?></a>
             </div>
             <div id="dtr-toi-aoi-matrix" style="display:none;"><?php echo json_encode(function_exists('dtr_get_toi_to_aoi_matrix') ? dtr_get_toi_to_aoi_matrix() : new stdClass()); ?></div>
             <div id="welcome" class="tab-content active">
@@ -694,24 +727,33 @@ class DTR_Workbooks_Integration {
                 <?php
                 $kb_file = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/content-knowledge-base.php';
                 if (file_exists($kb_file)) {
-                    // Buffer include to avoid stray DOCTYPE/HTML tags breaking admin layout; strip outer html/body if present
                     ob_start();
                     include $kb_file;
                     $kb_html = ob_get_clean();
-                    // If full document provided, attempt to extract inner .wrap content
                     if (strpos($kb_html, '<body') !== false && preg_match('/<body[^>]*>([\s\S]*?)<\/body>/i', $kb_html, $m)) {
                         $kb_html = $m[1];
                     }
-                    echo $kb_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped (already authored markup)
+                    echo $kb_html;
                 } else {
                     echo '<p>'.esc_html__('Knowledge Base file missing: admin/content-knowledge-base.php','dtr-workbooks').'</p>';
+                }
+                ?>
+            </div>
+            <!-- Test Webinar Registration -->
+            <div id="test-webinar" class="tab-content" style="margin-top:0; display:none;">
+                <?php
+                $test_file = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/content-test-webinar.php';
+                if (file_exists($test_file)) {
+                    include $test_file;
+                } else {
+                    echo '<p>'.esc_html__('Test Webinar file missing: admin/content-test-webinar.php','dtr-workbooks').'</p>';
                 }
                 ?>
             </div>
         </div>
 
         <style>
-        #knowledge-base {padding-top:0 !important;}
+        #knowledge-base, #test-webinar {padding-top:0 !important;}
         .tab-content { padding-top: 20px; }
         .test-section { margin-bottom: 30px; padding: 20px; background: #fff; border: 1px solid #ccd0d4; border-radius: 4px; }
         .test-section h3 { margin-top: 0; }
@@ -729,6 +771,12 @@ class DTR_Workbooks_Integration {
 
         <script>
         jQuery(document).ready(function($) {
+            // Tab switching for new tab
+            $('.nav-tab').click(function(e) {
+                e.preventDefault();
+                var target = $(this).attr('href').substring(1);
+                setActiveTab(target);
+            });
             // === AOI Mapping Debug (admin only) ===
             let dtrToiToAoiMatrix = {};
             try {
@@ -1044,6 +1092,20 @@ class DTR_Workbooks_Integration {
             include $file;
         } else {
             echo '<p>'.esc_html__('The file admin/content-member-registrations.php was not found.','dtr-workbooks').'</p>';
+        }
+        echo '</div>';
+    }
+
+    /**
+     * Employer Sync page (admin menu)
+     */
+    public function admin_employer_sync_page() {
+        $file = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/content-employer-sync.php';
+        echo '<div class="wrap plugin-admin-content"><h1>'.esc_html__('Employer Sync','dtr-workbooks').'</h1>';
+        if (file_exists($file)) {
+            include $file;
+        } else {
+            echo '<p>'.esc_html__('The file admin/content-employer-sync.php was not found.','dtr-workbooks').'</p>';
         }
         echo '</div>';
     }

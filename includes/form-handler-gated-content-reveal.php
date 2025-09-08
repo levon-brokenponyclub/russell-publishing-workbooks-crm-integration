@@ -146,6 +146,18 @@ function dtr_sanitize_field_structure($fields) {
  * @return void
  */
 function dtr_handle_gated_content_submission($form_data) {
+    // TEMP: Confirm handler is called and log form ID
+    $form_id = isset($form_data['form_id']) ? $form_data['form_id'] : (isset($form_data['id']) ? $form_data['id'] : 'unknown');
+    if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+        $file = DTR_WORKBOOKS_LOG_DIR . 'live-webinar-debug.log';
+        file_put_contents($file, date('c') . " -- dtr_handle_gated_content_submission called for form_id=$form_id\n", FILE_APPEND | LOCK_EX);
+    }
+    // Output to browser console for debugging
+    add_action('wp_footer', function() use ($form_id) {
+        ?>
+        <script>console.log('[DTR] dtr_handle_gated_content_submission called for form_id: <?php echo addslashes($form_id); ?>');</script>
+        <?php
+    }, 99);
     $debug_id = 'GATED-' . uniqid();
     
     if (!is_array($form_data) || empty($form_data)) {
@@ -372,10 +384,18 @@ function dtr_log_gated($message, $debug_id = '') {
     $formatted_message = "{$timestamp} {$prefix} {$message}";
     
     error_log($formatted_message);
-    
+
     // Also log to custom DTR log if function exists
     if (function_exists('dtr_custom_log')) {
         dtr_custom_log($formatted_message);
+    }
+
+    // Additionally, write to live-webinar-debug.log if this is a webinar submission (Form ID 2)
+    if (strpos($formatted_message, 'form ID: 2') !== false || strpos($formatted_message, 'form ID 2') !== false || strpos($formatted_message, 'webinar') !== false) {
+        if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+            $file = DTR_WORKBOOKS_LOG_DIR . 'live-webinar-debug.log';
+            file_put_contents($file, $formatted_message . "\n", FILE_APPEND | LOCK_EX);
+        }
     }
 }
 
