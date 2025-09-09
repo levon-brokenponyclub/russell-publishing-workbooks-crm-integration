@@ -85,7 +85,12 @@ if (!function_exists('dtr_admin_log')) {
         }
 
     $logfile = $log_dir . $filename;
-        @file_put_contents($logfile, $message, FILE_APPEND);
+        if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+            $log_file = DTR_WORKBOOKS_LOG_DIR . basename($logfile);
+            @file_put_contents($log_file, $message, FILE_APPEND);
+        } else {
+            @file_put_contents($logfile, $message, FILE_APPEND);
+        }
     }
 }
 
@@ -277,7 +282,12 @@ if (!function_exists('get_workbooks_instance')) {
                 $params['application_name'],
                 $params['user_agent']
             );
-            file_put_contents($debug_log, $debug_entry, FILE_APPEND);
+            if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+                $log_file = DTR_WORKBOOKS_LOG_DIR . basename($debug_log);
+                file_put_contents($log_file, $debug_entry, FILE_APPEND);
+            } else {
+                file_put_contents($debug_log, $debug_entry, FILE_APPEND);
+            }
             
             // Log diagnostic information (gated by debug_mode)
             dtr_admin_log(date('[Y-m-d H:i:s]') . " Initializing Workbooks API with parameters:\n", 'connection-debug.log');
@@ -299,7 +309,12 @@ if (!function_exists('get_workbooks_instance')) {
                 dtr_admin_log(date('[Y-m-d H:i:s]') . " Login response: " . print_r($login_response, true) . "\n", 'connection-debug.log');
                 
                 if ($login_response['success']) {
-                    file_put_contents($debug_log, date('[Y-m-d H:i:s]') . " Login successful\n", FILE_APPEND);
+                    if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+                        $log_file = DTR_WORKBOOKS_LOG_DIR . basename($debug_log);
+                        file_put_contents($log_file, date('[Y-m-d H:i:s]') . " Login successful\n", FILE_APPEND);
+                    } else {
+                        file_put_contents($debug_log, date('[Y-m-d H:i:s]') . " Login successful\n", FILE_APPEND);
+                    }
                     return $workbooks;
                 } else {
                     throw new Exception('Workbooks login failed: ' . ($login_response['error'] ?? 'Unknown error'));

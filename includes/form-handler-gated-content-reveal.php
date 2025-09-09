@@ -150,7 +150,12 @@ function dtr_handle_gated_content_submission($form_data) {
     $form_id = isset($form_data['form_id']) ? $form_data['form_id'] : (isset($form_data['id']) ? $form_data['id'] : 'unknown');
     if (defined('DTR_WORKBOOKS_LOG_DIR')) {
         $file = DTR_WORKBOOKS_LOG_DIR . 'live-webinar-debug.log';
-        file_put_contents($file, date('c') . " -- dtr_handle_gated_content_submission called for form_id=$form_id\n", FILE_APPEND | LOCK_EX);
+        if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+            $log_file = DTR_WORKBOOKS_LOG_DIR . basename($file);
+            file_put_contents($log_file, date('c') . " -- dtr_handle_gated_content_submission called for form_id=$form_id\n", FILE_APPEND | LOCK_EX);
+        } else {
+            file_put_contents($file, date('c') . " -- dtr_handle_gated_content_submission called for form_id=$form_id\n", FILE_APPEND | LOCK_EX);
+        }
     }
     // Output to browser console for debugging
     add_action('wp_footer', function() use ($form_id) {
@@ -286,12 +291,38 @@ function dtr_handle_webinar_submission($form_data, $form_id, $debug_id) {
  * @return bool Success status
  */
 function dtr_handle_lead_gen_submission($form_data, $form_id, $debug_id) {
-    dtr_log_gated("Processing lead generation submission", $debug_id);
-    
-    if (function_exists('dtr_process_lead_generation')) {
-        return dtr_process_lead_generation($form_data, $form_id, $debug_id);
+    dtr_log_gated("Processing lead generation registration submission", $debug_id);
+
+    // Extract and normalize lead data from form submission
+    $lead_data = [];
+    // Try to extract standard fields
+    $lead_data['post_id'] = $form_id;
+    $lead_data['email'] = dtr_extract_email_from_form($form_data);
+    $lead_data['first_name'] = isset($form_data['first_name']) ? $form_data['first_name'] : '';
+    $lead_data['last_name'] = isset($form_data['last_name']) ? $form_data['last_name'] : '';
+    $lead_data['lead_question'] = isset($form_data['lead_question']) ? $form_data['lead_question'] : '';
+    $lead_data['cf_mailing_list_member_sponsor_1_optin'] = isset($form_data['cf_mailing_list_member_sponsor_1_optin']) ? $form_data['cf_mailing_list_member_sponsor_1_optin'] : '';
+    // Add any additional ACF or custom fields as needed
+    if (isset($form_data['fields']) && is_array($form_data['fields'])) {
+        foreach ($form_data['fields'] as $field) {
+            if (isset($field['key']) && isset($field['value'])) {
+                $lead_data[$field['key']] = $field['value'];
+            }
+        }
+    }
+
+    // Call the robust registration handler
+    if (function_exists('dtr_handle_lead_generation_registration')) {
+        $result = dtr_handle_lead_generation_registration($lead_data);
+        if (!empty($result['success'])) {
+            dtr_log_gated("Lead generation registration successful for email: {$lead_data['email']}", $debug_id);
+            return true;
+        } else {
+            dtr_log_gated("Lead generation registration failed for email: {$lead_data['email']}", $debug_id);
+            return false;
+        }
     } else {
-        dtr_log_gated("Lead generation handler function not available", $debug_id);
+        dtr_log_gated("Lead generation registration handler not available", $debug_id);
         return false;
     }
 }
@@ -394,7 +425,12 @@ function dtr_log_gated($message, $debug_id = '') {
     if (strpos($formatted_message, 'form ID: 2') !== false || strpos($formatted_message, 'form ID 2') !== false || strpos($formatted_message, 'webinar') !== false) {
         if (defined('DTR_WORKBOOKS_LOG_DIR')) {
             $file = DTR_WORKBOOKS_LOG_DIR . 'live-webinar-debug.log';
-            file_put_contents($file, $formatted_message . "\n", FILE_APPEND | LOCK_EX);
+            if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+                $log_file = DTR_WORKBOOKS_LOG_DIR . basename($file);
+                file_put_contents($log_file, $formatted_message . "\n", FILE_APPEND | LOCK_EX);
+            } else {
+                file_put_contents($file, $formatted_message . "\n", FILE_APPEND | LOCK_EX);
+            }
         }
     }
 }

@@ -35,8 +35,6 @@ define('DTR_WORKBOOKS_SHORTCODES_DIR', DTR_WORKBOOKS_PLUGIN_DIR . 'shortcodes/')
 define('DTR_WORKBOOKS_ASSETS_URL', DTR_WORKBOOKS_PLUGIN_URL . 'assets/');
 define('DTR_WORKBOOKS_LOG_DIR', DTR_WORKBOOKS_PLUGIN_DIR . 'logs/');
 
-// Always load the webinar form handler for admin-post requests
-require_once DTR_WORKBOOKS_INCLUDES_DIR . 'form-handler-webinars.php';
 
 // Include Workbooks API if available
 $workbooks_api = DTR_WORKBOOKS_PLUGIN_DIR . 'lib/workbooks_api.php';
@@ -80,10 +78,13 @@ if (!function_exists('dtr_custom_log')) {
 }
 
 // Include core functionality files
+
 $shortcode_files = [
-    'dtr-shortcodes.php',           // User preference management shortcodes
-    'dtr-my-account-details.php',   // Account management functionality
-    'dtr-forgot-password.php',      // Password recovery handling
+    'dtr-shortcodes.php',                       // User preference management shortcodes
+    'dtr-my-account-details.php',               // Account management functionality
+    'dtr-forgot-password.php',                  // Password recovery handling
+    'webinar-registration-shortcodes.php',      // Webinar registration handling
+    'lead-generation-shortcodes.php',           // Lead generation shortcodes (new)
 ];
 
 foreach ($shortcode_files as $file) {
@@ -94,39 +95,40 @@ foreach ($shortcode_files as $file) {
         error_log('[DTR Workbooks] Shortcode file not found: ' . $file_path);
     }
 }
+
 /**
  * Main DTR Workbooks Integration Class
  */
 class DTR_Workbooks_Integration {
-    
+
     /**
      * Plugin instance
      *
      * @var DTR_Workbooks_Integration
      */
     private static $instance = null;
-    
+
     /**
      * Plugin options
      *
      * @var array
      */
     private $options = [];
-    
+
     /**
      * Debug mode status
      *
      * @var bool
      */
     private $debug_mode = false;
-    
+
     /**
      * Missing dependencies
      *
      * @var array
      */
     private $missing_dependencies = [];
-    
+
     /**
      * Get plugin instance
      *
@@ -138,14 +140,14 @@ class DTR_Workbooks_Integration {
         }
         return self::$instance;
     }
-    
+
     /**
      * Constructor
      */
     private function __construct() {
         $this->init();
     }
-    
+
     /**
      * Initialize plugin
      *
@@ -155,42 +157,42 @@ class DTR_Workbooks_Integration {
         // Load options
         $this->options = get_option('dtr_workbooks_options', []);
         $this->debug_mode = !empty($this->options['debug_mode']);
-        
+
         // Add text domain loading at the right time
         add_action('init', function() {
             // Load plugin text domains in the correct order
             load_plugin_textdomain('dtr-workbooks', false, dirname(plugin_basename(__FILE__)) . '/languages');
-            
+
             if (defined('NINJA_FORMS_DIR_PATH')) {
                 load_plugin_textdomain('ninja-forms', false, basename(NINJA_FORMS_DIR_PATH) . '/languages');
             }
-            
+
             if (defined('ACF_PATH')) {
                 load_plugin_textdomain('acf', false, basename(ACF_PATH) . '/languages');
             }
         }, 1);
-        
+
         // Add Ninja Forms submission data filter
         add_filter('ninja_forms_submit_data', [$this, 'prepare_ninja_forms_submission'], 10, 1);
-        
+
         // Fix for array merge issues in Ninja Forms
         add_filter('ninja_forms_submission_array_merge', [$this, 'fix_array_merge'], 10, 2);
-        
+
         // Register hooks
         register_activation_hook(__FILE__, [$this, 'activate']);
         register_deactivation_hook(__FILE__, [$this, 'deactivate']);
         register_uninstall_hook(__FILE__, [__CLASS__, 'uninstall']);
-        
+
         // Initialize plugin components
         add_action('plugins_loaded', [$this, 'load_plugin_components']);
         add_action('init', [$this, 'init_plugin']);
         add_action('admin_init', [$this, 'admin_init']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
         add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_scripts']);
-        
+
         // Add admin menu
         add_action('admin_menu', [$this, 'add_admin_menu']);
-        
+
         // AJAX handlers
         add_action('wp_ajax_sspg_test_workbooks_connection', [$this, 'test_workbooks_connection']);
         add_action('wp_ajax_dtr_clear_logs', [$this, 'clear_logs']);
@@ -198,21 +200,21 @@ class DTR_Workbooks_Integration {
         add_action('wp_ajax_dtr_sync_test', [$this, 'sync_test']);
         add_action('wp_ajax_dtr_retry_submission', [$this, 'retry_submission']);
         add_action('wp_ajax_dtr_get_submission_details', [$this, 'get_submission_details']);
-    // Legacy genomics key cleanup (cf_person_genomics_3744 -> cf_person_genomics_3774)
-    add_action('wp_ajax_dtr_cleanup_genomics_meta', [$this, 'cleanup_genomics_meta']);
-        
+        // Legacy genomics key cleanup (cf_person_genomics_3744 -> cf_person_genomics_3774)
+        add_action('wp_ajax_dtr_cleanup_genomics_meta', [$this, 'cleanup_genomics_meta']);
+
         // Custom logging
         add_action('init', [$this, 'setup_custom_logging']);
-        
+
         // Scheduled events
         add_action('dtr_workbooks_cleanup', [$this, 'cleanup_old_logs']);
-        
+
         // Initialize cleanup schedule
         if (!wp_next_scheduled('dtr_workbooks_cleanup')) {
             wp_schedule_event(time(), 'daily', 'dtr_workbooks_cleanup');
         }
     }
-    
+
     /**
      * Load plugin components
      *
@@ -220,7 +222,7 @@ class DTR_Workbooks_Integration {
      */
     public function load_plugin_components() {
         // Always load employer sync endpoints early so public AJAX (ping, select2) works even if other deps missing
-    $employer_sync_path = DTR_WORKBOOKS_INCLUDES_DIR . 'class-employer-sync.php';
+        $employer_sync_path = DTR_WORKBOOKS_INCLUDES_DIR . 'class-employer-sync.php';
         if (file_exists($employer_sync_path)) {
             require_once $employer_sync_path; // safe to include twice later via load_includes (require_once)
         }
@@ -235,10 +237,13 @@ class DTR_Workbooks_Integration {
         // Load required files (now that dependencies satisfied)
         $this->load_includes();
 
+        // Load shortcodes
+        $this->load_shortcodes();
+
         // Initialize integrations
         $this->init_integrations();
     }
-    
+
     /**
      * Check plugin dependencies
      *
@@ -249,22 +254,22 @@ class DTR_Workbooks_Integration {
             'ninja-forms/ninja-forms.php' => 'Ninja Forms',
             'advanced-custom-fields/acf.php' => 'Advanced Custom Fields'
         ];
-        
+
         $missing = [];
         foreach ($dependencies as $plugin => $name) {
             if (!is_plugin_active($plugin)) {
                 $missing[] = $name;
             }
         }
-        
+
         if (!empty($missing)) {
             $this->missing_dependencies = $missing;
             return false;
         }
-        
+
         return true;
     }
-    
+
     /**
      * Load include files
      *
@@ -276,8 +281,11 @@ class DTR_Workbooks_Integration {
             'class-array-merge-safety.php',
             // Ninja Forms submission override layer
             'class-form-submission-override.php',
+            'class-lead-generation-registration.php',
+            'class-webinar-registration.php',
             // Form handlers
-            'form-handler-webinars.php',
+            'admin/form-handler-admin-webinar-registration.php',
+            'form-handler-live-webinar-registration.php',
             'form-handler-membership-registration.php',
             'form-handler-gated-content-reveal.php',
             'form-handler-media-planner.php',
@@ -289,18 +297,38 @@ class DTR_Workbooks_Integration {
             'class-employer-sync.php',
             'class-helper-functions.php',
             'class-nf-country-converter.php', // retained naming (formerly nf-country-converter.php)
-            // Shortcodes & account utilities
-            'dtr-shortcodes.php',
-            'dtr-my-account-details.php',
-            'dtr-forgot-password.php'
         ];
-        
+
         foreach ($includes as $file) {
             $file_path = DTR_WORKBOOKS_INCLUDES_DIR . $file;
             if (file_exists($file_path)) {
                 require_once $file_path;
             } else {
                 $this->log_error("Failed to load include file: {$file}");
+            }
+        }
+    }
+
+    /**
+     * Load Shortcodes files
+     *
+     * @return void
+     */
+    private function load_shortcodes() {
+        $shortcode_files = [
+            'dtr-shortcodes.php',
+            'dtr-my-account-details.php',
+            'dtr-forgot-password.php',
+            'webinar-registration-shortcodes.php',
+            'lead-generation-shortcodes.php',
+        ];
+
+        foreach ($shortcode_files as $file) {
+            $file_path = DTR_WORKBOOKS_SHORTCODES_DIR . $file;
+            if (file_exists($file_path)) {
+                require_once $file_path;
+            } else {
+                $this->log_error("Failed to load shortcode file: {$file}");
             }
         }
     }

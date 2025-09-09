@@ -19,23 +19,36 @@
 /* Gated Content Styles */
 .gated-lead-form-content {
     position: relative;
-    padding: 20px;
+    padding: 1.5rem;
     margin-bottom: 20px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
 .gated-lead-form-content.webinars {
-    background-color: #f9f9f9;
+    background-color: #f5f5f5;
 }
 
 .speaker-question {
     display: none;
 }
 
+.gated-lead-form-content.webinars textarea,
+.gated-lead-form-content.webinars .nf-field-container.checkbox-container .nf-checked-label {
+  background:#fff;
+  appearance: none;
+  border:0;
+  border-radius: 5px;
+}
+
+.gated-lead-form-content.webinars textarea {
+  min-height: 200px !important;
+}
+
 .speaker-question.show {
     display: block;
 }
+
 
 /* ---------------------------------------------------------------
     #1. Membership Form Styles
@@ -846,7 +859,18 @@ input[type="submit"].form-button-element {
   z-index: 0 !important;
   position: relative;
   width: 93.996%;
+  font-family: "Titillium Web", Sans-serif !important;
 }
+.gated-lead-form-content.webinars label {
+  color:#333333 !important;
+  font-size:19px !important;
+  font-weight:400 !important;
+}
+.gated-lead-form-content.webinars .checkbox-container .checkbox-wrap label {
+  font-size:16px !important;
+  font-weight:normal !important;
+}
+
 .gated-lead-form-content input[type='checkbox'] {
   width: 1.25rem;
   min-width: 1.25rem;
@@ -858,6 +882,7 @@ input[type="submit"].form-button-element {
   background-repeat: no-repeat;
   background-size: 100%;
   background-color: #fff !important;
+  border:1px solid #ddd !important;
 }
 #acf-questions-form label.question-label {
   margin-bottom: 0 !important;
@@ -899,15 +924,17 @@ input[type="submit"].form-button-element {
 .gated-lead-form-content.webinars select,
 .gated-lead-form-content.webinars textarea {
   position: relative;
-  margin-top: 8px !important;
+  margin-top: 15px !important;
   top: 0 !important;
   display: block;
+  border:1px solid #ddd !important;
 }
 
 .gated-lead-form-content.webinars textarea,
 #acf-questions-form textarea {
   width:100% !important;
   margin-bottom:10px !important;
+  font-family: "Titillium Web", Sans-serif !important;
 }
 
 /* ---------------------------------------------------------------
@@ -946,4 +973,11 @@ input[type="submit"].form-button-element {
   margin: 0 8px 0 0 !important;
   vertical-align: middle !important;
   flex-shrink: 0 !important;
+  border:1px solid #2f2f2f !important;
+}
+
+@media screen and (min-width: 62.5em) {
+  #header .inner-container.desktop-container {
+    margin:0.5rem 4% !important;
+  }
 }

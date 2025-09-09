@@ -1,3 +1,35 @@
+# Webinar Registration Template Logic Reference
+
+## Logic Overview
+
+### 1. Webinar Type Detection
+- If the ACF field `webinar_link` is present, the post is treated as an **On Demand Webinar**.
+- Otherwise, it is a **Live Webinar** (date-based logic applies).
+
+### 2. User State Logic
+- **Not logged in:**
+   - Show a "Register Now" button that triggers the login modal.
+- **Logged in:**
+   - **On Demand Webinar (webinar_link present):**
+      - Show "On Demand - Register Now" button.
+      - If `add_additional_questions` is true and a form is set, display the Ninja Form below.
+   - **Live Webinar (upcoming event, not on demand):**
+      - If user is already registered:
+         - Show "Registered" button and calendar link.
+      - If user is not registered:
+         - Show "Register Now" button (no link).
+         - Display the Ninja Form below if set.
+   - **Live Webinar (event has passed, not on demand):**
+      - Show "On Demand - Register Now" button.
+      - If `add_additional_questions` is true and a form is set, display the Ninja Form below.
+
+### 3. Logging
+- Console logs are output at each major logic branch to identify webinar type and user state for debugging.
+- PHP comments and section titles are used throughout the template for maintainability.
+
+### 4. Future Extensions
+- Placeholder for JS logging/debug code is kept for future use.
+- Logic is modular and clearly commented for easy adaptation to Lead Generation or other flows.
 # DTR - Workbooks CRM API Integration
 
 ## Overview
@@ -227,6 +259,15 @@ Disable afterward to reduce I/O.
 
 ## Changelog (Highlights)
 ### 2.1.x (In Progress – September 2025)
+- **[In Progress: October 2025] Modular Webinar & Lead Generation Registration, Robust Logging, Dynamic UI, and Bugfixes**
+   - Refactored both webinar and lead generation registration logic into dedicated, modular classes and handler files for maintainability and testability.
+   - All registration shortcodes (webinar and lead gen) are always loaded and registered, ensuring UI is available wherever needed.
+   - Unified and robust logging for all registration flows, with step-by-step debug output and specialized logs for lead generation and webinars.
+   - Dynamic ACF-powered question rendering: registration forms now automatically display all ACF-defined questions for the current post/event, with no manual edits required.
+   - Frontend UI improvements: always-on form display for logged-in users, dynamic feedback, and microanimation for form submission.
+   - Fixed all PHP parse errors and logic bugs in lead generation and webinar registration flows, including array mapping, HTML structure, and conditional logic.
+   - Improved error handling and admin/test mode for safe, repeatable testing.
+   - Updated documentation and changelog to reflect all recent progress and improvements.
 - **Unified Membership Registration Handler:** All membership and gated content registrations now use a single, robust handler for consistency and easier maintenance.
 - **Paginated Select2 Employer Search:** Employer search in admin and frontend now uses paginated Select2 with exact, starts-with, and contains ordering for faster, more relevant results.
 - **Employer JSON Relocation:** Employer data JSON is now stored at `assets/json/employers.json` with new helper functions for reading/writing, plus legacy fallback for compatibility.
@@ -274,11 +315,15 @@ Proprietary software developed by Supersonic Playground for DTR (Drug Target Rev
 ## Key Features
 
 ### 🔗 **Core CRM Integration**
-- **API Integration**: Secure connection to Workbooks CRM using API keys with timeout and error handling
-- **Person Record Management**: Create, update, and sync person records with comprehensive field mapping
-- **Employer Synchronization**: Intelligent employer matching and organization management
-- **Duplicate Detection**: Smart duplicate checking using email matching with Workbooks API
-- **Comprehensive Logging**: Detailed debug logs for troubleshooting and monitoring
+
+### 🧩 **Modular & Extensible Architecture**
+- **Fully Modular Registration Logic**: All registration, handler, and UI logic is separated into dedicated classes and shortcodes for maintainability and easy extension.
+- **Shortcode-Based UI**: Webinar registration and save-for-later features are rendered via shortcodes, allowing flexible placement and theme integration.
+- **Centralized Logging**: All debug and process logs are routed to a central directory, with step-by-step logging for every major action.
+- **Admin/Test Mode**: Dedicated admin-side test forms and handlers allow robust, repeatable testing without affecting live data.
+- **Frontend/Backend Separation**: All business logic is server-side, with AJAX-powered UI for seamless user experience.
+- **User Content Collections**: Users can save posts to their "My Account" area for later viewing, with the ability to add personal notes to each saved post.
+- **Dynamic Button States**: Save buttons update in real time to show "Saved" status, and revert if removed, providing instant feedback.
 
 
 ### 📝 **Gated Content Enhancements & Microanimation Additions**
@@ -735,6 +780,12 @@ add_action('wp_ajax_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
 - Ticket creation and all registration steps are now fully logged in the dedicated debug log (`admin/admin-webinar-debug.log` or `includes/webinar-debug.log`).
 - Debug output now matches legacy format, making it easier to compare with previous logs and troubleshoot issues.
 - All changes validated: registration, ticket creation, and debug output confirmed working end-to-end.
+
+**UI/UX Improvements & Save for Later**
+- Save button text now changes to "Saved" when a post is saved, and reverts if removed.
+- Users can add a personal note when saving a post to their collection.
+- Saved posts and notes are visible in the "My Account" section for later viewing.
+- All save/remove/note actions are AJAX-powered for instant feedback.
 
 
 

@@ -15,9 +15,19 @@ function dtr_reg_log($msg) {
     if (defined('DTR_WORKBOOKS_LOG_DIR')) {
         $file1 = DTR_WORKBOOKS_LOG_DIR . 'member-registration-debug.log';
         if (!file_exists(dirname($file1))) wp_mkdir_p(dirname($file1));
-        file_put_contents($file1, $line, FILE_APPEND | LOCK_EX);
+        if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+            $log_file1 = DTR_WORKBOOKS_LOG_DIR . basename($file1);
+            file_put_contents($log_file1, $line, FILE_APPEND | LOCK_EX);
+        } else {
+            file_put_contents($file1, $line, FILE_APPEND | LOCK_EX);
+        }
         $file2 = DTR_WORKBOOKS_LOG_DIR . 'membership-registration-debug.log';
-        file_put_contents($file2, $line, FILE_APPEND | LOCK_EX);
+        if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+            $log_file2 = DTR_WORKBOOKS_LOG_DIR . basename($file2);
+            file_put_contents($log_file2, $line, FILE_APPEND | LOCK_EX);
+        } else {
+            file_put_contents($file2, $line, FILE_APPEND | LOCK_EX);
+        }
     }
     if (defined('WP_DEBUG') && WP_DEBUG) error_log($line);
 }
@@ -26,7 +36,12 @@ function dtr_reg_log($msg) {
 if (defined('DTR_WORKBOOKS_LOG_DIR')) {
     $test_file = DTR_WORKBOOKS_LOG_DIR . 'member-registration-debug.log';
     $test_msg = date('Y-m-d H:i:s') . " [FILE-LOAD-TEST] Form handler file is being loaded\n";
-    file_put_contents($test_file, $test_msg, FILE_APPEND | LOCK_EX);
+    if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+        $log_test_file = DTR_WORKBOOKS_LOG_DIR . basename($test_file);
+        file_put_contents($log_test_file, $test_msg, FILE_APPEND | LOCK_EX);
+    } else {
+        file_put_contents($test_file, $test_msg, FILE_APPEND | LOCK_EX);
+    }
 }
 
 dtr_reg_log('[BOOT] Membership handler file loaded');

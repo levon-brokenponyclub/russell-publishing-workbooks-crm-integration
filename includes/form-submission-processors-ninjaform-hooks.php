@@ -177,8 +177,27 @@ if (!function_exists('dtr_process_user_registration')) {
  */
 if (!function_exists('dtr_process_webinar_registration')) {
     function dtr_process_webinar_registration($form_data, $form_id, $debug_id) {
-        dtr_log_ninja_forms('(Fallback) Webinar registration handler missing', $debug_id);
-        return false;
+        // Diagnostic: Log entry to confirm processor is called
+        if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+            $diag_file = DTR_WORKBOOKS_LOG_DIR . 'live-webinar-registration-debug.log';
+            file_put_contents($diag_file, date('c') . " -- dtr_process_webinar_registration CALLED\nForm Data: " . print_r($form_data, true) . "\n", FILE_APPEND | LOCK_EX);
+        }
+        // Map Ninja Forms fields to expected handler fields
+        $registration_data = [
+            'post_id' => dtr_extract_field_by_keys($form_data, ['post_id', 'event_id', 'webinar_post_id']),
+            'email' => dtr_extract_field_by_keys($form_data, ['email', 'user_email', 'email_address']),
+            'first_name' => dtr_extract_field_by_keys($form_data, ['first_name', 'user_first_name', 'fname']),
+            'last_name' => dtr_extract_field_by_keys($form_data, ['last_name', 'user_last_name', 'lname']),
+            'speaker_question' => dtr_extract_field_by_keys($form_data, ['speaker_question', 'question_for_speaker']),
+            'cf_mailing_list_member_sponsor_1_optin' => dtr_extract_field_by_keys($form_data, ['cf_mailing_list_member_sponsor_1_optin', 'sponsor_optin']),
+            'event_id' => dtr_extract_field_by_keys($form_data, ['event_id', 'workbooks_reference']),
+        ];
+        if (!function_exists('dtr_handle_live_webinar_registration')) {
+            require_once __DIR__ . '/form-handler-live-webinar-registration.php';
+        }
+        $result = dtr_handle_live_webinar_registration($registration_data);
+        // Optionally log result or handle errors here
+        return $result && !empty($result['success']);
     }
 }
 
@@ -234,9 +253,20 @@ function dtr_dispatch_ninja_forms_submission($form_data) {
             }
             break;
         case 31: // Lead gen
-            if (function_exists('dtr_process_lead_generation')) {
-                dtr_process_lead_generation($form_data, 31, $debug_id);
+            if (!function_exists('dtr_handle_lead_generation_registration')) {
+                require_once __DIR__ . '/form-handler-lead-generation-registration.php';
             }
+            // Map fields for lead gen (mirroring webinar logic)
+            $lead_data = [
+                'post_id' => dtr_extract_field_by_keys($form_data, ['post_id', 'lead_post_id']),
+                'email' => dtr_extract_field_by_keys($form_data, ['email', 'user_email', 'email_address']),
+                'first_name' => dtr_extract_field_by_keys($form_data, ['first_name', 'user_first_name', 'fname']),
+                'last_name' => dtr_extract_field_by_keys($form_data, ['last_name', 'user_last_name', 'lname']),
+                'lead_question' => dtr_extract_field_by_keys($form_data, ['lead_question', 'question_for_lead']),
+                'cf_mailing_list_member_sponsor_1_optin' => dtr_extract_field_by_keys($form_data, ['cf_mailing_list_member_sponsor_1_optin', 'sponsor_optin']),
+                'person_id' => dtr_extract_field_by_keys($form_data, ['person_id']),
+            ];
+            dtr_handle_lead_generation_registration($lead_data);
             break;
         default:
             dtr_log_ninja_forms('No handler for form id ' . $form_id, $debug_id);
@@ -252,6 +282,16 @@ add_action('wp_footer', function() {
     ?>
     <script>
         console.log('%c[DTR Ninja Forms Clean Hook] Successfully loaded unified form handler', 'color: green; font-weight: bold;');
+        // TEMP: Alert on Ninja Forms submission success/fail
+        document.addEventListener('nfFormSubmitResponse', function(e, data) {
+            if (!data || !data.data || !data.data.form_id) return;
+            if (data.data.form_id !== 2) return; // Only for Webinar form
+            if (data.data.result && data.data.result.success) {
+                alert('Webinar registration successful!');
+            } else {
+                alert('Webinar registration failed.');
+            }
+        });
     </script>
     <?php
 });
