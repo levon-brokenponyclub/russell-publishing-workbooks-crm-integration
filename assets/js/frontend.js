@@ -1,74 +1,58 @@
-/* DTR Workbooks Frontend Scripts */
-/* (function($) {
+
+// DTR Workbooks Frontend Scripts (Simplified)
+(function($) {
     'use strict';
 
-    // Debug flag
-    const DEBUG = window.dtr_workbooks_ajax?.debug_mode || false;
-
-    function log(message, data = '') {
-        if (DEBUG) {
-            console.log('[DEBUG]', message, data ? data : '');
-        }
-    }
-
-    // Initialize once DOM is ready
     $(function() {
-        log('Frontend script loaded');
+        // Post Type: Live Webinar
+        console.log('Post Type: Live Webinar');
 
-        // Speaker question handling only if elements present AND likely webinar context
-        const speakerQuestions = $('.speaker-question');
-        if (speakerQuestions.length > 0 || $('.gated-lead-form-content.webinars').length) {
-            log('.speaker-question fields found:', speakerQuestions.length);
-            speakerQuestions.each(function(index) {
-                const field = $(this);
-                field.addClass('show');
-                log('Show Class Added to field #' + index, ' Current classList: ' + field.attr('class'));
-            });
+        // Form ID {2} Present
+        const form2Present = $('#nf-form-2-cont').length > 0;
+        console.log('Form ID {2} Present:', form2Present ? 'Yes' : 'No');
+
+        // Person ID and Email Address (check global and form fields)
+        let personId = '';
+        let personEmail = '';
+        let eventId = '';
+        let questionForSpeakerPresent = 'Not Present';
+
+        // Try global object first
+        if (window.dtr_workbooks_ajax) {
+            personId = window.dtr_workbooks_ajax.current_user_id || '';
+            personEmail = window.dtr_workbooks_ajax.current_user_email || '';
         }
 
-        // Add form submission monitoring if webinar form is present
-        if ($('.gated-lead-form-content.webinars').length) {
-            log('🎥 WEBINAR FORM DETECTED');
-            monitorWebinarForm();
-        }
-    });
-
-    // Monitor webinar form submissions
-    function monitorWebinarForm() {
-        let attempts = 0;
-        const maxAttempts = 5;
-
-        function detectForm() {
-            log('🔄 Webinar form detection attempt #' + (attempts + 1));
-            
-            const form = $('.nf-form-cont');
+        // If form is present, check form fields for overrides or missing values
+        if (form2Present) {
+            const form = $('#nf-form-2-cont form');
             if (form.length) {
-                log('✅ Webinar form detection complete!');
-                setupFormHandlers(form);
-                return;
-            }
-
-            attempts++;
-            if (attempts < maxAttempts) {
-                setTimeout(detectForm, 1000);
+                // Event ID
+                const eventField = form.find('[name="event_id"], [name="post_id"]');
+                if (eventField.length && eventField.val()) {
+                    eventId = eventField.val();
+                }
+                // Person ID
+                const personIdField = form.find('[name="person_id"]');
+                if (personIdField.length && personIdField.val()) {
+                    personId = personIdField.val();
+                }
+                // Email
+                const emailField = form.find('[name="email"], [name="user_email"], [name="email_address"]');
+                if (emailField.length && emailField.val()) {
+                    personEmail = emailField.val();
+                }
+                // Question for Speaker
+                const qfsField = form.find('[name="question_for_speaker"]');
+                if (qfsField.length) {
+                    questionForSpeakerPresent = 'Present';
+                }
             }
         }
 
-        detectForm();
-    }
-
-    // Setup form submission handlers
-    function setupFormHandlers(form) {
-        const formFields = form.find('.nf-field-container');
-        
-        // Log form fields for debugging
-        log('📝 Form fields found:', formFields.length);
-        formFields.each(function(index) {
-            const field = $(this);
-            const fieldId = field.find('.nf-field').attr('id');
-            const fieldType = field.attr('class').split(' ')[1].replace('-container', '');
-            console.log(`    ${index + 1}. ${fieldType} - ${fieldId}`);
-        });
-    }
-
-})(jQuery); */
+        console.log('Person ID:', personId);
+        console.log('Person Email Address:', personEmail);
+        console.log('Event ID:', eventId);
+        console.log('Question For Speaker:', questionForSpeakerPresent);
+    });
+})(jQuery);

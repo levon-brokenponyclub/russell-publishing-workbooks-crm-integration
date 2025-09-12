@@ -6,7 +6,7 @@ $enabled_forms = $options['enabled_forms'] ?? [2,15,31];
 $debug_mode    = !empty($options['debug_mode']);
 $available_forms = [2 => 'Webinar Form', 15 => 'Registration Form', 31 => 'Lead Gen Form'];
 ?>
-
+<div class="live/development-indicator" style="display:inline-block;margin-left:8px;padding:2px 6px;font-size:10px;font-weight:bold;color:#fff;background-color:#f57c00;border-radius:3px;vertical-align:middle;">Disconnected</div>
 <form method="post" action="options.php" id="workbooks-settings-form">
     <?php settings_fields('dtr_workbooks_options'); ?>
     <h2 class="title" style="margin-top:0;"><?php _e('Workbooks API Configuration', 'dtr-workbooks'); ?></h2>
@@ -35,18 +35,56 @@ $available_forms = [2 => 'Webinar Form', 15 => 'Registration Form', 31 => 'Lead 
     <table class="form-table" role="presentation">
         <tbody>
             <tr>
-                <th scope="row"><?php _e('Enabled Forms','dtr-workbooks'); ?></th>
                 <td>
-                    <?php foreach ($available_forms as $fid => $fname): $checked = in_array($fid, $enabled_forms) ? 'checked' : ''; ?>
-                        <label style="display:block;margin-bottom:4px;">
-                            <input type="checkbox" name="dtr_workbooks_options[enabled_forms][]" value="<?php echo esc_attr($fid); ?>" <?php echo $checked; ?> />
-                            <?php echo esc_html($fname); ?> (ID: <?php echo (int)$fid; ?>)
+                    <?php foreach ($available_forms as $fid => $fname): 
+                        $test_mode = !empty($options['test_mode_forms'][$fid]) ? 1 : 0;
+                    ?>
+                        <label style="display:block;margin-bottom:12px;">
+                            <span style="font-weight:bold;display:inline-block;width:180px;"><?php echo esc_html($fname); ?> (ID: <?php echo (int)$fid; ?>)</span>
+                            <label class="toggle-switch" style="margin-left:10px;">
+                                <input type="checkbox" id="toggle-<?php echo esc_attr($fid); ?>" <?php echo !$test_mode ? 'checked' : ''; ?> />
+                                <span class="slider"></span>
+                            </label>
+                            <span id="toggle-label-<?php echo esc_attr($fid); ?>" style="margin-left:10px;font-weight:bold;vertical-align:middle;">Live</span>
+                            <input type="hidden" name="dtr_workbooks_options[test_mode_forms][<?php echo esc_attr($fid); ?>]" id="test-mode-<?php echo esc_attr($fid); ?>" value="<?php echo $test_mode; ?>" />
                         </label>
                     <?php endforeach; ?>
                 </td>
             </tr>
         </tbody>
     </table>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        <?php foreach ($available_forms as $fid => $fname): ?>
+        var toggle<?php echo $fid; ?> = document.getElementById('toggle-<?php echo esc_attr($fid); ?>');
+        var hidden<?php echo $fid; ?> = document.getElementById('test-mode-<?php echo esc_attr($fid); ?>');
+        var label<?php echo $fid; ?> = document.getElementById('toggle-label-<?php echo esc_attr($fid); ?>');
+        function updateToggle<?php echo $fid; ?>() {
+            if (toggle<?php echo $fid; ?>.checked) {
+                hidden<?php echo $fid; ?>.value = '0';
+                label<?php echo $fid; ?>.textContent = 'Live';
+                label<?php echo $fid; ?>.style.color = 'green';
+            } else {
+                hidden<?php echo $fid; ?>.value = '1';
+                label<?php echo $fid; ?>.textContent = 'Test Mode';
+                label<?php echo $fid; ?>.style.color = '#b71c1c';
+            }
+        }
+        toggle<?php echo $fid; ?>.addEventListener('change', updateToggle<?php echo $fid; ?>);
+        updateToggle<?php echo $fid; ?>();
+        <?php endforeach; ?>
+
+        // Ensure all hidden test mode fields are updated before form submit
+        var form = document.getElementById('workbooks-settings-form');
+        if (form) {
+            form.addEventListener('submit', function() {
+                <?php foreach ($available_forms as $fid => $fname): ?>
+                updateToggle<?php echo $fid; ?>();
+                <?php endforeach; ?>
+            });
+        }
+    });
+    </script>
 
     <h2 class="title" style="margin-top:30px;"><?php _e('Debug & Logging','dtr-workbooks'); ?></h2>
     <p class="description"><?php _e('Configure debug and logging settings.','dtr-workbooks'); ?></p>

@@ -158,8 +158,9 @@ add_shortcode('dtr-my-account-details', function() {
                     <input type="text" name="job-title" id="job-title" class="dtr-form-input" value="<?php echo esc_attr($job_title); ?>" required>
                 </label>
                 <label class="dtr-form-label half-width">
-                    Your Employer<span>*</span>
-                    <input type="text" name="employer" id="employer" class="dtr-form-input" value="<?php echo esc_attr($employer); ?>" required>
+                    Employer<span>*</span>
+                    <input type="text" name="employer" id="employer" class="dtr-form-input" value='<?php echo esc_attr($employer); ?>' required>
+                    <!-- <div class="dtr-account-form"><?php // echo do_shortcode('[workbooks_employer_select]'); ?></div> -->
                 </label>
                 <label class="dtr-form-label full-width">
                     Telephone<span>*</span>

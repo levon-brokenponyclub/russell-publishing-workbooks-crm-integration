@@ -141,9 +141,11 @@ function dtr_register_workbooks_lead(
     }
     if (is_array($debug_report)) $debug_report['resolved_names'] = [$first_name, $last_name];
 
-    // Try to get Workbooks lead reference (use 'workbooks_reference' or 'reference' ACF/meta field)
+    // Try to get Workbooks lead reference (use 'workbook_reference' or 'reference' ACF/meta field)
     $lead_ref = function_exists('get_field') ? (
-        get_field('workbooks_reference', $post_id)
+        get_field('workbook_reference', $post_id)
+        ?: get_post_meta($post_id, 'workbook_reference', true)
+        ?: get_field('workbooks_reference', $post_id)
         ?: get_post_meta($post_id, 'workbooks_reference', true)
         ?: get_field('reference', $post_id)
         ?: get_post_meta($post_id, 'reference', true)
@@ -176,44 +178,46 @@ function dtr_register_workbooks_lead(
     }
     $step++;
 
-    // STEP 2: Person created/updated
+    // STEP 2: Person lookup (logged-in users already exist in Workbooks)
     $person_id = null;
     $person_step_success = false;
     $person_step_reason = '';
-    try {
-        $person_result = $workbooks->assertGet('crm/people.api', [
-            '_start' => 0, '_limit' => 1,
-            '_ff[]' => 'main_location[email]', '_ft[]' => 'eq', '_fc[]' => $email,
-            '_select_columns[]' => ['id', 'object_ref']
-        ]);
-        if (!empty($person_result['data'][0]['id'])) {
-            $person_id = $person_result['data'][0]['id'];
+    
+    // First try to get person_id from user meta (fastest)
+    if (is_user_logged_in()) {
+        $current_user = wp_get_current_user();
+        $person_id = get_user_meta($current_user->ID, 'workbooks_person_id', true);
+        if (!empty($person_id)) {
             $person_step_success = true;
+            dtr_lead_debug("✅ STEP {$step}: Person found via user meta (ID: $person_id)");
         }
-    } catch (Exception $e) {
-        $person_step_reason = $e->getMessage();
     }
+    
+    // If not found in user meta, search by email
     if (!$person_id) {
         try {
-            $create_person = $workbooks->assertCreate('crm/people', [[
-                'main_location[email]' => $email,
-                'person_first_name' => $first_name,
-                'person_last_name' => $last_name,
-            ]]);
-            if (!empty($create_person['data'][0]['id'])) {
-                $person_id = $create_person['data'][0]['id'];
+            $person_result = $workbooks->assertGet('crm/people.api', [
+                '_start' => 0, '_limit' => 1,
+                '_ff[]' => 'main_location[email]', '_ft[]' => 'eq', '_fc[]' => $email,
+                '_select_columns[]' => ['id', 'object_ref']
+            ]);
+            if (!empty($person_result['data'][0]['id'])) {
+                $person_id = $person_result['data'][0]['id'];
                 $person_step_success = true;
-            } else {
-                $person_step_reason = 'Person create returned no ID';
+                dtr_lead_debug("✅ STEP {$step}: Person found via email search (ID: $person_id)");
+                
+                // Store person_id in user meta for future use
+                if (is_user_logged_in()) {
+                    update_user_meta($current_user->ID, 'workbooks_person_id', $person_id);
+                }
             }
         } catch (Exception $e) {
             $person_step_reason = $e->getMessage();
         }
     }
-    if ($person_step_success) {
-        dtr_lead_debug("✅ STEP {$step}: Person created/updated");
-    } else {
-        dtr_lead_debug("❌ STEP {$step}: Person created/updated - $person_step_reason");
+    
+    if (!$person_id) {
+        dtr_lead_debug("❌ STEP {$step}: Person not found - $person_step_reason");
         dtr_lead_debug("🎉 FINAL RESULT: LEAD GENERATION REGISTRATION FAILED!");
         return false;
     }

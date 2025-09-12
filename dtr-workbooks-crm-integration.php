@@ -85,6 +85,7 @@ $shortcode_files = [
     'dtr-forgot-password.php',                  // Password recovery handling
     'webinar-registration-shortcodes.php',      // Webinar registration handling
     'lead-generation-shortcodes.php',           // Lead generation shortcodes (new)
+    'workbooks-employer-select.php',            // Workbooks employer select shortcode
 ];
 
 foreach ($shortcode_files as $file) {
@@ -321,6 +322,7 @@ class DTR_Workbooks_Integration {
             'dtr-forgot-password.php',
             'webinar-registration-shortcodes.php',
             'lead-generation-shortcodes.php',
+            'workbooks-employer-select.php',
         ];
 
         foreach ($shortcode_files as $file) {
@@ -2881,5 +2883,132 @@ function dtr_update_workbooks_person($person_id, $lock_version, $data) {
         return ['success' => false, 'message' => $e->getMessage()];
     }
 }
+// --- Event Field Explorer (Improved) ---
 
+add_action('admin_menu', function() {
+    add_submenu_page(
+        'dtr-workbooks',
+        __('Event Field Explorer', 'dtr-workbooks'),
+        __('Event Field Explorer', 'dtr-workbooks'),
+        'manage_options',
+        'dtr-workbooks-event-explorer',
+        'dtr_workbooks_event_explorer_page'
+    );
+});
+
+function dtr_workbooks_event_explorer_page() {
+    ?>
+    <div class="wrap plugin-admin-content">
+        <h1><?php _e('Workbooks Event Field Explorer', 'dtr-workbooks'); ?></h1>
+        <p><?php _e('Select an event to view all field names and values from Workbooks CRM.', 'dtr-workbooks'); ?></p>
+        <div id="dtr-event-explorer-error" style="color:red;"></div>
+        <select id="dtr-workbooks-event-select" style="min-width:300px;">
+            <option value=""><?php _e('Loading events...', 'dtr-workbooks'); ?></option>
+        </select>
+        <div id="dtr-workbooks-event-fields-table" style="margin-top: 30px;"></div>
+        <script>
+        jQuery(function($){
+            var $select = $('#dtr-workbooks-event-select');
+            var $table = $('#dtr-workbooks-event-fields-table');
+            var $error = $('#dtr-event-explorer-error');
+            $select.prop('disabled', true);
+            $error.text('');
+            // Fetch events
+            $.post(ajaxurl, {
+                action: 'dtr_list_workbooks_events',
+                nonce: '<?php echo esc_js(wp_create_nonce('workbooks_nonce')); ?>'
+            }, function(resp){
+                $select.empty();
+                if (resp.success && resp.data && resp.data.events && resp.data.events.length) {
+                    $select.append('<option value=""><?php echo esc_js(__('Select an event...', 'dtr-workbooks')); ?></option>');
+                    $.each(resp.data.events, function(i, event){
+                        var label = event.name + ' (ID: ' + event.id + ')';
+                        $select.append('<option value="' + event.id + '">' + label + '</option>');
+                    });
+                    $select.prop('disabled', false);
+                } else {
+                    $select.append('<option value=""><?php echo esc_js(__('No events found', 'dtr-workbooks')); ?></option>');
+                    $error.text(resp.data && resp.data.message ? resp.data.message : '<?php echo esc_js(__('No events loaded - check API connection and debug logs.', 'dtr-workbooks')); ?>');
+                }
+            }).fail(function(xhr){
+                $select.empty().append('<option value=""><?php echo esc_js(__('AJAX error', 'dtr-workbooks')); ?></option>');
+                $error.text('AJAX Error: ' + xhr.status + ' ' + xhr.statusText);
+            });
+            // On selection, fetch event fields
+            $select.on('change', function(){
+                var event_id = $(this).val();
+                $table.html('');
+                $error.text('');
+                if (!event_id) return;
+                $table.html('<?php echo esc_js(__('Loading event details...', 'dtr-workbooks')); ?>');
+                $.post(ajaxurl, {
+                    action: 'dtr_get_workbooks_event_fields',
+                    nonce: '<?php echo esc_js(wp_create_nonce('workbooks_nonce')); ?>',
+                    event_id: event_id
+                }, function(resp){
+                    if (resp.success && resp.data && resp.data.event) {
+                        var html = '<table class="widefat striped"><thead><tr><th><?php echo esc_js(__('Field', 'dtr-workbooks')); ?></th><th><?php echo esc_js(__('Value', 'dtr-workbooks')); ?></th></tr></thead><tbody>';
+                        $.each(resp.data.event, function(key, val){
+                            if (typeof val === 'object') val = JSON.stringify(val);
+                            html += '<tr><td><code>' + key + '</code></td><td>' + (val ? val : '-') + '</td></tr>';
+                        });
+                        html += '</tbody></table>';
+                        $table.html(html);
+                    } else {
+                        $table.html('');
+                        $error.text(resp.data && resp.data.message ? resp.data.message : '<?php echo esc_js(__('Error fetching event details.', 'dtr-workbooks')); ?>');
+                    }
+                }).fail(function(xhr){
+                    $table.html('');
+                    $error.text('AJAX Error: ' + xhr.status + ' ' + xhr.statusText);
+                });
+            });
+        });
+        </script>
+    </div>
+    <?php
+}
+
+// --- AJAX handlers (same as before, but with improved error returns) ---
+
+add_action('wp_ajax_dtr_list_workbooks_events', function() {
+    check_ajax_referer('workbooks_nonce', 'nonce');
+    $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+    if (!$workbooks) wp_send_json_error(['message' => 'Workbooks API not available. Check API settings and debug log.']);
+    try {
+        $events_result = $workbooks->assertGet('crm/events.api', [
+            '_start' => 0,
+            '_limit' => 50,
+            '_select_columns[]' => ['id', 'name'],
+            '_sort_column' => 'id',
+            '_sort_direction' => 'DESC'
+        ]);
+        $events = $events_result['data'] ?? [];
+        wp_send_json_success(['events' => $events]);
+    } catch (Exception $e) {
+        wp_send_json_error(['message' => 'Workbooks API error: ' . $e->getMessage()]);
+    }
+});
+
+add_action('wp_ajax_dtr_get_workbooks_event_fields', function() {
+    check_ajax_referer('workbooks_nonce', 'nonce');
+    $event_id = intval($_POST['event_id'] ?? 0);
+    if (!$event_id) wp_send_json_error(['message' => 'Missing event ID']);
+    $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+    if (!$workbooks) wp_send_json_error(['message' => 'Workbooks API not available']);
+    try {
+        $result = $workbooks->assertGet('crm/events.api', [
+            '_start' => 0,
+            '_limit' => 1,
+            '_ff[]' => 'id',
+            '_ft[]' => 'eq',
+            '_fc[]' => $event_id,
+            '_select_columns[]' => '*'
+        ]);
+        if (empty($result['data'][0])) wp_send_json_error(['message' => 'Event not found (ID: ' . $event_id . ')']);
+        wp_send_json_success(['event' => $result['data'][0]]);
+    } catch (Exception $e) {
+        wp_send_json_error(['message' => 'Workbooks API error: ' . $e->getMessage()]);
+    }
+});
 ?>

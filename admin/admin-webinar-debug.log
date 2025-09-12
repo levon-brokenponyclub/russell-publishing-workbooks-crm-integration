@@ -1,7 +1,7 @@
 [webinar_title] => 
 [post_id] => 161189
 [email_address] => levon.gravett@supersonicplayground.com
-[question_for_speaker] => Again
+[question_for_speaker] => Hello
 [add_questions] => 
 [cf_mailing_list_member_sponsor_1_optin] => 1
 [ticket_id] => 
@@ -9,4 +9,27 @@
 [event_id] => 5832
 [success] => 
 
-[2025-09-08 21:51:03] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-08 21:10:36] ✅ STEP 1: Processing Webinar Form (ID 161189)
+
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 816614
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-02 10:40:47] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-02 10:40:47] ✅ STEP 3: Person created/updated
+[2025-09-02 10:40:48] ✅ STEP 4: Ticket Created/Updated
+[2025-09-02 10:40:48] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4324180
+[2025-09-02 10:40:49] ℹ️ Mailing List Entry updated for jtest@sspgtest.com
+[2025-09-02 10:40:49] ✅ STEP 5: Added to Mailing List
+[2025-09-02 10:40:49] ✅ STEP 6: Speaker Question = Test Question
+[2025-09-02 10:40:49] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-02 10:40:49] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+
+
+Yay---- found my old fields and values - Please update both the form and handler and debug

@@ -4,11 +4,17 @@ jQuery(document).ready(function($) {
         if (!data || !data.data || !data.data.form_id) return;
 
         var formId = data.data.form_id;
-
         if (formId !== 2) return; // Only for Ninja Form 2
 
         var $form = data.data.$form;
         var $statusArea = $('#wb-connection-status');
+
+        // Show debug_message if present
+        if (data.data.debug_message) {
+            var $debugMsg = $('<div class="nf-debug-message nf-webinar-debug-message" style="color: #155724; background: #d4edda; border: 1px solid #c3e6cb; padding: 10px; margin: 10px 0; font-weight: bold;"></div>');
+            $debugMsg.text(data.data.debug_message);
+            $form.prepend($debugMsg);
+        }
 
         if ($statusArea.length === 0) {
             $statusArea = $('<div id="wb-connection-status" style="margin-bottom: 10px; font-weight: bold;"></div>');

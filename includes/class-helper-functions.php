@@ -204,7 +204,8 @@ if (!function_exists('dtr_map_toi_to_aoi')) {
         foreach ($selected_toi_fields as $toi_field) {
             if (isset($matrix[$toi_field])) {
                 foreach ($matrix[$toi_field] as $aoi_field => $value) {
-                    $aoi_mapping[$aoi_field] = $value;
+                    // Use logical OR: if any TOI maps to this AOI, set to 1
+                    if ($value) $aoi_mapping[$aoi_field] = 1;
                 }
             }
         }

@@ -16,7 +16,7 @@ function dtr_handle_test_webinar_registration() {
     ];
 
     // Log the registration data and steps in the requested format
-    $log_file = __DIR__ . '/../admin/admin-webinar-debug.log';
+    $log_file = __DIR__ . '/admin-webinar-registeration-debug.log';
     $log_entry = '';
     $result_info = [
         'webinar_title' => '',
@@ -85,9 +85,7 @@ if (!defined('ABSPATH')) exit;
 // Unified debug logging function for webinars (step-by-step, to webinar-debug.log)
 if (!function_exists('dtr_webinar_debug')) {
     function dtr_webinar_debug($message) {
-        $debug_log_file = defined('WORKBOOKS_NF_PATH')
-            ? WORKBOOKS_NF_PATH . 'logs/webinar-debug.log'
-            : __DIR__ . '/webinar-debug.log';
+        $debug_log_file = __DIR__ . '/admin-webinar-registeration-debug.log';
         $logs_dir = dirname($debug_log_file);
         if (!file_exists($logs_dir)) {
             if (function_exists('wp_mkdir_p')) wp_mkdir_p($logs_dir);
@@ -187,11 +185,10 @@ function dtr_register_workbooks_webinar(
     $person_id = null;
     $person_step_success = false;
     $person_step_reason = '';
-    if (!empty($registration_data['person_id'])) {
-        $person_id = intval($registration_data['person_id']);
-        $person_step_success = true;
-        dtr_webinar_debug("✅ STEP {$step}: Used submitted person_id $person_id");
-    } else {
+    // No $registration_data available, so skip this check or add a $person_id parameter if needed
+    // If you want to allow passing $person_id, add it as a parameter to the function
+    // For now, always create or find the person by email
+    {
         try {
             $person_result = $workbooks->assertGet('crm/people.api', [
                 '_start' => 0, '_limit' => 1,

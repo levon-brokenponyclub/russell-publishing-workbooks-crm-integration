@@ -245,3 +245,46 @@
     .wrap.plugin-admin-content .form-table textarea { max-width:100%!important; }
     #workbooks_update_user_form { grid-template-columns:1fr; }
 }
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+}
+
+.toggle-switch input {
+  display: none; /* Hide the default checkbox */
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ff8383;
+  border-radius: 34px;
+  transition: 0.4s;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #83da86; /* Color when checked (on) */
+}
+
+input:checked + .slider::before {
+  transform: translateX(24px); /* Move the slider knob */
+}

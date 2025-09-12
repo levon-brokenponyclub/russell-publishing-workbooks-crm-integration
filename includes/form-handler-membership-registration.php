@@ -88,13 +88,37 @@ function dtr_nf_membership_registration_entrypoint($form_data) {
  * -------------------------------------------------------------------------- */
 function dtr_nf_membership_process($form_data) {
     $debug_id = 'REG-' . uniqid();
-    dtr_reg_log("[{$debug_id}] ====== MEMBER REGISTRATION ======");
+    // Get plugin test mode setting for this form
+    $options = get_option('dtr_workbooks_options', []);
+    $test_mode = !empty($options['test_mode_forms'][15]) && $options['test_mode_forms'][15] == 1;
+
+    $header = $test_mode ? "[{$debug_id}] ====== MEMBER REGISTRATION - TEST MODE ======" : "[{$debug_id}] ====== MEMBER REGISTRATION ======";
+    dtr_reg_log($header);
     dtr_reg_log("[{$debug_id}] NF DEBUG: Start processing form " . ($form_data['id'] ?? 'unknown'));
     $flat = dtr_nf_membership_flatten_fields($form_data);
     $data = dtr_nf_collect_membership_data($flat, $debug_id);
     if (!$data) { // already logged inside collector (missing required or duplicate WP user)
         dtr_nf_membership_log_failure('Validation or duplicate WP user', $flat);
         return false;
+    }
+
+    if ($test_mode) {
+        dtr_reg_log("[{$debug_id}] TEST MODE ENABLED: Skipping user creation and Workbooks sync");
+        if (function_exists('error_log')) {
+            error_log("[DTR] Test Mode: Active");
+        }
+        // Simulate user_id for payload/debug, but DO NOT create user or sync to Workbooks
+        $user_id = 999999;
+        dtr_reg_log("[{$debug_id}] TEST MODE: Selected TOIs: " . json_encode($data['toi_selected']));
+        $aoi_map = function_exists('dtr_map_toi_to_aoi') ? dtr_map_toi_to_aoi($data['toi_selected']) : [];
+        dtr_reg_log("[{$debug_id}] TEST MODE: AOI matrix result: " . json_encode($aoi_map));
+        $payload = dtr_nf_build_workbooks_payload($user_id, $data, $debug_id);
+        $payload = dtr_nf_maybe_attach_employer_org($user_id, $payload, $data, $debug_id);
+        dtr_reg_log("[{$debug_id}] TEST MODE: Would send payload: " . json_encode($payload));
+        dtr_reg_log("[{$debug_id}] TEST MODE: End of simulated registration.");
+        dtr_reg_log("[Membership-Reg] ==== MEMBER REGISTRATION SUCCESSFUL - TEST MODE  =====");
+        dtr_reg_log("[Membership-Reg] Member registration successful - Test Mode");
+        return true;
     }
 
     $user_id = dtr_nf_create_wp_user_and_meta($data, $debug_id);
@@ -175,6 +199,7 @@ function dtr_nf_create_wp_user_and_meta(array $data, $debug_id) {
         'employer' => $data['employer'],
         'employer_name' => $data['employer'],
         'cf_person_claimed_employer' => $data['employer'],
+        // Always keep employer_name and cf_person_claimed_employer in sync
         'person_personal_title' => $data['title'],
         'telephone' => $data['telephone'],
         'country' => $data['country'],
@@ -213,10 +238,12 @@ function dtr_nf_handle_aoi_mapping($user_id, $debug_id) {
     $toi_fields = [ 'cf_person_business','cf_person_diseases','cf_person_drugs_therapies','cf_person_genomics_3774','cf_person_research_development','cf_person_technology','cf_person_tools_techniques' ];
     $selected_toi = [];
     foreach ($toi_fields as $tf) { if ((int) get_user_meta($user_id,$tf,true) === 1) $selected_toi[] = $tf; }
+    dtr_reg_log("[{$debug_id}] NF DEBUG: TOIs selected for AOI mapping: " . json_encode($selected_toi));
     if (!$selected_toi) return true; // nothing to map but not an error
     $aoi_map = dtr_map_toi_to_aoi($selected_toi);
+    dtr_reg_log("[{$debug_id}] NF DEBUG: AOI matrix result: " . json_encode($aoi_map));
     foreach ($aoi_map as $aoi_field=>$aoi_val) update_user_meta($user_id,$aoi_field,$aoi_val);
-    dtr_reg_log("[{$debug_id}] NF DEBUG: AOI mapping applied: " . wp_json_encode($aoi_map));
+    dtr_reg_log("[{$debug_id}] NF DEBUG: AOI mapping applied: " . json_encode($aoi_map));
     return true;
 }
 
@@ -238,19 +265,13 @@ function dtr_nf_build_workbooks_payload($user_id, array $data, $debug_id) {
         'main_location[postcode]' => $data['postcode'],
         'employer_name' => $data['employer'],
         'cf_person_claimed_employer' => $data['employer'],
+        // Always keep employer_name and cf_person_claimed_employer in sync
         'cf_person_dtr_subscriber_type' => 'Prospect',
         'cf_person_dtr_subscriber' => 1,
         'cf_person_dtr_web_member' => 1,
         'lead_source_type' => 'Online Registration',
         'cf_person_is_person_active_or_inactive' => 'Active',
-        'cf_person_data_source_detail' => 'DTR Web Member Signup',
-        'cf_person_dtr_nurture_track' => 0,
-        'cf_person_nf_nurture_track' => 0,
-        'cf_person_epr_nurture_track' => 0,
-        'cf_person_grr_nurture_track' => 0,
-        'cf_person_iar_nurture_track' => 0,
-        'cf_person_it_nurture_track' => 0,
-        'cf_person_nurture_track' => 0
+        'cf_person_data_source_detail' => 'DTR Web Member Signup'
     ];
     // Marketing & TOI fields from meta (ensures consistency)
     $marketing_fields = [ 'cf_person_dtr_news','cf_person_dtr_events','cf_person_dtr_third_party','cf_person_dtr_webinar' ];

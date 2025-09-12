@@ -1,54 +1,155 @@
+/* ---------------------------------------------------------------
+   Saved Collection Grid: Clickable, Arrow Alignment, Hover, White Text
+--------------------------------------------------------------- */
+
+.collection-grid-all,
+.collection-grid-project {
+  cursor: pointer !important;
+  transition: background 0.3s !important;
+  background: #009fe3 !important;
+  color: #fff !important;
+  position: relative !important;
+}
+.collection-grid-all .content,
+.collection-grid-project .content {
+  color: #fff !important;
+}
+.collection-grid-all .label-icon,
+.collection-grid-project .label-icon {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5em !important;
+  color: #fff !important;
+}
+.collection-grid-all .icon,
+.collection-grid-project .icon {
+  color: #fff !important;
+  fill: #fff !important;
+}
+.collection-grid-all h5,
+.collection-grid-project h5 {
+  color: #fff !important;
+}
+.collection-grid-all p,
+.collection-grid-project p {
+  color: #fff !important;
+}
+.collection-grid-all .arrow,
+.collection-grid-project .arrow {
+  align-self: flex-end !important;
+  margin-top: auto !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: flex-end !important;
+  position: static !important;
+}
+.collection-grid-all .arrow .icon,
+
+.collection-grid-project .arrow .icon,
+.collection-grid-project .label-icon .icon.event::after {
+  color: #fff !important;
+  fill: #fff !important;
+}
+.collection-grid-all.clickable-container,
+.collection-grid-project.clickable-container {
+  cursor: pointer !important;
+  text-decoration: none !important;
+}
+.collection-grid-all.clickable-container:active,
+.collection-grid-project.clickable-container:active {
+  filter: brightness(0.95) !important;
+}
+.collection-grid-all a,
+.collection-grid-project a {
+  color: #fff !important;
+  text-decoration: none !important;
+}
+.collection-grid-all a:hover,
+.collection-grid-project a:hover {
+  text-decoration: underline !important;
+}
+
+.collection-grid-all:hover,
+.collection-grid-project:hover {
+  background: #871f80 !important;
+}
+.collection-grid-all:hover .content,
+.collection-grid-project:hover .content,
+.collection-grid-all:hover .label-icon,
+.collection-grid-project:hover .label-icon,
+.collection-grid-all:hover .icon,
+.collection-grid-project:hover .icon,
+.collection-grid-all:hover h5,
+.collection-grid-project:hover h5,
+.collection-grid-all:hover p,
+.collection-grid-project:hover p,
+.collection-grid-all:hover .arrow .icon,
+.collection-grid-project:hover .arrow .icon,
+.collection-grid-all:hover a,
+.collection-grid-project:hover a {
+  color: #fff !important;
+  fill: #fff !important;
+}
+.collection-grid-all:hover .label-icon .icon::after,
+.collection-grid-project:hover .label-icon .icon::after {
+  color: #fff !important;
+}
+.collection-grid-all:hover .arrow .icon,
+.collection-grid-project:hover .arrow .icon {
+  background: #008dc7 !important;
+}
+/* ---------------------------------------------------------------
+   Saved Collection Grid: Equal Height, Title/Description Alignment
+--------------------------------------------------------------- */
+.collection-grid-all,
+.collection-grid-project {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: stretch !important;
+  height: 100% !important;
+}
+.collection-grid-all .content,
+.collection-grid-project .content {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  justify-content: flex-start !important;
+}
+.collection-grid-all h5,
+.collection-grid-project h5 {
+  margin: 0 0 1em 0 !important;
+  line-height: 30px !important;
+  min-height: 2.4em !important;
+  display: flex !important;
+  align-items: flex-end !important;
+}
+.collection-grid-all p,
+.collection-grid-project p {
+  margin: 0 !important;
+  padding-top: 0.5em !important;
+  flex-shrink: 0 !important;
+}
+.collection-grid-all .arrow,
+.collection-grid-project .arrow {
+  margin-top: auto !important;
+}
 /* DTR Workbooks Frontend Styles */
 .dtr-workbooks-form {
-    margin: 20px 0;
+    margin: 20px 0 !important;
 }
 
 .dtr-workbooks-test-connection-result {
-    margin-left: 10px;
-    font-weight: bold;
+    margin-left: 10px !important;
+    font-weight: bold !important;
 }
 
 .dtr-workbooks-test-connection-result.success {
-    color: #4caf50;
+    color: #4caf50 !important;
 }
 
 .dtr-workbooks-test-connection-result.error {
-    color: #ff3b30;
+    color: #ff3b30 !important;
 }
-
-/* Gated Content Styles */
-.gated-lead-form-content {
-    position: relative;
-    padding: 1.5rem;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.gated-lead-form-content.webinars {
-    background-color: #f5f5f5;
-}
-
-.speaker-question {
-    display: none;
-}
-
-.gated-lead-form-content.webinars textarea,
-.gated-lead-form-content.webinars .nf-field-container.checkbox-container .nf-checked-label {
-  background:#fff;
-  appearance: none;
-  border:0;
-  border-radius: 5px;
-}
-
-.gated-lead-form-content.webinars textarea {
-  min-height: 200px !important;
-}
-
-.speaker-question.show {
-    display: block;
-}
-
 
 /* ---------------------------------------------------------------
     #1. Membership Form Styles
@@ -56,28 +157,28 @@
 
 /* --- Container & Typography --- */
 #membership-form-container .blue-container a {
-  color: #fff;
+  color: #fff !important;
   text-decoration: underline !important;
 }
 
 #membership-form-container .nf-before-form-content,
 #membership-form-container .nf-form-title {
-  display: none;
+  display: none !important;
 }
 
 #membership-form-container h1,
 #membership-form-container h2,
 #membership-form-container h3,
 #membership-form-container h4,
-#membership-form-container p,
-#membership-form-container a,
-#membership-form-container input,
-#membership-form-container .nf-field-label .nf-label-span,
-#membership-form-container .nf-field-label label {
-  font-family: "Titillium Web", Sans-serif !important;
+/* ---------------------------------------------------------------
+#membership-form-container .list-checkbox-wrap .nf-field-element li label,
+#membership-form-container .list-radio-wrap .nf-field-element li label {
+  margin-left: 30px !important;
+  top: 3px !important;
+  position: relative !important;
 }
 
-/* --- Label and Field Styling --- */
+/* --- Headings & Descriptions --- */
 #membership-form-container .label-above .nf-field-label {
   margin-bottom: 0 !important;
 }
@@ -146,31 +247,81 @@
   font-size: 16px !important;
 }
 
+/* --------------------------------------------------------------------------
+ * My Account Overview Dashboard Grid
+ * -------------------------------------------------------------------------- */
+.my-account .overview-dashboard-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: stretch !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  max-width: 1320px !important;
+}
+.my-account .overview-dashboard-grid > div {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  padding: 0 1.5em !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: stretch !important;
+  align-items: stretch !important;
+  margin:0 !important;
+}
+.my-account .overview-dashboard-grid .collection-grid-all,
+.my-account .overview-dashboard-grid .collection-grid {
+  height: 100% !important;
+  min-height: 320px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+.my-account .overview-dashboard-grid .collection-grid-project {
+  min-height: 80px !important;
+}
+@media (max-width: 900px) {
+  .my-account .overview-dashboard-grid {
+    flex-direction: column !important;
+  }
+  .my-account .overview-dashboard-grid > div {
+    padding: 0 !important;
+    margin-bottom: 2em !important;
+  }
+}
+#membership-form-container .nf-field-description,
+#membership-form-container .nf-field-description span {
+  margin-bottom: 25px !important;
+  font-size: 16px !important;
+}
+
 /* --- Breadcrumbs/Progress --- */
 #membership-form-container ul.nf-breadcrumbs {
-  display: flex;
-  justify-content: space-evenly;
+  display: flex !important;
+  justify-content: space-evenly !important;
   margin: 0 !important;
-  position: relative;
-  top: -17px;
+  position: relative !important;
+  top: -17px !important;
 }
 #membership-form-container ul.nf-breadcrumbs li.active a {
-  background: #871f80;
+  background: #871f80 !important;
 }
 #membership-form-container ul.nf-breadcrumbs li a {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #008dc7;
-  text-align: center;
-  line-height: 31px;
-  color: #fff;
-  font-weight: 700;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: #008dc7 !important;
+  text-align: center !important;
+  line-height: 31px !important;
+  color: #fff !important;
+  font-weight: 700 !important;
 }
 #membership-form-container .nf-progress-container {
   margin: 0 !important;
   border: none !important;
-  background-color: #f2f2f2;
+  background-color: #f2f2f2 !important;
 }
 #membership-form-container .nf-progress {
   height: 3px !important;
@@ -182,20 +333,20 @@
 
 /* --- Inline Buttons --- */
 #membership-form-container .nf-form-wrap .inline-buttons .nf-field-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  display: flex !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
 }
 #membership-form-container .nf-form-wrap .inline-buttons button {
-  display: inline-block;
-  width: auto;
+  display: inline-block !important;
+  width: auto !important;
 }
 
 /* --- Submit Button & Container --- */
 #membership-form-container .submit-container {
-  float: right;
-  margin-top: 40px;
-  top: 100px;
+  float: right !important;
+  margin-top: 40px !important;
+  top: 100px !important;
 }
 
 #membership-form-container [type="button"],
@@ -204,11 +355,11 @@
   background: #008dc7 !important;
   border: 0 !important;
   color: #fff !important;
-  font-weight: 500;
+  font-weight: 500 !important;
   font-family: "Titillium Web", Sans-serif !important;
-  font-size: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
 }
 #membership-form-container [type="button"]:hover,
 #membership-form-container [type="submit"]:hover,
@@ -219,83 +370,83 @@
 /* --- Custom Checkbox Styling --- */
 #membership-form-container .field-wrap > div input[type="checkbox"] {
   width: 1.25rem !important;
-  min-width: 1.25rem;
-  height: 1.25rem;
-  min-height: 1.25rem;
-  margin-left: 0;
-  margin-bottom: 0;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: 100%;
-  appearance: none;
-  clear:both;
+  min-width: 1.25rem !important;
+  height: 1.25rem !important;
+  min-height: 1.25rem !important;
+  margin-left: 0 !important;
+  margin-bottom: 0 !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% !important;
+  appearance: none !important;
+  clear:both !important;
 }
 #membership-form-container .checkbox:not(last-of-type) {
-  display: inline-block;
-  margin-right: 40px;
+  display: inline-block !important;
+  margin-right: 40px !important;
 }
 #membership-form-container .checkbox {
-  position: relative;
+  position: relative !important;
 }
 #membership-form-container .checkbox label {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 26px;
-  height: 26px;
-  background-color: #f1f1f1;
-  border: 1px solid #f1f1f1;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: background-color 300ms ease, color 300ms ease, box-shadow 300ms ease;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 26px !important;
+  height: 26px !important;
+  background-color: #f1f1f1 !important;
+  border: 1px solid #f1f1f1 !important;
+  border-radius: 3px !important;
+  cursor: pointer !important;
+  transition: background-color 300ms ease, color 300ms ease, box-shadow 300ms ease !important;
 }
 #membership-form-container .checkbox label:after {
-  content: "";
-  position: absolute;
-  top: 28%;
-  left: 24%;
-  width: 55%;
-  height: 35%;
-  opacity: 0;
-  border-left: 3px solid #871f80;
-  border-bottom: 3px solid #871f80;
-  transform: rotate(-45deg);
-  transition: opacity 300ms ease;
+  content: "" !important;
+  position: absolute !important;
+  top: 28% !important;
+  left: 24% !important;
+  width: 55% !important;
+  height: 35% !important;
+  opacity: 0 !important;
+  border-left: 3px solid #871f80 !important;
+  border-bottom: 3px solid #871f80 !important;
+  transform: rotate(-45deg) !important;
+  transition: opacity 300ms ease !important;
 }
 #membership-form-container .checkbox input {
-  visibility: hidden;
+  visibility: hidden !important;
 }
 #membership-form-container .checkbox input:checked + label {
-  background-color: #fff;
-  border-color: #fff;
+  background-color: #fff !important;
+  border-color: #fff !important;
 }
 #membership-form-container .checkbox input:checked + label:after {
-  opacity: 1;
+  opacity: 1 !important;
 }
 #membership-form-container .checkbox:nth-child(1) input:checked + label {
-  background-color: #fff;
-  border-color: #fff;
+  background-color: #fff !important;
+  border-color: #fff !important;
 }
 #membership-form-container .checkbox span {
-  display: inline-flex;
-  color: #fff;
-  margin: 0 0 0 40px;
-  top: -32px;
-  position: relative;
+  display: inline-flex !important;
+  color: #fff !important;
+  margin: 0 0 0 40px !important;
+  top: -32px !important;
+  position: relative !important;
   font-family: "Titillium Web", Sans-serif !important;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 14px !important;
+  font-weight: 600 !important;
 }
 
 /* --- Miscellaneous Membership Form Customizations --- */
 .full-page.vertical-half-margin.event-registration .nf-field {
-  margin-bottom: 10px;
+  margin-bottom: 10px !important;
 }
 .label-above .nf-field-label {
-  margin: 0;
+  margin: 0 !important;
 }
 nf-field .nf-field-container.checkbox-container label {
-  font-size: 16px;
+  font-size: 16px !important;
 }
 
 /* --- Section Titles and Adjustments --- */
@@ -307,13 +458,70 @@ nf-field .nf-field-container.checkbox-container label {
   display: block !important;
 }
 #membership-form-container #nf-field-155 {
-  top: -33px;
+  top: -33px !important;
   width:auto !important;
 }
 
 /* --- Hide Select2 Clear Button --- */
 #membership-form-container [type="button"].select2-selection__clear {
-  display: none;
+  display: none !important;
+}
+
+/* Ensure the checkbox field stays full width in the left column */
+#nf-field-232-container.confirm-container {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 1.5em 0 0 0 !important; /* Space after text/divider */
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  background: none !important;
+  border: none !important;
+  display: flex !important;
+  align-items: flex-start !important;
+}
+
+/* Style the label and input side by side, always left aligned */
+#nf-field-232-container .nf-field-label,
+#nf-field-232-container .nf-field-element {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5em !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Checkbox input styles for consistency */
+#nf-field-232-container input[type="checkbox"] {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  margin-right: 12px !important;
+  margin-left: 0 !important;
+  accent-color: #871f80 !important; /* or your brand color */
+}
+
+/* Make sure label text fits and wraps naturally in the column */
+#nf-label-field-232 {
+  font-size: 1.1em !important;
+  color: #fff !important;
+  font-family: inherit !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  font-weight: 400 !important;
+  display: inline !important;
+  white-space: normal !important;
+}
+
+/* Responsive: make sure it scales with column width */
+@media (max-width: 900px) {
+  #nf-field-232-container.confirm-container {
+    margin-top: 1em !important;
+    font-size: 1em !important;
+  }
+  #nf-label-field-232 {
+    font-size: 1em !important;
+  }
 }
 
 /* --- Positioning and Miscellaneous --- */
@@ -323,9 +531,9 @@ nf-field .nf-field-container.checkbox-container label {
   top: 60% !important;
 }
 #nf-label-field-232 {
-  max-width: 400px;
+  max-width: 400px !important;
   line-height: 20px !important;
-  color: #fff;
+  color: #fff !important;
 }
 
 #ea11y-widget-container .ea11y-widget-footer {
@@ -334,34 +542,34 @@ nf-field .nf-field-container.checkbox-container label {
 
 /* --- Spinner Overlay for Loading --- */
 #nf-spinner-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
 .nf-spinner {
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid #3498db;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: nf-spin 1s linear infinite;
+  border: 6px solid #f3f3f3 !important;
+  border-top: 6px solid #3498db !important;
+  border-radius: 50% !important;
+  width: 50px !important;
+  height: 50px !important;
+  animation: nf-spin 1s linear infinite !important;
 }
 @keyframes nf-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% { transform: rotate(0deg) !important; }
+  100% { transform: rotate(360deg) !important; }
 }
 
 /* --- Responsive Membership Form Adjustments --- */
 @media screen and (max-width: 540px) {
   .author-information h1 {
-    font-size: 2rem;
+    font-size: 2rem !important;
   }
 }
 
@@ -371,22 +579,22 @@ nf-field .nf-field-container.checkbox-container label {
 
 /* --- Ad Blocks and Article Listing --- */
 .ad-container {
-  margin: 0 0 1rem 0;
+  margin: 0 0 1rem 0 !important;
 }
 .article-listing .content h4 {
-  min-height: 5rem;
+  min-height: 5rem !important;
 }
 .advertising-tech-specs .one-third-page {
-  margin-top: 3rem;
+  margin-top: 3rem !important;
 }
 
 /* --- Navigation --- */
 .mobile-navigation nav ul.mobile-navigation-list li.menu-item-has-children {
-  position: relative;
-  cursor: pointer;
+  position: relative !important;
+  cursor: pointer !important;
 }
 .menu-icon-nb_webinar {
-  display: none;
+  display: none !important;
 }
 
 /* --- Select2 Dropdowns --- */
@@ -410,32 +618,91 @@ nf-field .nf-field-container.checkbox-container label {
 }
 .select2-container--default .select2-selection--single .select2-selection__arrow {
   height: 48px !important;
-  position: absolute;
+  position: absolute !important;
   top: 0px !important;
   right: 10px !important;
-  width: 20px;
+  width: 20px !important;
 }
 
 /* --- Account/My Account Styles --- */
 .my-account-navigation li a {
-  color: #5c5c5c;
+  color: #5c5c5c !important;
 }
+.my-account-navigation li a:hover {
+  color: #871f80 !important;
+}
+.my-account-navigation li.active a {
+  color: #871f80 !important;
+  font-weight: 600 !important;
+}
+
+.my-account-navigation {
+    position: relative !important;
+    display: flex !important;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.my-account-navigation li {
+    position: relative !important;
+    margin-right: 20px !important;
+}
+
+.my-account-navigation li:last-child {
+    margin-right: 0 !important;
+}
+
+.my-account-navigation li a {
+    display: block !important;
+    padding: 10px 15px !important;
+    text-decoration: none !important;
+    color: #333 !important;
+    transition: color 0.3s ease !important;
+}
+
+.my-account-navigation li:hover a {
+    color: #871f80 !important;
+}
+
+.my-account-navigation li:after {
+    content: '' !important;
+    display: block !important;
+    height: 8px !important;
+    width: 100% !important;
+    background: #871f80 !important;
+    position: absolute !important;
+    left: 0 !important;
+    bottom: -10px !important;
+    transform: scaleX(0) !important;
+    transform-origin: center !important;
+    transition: transform 0.3s ease !important;
+}
+
+.my-account-navigation li.active:after {
+    transform: scaleX(1) !important;
+}
+
+.my-account-navigation li:hover:after {
+    transform: scaleX(1) !important;
+}
+
 .my-account .updated,
 .dtr-form-success-message,
 .dtr-account-form .error {
-  background: #4caf50;
-  color: #fff;
-  font-size: 17px;
-  padding: 13px;
-  border-radius: 4px 4px 0 0;
-  top: 2px;
-  position: relative;
-  font-weight: 600;
+  background: #4caf50 !important;
+  color: #fff !important;
+  font-size: 17px !important;
+  padding: 13px !important;
+  border-radius: 4px 4px 0 0 !important;
+  top: 2px !important;
+  position: relative !important;
+  font-weight: 600 !important;
   margin-bottom:0 !important;
-  text-align: center;
+  text-align: center !important;
 }
 .dtr-account-form .error {
-  background:#ff3b30;
+  background:#ff3b30 !important;
 }
 .dtr-account-content input[type="submit"]:hover {
   background: #009fe3 !important;
@@ -446,114 +713,113 @@ nf-field .nf-field-container.checkbox-container label {
 --------------------------------------------------------------- */
 
 .dtr-account-container {
-  display: flex;
-  gap: 0;
-  max-width: 100%;
-  margin: 0 auto;
-  background: #f2f2f2;
-  margin-bottom:3rem;
+  display: flex !important;
+  gap: 0 !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  background: #f2f2f2 !important;
+  margin-bottom:3rem !important;
 }
 .dtr-account-sidebar {
-  width: 33.3%;
-  background: #dff2f9;
-  padding: 2rem;
-  box-sizing: border-box;
-  color: #333333;
-  border-radius: 5px;
+  width: 33.3% !important;
+  background: #dff2f9 !important;
+  padding: 2rem !important;
+  box-sizing: border-box !important;
+  color: #333333 !important;
+  border-radius: 5px !important;
 }
 .dtr-account-tabs {
   list-style: none !important;
-  padding: 0;
-  margin: 0;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 .dtr-account-tabs li {
-  margin-bottom: 16px;
-  list-style: none;
+  margin-bottom: 16px !important;
+  list-style: none !important;
 }
 .dtr-account-tab-link {
-  display: block;
-  padding: 14px 18px;
-  background: #009fe3;
-  color: #fff;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background 0.2s;
-  cursor: pointer;
-  font-size: 0.8rem;
+  display: block !important;
+  padding: 14px 18px !important;
+  background: #009fe3 !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  transition: background 0.2s !important;
+  cursor: pointer !important;
+  font-size: 0.8rem !important;
 }
 .dtr-account-tab-link.active,
 .dtr-account-tab-link:hover {
-  background: #871f80;
-  color: #fff;
+  background: #871f80 !important;
+  color: #fff !important;
 }
 .dtr-account-content {
-  width: 66.6%;
-  padding: 2rem;
-  box-sizing: border-box;
+  width: 66.6% !important;
+  padding: 2rem !important;
+  box-sizing: border-box !important;
 }
 .dtr-account-content .label-icon {
-  padding-top: 10px;
+  padding-top: 10px !important;
 }
 .dtr-account-tab-content {
-  display: none;
+  display: none !important;
 }
 .dtr-account-tab-content.active {
-  display: block;
+  display: block !important;
 }
 .data-table thead tr th {
   background-color:#009fe3 !important;
-  color:#fff;
-  font-weight:bold;
+  color:#fff !important;
+  font-weight:bold !important;
 }
 .dtr-account-container table th,
 .dtr-account-container table td {
-  text-align: left;
-  font-size:16px;
+  text-align: left !important;
+  font-size:16px !important;
 }
-/* --- Standardized Form Styling --- */
 .dtr-account-tab-content .dtr-account-form {
-  width: 100%;
-  margin-bottom: 2rem;
+  width: 100% !important;
+  margin-bottom: 2rem !important;
 }
 .dtr-account-form .dtr-form-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 28px;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 28px !important;
 }
 .dtr-form-label {
-  display: block;
-  width: 48%;
+  display: block !important;
+  width: 48% !important;
   font-family: "Titillium Web", Sans-serif !important;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 16px !important;
+  font-weight: 500 !important;
 }
 .dtr-form-label.full-width {
-  width: 100%;
+  width: 100% !important;
 }
 .dtr-form-label.half-width {
-  width: 48%;
+  width: 48% !important;
 }
 .dtr-form-input,
 .dtr-form-label select,
 .dtr-form-label input,
 .dtr-form-label textarea {
-  width: 100%;
-  background-color: #ffffff;
-  border-radius: 5px;
+  width: 100% !important;
+  background-color: #ffffff !important;
+  border-radius: 5px !important;
   border: 0 !important;
   font-size: 14px !important;
   font-family: "Titillium Web", Sans-serif !important;
-  padding: 0.75rem;
-  box-sizing: border-box;
-  margin-top:8px;
+  padding: 0.75rem !important;
+  box-sizing: border-box !important;
+  margin-top:8px !important;
 }
 .dtr-form-input:focus,
 .dtr-form-label select:focus,
 .dtr-form-label input:focus,
 .dtr-form-label textarea:focus {
-  outline: 2px solid #009fe3;
-  background: #e7f7fc;
+  outline: 2px solid #009fe3 !important;
+  background: #e7f7fc !important;
 }
 /* --- Full Width Animated Form Button --- */
 /* DISABLED: Problematic CSS that causes positioning conflicts with input elements
@@ -587,20 +853,20 @@ nf-field .nf-field-container.checkbox-container label {
 }
 .dtr-form-button::before,
 .form-button-element::before {
-  content: "";
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 0%;
-  background: #871f80;
-  z-index: 1;
-  transition: width 0.8s cubic-bezier(.6,.01,0,1);
-  pointer-events: none;
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important; top: 0 !important; bottom: 0 !important;
+  width: 0% !important;
+  background: #871f80 !important;
+  z-index: 1 !important;
+  transition: width 0.8s cubic-bezier(.6,.01,0,1) !important;
+  pointer-events: none !important;
 }
 .dtr-form-button.animating-bg::before,
 .form-button-element.animating-bg::before,
 .dtr-form-button.registered::before,
 .form-button-element.registered::before {
-  width: 100%;
+  width: 100% !important;
 }
 .dtr-form-button.registered,
 .form-button-element.registered {
@@ -608,91 +874,91 @@ nf-field .nf-field-container.checkbox-container label {
 }
 .dtr-form-button .btn-content,
 .form-button-element .btn-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  position: relative !important;
+  z-index: 2 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
 }
 */
 /* DISABLED: Complex spinner animations no longer used
 .fa-solid.icon.spinner {
-  margin-right: 0.5em;
-  opacity: 0;
-  transition: opacity 0.25s;
-  animation: none;
-  background: none;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: #fff;
+  margin-right: 0.5em !important;
+  opacity: 0 !important;
+  transition: opacity 0.25s !important;
+  animation: none !important;
+  background: none !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: #fff !important;
 }
 .fa-solid.icon.spinner.spin {
-  opacity: 1;
-  animation: spin 0.8s linear infinite;
-  background: linear-gradient(90deg, #fff 0%, #871f80 100%);
-  background-size: 200% 100%;
-  background-position: 0 0;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation-name: spin, spinnerColorMask;
-  animation-duration: 0.8s, 0.8s;
-  animation-iteration-count: infinite, 1;
-  animation-timing-function: linear, ease-in-out;
-  animation-fill-mode: forwards;
+  opacity: 1 !important;
+  animation: spin 0.8s linear infinite !important;
+  background: linear-gradient(90deg, #fff 0%, #871f80 100%) !important;
+  background-size: 200% 100% !important;
+  background-position: 0 0 !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation-name: spin, spinnerColorMask !important;
+  animation-duration: 0.8s, 0.8s !important;
+  animation-iteration-count: infinite, 1 !important;
+  animation-timing-function: linear, ease-in-out !important;
+  animation-fill-mode: forwards !important;
 }
 @keyframes spinnerColorMask {
   0% {
-    background-position: 0 0;
+    background-position: 0 0 !important;
   }
   100% {
-    background-position: 100% 0;
+    background-position: 100% 0 !important;
   }
 }
 @keyframes spin {
-  100% { transform: rotate(360deg); }
+  100% { transform: rotate(360deg) !important; }
 }
 .fa-solid.icon.check {
-  color: #fff;
-  margin-right: 0.5em;
-  opacity: 1;
+  color: #fff !important;
+  margin-right: 0.5em !important;
+  opacity: 1 !important;
 }
 .btn-text {
-  display: inline-block;
+  display: inline-block !important;
 }
 */
 
 /* --- Data Table Styling --- */
 .data-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 2rem;
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin-bottom: 2rem !important;
 }
 .data-table th,
 .data-table td {
-  padding: 0.6rem 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 0.6rem 1rem !important;
+  border-bottom: 1px solid #e0e0e0 !important;
 }
 
 /* --- Responsive Account Layout --- */
 @media screen and (max-width: 900px) {
   .dtr-account-container {
-    flex-direction: column;
+    flex-direction: column !important;
   }
   .dtr-account-sidebar,
   .dtr-account-content {
-    width: 100%;
-    border-radius: 0;
-    padding: 1rem;
+    width: 100% !important;
+    border-radius: 0 !important;
+    padding: 1rem !important;
   }
   .dtr-form-label,
   .dtr-form-label.full-width,
   .dtr-form-label.half-width {
-    width: 100%;
+    width: 100% !important;
   }
   .dtr-account-tabs li {
-    display: inline-block;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
+    display: inline-block !important;
+    margin-right: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
   }
 }
 
@@ -706,11 +972,11 @@ nf-field .nf-field-container.checkbox-container label {
 .nf-field-container.submit-container input[type="submit"].form-button-element {
   width: 100% !important;
   min-width: 0 !important;
-  box-sizing: border-box;
-  display: flex;
-  flex: 1 1 0%;
-  justify-content: center;
-  align-items: center;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex: 1 1 0% !important;
+  justify-content: center !important;
+  align-items: center !important;
   padding: 0 !important;
   margin: 0 !important;
 }
@@ -739,7 +1005,7 @@ nf-field .nf-field-container.checkbox-container label {
 .submit-container .field-wrap,
 .submit-container .nf-field-element {
   width: 100% !important;
-  display: flex;
+  display: flex !important;
   padding: 0 !important;
   margin: 0 !important;
 }
@@ -748,27 +1014,27 @@ nf-field .nf-field-container.checkbox-container label {
 .submit-container .form-button-element,
 .dtr-input-button,
 .dtr-account-tab-content .dtr-input-button {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   width: 100% !important;
-  min-width: 0;
-  box-sizing: border-box;
-  font-weight: bold;
-  font-size: 0.75rem;
-  cursor: pointer;
-  user-select: none;
-  color: #fff;
-  border: none;
-  background: #009fe3;
-  transition: background 0.2s;
-  line-height: 2.5rem;
-  min-height: 2.5rem;
-  padding: 0 1em;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  font-weight: bold !important;
+  font-size: 0.75rem !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  color: #fff !important;
+  border: none !important;
+  background: #009fe3 !important;
+  transition: background 0.2s !important;
+  line-height: 2.5rem !important;
+  min-height: 2.5rem !important;
+  padding: 0 1em !important;
   margin: 0 !important;
   opacity:1 !important;
-  max-width:300px;
+  max-width:300px !important;
   margin:20px auto !important;
 }
 .submit-container .form-button-element:hover,
@@ -776,7 +1042,7 @@ nf-field .nf-field-container.checkbox-container label {
   background:#871f80 !important;
 }
 .dtr-account-tab-content .dtr-input-button:disabled {
-    opacity:1;
+    opacity:1 !important;
     background:#871f80 !important;
 }
 
@@ -818,31 +1084,30 @@ input[type="submit"].form-button-element {
 
 /* ---------------------------------------------------------------
     #5. Ninja Forms - Loading Animation
---------------------------------------------------------------- */
+
 
 .nf-loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255,255,255,0.7);
-  z-index: 9999;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(255,255,255,0.7) !important;
+  z-index: 9999 !important;
 }
 .nf-loading-spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 50px;
-  height: 50px;
-  border: 5px solid #ccc;
-  border-top-color: #0073aa;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 50px !important;
+  height: 50px !important;
+  border: 5px solid #ccc !important;
+  border-top-color: #0073aa !important;
+  animation: spin 1s linear infinite !important;
 }
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to { transform: rotate(360deg) !important; }
 }
 
 
@@ -851,14 +1116,14 @@ input[type="submit"].form-button-element {
 --------------------------------------------------------------- */
 
 .gated-lead-form-content {
-  margin-top: -45px;
-  padding: 1.5rem;
-  padding-top: 2rem;
-  border-radius: 5px;
-  background: #f2f2f2;
+  margin-top: -45px !important;
+  padding: 1.5rem !important;
+  padding-top: 2rem !important;
+  border-radius: 5px !important;
+  background: #f2f2f2 !important;
   z-index: 0 !important;
-  position: relative;
-  width: 93.996%;
+  position: relative !important;
+  width: 93.996% !important;
   font-family: "Titillium Web", Sans-serif !important;
 }
 .gated-lead-form-content.webinars label {
@@ -872,35 +1137,35 @@ input[type="submit"].form-button-element {
 }
 
 .gated-lead-form-content input[type='checkbox'] {
-  width: 1.25rem;
-  min-width: 1.25rem;
-  height: 1.25rem;
-  min-height: 1.25rem;
-  margin-left: 0;
-  margin-bottom: 0;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: 100%;
+  width: 1.25rem !important;
+  min-width: 1.25rem !important;
+  height: 1.25rem !important;
+  min-height: 1.25rem !important;
+  margin-left: 0 !important;
+  margin-bottom: 0 !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% !important;
   background-color: #fff !important;
   border:1px solid #ddd !important;
 }
 #acf-questions-form label.question-label {
   margin-bottom: 0 !important;
-  display: block;
-  font-size: 19px;
-  color: #424242;
+  display: block !important;
+  font-size: 19px !important;
+  color: #424242 !important;
 }
 .gated-lead-form-content label.answer-label,
 .gated-lead-form-content select,
 .gated-lead-form-content textarea {
-  position: relative;
+  position: relative !important;
   top: -15px !important;
-  display: block;
-  font-size:16px;
+  display: block !important;
+  font-size:16px !important;
 }
 .gated-lead-form-content select {
-  width: 100%;
-  background: #fff;
+  width: 100% !important;
+  background: #fff !important;
 }
 #acf-questions-form input[type='radio'],
 #acf-questions-form input[type='checkbox'],
@@ -910,23 +1175,23 @@ input[type="submit"].form-button-element {
 .gated-lead-form-content.webinars textarea {
   background-color: #fff !important;
   opacity: 1 !important;
-  position: relative;
-  margin-right: 8px;
+  position: relative !important;
+  margin-right: 8px !important;
 }
 #acf-questions-form input[type='radio'],
 #acf-questions-form input[type='checkbox'] {
-  top:7px;
+  top:7px !important;
 }
 .gated-lead-form-content.webinars textarea {
-  margin-bottom: 20px;
+  margin-bottom: 20px !important;
 }
 .gated-lead-form-content.webinars label.answer-label,
 .gated-lead-form-content.webinars select,
 .gated-lead-form-content.webinars textarea {
-  position: relative;
+  position: relative !important;
   margin-top: 15px !important;
   top: 0 !important;
-  display: block;
+  display: block !important;
   border:1px solid #ddd !important;
 }
 
@@ -976,8 +1241,48 @@ input[type="submit"].form-button-element {
   border:1px solid #2f2f2f !important;
 }
 
-@media screen and (min-width: 62.5em) {
+/* @media screen and (min-width: 62.5em) {
   #header .inner-container.desktop-container {
     margin:0.5rem 4% !important;
   }
+} */
+
+.full-page.vertical-half-margin.event-registration.purple-button .event-register-button {
+  background-color: #871f80 !important;
+}
+.full-page.vertical-half-margin.event-registration.purple-button .event-register-button:hover {
+  background-color: #009fe3 !important;
+}
+
+.image-only-hero-content.shifted-hero h1 {
+  min-height:130px !important;
+  max-height:130px !important
+}
+
+.facetwp-template publication.publication-listing {
+  background:#f2f2f25f !important;
+}
+
+.facetwp-template publication.publication-listing .content {
+  padding-right:25px !important;
+}
+
+.facetwp-template publication.publication-listing .image-layover-icon.publication {
+  background:#fff !important;
+}
+.date.top-right {
+    min-width: 2rem;
+    min-height: 2rem;
+    height: 2rem;
+    line-height: 2rem;
+    padding: 0 1rem;
+    background:#009fe3;
+    position: absolute;
+    top:0;
+    right:0;
+    border-radius:0 0 0 0.25rem;
+    color:#fff;
+    font-weight:600;
+    font-size:13px;
+    /* border:3px solid #fff; */
 }
