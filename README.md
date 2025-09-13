@@ -1,35 +1,4 @@
-# Webinar Registration Template Logic Reference
 
-## Logic Overview
-
-### 1. Webinar Type Detection
-- If the ACF field `webinar_link` is present, the post is treated as an **On Demand Webinar**.
-- Otherwise, it is a **Live Webinar** (date-based logic applies).
-
-### 2. User State Logic
-- **Not logged in:**
-   - Show a "Register Now" button that triggers the login modal.
-- **Logged in:**
-   - **On Demand Webinar (webinar_link present):**
-      - Show "On Demand - Register Now" button.
-      - If `add_additional_questions` is true and a form is set, display the Ninja Form below.
-   - **Live Webinar (upcoming event, not on demand):**
-      - If user is already registered:
-         - Show "Registered" button and calendar link.
-      - If user is not registered:
-         - Show "Register Now" button (no link).
-         - Display the Ninja Form below if set.
-   - **Live Webinar (event has passed, not on demand):**
-      - Show "On Demand - Register Now" button.
-      - If `add_additional_questions` is true and a form is set, display the Ninja Form below.
-
-### 3. Logging
-- Console logs are output at each major logic branch to identify webinar type and user state for debugging.
-- PHP comments and section titles are used throughout the template for maintainability.
-
-### 4. Future Extensions
-- Placeholder for JS logging/debug code is kept for future use.
-- Logic is modular and clearly commented for easy adaptation to Lead Generation or other flows.
 # DTR - Workbooks CRM API Integration
 
 ## Overview
@@ -42,9 +11,8 @@ A production-ready WordPress plugin that integrates WordPress with the DTR Workb
 
 ---
 
-## Comprehensive Feature Summary
 
-A comprehensive WordPress plugin enabling seamless integration between WordPress and DTR Workbooks CRM. This solution powers automated user registration, advanced ACF-driven content gating, dynamic form generation from content metadata, robust event/ticket/lead creation, intelligent employer search, bidirectional account preference syncing, and detailed debugging across ALL gated content types (not just webinars).
+## Comprehensive Feature Summary
 
 ### 🔗 Core CRM Integration
 * Secure API wrapper with timeout/error surfacing & lock_version handling
@@ -94,6 +62,40 @@ A comprehensive WordPress plugin enabling seamless integration between WordPress
 * Archived legacy code catalogued (`archive/README-ARCHIVED-FILES.md`)
 * Clear plugin structure & helper abstraction layers
 
+## Webinar Registration Template Logic Reference
+
+### Logic Overview
+
+#### 1. Webinar Type Detection
+- If the ACF field `webinar_link` is present, the post is treated as an **On Demand Webinar**.
+- Otherwise, it is a **Live Webinar** (date-based logic applies).
+
+#### 2. User State Logic
+- **Not logged in:**
+   - Show a "Register Now" button that triggers the login modal.
+- **Logged in:**
+   - **On Demand Webinar (webinar_link present):**
+      - Show "On Demand - Register Now" button.
+      - If `add_additional_questions` is true and a form is set, display the Ninja Form below.
+   - **Live Webinar (upcoming event, not on demand):**
+      - If user is already registered:
+         - Show "Registered" button and calendar link.
+      - If user is not registered:
+         - Show "Register Now" button (no link).
+         - Display the Ninja Form below if set.
+   - **Live Webinar (event has passed, not on demand):**
+      - Show "On Demand - Register Now" button.
+      - If `add_additional_questions` is true and a form is set, display the Ninja Form below.
+
+#### 3. Logging
+- Console logs are output at each major logic branch to identify webinar type and user state for debugging.
+- PHP comments and section titles are used throughout the template for maintainability.
+
+#### 4. Future Extensions
+- Placeholder for JS logging/debug code is kept for future use.
+- Logic is modular and clearly commented for easy adaptation to Lead Generation or other flows.
+
+A comprehensive WordPress plugin enabling seamless integration between WordPress and DTR Workbooks CRM. This solution powers automated user registration, advanced ACF-driven content gating, dynamic form generation from content metadata, robust event/ticket/lead creation, intelligent employer search, bidirectional account preference syncing, and detailed debugging across ALL gated content types (not just webinars).
 ---
 
 ## Installation & Setup
@@ -202,7 +204,42 @@ Sync Steps:
 
 ## Developer Information
 
+dtr-workbooks-crm-integration/
+├── dtr-workbooks-crm-integration.php
+├── includes/
+│   ├── class-acf-ninjaforms-merge.php
+│   ├── class-array-merge-safety.php
+│   ├── class-employer-sync.php
+│   ├── class-form-submission-override.php
+│   ├── class-helper-functions.php
+│   ├── class-loader.php
+│   ├── core/
+│   ├── form-handler-gated-content-reveal.php
+│   ├── form-handler-media-planner.php
+│   ├── form-handler-membership-registration.php
+│   ├── form-handler-webinars.php
+│   ├── form-submission-processors-ninjaform-hooks.php
+│   └── form-submission-processors-submission-fix.php
+├── shortcodes/
+│   ├── dtr-forgot-password.php
+│   ├── dtr-my-account-details.php
+│   └── dtr-shortcodes.php
+├── js/
+├── assets/
+│   └── json/
+│       └── employers.json
+├── logs/
+├── lib/
+│   └── workbooks_api.php
+├── scripts/
+│   ├── setup.sh
+│   ├── deploy.sh
+│   ├── post-commit-sync.sh
+│   ├── config.example.sh
+│   └── README.md
+
 ### Plugin Structure (Current)
+
 ```
 dtr-workbooks-crm-integration/
 ├── dtr-workbooks-crm-integration.php
@@ -257,55 +294,28 @@ Disable afterward to reduce I/O.
 * Ensure permissions allow writing to `logs/` and `assets/json/`
 
 
+
 ## Changelog (Highlights)
+
 ### 2.1.x (In Progress – September 2025)
-- **[In Progress: October 2025] Modular Webinar & Lead Generation Registration, Robust Logging, Dynamic UI, and Bugfixes**
-   - Refactored both webinar and lead generation registration logic into dedicated, modular classes and handler files for maintainability and testability.
-   - All registration shortcodes (webinar and lead gen) are always loaded and registered, ensuring UI is available wherever needed.
-   - Unified and robust logging for all registration flows, with step-by-step debug output and specialized logs for lead generation and webinars.
-   - Dynamic ACF-powered question rendering: registration forms now automatically display all ACF-defined questions for the current post/event, with no manual edits required.
-   - Frontend UI improvements: always-on form display for logged-in users, dynamic feedback, and microanimation for form submission.
-   - Fixed all PHP parse errors and logic bugs in lead generation and webinar registration flows, including array mapping, HTML structure, and conditional logic.
-   - Improved error handling and admin/test mode for safe, repeatable testing.
-   - Updated documentation and changelog to reflect all recent progress and improvements.
-- **Unified Membership Registration Handler:** All membership and gated content registrations now use a single, robust handler for consistency and easier maintenance.
-- **Paginated Select2 Employer Search:** Employer search in admin and frontend now uses paginated Select2 with exact, starts-with, and contains ordering for faster, more relevant results.
-- **Employer JSON Relocation:** Employer data JSON is now stored at `assets/json/employers.json` with new helper functions for reading/writing, plus legacy fallback for compatibility.
-- **Central Logging & Log Reset:** All plugin logs are now consolidated, with a workflow for resetting logs to prepare for clean test runs and easier debugging.
-- **Admin ↔ User Preference & AOI Sync:** Improvements to ensure admin changes to user preferences and AOI fields are mirrored to user meta, and vice versa, for true bidirectional sync.
-- **Genomics Key Migration:** Logic for genomics field migration has been moved out of the main code body. The plugin now repairs incorrect legacy `cf_person_genomics_3744` keys and uses the canonical key, with an optional cleanup utility for old data.
-- **Responsive Tables:** Admin tables are now fully responsive, with columns auto-sizing and horizontal scrolling on small screens.
-- **Column Width Fixes:** First column adapts to content, second and third columns have a max width of 250px with ellipsis for overflow.
-- **Toggle Button for Workbooks Fields:** The "Show Workbooks API Fields for this User" link is now a button with improved JS toggle logic and accessibility.
-- **Ninja Forms Country Select:** The Ninja Forms - Full Country Names plugin now:
-   - Processes selects inside containers with `.full-iso-country-names`.
-   - Only logs the selected country (not all options) in the console, both on load and change.
-   - Handles both ISO code and full country name as selected value, with reverse lookup for code.
-   - Improved MutationObserver and logging for dynamic forms.
-
-## Custom Plugin: Ninja Forms - Full Country Names
-
-**Plugin Name:** Ninja Forms - Full Country Names  
-**Description:** Applies full country names to Ninja Forms country fields (both frontend and backend), and any select field with a class of 'full-iso-country-names'. Works with Ninja Forms 3.0+.
-
-### Features
-- Replaces ISO 3166-1 alpha-2 country codes with full country names in Ninja Forms submissions and emails.
-- Works for both default Ninja Forms country fields and any select with the class `full-iso-country-names`.
-- Includes a full mapping of all ISO country codes to names.
-- Enqueues a frontend JS file to update select fields in real time.
-
-### 2.0.0
-* Modular admin, gated debug logging, verification fetch after updates, stable ACF/Ninja Forms gating
-
-### 1.4.x Series (Summary)
-* Universal gated content integration; always-create sales lead
-* Enhanced AOI/TOI mapping & employer sync improvements
-* Dynamic ACF question extraction & sponsor opt-in handling
-* Performance & caching refinements for employer lookup
-
-## Support
-* Website: https://www.supersonicplayground.com  
-* Developer: Levon Gravett  
+- Refactored both webinar and lead generation registration logic into dedicated, modular classes and handler files for maintainability and testability.
+- All registration shortcodes (webinar and lead gen) are always loaded and registered, ensuring UI is available wherever needed.
+- Unified and robust logging for all registration flows, with step-by-step debug output and specialized logs for lead generation and webinars.
+- Dynamic ACF-powered question rendering: registration forms now automatically display all ACF-defined questions for the current post/event, with no manual edits required.
+- Frontend UI improvements: always-on form display for logged-in users, dynamic feedback, and microanimation for form submission.
+- Fixed all PHP parse errors and logic bugs in lead generation and webinar registration flows, including array mapping, HTML structure, and conditional logic.
+- Improved error handling and admin/test mode for safe, repeatable testing.
+- Updated documentation and changelog to reflect all recent progress and improvements.
+- Unified Membership Registration Handler: All membership and gated content registrations now use a single, robust handler for consistency and easier maintenance.
+- Paginated Select2 Employer Search: Employer search in admin and frontend now uses paginated Select2 with exact, starts-with, and contains ordering for faster, more relevant results.
+- Employer JSON Relocation: Employer data JSON is now stored at `assets/json/employers.json` with new helper functions for reading/writing, plus legacy fallback for compatibility.
+- Central Logging & Log Reset: All plugin logs are now consolidated, with a workflow for resetting logs to prepare for clean test runs and easier debugging.
+- Admin ↔ User Preference & AOI Sync: Improvements to ensure admin changes to user preferences and AOI fields are mirrored to user meta, and vice versa, for true bidirectional sync.
+- Genomics Key Migration: Logic for genomics field migration has been moved out of the main code body. The plugin now repairs incorrect legacy `cf_person_genomics_3744` keys and uses the canonical key, with an optional cleanup utility for old data.
+- Responsive Tables: Admin tables are now fully responsive, with columns auto-sizing and horizontal scrolling on small screens.
+- Column Width Fixes: First column adapts to content, second and third columns have a max width of 250px with ellipsis for overflow.
+- Toggle Button for Workbooks Fields: The "Show Workbooks API Fields for this User" link is now a button with improved JS toggle logic and accessibility.
+- Ninja Forms Country Select: The Ninja Forms - Full Country Names plugin now processes selects inside containers with `.full-iso-country-names`, only logs the selected country (not all options) in the console, both on load and change, handles both ISO code and full country name as selected value (with reverse lookup for code), and uses improved MutationObserver and logging for dynamic forms.
 
 ## License
 Proprietary software developed by Supersonic Playground for DTR (Drug Target Review). All rights reserved.
