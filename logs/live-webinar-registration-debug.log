@@ -1,1 +1,1502 @@
-[2025-09-11 12:00:00] Example debug entry: live webinar registration log initialized.
+
+[2025-09-13 11:23:18] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-13 11:23:18] RAW $_POST: Array
+(
+    [_wpnonce] => 2aff3ede3f
+    [_wp_http_referer] => /wp-admin/admin.php?page=dtr-workbooks-webinar-test
+    [webinar_selection] => 161189
+    [speaker_question] => Test question from dynamic webinar selection
+    [sponsor_optin] => 1
+    [test_submission] => 
+)
+
+[2025-09-13 11:23:18] Registration Data (arg): Array
+(
+    [post_id] => 161189
+    [speaker_question] => Test question from dynamic webinar selection
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 11:23:18] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-13 11:23:18] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-13 11:23:18] ℹ️ Form data - Speaker question: 'Test question from dynamic webinar selection', Sponsor optin: 1
+[2025-09-13 11:23:18] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-13 11:23:18] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5832
+[2025-09-13 11:23:18] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 11:23:18] ✅ STEP 3: Person created/updated
+[2025-09-13 11:23:19] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 11:23:19] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-13 11:23:20] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 11:23:20] ✅ STEP 5: Added to Mailing List
+[2025-09-13 11:23:20] ✅ STEP 6: Speaker Question = Test question from dynamic webinar selection
+[2025-09-13 11:23:20] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 11:23:20] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-13 11:23:20] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819700
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-13 11:23:20] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819700
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+[2025-09-13 11:23:31] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-13 11:23:31] RAW $_POST: Array
+(
+    [_wpnonce] => 2aff3ede3f
+    [_wp_http_referer] => /wp-admin/admin.php?page=dtr-workbooks-webinar-test
+    [webinar_selection] => 161472
+    [speaker_question] => Test question from dynamic webinar selection
+    [sponsor_optin] => 1
+    [test_submission] => 
+)
+
+[2025-09-13 11:23:31] Registration Data (arg): Array
+(
+    [post_id] => 161472
+    [speaker_question] => Test question from dynamic webinar selection
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 11:23:31] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-13 11:23:31] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-13 11:23:31] ℹ️ Form data - Speaker question: 'Test question from dynamic webinar selection', Sponsor optin: 1
+[2025-09-13 11:23:31] ✅ STEP 1: Processing Webinar Form (ID 161472)
+[2025-09-13 11:23:31] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5790
+[2025-09-13 11:23:31] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 11:23:31] ✅ STEP 3: Person created/updated
+[2025-09-13 11:23:32] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 11:23:32] ℹ️ Updating Mailing List Entry for event_id=5790, person_id=4318866
+[2025-09-13 11:23:34] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 11:23:34] ✅ STEP 5: Added to Mailing List
+[2025-09-13 11:23:34] ✅ STEP 6: Speaker Question = Test question from dynamic webinar selection
+[2025-09-13 11:23:34] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 11:23:34] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-13 11:23:34] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161472
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819702
+[person_id] => 4318866
+[event_id] => 5790
+[success] => 1
+[2025-09-13 11:23:34] [webinar_title] => 
+[post_id] => 161472
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819702
+[person_id] => 4318866
+[event_id] => 5790
+[success] => 1
+
+[2025-09-13 11:34:02] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-13 11:34:02] RAW $_POST: Array
+(
+    [_wpnonce] => 2aff3ede3f
+    [_wp_http_referer] => /wp-admin/admin.php?page=dtr-workbooks-webinar-test
+    [webinar_selection] => 161189
+    [speaker_question] => Test question from dynamic webinar selection
+    [sponsor_optin] => 1
+    [test_submission] => 
+)
+
+[2025-09-13 11:34:02] Registration Data (arg): Array
+(
+    [post_id] => 161189
+    [speaker_question] => Test question from dynamic webinar selection
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 11:34:02] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-13 11:34:02] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-13 11:34:02] ℹ️ Form data - Speaker question: 'Test question from dynamic webinar selection', Sponsor optin: 1
+[2025-09-13 11:34:02] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-13 11:34:02] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5832
+[2025-09-13 11:34:02] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 11:34:02] ✅ STEP 3: Person created/updated
+[2025-09-13 11:34:04] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 11:34:04] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-13 11:34:05] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 11:34:05] ✅ STEP 5: Added to Mailing List
+[2025-09-13 11:34:05] ✅ STEP 6: Speaker Question = Test question from dynamic webinar selection
+[2025-09-13 11:34:05] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 11:34:05] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-13 11:34:05] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819706
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-13 11:34:05] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819706
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+[2025-09-13 14:06:47] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-13 14:06:47] RAW $_POST: Array
+(
+    [_wpnonce] => 12673f18e7
+    [_wp_http_referer] => /wp-admin/admin.php?page=dtr-workbooks-webinar-test
+    [webinar_selection] => 161189
+    [speaker_question] => Test question from dynamic webinar selection
+    [sponsor_optin] => 1
+    [test_submission] => 
+)
+
+[2025-09-13 14:06:47] Registration Data (arg): Array
+(
+    [post_id] => 161189
+    [speaker_question] => Test question from dynamic webinar selection
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 14:06:47] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-13 14:06:47] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-13 14:06:47] ℹ️ Form data - Speaker question: 'Test question from dynamic webinar selection', Sponsor optin: 1
+[2025-09-13 14:06:47] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-13 14:06:47] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5832
+[2025-09-13 14:06:47] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 14:06:47] ✅ STEP 3: Person created/updated
+[2025-09-13 14:06:48] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 14:06:48] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-13 14:06:50] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 14:06:50] ✅ STEP 5: Added to Mailing List
+[2025-09-13 14:06:50] ✅ STEP 6: Speaker Question = Test question from dynamic webinar selection
+[2025-09-13 14:06:50] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 14:06:50] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-13 14:06:50] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819728
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-13 14:06:50] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819728
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+[2025-09-13 15:03:16] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-13 15:03:16] RAW $_POST: Array
+(
+    [_wpnonce] => 12673f18e7
+    [_wp_http_referer] => /wp-admin/admin.php?page=dtr-workbooks-webinar-test
+    [webinar_selection] => 161189
+    [speaker_question] => Test question from dynamic webinar selection
+    [sponsor_optin] => 1
+    [test_submission] => 
+)
+
+[2025-09-13 15:03:16] Registration Data (arg): Array
+(
+    [post_id] => 161189
+    [speaker_question] => Test question from dynamic webinar selection
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 15:03:16] ✅ Using post_id: 161189
+[2025-09-13 15:03:16] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-13 15:03:16] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-13 15:03:16] ℹ️ Form data - Speaker question: 'Test question from dynamic webinar selection', Sponsor optin: 1
+[2025-09-13 15:03:16] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-13 15:03:16] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5832
+[2025-09-13 15:03:16] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 15:03:16] ✅ STEP 3: Person created/updated
+[2025-09-13 15:03:17] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 15:03:17] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-13 15:03:18] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 15:03:18] ✅ STEP 5: Added to Mailing List
+[2025-09-13 15:03:18] ✅ STEP 6: Speaker Question = Test question from dynamic webinar selection
+[2025-09-13 15:03:18] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 15:03:18] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-13 15:03:18] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819738
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-13 15:03:18] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819738
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+[2025-09-13 15:13:14] HOOKS FILE LOADED
+[2025-09-13 15:13:14] FILE LOAD: form-submission-processors-ninjaform-hooks.php
+[2025-09-13 15:13:14] HOOKS INITIALIZED
+[2025-09-13 15:13:14] DISPATCHER ENTRY
+[2025-09-13 15:13:14] DISPATCHER CALLED
+Form ID: 2
+Debug ID: NF-68c58a0a8821e
+Form Data: Array
+(
+    [fields] => Array
+        (
+            [question_for_speaker] => Array
+                (
+                    [value] => Test question from manual form submission - 2025-09-13 15:13:07
+                )
+
+            [cf_mailing_list_member_sponsor_1_optin] => Array
+                (
+                    [value] => 1
+                )
+
+        )
+
+    [form_id] => 2
+)
+
+---
+[2025-09-13 15:13:14] WEBINAR CASE TRIGGERED (Form ID 2)
+[2025-09-13 15:13:14] Calling dtr_process_webinar_registration
+[2025-09-13 15:16:16] HOOKS FILE LOADED
+[2025-09-13 15:16:16] FILE LOAD: form-submission-processors-ninjaform-hooks.php
+[2025-09-13 15:16:16] HOOKS INITIALIZED
+[2025-09-13 15:16:16] DISPATCHER ENTRY
+[2025-09-13 15:16:16] DISPATCHER CALLED
+Form ID: 2
+Debug ID: NF-68c58ac016d91
+Form Data: Array
+(
+    [fields] => Array
+        (
+            [question_for_speaker] => Array
+                (
+                    [value] => Test question from manual form submission - 2025-09-13 15:16:10
+                )
+
+            [cf_mailing_list_member_sponsor_1_optin] => Array
+                (
+                    [value] => 1
+                )
+
+        )
+
+    [form_id] => 2
+)
+
+---
+[2025-09-13 15:16:16] WEBINAR CASE TRIGGERED (Form ID 2)
+[2025-09-13 15:16:16] Calling dtr_process_webinar_registration
+[2025-09-13 15:21:32] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-13 15:21:32] RAW $_POST: Array
+(
+    [_wpnonce] => 12673f18e7
+    [_wp_http_referer] => /wp-admin/admin.php?page=dtr-workbooks-webinar-test
+    [webinar_selection] => 161189
+    [speaker_question] => Test question from dynamic webinar selection
+    [sponsor_optin] => 1
+    [test_submission] => 
+)
+
+[2025-09-13 15:21:32] Registration Data (arg): Array
+(
+    [post_id] => 161189
+    [speaker_question] => Test question from dynamic webinar selection
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 15:21:32] ✅ Using post_id: 161189
+[2025-09-13 15:21:32] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-13 15:21:32] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-13 15:21:32] ℹ️ Form data - Speaker question: 'Test question from dynamic webinar selection', Sponsor optin: 1
+[2025-09-13 15:21:32] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-13 15:21:32] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5832
+[2025-09-13 15:21:32] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 15:21:32] ✅ STEP 3: Person created/updated
+[2025-09-13 15:21:34] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 15:21:34] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-13 15:21:35] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 15:21:35] ✅ STEP 5: Added to Mailing List
+[2025-09-13 15:21:35] ✅ STEP 6: Speaker Question = Test question from dynamic webinar selection
+[2025-09-13 15:21:35] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 15:21:35] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-13 15:21:35] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819740
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-13 15:21:35] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819740
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+[2025-09-13 15:22:15] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-13 15:22:15] RAW $_POST: Array
+(
+    [_wpnonce] => 12673f18e7
+    [_wp_http_referer] => /wp-admin/admin.php?page=dtr-workbooks-webinar-test
+    [webinar_selection] => 161189
+    [speaker_question] => Another test
+    [sponsor_optin] => 1
+    [test_submission] => 
+)
+
+[2025-09-13 15:22:15] Registration Data (arg): Array
+(
+    [post_id] => 161189
+    [speaker_question] => Another test
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 15:22:15] ✅ Using post_id: 161189
+[2025-09-13 15:22:15] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-13 15:22:15] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-13 15:22:15] ℹ️ Form data - Speaker question: 'Another test', Sponsor optin: 1
+[2025-09-13 15:22:15] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-13 15:22:15] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5832
+[2025-09-13 15:22:15] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 15:22:15] ✅ STEP 3: Person created/updated
+[2025-09-13 15:22:17] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 15:22:17] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-13 15:22:18] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 15:22:18] ✅ STEP 5: Added to Mailing List
+[2025-09-13 15:22:18] ✅ STEP 6: Speaker Question = Another test
+[2025-09-13 15:22:18] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 15:22:18] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-13 15:22:18] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Another test
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819742
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-13 15:22:18] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Another test
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819742
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+=== READY FOR FORM TESTING ===
+[2025-09-13 17:30:17] === TESTING HTTPS FRONT-END FORM ===
+[2025-09-13 17:33:27] FORM ID 2 DETECTED ON PAGE - READY TO TEST
+[2025-09-13 17:35:13] === TESTING IN DEFAULT BROWSER ===
+[2025-09-13 17:40:47] === NEW FORM ID 2 HANDLER INSTALLED - READY FOR TESTING ===
+[2025-09-13 15:41:31] === FORM ID 2 SUBMISSION CAPTURED (SUBMIT_DATA FILTER) ===
+[2025-09-13 15:41:31] Debug ID: NF2-68c590ab187b3
+[2025-09-13 15:41:31] Form Data: Array
+(
+    [id] => 2
+    [fields] => Array
+        (
+            [2] => Array
+                (
+                    [value] => 
+                    [id] => 2
+                    [key] => register
+                )
+
+            [56] => Array
+                (
+                    [value] => Final Webinar - Levon - August 2025
+                    [id] => 56
+                    [key] => webinar_title
+                )
+
+            [58] => Array
+                (
+                    [value] => 1
+                    [id] => 58
+                    [key] => cf_mailing_list_member_sponsor_1_optin
+                )
+
+            [68] => Array
+                (
+                    [value] => 161189
+                    [id] => 68
+                    [key] => post_id
+                )
+
+            [385] => Array
+                (
+                    [value] => 
+                    [id] => 385
+                    [key] => add_questions
+                )
+
+            [387] => Array
+                (
+                    [value] => dfdfadfadfdfd
+                    [id] => 387
+                    [key] => question_for_speaker
+                )
+
+        )
+
+    [settings] => Array
+        (
+            [objectType] => Form Setting
+            [editActive] => 1
+            [title] => Webinar Registration Form
+            [show_title] => 0
+            [allow_public_link] => 0
+            [embed_form] => 
+            [clear_complete] => 1
+            [hide_complete] => 1
+            [default_label_pos] => above
+            [wrapper_class] => 
+            [element_class] => 
+            [form_title_heading_level] => 3
+            [key] => 
+            [add_submit] => 1
+            [changeEmailErrorMsg] => Please enter a valid email address!
+            [changeDateErrorMsg] => Please enter a valid date!
+            [confirmFieldErrorMsg] => These fields must match!
+            [fieldNumberNumMinError] => Number Min Error
+            [fieldNumberNumMaxError] => Number Max Error
+            [fieldNumberIncrementBy] => Please increment by 
+            [formErrorsCorrectErrors] => Please correct errors before submitting this form.
+            [validateRequiredField] => This is a required field.
+            [honeypotHoneypotError] => Honeypot Error
+            [fieldsMarkedRequired] => Fields marked with an <span class="ninja-forms-req-symbol">*</span> are required
+            [currency] => 
+            [unique_field_error] => A form with this value has already been submitted.
+            [logged_in] => 
+            [not_logged_in_msg] => 
+            [sub_limit_msg] => The form has reached its submission limit.
+            [calculations] => Array
+                (
+                )
+
+            [drawerDisabled] => 
+            [conditions] => Array
+                (
+                    [0] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 6
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                    [1] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 4
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                    [2] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 5
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [objectDomain] => display
+            [save_progress_allow_multiple] => 
+            [save_progress_table_legend] => Load saved progress
+            [save_progress_table_columns] => Array
+                (
+                    [0] => Array
+                        (
+                            [errors] => Array
+                                (
+                                )
+
+                            [max_options] => 0
+                            [label] => Column Title
+                            [field] => {field}
+                            [order] => 0
+                            [settingModel] => Array
+                                (
+                                    [settings] => 
+                                    [hide_merge_tags] => 
+                                    [error] => 
+                                    [name] => save_progress_table_columns
+                                    [type] => option-repeater
+                                    [label] => Save Table Columns <a href="#" class="nf-add-new">Add New</a>
+                                    [width] => full
+                                    [group] => primary
+                                    [columns] => Array
+                                        (
+                                            [field] => Array
+                                                (
+                                                    [header] => Field Key
+                                                    [default] => 
+                                                )
+
+                                        )
+
+                                    [value] => Array
+                                        (
+                                            [0] => Array
+                                                (
+                                                    [label] => Column Title
+                                                    [field] => {field}
+                                                    [order] => 0
+                                                )
+
+                                        )
+
+                                    [tmpl_row] => tmpl-nf-save-progress-table-columns-repeater-row
+                                )
+
+                        )
+
+                )
+
+            [container_styles_show_advanced_css] => 0
+            [title_styles_show_advanced_css] => 0
+            [row_styles_show_advanced_css] => 0
+            [row-odd_styles_show_advanced_css] => 0
+            [success-msg_styles_show_advanced_css] => 0
+            [error_msg_styles_show_advanced_css] => 0
+            [mp_breadcrumb] => 1
+            [mp_progress_bar] => 1
+            [mp_display_titles] => 0
+            [breadcrumb_container_styles_show_advanced_css] => 0
+            [breadcrumb_buttons_styles_show_advanced_css] => 0
+            [breadcrumb_button_hover_styles_show_advanced_css] => 0
+            [breadcrumb_active_button_styles_show_advanced_css] => 0
+            [progress_bar_container_styles_show_advanced_css] => 0
+            [progress_bar_fill_styles_show_advanced_css] => 0
+            [part_titles_styles_show_advanced_css] => 0
+            [navigation_container_styles_show_advanced_css] => 0
+            [previous_button_styles_show_advanced_css] => 0
+            [next_button_styles_show_advanced_css] => 0
+            [navigation_hover_styles_show_advanced_css] => 0
+            [ninjaForms] => Ninja Forms
+            [fieldTextareaRTEInsertLink] => Insert Link
+            [fieldTextareaRTEInsertMedia] => Insert Media
+            [fieldTextareaRTESelectAFile] => Select a file
+            [formHoneypot] => If you are a human seeing this field, please leave it empty.
+            [fileUploadOldCodeFileUploadInProgress] => File Upload in Progress.
+            [fileUploadOldCodeFileUpload] => FILE UPLOAD
+            [currencySymbol] => &#36;
+            [thousands_sep] => ,
+            [decimal_point] => .
+            [siteLocale] => en_GB
+            [dateFormat] => m/d/Y
+            [startOfWeek] => 1
+            [of] => of
+            [previousMonth] => Previous Month
+            [nextMonth] => Next Month
+            [months] => Array
+                (
+                    [0] => January
+                    [1] => February
+                    [2] => March
+                    [3] => April
+                    [4] => May
+                    [5] => June
+                    [6] => July
+                    [7] => August
+                    [8] => September
+                    [9] => October
+                    [10] => November
+                    [11] => December
+                )
+
+            [monthsShort] => Array
+                (
+                    [0] => Jan
+                    [1] => Feb
+                    [2] => Mar
+                    [3] => Apr
+                    [4] => May
+                    [5] => Jun
+                    [6] => Jul
+                    [7] => Aug
+                    [8] => Sep
+                    [9] => Oct
+                    [10] => Nov
+                    [11] => Dec
+                )
+
+            [weekdays] => Array
+                (
+                    [0] => Sunday
+                    [1] => Monday
+                    [2] => Tuesday
+                    [3] => Wednesday
+                    [4] => Thursday
+                    [5] => Friday
+                    [6] => Saturday
+                )
+
+            [weekdaysShort] => Array
+                (
+                    [0] => Sun
+                    [1] => Mon
+                    [2] => Tue
+                    [3] => Wed
+                    [4] => Thu
+                    [5] => Fri
+                    [6] => Sat
+                )
+
+            [weekdaysMin] => Array
+                (
+                    [0] => Su
+                    [1] => Mo
+                    [2] => Tu
+                    [3] => We
+                    [4] => Th
+                    [5] => Fr
+                    [6] => Sa
+                )
+
+            [recaptchaConsentMissing] => reCaptcha validation couldn&#039;t load.
+            [recaptchaMissingCookie] => reCaptcha v3 validation couldn&#039;t load the cookie needed to submit the form.
+            [recaptchaConsentEvent] => Accept reCaptcha cookies before sending the form.
+            [save_progress_actions] => Array
+                (
+                    [4] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [5] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [6] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [16] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [45] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [140] => Array
+                        (
+                            [active] => 
+                        )
+
+                )
+
+            [currency_symbol] => 
+            [beforeForm] => <fieldset class="nf-saves-cont">
+
+    <legend>Load saved progress</legend>
+
+    <div class="form-save-loading">
+        <!-- Loading message container. Will be removed during rendering. -->
+    </div>
+
+    <table></table>
+
+</fieldset>
+
+            [beforeFields] => 
+            [afterFields] => 
+            [afterForm] => 
+        )
+
+    [extra] => Array
+        (
+        )
+
+)
+
+[2025-09-13 15:41:31] Extracted fields: Array
+(
+    [register] => 
+    [webinar_title] => Final Webinar - Levon - August 2025
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+    [post_id] => 161189
+    [add_questions] => 
+    [question_for_speaker] => dfdfadfadfdfd
+)
+
+[2025-09-13 15:41:31] Registration data prepared: Array
+(
+    [post_id] => 161189
+    [speaker_question] => dfdfadfadfdfd
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 15:41:31] Calling dtr_handle_live_webinar_registration
+[2025-09-13 15:41:31] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-13 15:41:31] RAW $_POST: Array
+(
+    [action] => nf_ajax_submit
+    [security] => 6521339ac4
+    [formData] => {"id":"2","fields":{"2":{"value":"","id":2},"56":{"value":"Final Webinar - Levon - August 2025","id":56},"58":{"value":1,"id":58},"68":{"value":"161189","id":68},"385":{"value":"","id":385},"387":{"value":"dfdfadfadfdfd","id":387}},"settings":{"objectType":"Form Setting","editActive":true,"title":"Webinar Registration Form","show_title":0,"allow_public_link":0,"embed_form":"","clear_complete":1,"hide_complete":1,"default_label_pos":"above","wrapper_class":"","element_class":"","form_title_heading_level":"3","key":"","add_submit":1,"changeEmailErrorMsg":"Please enter a valid email address!","changeDateErrorMsg":"Please enter a valid date!","confirmFieldErrorMsg":"These fields must match!","fieldNumberNumMinError":"Number Min Error","fieldNumberNumMaxError":"Number Max Error","fieldNumberIncrementBy":"Please increment by ","formErrorsCorrectErrors":"Please correct errors before submitting this form.","validateRequiredField":"This is a required field.","honeypotHoneypotError":"Honeypot Error","fieldsMarkedRequired":"Fields marked with an <span class=\"ninja-forms-req-symbol\">*<\/span> are required","currency":"","unique_field_error":"A form with this value has already been submitted.","logged_in":false,"not_logged_in_msg":"","sub_limit_msg":"The form has reached its submission limit.","calculations":[],"drawerDisabled":false,"conditions":[{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":6,"trigger":"deactivate_action","type":"action","modelType":"else"}]},{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":4,"trigger":"deactivate_action","type":"action","modelType":"else"}]},{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":5,"trigger":"deactivate_action","type":"action","modelType":"else"}]}],"objectDomain":"display","save_progress_allow_multiple":false,"save_progress_table_legend":"Load saved progress","save_progress_table_columns":[{"errors":[],"max_options":0,"label":"Column Title","field":"{field}","order":0,"settingModel":{"settings":false,"hide_merge_tags":false,"error":false,"name":"save_progress_table_columns","type":"option-repeater","label":"Save Table Columns <a href=\"#\" class=\"nf-add-new\">Add New<\/a>","width":"full","group":"primary","columns":{"field":{"header":"Field Key","default":""}},"value":[{"label":"Column Title","field":"{field}","order":0}],"tmpl_row":"tmpl-nf-save-progress-table-columns-repeater-row"}}],"container_styles_show_advanced_css":0,"title_styles_show_advanced_css":0,"row_styles_show_advanced_css":0,"row-odd_styles_show_advanced_css":0,"success-msg_styles_show_advanced_css":0,"error_msg_styles_show_advanced_css":0,"mp_breadcrumb":1,"mp_progress_bar":1,"mp_display_titles":0,"breadcrumb_container_styles_show_advanced_css":0,"breadcrumb_buttons_styles_show_advanced_css":0,"breadcrumb_button_hover_styles_show_advanced_css":0,"breadcrumb_active_button_styles_show_advanced_css":0,"progress_bar_container_styles_show_advanced_css":0,"progress_bar_fill_styles_show_advanced_css":0,"part_titles_styles_show_advanced_css":0,"navigation_container_styles_show_advanced_css":0,"previous_button_styles_show_advanced_css":0,"next_button_styles_show_advanced_css":0,"navigation_hover_styles_show_advanced_css":0,"ninjaForms":"Ninja Forms","fieldTextareaRTEInsertLink":"Insert Link","fieldTextareaRTEInsertMedia":"Insert Media","fieldTextareaRTESelectAFile":"Select a file","formHoneypot":"If you are a human seeing this field, please leave it empty.","fileUploadOldCodeFileUploadInProgress":"File Upload in Progress.","fileUploadOldCodeFileUpload":"FILE UPLOAD","currencySymbol":"&#36;","thousands_sep":",","decimal_point":".","siteLocale":"en_GB","dateFormat":"m\/d\/Y","startOfWeek":"1","of":"of","previousMonth":"Previous Month","nextMonth":"Next Month","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthsShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"weekdaysShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"weekdaysMin":["Su","Mo","Tu","We","Th","Fr","Sa"],"recaptchaConsentMissing":"reCaptcha validation couldn&#039;t load.","recaptchaMissingCookie":"reCaptcha v3 validation couldn&#039;t load the cookie needed to submit the form.","recaptchaConsentEvent":"Accept reCaptcha cookies before sending the form.","save_progress_actions":{"4":{"active":null},"5":{"active":null},"6":{"active":null},"16":{"active":null},"45":{"active":null},"140":{"active":null}},"currency_symbol":"","beforeForm":"<fieldset class=\"nf-saves-cont\">\n\n    <legend>Load saved progress<\/legend>\n\n    <div class=\"form-save-loading\">\n        <!-- Loading message container. Will be removed during rendering. -->\n    <\/div>\n\n    <table><\/table>\n\n<\/fieldset>\n","beforeFields":"","afterFields":"","afterForm":""},"extra":[]}
+)
+
+[2025-09-13 15:41:31] Registration Data (arg): Array
+(
+    [post_id] => 161189
+    [speaker_question] => dfdfadfadfdfd
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 15:41:31] ✅ Using post_id: 161189
+[2025-09-13 15:41:31] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-13 15:41:31] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-13 15:41:31] ℹ️ Form data - Speaker question: 'dfdfadfadfdfd', Sponsor optin: 1
+[2025-09-13 15:41:31] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-13 15:41:31] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5832
+[2025-09-13 15:41:31] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 15:41:31] ✅ STEP 3: Person created/updated
+[2025-09-13 15:41:32] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 15:41:32] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-13 15:41:34] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 15:41:34] ✅ STEP 5: Added to Mailing List
+[2025-09-13 15:41:34] ✅ STEP 6: Speaker Question = dfdfadfadfdfd
+[2025-09-13 15:41:34] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 15:41:34] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-13 15:41:34] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => dfdfadfadfdfd
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819744
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-13 15:41:34] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => dfdfadfadfdfd
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819744
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+[2025-09-13 15:41:34] Registration result: Array
+(
+    [success] => 1
+    [ticket_id] => 819744
+    [person_id] => 4318866
+    [event_id] => 5832
+    [debug_id] => 
+)
+
+[2025-09-13 15:41:34] User registered locally for event 161189
+[2025-09-13 16:30:37] === FORM ID 2 SUBMISSION CAPTURED (SUBMIT_DATA FILTER) ===
+[2025-09-13 16:30:37] Debug ID: NF2-68c59c2da2a81
+[2025-09-13 16:30:37] Form Data: Array
+(
+    [id] => 2
+    [fields] => Array
+        (
+            [2] => Array
+                (
+                    [value] => 
+                    [id] => 2
+                    [key] => register
+                )
+
+            [56] => Array
+                (
+                    [value] => Final Webinar - Levon - August 2025
+                    [id] => 56
+                    [key] => webinar_title
+                )
+
+            [58] => Array
+                (
+                    [value] => 1
+                    [id] => 58
+                    [key] => cf_mailing_list_member_sponsor_1_optin
+                )
+
+            [68] => Array
+                (
+                    [value] => 161189
+                    [id] => 68
+                    [key] => post_id
+                )
+
+            [385] => Array
+                (
+                    [value] => 
+                    [id] => 385
+                    [key] => add_questions
+                )
+
+            [387] => Array
+                (
+                    [value] => Testing live jouney
+                    [id] => 387
+                    [key] => question_for_speaker
+                )
+
+        )
+
+    [settings] => Array
+        (
+            [objectType] => Form Setting
+            [editActive] => 1
+            [title] => Webinar Registration Form
+            [show_title] => 0
+            [allow_public_link] => 0
+            [embed_form] => 
+            [clear_complete] => 1
+            [hide_complete] => 1
+            [default_label_pos] => above
+            [wrapper_class] => 
+            [element_class] => 
+            [form_title_heading_level] => 3
+            [key] => 
+            [add_submit] => 1
+            [changeEmailErrorMsg] => Please enter a valid email address!
+            [changeDateErrorMsg] => Please enter a valid date!
+            [confirmFieldErrorMsg] => These fields must match!
+            [fieldNumberNumMinError] => Number Min Error
+            [fieldNumberNumMaxError] => Number Max Error
+            [fieldNumberIncrementBy] => Please increment by 
+            [formErrorsCorrectErrors] => Please correct errors before submitting this form.
+            [validateRequiredField] => This is a required field.
+            [honeypotHoneypotError] => Honeypot Error
+            [fieldsMarkedRequired] => Fields marked with an <span class="ninja-forms-req-symbol">*</span> are required
+            [currency] => 
+            [unique_field_error] => A form with this value has already been submitted.
+            [logged_in] => 
+            [not_logged_in_msg] => 
+            [sub_limit_msg] => The form has reached its submission limit.
+            [calculations] => Array
+                (
+                )
+
+            [drawerDisabled] => 
+            [conditions] => Array
+                (
+                    [0] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 6
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                    [1] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 4
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                    [2] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 5
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [objectDomain] => display
+            [save_progress_allow_multiple] => 
+            [save_progress_table_legend] => Load saved progress
+            [save_progress_table_columns] => Array
+                (
+                    [0] => Array
+                        (
+                            [errors] => Array
+                                (
+                                )
+
+                            [max_options] => 0
+                            [label] => Column Title
+                            [field] => {field}
+                            [order] => 0
+                            [settingModel] => Array
+                                (
+                                    [settings] => 
+                                    [hide_merge_tags] => 
+                                    [error] => 
+                                    [name] => save_progress_table_columns
+                                    [type] => option-repeater
+                                    [label] => Save Table Columns <a href="#" class="nf-add-new">Add New</a>
+                                    [width] => full
+                                    [group] => primary
+                                    [columns] => Array
+                                        (
+                                            [field] => Array
+                                                (
+                                                    [header] => Field Key
+                                                    [default] => 
+                                                )
+
+                                        )
+
+                                    [value] => Array
+                                        (
+                                            [0] => Array
+                                                (
+                                                    [label] => Column Title
+                                                    [field] => {field}
+                                                    [order] => 0
+                                                )
+
+                                        )
+
+                                    [tmpl_row] => tmpl-nf-save-progress-table-columns-repeater-row
+                                )
+
+                        )
+
+                )
+
+            [container_styles_show_advanced_css] => 0
+            [title_styles_show_advanced_css] => 0
+            [row_styles_show_advanced_css] => 0
+            [row-odd_styles_show_advanced_css] => 0
+            [success-msg_styles_show_advanced_css] => 0
+            [error_msg_styles_show_advanced_css] => 0
+            [mp_breadcrumb] => 1
+            [mp_progress_bar] => 1
+            [mp_display_titles] => 0
+            [breadcrumb_container_styles_show_advanced_css] => 0
+            [breadcrumb_buttons_styles_show_advanced_css] => 0
+            [breadcrumb_button_hover_styles_show_advanced_css] => 0
+            [breadcrumb_active_button_styles_show_advanced_css] => 0
+            [progress_bar_container_styles_show_advanced_css] => 0
+            [progress_bar_fill_styles_show_advanced_css] => 0
+            [part_titles_styles_show_advanced_css] => 0
+            [navigation_container_styles_show_advanced_css] => 0
+            [previous_button_styles_show_advanced_css] => 0
+            [next_button_styles_show_advanced_css] => 0
+            [navigation_hover_styles_show_advanced_css] => 0
+            [ninjaForms] => Ninja Forms
+            [fieldTextareaRTEInsertLink] => Insert Link
+            [fieldTextareaRTEInsertMedia] => Insert Media
+            [fieldTextareaRTESelectAFile] => Select a file
+            [formHoneypot] => If you are a human seeing this field, please leave it empty.
+            [fileUploadOldCodeFileUploadInProgress] => File Upload in Progress.
+            [fileUploadOldCodeFileUpload] => FILE UPLOAD
+            [currencySymbol] => &#36;
+            [thousands_sep] => ,
+            [decimal_point] => .
+            [siteLocale] => en_GB
+            [dateFormat] => m/d/Y
+            [startOfWeek] => 1
+            [of] => of
+            [previousMonth] => Previous Month
+            [nextMonth] => Next Month
+            [months] => Array
+                (
+                    [0] => January
+                    [1] => February
+                    [2] => March
+                    [3] => April
+                    [4] => May
+                    [5] => June
+                    [6] => July
+                    [7] => August
+                    [8] => September
+                    [9] => October
+                    [10] => November
+                    [11] => December
+                )
+
+            [monthsShort] => Array
+                (
+                    [0] => Jan
+                    [1] => Feb
+                    [2] => Mar
+                    [3] => Apr
+                    [4] => May
+                    [5] => Jun
+                    [6] => Jul
+                    [7] => Aug
+                    [8] => Sep
+                    [9] => Oct
+                    [10] => Nov
+                    [11] => Dec
+                )
+
+            [weekdays] => Array
+                (
+                    [0] => Sunday
+                    [1] => Monday
+                    [2] => Tuesday
+                    [3] => Wednesday
+                    [4] => Thursday
+                    [5] => Friday
+                    [6] => Saturday
+                )
+
+            [weekdaysShort] => Array
+                (
+                    [0] => Sun
+                    [1] => Mon
+                    [2] => Tue
+                    [3] => Wed
+                    [4] => Thu
+                    [5] => Fri
+                    [6] => Sat
+                )
+
+            [weekdaysMin] => Array
+                (
+                    [0] => Su
+                    [1] => Mo
+                    [2] => Tu
+                    [3] => We
+                    [4] => Th
+                    [5] => Fr
+                    [6] => Sa
+                )
+
+            [recaptchaConsentMissing] => reCaptcha validation couldn&#039;t load.
+            [recaptchaMissingCookie] => reCaptcha v3 validation couldn&#039;t load the cookie needed to submit the form.
+            [recaptchaConsentEvent] => Accept reCaptcha cookies before sending the form.
+            [save_progress_actions] => Array
+                (
+                    [4] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [5] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [6] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [16] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [45] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [140] => Array
+                        (
+                            [active] => 
+                        )
+
+                )
+
+            [currency_symbol] => 
+            [beforeForm] => <fieldset class="nf-saves-cont">
+
+    <legend>Load saved progress</legend>
+
+    <div class="form-save-loading">
+        <!-- Loading message container. Will be removed during rendering. -->
+    </div>
+
+    <table></table>
+
+</fieldset>
+
+            [beforeFields] => 
+            [afterFields] => 
+            [afterForm] => 
+        )
+
+    [extra] => Array
+        (
+        )
+
+)
+
+[2025-09-13 16:30:37] Extracted fields: Array
+(
+    [register] => 
+    [webinar_title] => Final Webinar - Levon - August 2025
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+    [post_id] => 161189
+    [add_questions] => 
+    [question_for_speaker] => Testing live jouney
+)
+
+[2025-09-13 16:30:37] Registration data prepared: Array
+(
+    [post_id] => 161189
+    [speaker_question] => Testing live jouney
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 16:30:37] Calling dtr_handle_live_webinar_registration
+[2025-09-13 16:30:37] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-13 16:30:37] RAW $_POST: Array
+(
+    [action] => nf_ajax_submit
+    [security] => 6521339ac4
+    [formData] => {"id":"2","fields":{"2":{"value":"","id":2},"56":{"value":"Final Webinar - Levon - August 2025","id":56},"58":{"value":1,"id":58},"68":{"value":"161189","id":68},"385":{"value":"","id":385},"387":{"value":"Testing live jouney","id":387}},"settings":{"objectType":"Form Setting","editActive":true,"title":"Webinar Registration Form","show_title":0,"allow_public_link":0,"embed_form":"","clear_complete":1,"hide_complete":1,"default_label_pos":"above","wrapper_class":"","element_class":"","form_title_heading_level":"3","key":"","add_submit":1,"changeEmailErrorMsg":"Please enter a valid email address!","changeDateErrorMsg":"Please enter a valid date!","confirmFieldErrorMsg":"These fields must match!","fieldNumberNumMinError":"Number Min Error","fieldNumberNumMaxError":"Number Max Error","fieldNumberIncrementBy":"Please increment by ","formErrorsCorrectErrors":"Please correct errors before submitting this form.","validateRequiredField":"This is a required field.","honeypotHoneypotError":"Honeypot Error","fieldsMarkedRequired":"Fields marked with an <span class=\"ninja-forms-req-symbol\">*<\/span> are required","currency":"","unique_field_error":"A form with this value has already been submitted.","logged_in":false,"not_logged_in_msg":"","sub_limit_msg":"The form has reached its submission limit.","calculations":[],"drawerDisabled":false,"conditions":[{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":6,"trigger":"deactivate_action","type":"action","modelType":"else"}]},{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":4,"trigger":"deactivate_action","type":"action","modelType":"else"}]},{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":5,"trigger":"deactivate_action","type":"action","modelType":"else"}]}],"objectDomain":"display","save_progress_allow_multiple":false,"save_progress_table_legend":"Load saved progress","save_progress_table_columns":[{"errors":[],"max_options":0,"label":"Column Title","field":"{field}","order":0,"settingModel":{"settings":false,"hide_merge_tags":false,"error":false,"name":"save_progress_table_columns","type":"option-repeater","label":"Save Table Columns <a href=\"#\" class=\"nf-add-new\">Add New<\/a>","width":"full","group":"primary","columns":{"field":{"header":"Field Key","default":""}},"value":[{"label":"Column Title","field":"{field}","order":0}],"tmpl_row":"tmpl-nf-save-progress-table-columns-repeater-row"}}],"container_styles_show_advanced_css":0,"title_styles_show_advanced_css":0,"row_styles_show_advanced_css":0,"row-odd_styles_show_advanced_css":0,"success-msg_styles_show_advanced_css":0,"error_msg_styles_show_advanced_css":0,"mp_breadcrumb":1,"mp_progress_bar":1,"mp_display_titles":0,"breadcrumb_container_styles_show_advanced_css":0,"breadcrumb_buttons_styles_show_advanced_css":0,"breadcrumb_button_hover_styles_show_advanced_css":0,"breadcrumb_active_button_styles_show_advanced_css":0,"progress_bar_container_styles_show_advanced_css":0,"progress_bar_fill_styles_show_advanced_css":0,"part_titles_styles_show_advanced_css":0,"navigation_container_styles_show_advanced_css":0,"previous_button_styles_show_advanced_css":0,"next_button_styles_show_advanced_css":0,"navigation_hover_styles_show_advanced_css":0,"ninjaForms":"Ninja Forms","fieldTextareaRTEInsertLink":"Insert Link","fieldTextareaRTEInsertMedia":"Insert Media","fieldTextareaRTESelectAFile":"Select a file","formHoneypot":"If you are a human seeing this field, please leave it empty.","fileUploadOldCodeFileUploadInProgress":"File Upload in Progress.","fileUploadOldCodeFileUpload":"FILE UPLOAD","currencySymbol":"&#36;","thousands_sep":",","decimal_point":".","siteLocale":"en_GB","dateFormat":"m\/d\/Y","startOfWeek":"1","of":"of","previousMonth":"Previous Month","nextMonth":"Next Month","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthsShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"weekdaysShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"weekdaysMin":["Su","Mo","Tu","We","Th","Fr","Sa"],"recaptchaConsentMissing":"reCaptcha validation couldn&#039;t load.","recaptchaMissingCookie":"reCaptcha v3 validation couldn&#039;t load the cookie needed to submit the form.","recaptchaConsentEvent":"Accept reCaptcha cookies before sending the form.","save_progress_actions":{"4":{"active":null},"5":{"active":null},"6":{"active":null},"16":{"active":null},"45":{"active":null},"140":{"active":null}},"currency_symbol":"","beforeForm":"<fieldset class=\"nf-saves-cont\">\n\n    <legend>Load saved progress<\/legend>\n\n    <div class=\"form-save-loading\">\n        <!-- Loading message container. Will be removed during rendering. -->\n    <\/div>\n\n    <table><\/table>\n\n<\/fieldset>\n","beforeFields":"","afterFields":"","afterForm":""},"extra":[]}
+)
+
+[2025-09-13 16:30:37] Registration Data (arg): Array
+(
+    [post_id] => 161189
+    [speaker_question] => Testing live jouney
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 16:30:37] ✅ Using post_id: 161189
+[2025-09-13 16:30:37] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-13 16:30:37] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-13 16:30:37] ℹ️ Form data - Speaker question: 'Testing live jouney', Sponsor optin: 1
+[2025-09-13 16:30:37] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-13 16:30:37] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5832
+[2025-09-13 16:30:37] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 16:30:37] ✅ STEP 3: Person created/updated
+[2025-09-13 16:30:39] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 16:30:39] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-13 16:30:41] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 16:30:41] ✅ STEP 5: Added to Mailing List
+[2025-09-13 16:30:41] ✅ STEP 6: Speaker Question = Testing live jouney
+[2025-09-13 16:30:41] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 16:30:41] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-13 16:30:41] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Testing live jouney
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819752
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-13 16:30:41] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Testing live jouney
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819752
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+[2025-09-13 16:30:41] Registration result: Array
+(
+    [success] => 1
+    [ticket_id] => 819752
+    [person_id] => 4318866
+    [event_id] => 5832
+    [debug_id] => 
+)
+
+[2025-09-13 16:30:41] User registered locally for event 161189

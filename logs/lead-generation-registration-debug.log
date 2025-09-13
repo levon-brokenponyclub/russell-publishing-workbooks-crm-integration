@@ -1,0 +1,16 @@
+[2025-09-13 13:43:24] dtr_handle_lead_generation_registration CALLED
+[2025-09-13 13:43:24] ✅ STEP 1: Processing Lead Generation Form (ID 161023)
+[2025-09-13 13:43:24] ✅ Found ACF questions in restricted_content_fields: 4
+[2025-09-13 13:43:24] ✅ Found workbooks reference in restricted_content_fields: 5778
+[2025-09-13 13:43:24] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 13:43:25] ❌ STEP 4: Lead Created/Updated - Non-OK response (404)
+[2025-09-13 13:43:25] 🎉 FINAL RESULT: LEAD GENERATION REGISTRATION FAILED!
+[2025-09-13 13:43:25] [post_id] => 161023
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_lead] => General interest in this publication content
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[lead_id] => 
+[person_id] => 4318866
+[success] => 0
+

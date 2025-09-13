@@ -1,4 +1,3 @@
-
 # DTR - Workbooks CRM API Integration
 
 ## Overview
@@ -515,7 +514,6 @@ For detailed deployment documentation, see `scripts/README.md`.
 4. Create Workbooks person, event ticket (if applicable), and **always create a sales lead**
 5. Optional dynamic questions and sponsor opt-in handled via ACF fields
 
-
 ---
 ## 👥 Handler & Submission & Full ACF Powered Forms (v1.4.7)
 
@@ -598,8 +596,6 @@ For detailed deployment documentation, see `scripts/README.md`.
 5. **Ticket Creation:** Event ticket is created/updated for the person
 6. **Mailing List Update:** Participant is added/updated in the event's mailing list with all relevant info
 7. **Debug Logging:** Every step, success, and error is logged with a unique debug ID
-
----
 
 ---
 
@@ -702,7 +698,6 @@ add_action('wp_ajax_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
 ```
 
 ---
-
 
 ## Changelog
 
@@ -841,153 +836,6 @@ add_action('wp_ajax_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
 - **Employer Sync**: Daily and manual sync of employer data, with Select2 endpoint and JSON fallback.
 - **Dynamic Gated Content**: Forms for gated content are generated from ACF field groups, requiring no manual edits for new fields.
 - **Ninja Forms - Full Country Names Plugin**: Adds full country name support to Ninja Forms country fields and any select with the class `full-iso-country-names` (see below).
-
----
-
-## Plugin Folder Structure (excluding `archive/`)
-```
-dtr-workbooks-crm-integration/
-├── dtr-workbooks-crm-integration.php (Main plugin file)
-├── includes/
-│   ├── class-acf-ninjaforms-merge.php
-│   ├── class-array-merge-safety.php
-│   ├── class-employer-sync.php
-│   ├── class-form-submission-override.php
-│   ├── class-helper-functions.php (TOI/AOI mapping)
-│   ├── class-loader.php
-│   ├── core/
-│   ├── form-handler-gated-content-reveal.php
-│   ├── form-handler-media-planner.php
-│   ├── form-handler-membership-registration.php
-│   ├── form-handler-webinars.php (Webinar registration & mailing list handler)
-│   ├── form-submission-processors-ninjaform-hooks.php (New Ninja Forms handler)
-│   ├── form-submission-processors-submission-fix.php
-│   ├── ninja-forms-membership-registration.php (Membership registration handler - Form 15)
-│   ├── ninja-forms-simple-hook.php
-│   ├── dtr-shortcodes.php (Shortcode functionality)
-│   ├── workbooks-employer-sync.php (Employer sync)
-│   ├── media-planner-ajax-handler.php (Media planner AJAX handler)
-├── assets/
-│   ├── admin.css (Admin styling)
-│   └── dtr-ninjaform-title-select.js (Frontend scripts)
-├── js/
-│   ├── admin.js (Admin interface)
-│   ├── employers-sync.js (Employer management)
-│   └── webinar-endpoint.js (Webinar functionality)
-├── lib/
-│   └── workbooks_api.php (Workbooks API wrapper)
-├── logs/ (Debug and error logs)
-├── scripts/
-│   ├── setup.sh
-│   ├── deploy.sh
-│   ├── post-commit-sync.sh
-│   ├── config.example.sh
-│   └── README.md
-└── .github/
-   └── workflows/deploy.yml (GitHub Actions deployment)
-```
-```
-dtr-workbooks-crm-integration/
-├── dtr-workbooks-crm-integration.php (Main plugin file)
-├── LICENSE
-├── README.md
-├── readme.txt
-├── admin/                  # Admin UI, debug logs, and admin-specific handlers
-│   ├── admin-webinar-debug.log
-│   ├── admin-webinar-registeration-debug.log
-│   ├── connection-debug.log
-│   ├── content-api-settings.php
-│   ├── content-employer-sync.php
-│   ├── content-knowledge-base.php
-│   ├── content-member-registrations.php
-│   ├── content-person-record.php
-│   ├── content-test-webinar.php
-│   ├── form-handler-admin-webinar-registration.php
-│   ├── gated-content-admin.js
-│   ├── gated-content-ajax.php
-│   ├── archive/                  # Archived admin logs
-│   └── ... (other admin PHP/JS files)
-├── archive/                # Archived files and logs
-├── assets/
-│   ├── css/
-│   ├── js/
-│   └── json/
-│       └── employers.json
-├── includes/
-│   ├── class-acf-ninjaforms-merge.php
-│   ├── class-admin-employer-sync.php
-│   ├── class-array-merge-safety.php
-│   ├── class-employer-sync.php
-│   ├── class-form-submission-override.php
-│   ├── class-helper-functions.php
-│   ├── class-lead-generation-registration.php
-│   ├── class-loader.php
-│   ├── class-webinar-registration.php
-│   ├── dtr-membership-mode-shortcode.php
-│   ├── form-handler-gated-content-reveal.php
-│   ├── form-handler-lead-generation-registration.php
-│   ├── form-handler-live-webinar-registration.php
-│   ├── form-handler-media-planner.php
-│   ├── form-handler-membership-registration.php
-│   ├── form-submission-processors-ninjaform-hooks.php
-│   └── ... (other includes)
-├── js/
-│   ├── admin.js
-│   └── ... (other JS files)
-├── lib/
-│   └── ... (library files, e.g., workbooks_api.php)
-├── logs/                   # Debug and error logs
-├── scripts/
-│   ├── setup.sh
-│   ├── deploy.sh
-│   ├── post-commit-sync.sh
-│   ├── config.example.sh
-│   └── README.md
-├── shortcodes/
-│   └── ... (shortcode PHP files)
-└── .github/
-   └── workflows/deploy.yml (GitHub Actions deployment)
-```
-
-ninjafoms-full-country-names/
-├── ninjafoms-full-country-names.php
-├── nf-full-country-names.js
-
----
-
-## Custom Plugin: Ninja Forms - Full Country Names
-
-**Plugin Name:** Ninja Forms - Full Country Names  
-**Description:** Applies full country names to Ninja Forms country fields (both frontend and backend), and any select field with a class of 'full-iso-country-names'. Works with Ninja Forms 3.0+.
-
-### Features
-- Replaces ISO 3166-1 alpha-2 country codes with full country names in Ninja Forms submissions and emails.
-- Works for both default Ninja Forms country fields and any select with the class `full-iso-country-names`.
-- Includes a full mapping of all ISO country codes to names.
-- Enqueues a frontend JS file to update select fields in real time.
-
-### File Structure
-```
-ninjafoms-full-country-names/
-├── ninjafoms-full-country-names.php
-├── nf-full-country-names.js
-```
-
----
-
-## How to Use
-1. Upload both plugin folders to `/wp-content/plugins/`.
-2. Activate via the WordPress admin.
-3. Configure Workbooks CRM settings in the admin panel.
-4. For full country names in Ninja Forms, use a country field or a select with the class `full-iso-country-names`.
-
----
-
-## For Developers
-- See each plugin's main PHP file for hooks, filters, and integration points.
-- All mapping logic for AOI/TOI is in `class-helper-functions.php`.
-- AJAX handlers for account and preference updates are in the main plugin and shortcodes.
-- Debug logs are in `/logs/` and `/admin/` (when debug mode is enabled).
 
 ---
 

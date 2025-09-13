@@ -32,4 +32,153 @@
 [2025-09-02 10:40:49] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
 
 
-Yay---- found my old fields and values - Please update both the form and handler and debug
+Yay---- found my old fields and values - Please update both the form and handler and debug[post_id] => 161189
+[email] => levon.gravett@supersonicplayground.com
+[first_name] => Levon
+[last_name] => Gravett
+[person_id] => 684710
+[event_id] => 5832
+[speaker_question] => fadfdff
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[post_id] => 161189
+[email] => levon.gravett@supersonicplayground.com
+[first_name] => Levon
+[last_name] => Gravett
+[person_id] => 684710
+[event_id] => 5832
+[speaker_question] => dfdfdafafd
+[cf_mailing_list_member_sponsor_1_optin] => 1
+=== DIRECT TEST START ===
+Array
+(
+    [post_id] => 161189
+    [email] => levon.gravett@supersonicplayground.com
+    [first_name] => Levon
+    [last_name] => Gravett
+    [person_id] => 684710
+    [event_id] => 5832
+    [speaker_question] => Another Direct Test
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+=== CALLING HANDLER ===
+=== HANDLER RESULT ===
+=== DIRECT TEST END ===
+=== DIRECT TEST START ===
+Array
+(
+    [post_id] => 161189
+    [email] => levon.gravett@supersonicplayground.com
+    [first_name] => Levon
+    [last_name] => Gravett
+    [person_id] => 684710
+    [event_id] => 5832
+    [speaker_question] => Testing again
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+=== CALLING HANDLER ===
+=== HANDLER RESULT ===
+=== DIRECT TEST END ===
+=== DIRECT TEST START ===
+Array
+(
+    [post_id] => 161189
+    [email] => levon.gravett@supersonicplayground.com
+    [first_name] => Levon
+    [last_name] => Gravett
+    [person_id] => 684710
+    [event_id] => 5832
+    [speaker_question] => dfdafdf
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+=== CALLING HANDLER ===
+=== HANDLER RESULT ===
+=== DIRECT TEST END ===
+=== DIRECT TEST START ===
+Array
+(
+    [post_id] => 161189
+    [email] => levon.gravett@supersonicplayground.com
+    [first_name] => Levon
+    [last_name] => Gravett
+    [person_id] => 684710
+    [event_id] => 5832
+    [speaker_question] => Again
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+=== CALLING HANDLER ===
+=== HANDLER RESULT ===
+=== DIRECT TEST END ===
+[2025-09-13 09:55:58] TEST: Debug function is working
+[2025-09-13 09:55:58] TEST: Debug function is working from direct test
+=== DIRECT TEST START ===
+Array
+(
+    [post_id] => 161189
+    [email] => levon.gravett@supersonicplayground.com
+    [first_name] => Levon
+    [last_name] => Gravett
+    [person_id] => 684710
+    [event_id] => 5832
+    [speaker_question] => Final Test
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+=== CALLING HANDLER ===
+[2025-09-13 09:55:58] === HANDLER START ===
+Input data: Array
+(
+    [post_id] => 161189
+    [email] => levon.gravett@supersonicplayground.com
+    [first_name] => Levon
+    [last_name] => Gravett
+    [person_id] => 684710
+    [event_id] => 5832
+    [speaker_question] => Final Test
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 09:55:58] User is logged in
+[2025-09-13 09:55:58] About to call dtr_register_workbooks_webinar with:
+[2025-09-13 09:55:58] - post_id: 161189
+[2025-09-13 09:55:58] - email: levon.gravett@supersonicplayground.com
+[2025-09-13 09:55:58] - first_name: Levon
+[2025-09-13 09:55:58] - last_name: Gravett
+dtr_register_workbooks_webinar returned: Array
+(
+    [success] => 1
+    [ticket_id] => 819682
+    [person_id] => 4318866
+    [event_id] => 5832
+    [debug_id] => 
+)
+
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Final Test
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819682
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-13 09:55:58] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-13 09:55:58] ℹ️ STEP 2: Using hardcoded event reference 5832 for test post 161189
+[2025-09-13 09:55:58] ✅ STEP 3: Person created/updated
+[2025-09-13 09:56:00] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 09:56:00] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-13 09:56:03] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 09:56:03] ✅ STEP 5: Added to Mailing List
+[2025-09-13 09:56:03] ✅ STEP 6: Speaker Question = Final Test
+[2025-09-13 09:56:03] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 09:56:03] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+
+=== HANDLER RESULT ===
+Array
+(
+    [success] => 1
+    [ticket_id] => 819682
+    [person_id] => 4318866
+    [event_id] => 5832
+    [debug_id] => 
+)
+=== DIRECT TEST END ===

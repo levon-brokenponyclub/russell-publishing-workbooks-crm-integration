@@ -112,12 +112,30 @@ function dtr_register_workbooks_lead(
 
     // Merge ACF questions and main question
     $acf_questions = [];
-    $lead_fields = function_exists('get_field') ? get_field('lead_fields', $post_id) : null;
-    if (is_array($lead_fields) && !empty($lead_fields['add_questions'])) {
-        foreach ($lead_fields['add_questions'] as $acf_question_row) {
-            if (!empty($acf_question_row['question_title'])) {
-                $acf_questions[] = trim($acf_question_row['question_title']);
+    
+    // First check for questions in restricted_content_fields group
+    if (function_exists('get_field')) {
+        $restricted_content_fields = get_field('restricted_content_fields', $post_id);
+        if (is_array($restricted_content_fields) && !empty($restricted_content_fields['add_questions'])) {
+            foreach ($restricted_content_fields['add_questions'] as $acf_question_row) {
+                if (!empty($acf_question_row['question_title'])) {
+                    $acf_questions[] = trim($acf_question_row['question_title']);
+                }
             }
+            dtr_lead_debug("✅ Found ACF questions in restricted_content_fields: " . count($acf_questions));
+        }
+    }
+    
+    // Fallback to lead_fields for questions if not found in restricted content
+    if (empty($acf_questions)) {
+        $lead_fields = function_exists('get_field') ? get_field('lead_fields', $post_id) : null;
+        if (is_array($lead_fields) && !empty($lead_fields['add_questions'])) {
+            foreach ($lead_fields['add_questions'] as $acf_question_row) {
+                if (!empty($acf_question_row['question_title'])) {
+                    $acf_questions[] = trim($acf_question_row['question_title']);
+                }
+            }
+            dtr_lead_debug("✅ Found ACF questions in lead_fields: " . count($acf_questions));
         }
     }
     $all_questions = $acf_questions;
@@ -141,18 +159,35 @@ function dtr_register_workbooks_lead(
     }
     if (is_array($debug_report)) $debug_report['resolved_names'] = [$first_name, $last_name];
 
-    // Try to get Workbooks lead reference (use 'workbook_reference' or 'reference' ACF/meta field)
-    $lead_ref = function_exists('get_field') ? (
-        get_field('workbook_reference', $post_id)
-        ?: get_post_meta($post_id, 'workbook_reference', true)
-        ?: get_field('workbooks_reference', $post_id)
-        ?: get_post_meta($post_id, 'workbooks_reference', true)
-        ?: get_field('reference', $post_id)
-        ?: get_post_meta($post_id, 'reference', true)
-    ) : null;
+    // Try to get Workbooks lead reference - check both nested and direct ACF fields
+    $lead_ref = null;
+    
+    // First check if it's within the restricted_content_fields group (based on your ACF structure)
+    if (function_exists('get_field')) {
+        $restricted_content_fields = get_field('restricted_content_fields', $post_id);
+        if (is_array($restricted_content_fields) && !empty($restricted_content_fields['workbooks_reference'])) {
+            $lead_ref = $restricted_content_fields['workbooks_reference'];
+            dtr_lead_debug("✅ Found workbooks reference in restricted_content_fields: $lead_ref");
+        }
+    }
+    
+    // Fallback to direct field lookups if not found in group
+    if (!$lead_ref && function_exists('get_field')) {
+        $lead_ref = get_field('workbook_reference', $post_id)
+            ?: get_post_meta($post_id, 'workbook_reference', true)
+            ?: get_field('workbooks_reference', $post_id)
+            ?: get_post_meta($post_id, 'workbooks_reference', true)
+            ?: get_field('reference', $post_id)
+            ?: get_post_meta($post_id, 'reference', true);
+        
+        if ($lead_ref) {
+            dtr_lead_debug("✅ Found workbooks reference in direct fields: $lead_ref");
+        }
+    }
 
     if (!$lead_ref && is_array($lead_fields) && !empty($lead_fields['workbook_reference'])) {
         $lead_ref = $lead_fields['workbook_reference'];
+        dtr_lead_debug("✅ Found workbooks reference in lead_fields: $lead_ref");
     }
 
     if (!$lead_ref) {
@@ -225,12 +260,12 @@ function dtr_register_workbooks_lead(
 
     // STEP 3: Lead Created/Updated
     $lead_payload = [[
-        'lead_id' => $lead_id,
+        'event_id' => $lead_id,  // Use event_id instead of lead_id based on your Workbooks schema
         'person_id' => $person_id,
         'name' => trim(($first_name . ' ' . $last_name)) ?: $email,
         'status' => 'New',
         'lead_question' => $merged_questions,
-        'sponsor_1_opt_in' => (int)$cf_mailing_list_member_sponsor_1_optin
+        'sponsor_1_optin' => (int)$cf_mailing_list_member_sponsor_1_optin
     ]];
 
     $lead_result = null;

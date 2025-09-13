@@ -1,6 +1,11 @@
 <?php
 // TEST: Confirm logging works and file is loaded
 error_log('DTR TEST LOG: form-submission-processors-ninjaform-hooks.php loaded');
+// IMMEDIATE FILE LOAD LOG
+$debug_log_file = defined('DTR_WORKBOOKS_LOG_DIR')
+    ? DTR_WORKBOOKS_LOG_DIR . 'live-webinar-registration-debug.log'
+    : __DIR__ . '/../logs/live-webinar-registration-debug.log';
+file_put_contents($debug_log_file, '[' . date('Y-m-d H:i:s') . "] HOOKS FILE LOADED\n", FILE_APPEND | LOCK_EX);
 // FILE-LEVEL DEBUG: Confirm dispatcher file is loaded by WordPress
 $debug_log_file = defined('DTR_WORKBOOKS_LOG_DIR')
     ? DTR_WORKBOOKS_LOG_DIR . 'live-webinar-registration-debug.log'
@@ -234,13 +239,24 @@ if (!function_exists('dtr_process_webinar_registration')) {
             ? DTR_WORKBOOKS_LOG_DIR . 'live-webinar-registration-debug.log'
             : __DIR__ . '/../logs/live-webinar-registration-debug.log';
             
-        $debug_entry = "[" . date('Y-m-d H:i:s') . "] WEBINAR PROCESSOR CALLED\n";
+        $debug_entry = "[" . date('Y-m-d H:i:s') . "] WEBINAR PROCESSOR CALLED - FORM ID 2 FROM WEBINAR PAGE\n";
         $debug_entry .= "Form ID: $form_id\n";
         $debug_entry .= "Debug ID: $debug_id\n";
-        $debug_entry .= "Form Data: " . print_r($form_data, true) . "\n";
-        $debug_entry .= "---\n";
+        $debug_entry .= "Raw Form Data: " . print_r($form_data, true) . "\n";
         
+        // Log current user info
+        if (is_user_logged_in()) {
+            $current_user = wp_get_current_user();
+            $debug_entry .= "Current User ID: {$current_user->ID}\n";
+            $debug_entry .= "Current User Email: {$current_user->user_email}\n";
+            $debug_entry .= "Person ID: " . get_user_meta($current_user->ID, 'workbooks_person_id', true) . "\n";
+        } else {
+            $debug_entry .= "User not logged in!\n";
+        }
+        
+        $debug_entry .= "---\n";
         file_put_contents($debug_log_file, $debug_entry, FILE_APPEND | LOCK_EX);
+        
             // Map Ninja Forms fields to expected handler fields
             $speaker_question = dtr_extract_field_by_keys($form_data, ['speaker_question', 'question_for_speaker']);
             $registration_data = [
@@ -252,6 +268,18 @@ if (!function_exists('dtr_process_webinar_registration')) {
                 'last_name' => dtr_extract_field_by_keys($form_data, ['last_name', 'lname']),
                 'event_id' => dtr_extract_field_by_keys($form_data, ['event_id', 'workbooks_reference']),
             ];
+
+        // Log the field extraction results
+        $extraction_log = "[" . date('Y-m-d H:i:s') . "] FIELD EXTRACTION RESULTS:\n";
+        $extraction_log .= "post_id: " . ($registration_data['post_id'] ?: 'NOT_FOUND') . "\n";
+        $extraction_log .= "email: " . ($registration_data['email'] ?: 'NOT_FOUND') . "\n";
+        $extraction_log .= "speaker_question: " . ($registration_data['speaker_question'] ?: 'NOT_FOUND') . "\n";
+        $extraction_log .= "sponsor_optin: " . ($registration_data['cf_mailing_list_member_sponsor_1_optin'] ?: 'NOT_FOUND') . "\n";
+        $extraction_log .= "first_name: " . ($registration_data['first_name'] ?: 'NOT_FOUND') . "\n";
+        $extraction_log .= "last_name: " . ($registration_data['last_name'] ?: 'NOT_FOUND') . "\n";
+        $extraction_log .= "event_id: " . ($registration_data['event_id'] ?: 'NOT_FOUND') . "\n";
+        $extraction_log .= "---\n";
+        file_put_contents($debug_log_file, $extraction_log, FILE_APPEND | LOCK_EX);
 
             // Log registration data in the old debug format
             $log_file = defined('DTR_WORKBOOKS_LOG_DIR')
@@ -306,6 +334,34 @@ if (!function_exists('dtr_process_webinar_registration')) {
     $debug_entry .= "---\n";
     file_put_contents($debug_log_file, $debug_entry, FILE_APPEND | LOCK_EX);
 
+    // If registration was successful, register user locally for button state updates
+    if ($result && !empty($result['success']) && is_user_logged_in()) {
+        $post_id = $registration_data['post_id'];
+        $user_id = get_current_user_id();
+        
+        // Include functions-events.php if needed
+        if (!function_exists('register_user_for_event')) {
+            $functions_events_file = get_template_directory() . '/functions/functions-events.php';
+            if (file_exists($functions_events_file)) {
+                include_once $functions_events_file;
+            }
+        }
+        
+        if (function_exists('register_user_for_event') && $post_id) {
+            $local_registration_result = register_user_for_event($user_id, $post_id);
+            $debug_local = "[" . date('Y-m-d H:i:s') . "] LOCAL REGISTRATION: user_id=$user_id, post_id=$post_id, result=" . ($local_registration_result ? 'SUCCESS' : 'ALREADY_REGISTERED') . "\n";
+            file_put_contents($debug_log_file, $debug_local, FILE_APPEND | LOCK_EX);
+            
+            // Log success message that matches admin test format
+            $success_msg = "[" . date('Y-m-d H:i:s') . "] ✅ WEBINAR REGISTRATION SUCCESS - User is now registered for event $post_id\n";
+            file_put_contents($debug_log_file, $success_msg, FILE_APPEND | LOCK_EX);
+        }
+    }
+
+    // Set global flag for ninja_forms_submit_response filter
+    global $dtr_webinar_registration_success;
+    $dtr_webinar_registration_success = $result && !empty($result['success']);
+
     return $result && !empty($result['success']);
     }
 }
@@ -331,6 +387,21 @@ if (!function_exists('dtr_process_lead_generation')) {
  * This is a placeholder. Implement your hooks here.
  */
 function dtr_init_ninja_forms_hooks() {
+    // Debug: Log initialization
+    $debug_log_file = defined('DTR_WORKBOOKS_LOG_DIR')
+        ? DTR_WORKBOOKS_LOG_DIR . 'live-webinar-registration-debug.log'
+        : __DIR__ . '/../logs/live-webinar-registration-debug.log';
+    file_put_contents($debug_log_file, '[' . date('Y-m-d H:i:s') . "] HOOKS INITIALIZED\n", FILE_APPEND | LOCK_EX);
+    
+    // Add a simple test hook to see if Ninja Forms is working
+    add_action('ninja_forms_after_submission', function($form_data) {
+        $debug_log_file = defined('DTR_WORKBOOKS_LOG_DIR')
+            ? DTR_WORKBOOKS_LOG_DIR . 'live-webinar-registration-debug.log'
+            : __DIR__ . '/../logs/live-webinar-registration-debug.log';
+        $form_id = $form_data['form_id'] ?? $form_data['id'] ?? 'unknown';
+        file_put_contents($debug_log_file, '[' . date('Y-m-d H:i:s') . "] TEST HOOK FIRED - Form ID: $form_id\n", FILE_APPEND | LOCK_EX);
+    }, 5); // Higher priority to fire first
+    
     // Central dispatcher to route by form ID
     if (!has_action('ninja_forms_after_submission', 'dtr_dispatch_ninja_forms_submission')) {
         add_action('ninja_forms_after_submission', 'dtr_dispatch_ninja_forms_submission', 9, 1);
@@ -412,7 +483,8 @@ dtr_init_ninja_forms_hooks();
 add_filter('ninja_forms_submit_response', function($response, $form_id) {
     if ((int)$form_id === 2) {
         // Try to get mapped registration data from global or static var set in dtr_process_webinar_registration
-        global $dtr_last_webinar_registration_data;
+        global $dtr_last_webinar_registration_data, $dtr_webinar_registration_success;
+        
         if (!empty($dtr_last_webinar_registration_data) && is_array($dtr_last_webinar_registration_data)) {
             // Format as key => value pairs for alerting
             $lines = [];
@@ -421,7 +493,14 @@ add_filter('ninja_forms_submit_response', function($response, $form_id) {
             }
             $response['data']['debug'][] = implode("\n", $lines);
         }
-        $response['data']['debug_message'] = 'Webinar handler executed!';
+        
+        // Set success flag based on registration result
+        if (!empty($dtr_webinar_registration_success)) {
+            $response['data']['success'] = true;
+            $response['data']['debug_message'] = 'Webinar registration completed successfully!';
+        } else {
+            $response['data']['debug_message'] = 'Webinar handler executed but registration may have failed.';
+        }
     }
     return $response;
 }, 20, 2);

@@ -26,6 +26,7 @@ if (!defined('ABSPATH')) {
 
 // Plugin constants
 // Bumped to 2.0.1 for cache-busting updated employer field script
+error_log('DTR TEST LOG: Main plugin file is loading - dtr-workbooks-crm-integration.php');
 define('DTR_WORKBOOKS_VERSION', '2.0.1');
 define('DTR_WORKBOOKS_PLUGIN_FILE', __FILE__);
 define('DTR_WORKBOOKS_PLUGIN_DIR', plugin_dir_path(__FILE__));
@@ -341,9 +342,13 @@ class DTR_Workbooks_Integration {
      * @return void
      */
     private function init_integrations() {
+        error_log('DTR TEST LOG: init_integrations() called');
         // Initialize form processors and handlers
         if (function_exists('dtr_init_ninja_forms_hooks')) {
+            error_log('DTR TEST LOG: dtr_init_ninja_forms_hooks function exists, calling it');
             dtr_init_ninja_forms_hooks();
+        } else {
+            error_log('DTR TEST LOG: dtr_init_ninja_forms_hooks function does NOT exist');
         }
         
         if (function_exists('dtr_init_gated_content_hooks')) {
@@ -394,6 +399,12 @@ class DTR_Workbooks_Integration {
                 }
             }
         }
+        
+        // Add admin-post handler for admin webinar test form
+        add_action('admin_post_dtr_admin_test_webinar', [$this, 'handle_admin_test_webinar']);
+        
+        // Add admin-post handler for admin lead generation test form
+        add_action('admin_post_dtr_admin_test_lead_generation', [$this, 'handle_admin_test_lead_generation']);
     }
     
     /**
@@ -502,6 +513,8 @@ class DTR_Workbooks_Integration {
             DTR_WORKBOOKS_VERSION
         );
         
+        // TEMPORARILY DISABLED: Frontend JS to allow PHP-based login state logging from theme template
+        /*
         wp_enqueue_script(
             'dtr-workbooks-frontend',
             DTR_WORKBOOKS_ASSETS_URL . 'js/frontend.js',
@@ -516,6 +529,7 @@ class DTR_Workbooks_Integration {
             'nonce' => wp_create_nonce('dtr_workbooks_nonce'),
             'debug_mode' => $this->debug_mode
         ]);
+        */
 
         // Conditional enqueue for employer select (registration form 15)
         if (is_page(array('free-membership','membership','register')) || isset($_GET['dtr_reg_debug'])) {
@@ -681,6 +695,36 @@ class DTR_Workbooks_Integration {
             'manage_options',
             'dtr-workbooks-mapping',
             [$this, 'admin_toi_aoi_mapping_page']
+        );
+
+        // Webinar Registration Test page
+        add_submenu_page(
+            'dtr-workbooks',
+            __('Webinar Registration Test', 'dtr-workbooks'),
+            __('Webinar Registration Test', 'dtr-workbooks'),
+            'manage_options',
+            'dtr-workbooks-webinar-test',
+            [$this, 'admin_webinar_test_page']
+        );
+
+        // Lead Generation Test page
+        add_submenu_page(
+            'dtr-workbooks',
+            __('Lead Generation Test', 'dtr-workbooks'),
+            __('Lead Generation Test', 'dtr-workbooks'),
+            'manage_options',
+            'dtr-workbooks-lead-generation-test',
+            [$this, 'admin_lead_generation_test_page']
+        );
+
+        // Registered Events page
+        add_submenu_page(
+            'dtr-workbooks',
+            __('Registered Events', 'dtr-workbooks'),
+            __('Registered Events', 'dtr-workbooks'),
+            'manage_options',
+            'dtr-workbooks-registered-events',
+            [$this, 'admin_registered_events_page']
         );
     }
 
@@ -1173,6 +1217,43 @@ class DTR_Workbooks_Integration {
         echo '</tbody></table>';
         echo '<p style="margin-top:12px;">'.esc_html__('Matrix source: dtr_get_toi_to_aoi_matrix()','dtr-workbooks').'</p>';
         echo '</div>';
+    }
+
+    /**
+     * Form ID 2 Testing page
+     */
+    /**
+     * Webinar Registration Test page
+     *
+     * @return void
+     */
+    public function admin_webinar_test_page() {
+        $test_page_file = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/webinar-form-test.php';
+        if (file_exists($test_page_file)) {
+            include $test_page_file;
+        } else {
+            echo '<div class="wrap">';
+            echo '<h1>'.esc_html__('Webinar Registration Test','dtr-workbooks').'</h1>';
+            echo '<p>'.esc_html__('Test content file missing (admin/webinar-form-test.php).','dtr-workbooks').'</p>';
+            echo '</div>';
+        }
+    }
+
+    /**
+     * Lead Generation Test page
+     *
+     * @return void
+     */
+    public function admin_lead_generation_test_page() {
+        $test_page_file = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/lead-generation-form-test.php';
+        if (file_exists($test_page_file)) {
+            include $test_page_file;
+        } else {
+            echo '<div class="wrap">';
+            echo '<h1>'.esc_html__('Lead Generation Test','dtr-workbooks').'</h1>';
+            echo '<p>'.esc_html__('Test content file missing (admin/lead-generation-form-test.php).','dtr-workbooks').'</p>';
+            echo '</div>';
+        }
     }
     
     /**
@@ -1957,6 +2038,143 @@ class DTR_Workbooks_Integration {
         }
     }
     
+    /**
+     * Handle admin test webinar form submission
+     */
+    public function handle_admin_test_webinar() {
+        // Verify nonce for security (optional for admin-only testing)
+        if (!current_user_can('manage_options')) {
+            wp_die('Unauthorized access.');
+        }
+        
+        // Extract form data
+        $registration_data = [
+            'post_id' => sanitize_text_field($_POST['post_id'] ?? ''),
+            'email' => sanitize_email($_POST['email'] ?? ''),
+            'first_name' => sanitize_text_field($_POST['first_name'] ?? ''),
+            'last_name' => sanitize_text_field($_POST['last_name'] ?? ''),
+            'person_id' => sanitize_text_field($_POST['person_id'] ?? ''),
+            'event_id' => sanitize_text_field($_POST['event_id'] ?? ''),
+            'speaker_question' => sanitize_textarea_field($_POST['speaker_question'] ?? ''),
+            'cf_mailing_list_member_sponsor_1_optin' => !empty($_POST['cf_mailing_list_member_sponsor_1_optin']) ? 1 : 0
+        ];
+        
+        // Log to admin debug file first
+        $admin_log_file = plugin_dir_path(__FILE__) . 'admin/admin-webinar-debug.log';
+        $debug_lines = [];
+        foreach ($registration_data as $key => $value) {
+            $debug_lines[] = "[$key] => $value";
+        }
+        $debug_entry = implode("\n", $debug_lines) . "\n";
+        error_log($debug_entry, 3, $admin_log_file);
+        
+        // Include the webinar handler
+        $handler_file = plugin_dir_path(__FILE__) . 'admin/form-handler-admin-webinar-registration.php';
+        if (!file_exists($handler_file)) {
+            echo '<h3>Handler File Not Found</h3>';
+            echo '<p>Expected: ' . esc_html($handler_file) . '</p>';
+            wp_die();
+        }
+        
+        require_once $handler_file;
+        
+        // Process using existing handler
+        if (function_exists('dtr_handle_live_webinar_registration')) {
+            try {
+                $result = dtr_handle_live_webinar_registration($registration_data);
+                
+                if (!empty($result['success'])) {
+                    echo '<h3>Registration Successful</h3>';
+                    echo '<p>Ticket ID: ' . esc_html($result['ticket_id'] ?? 'N/A') . '</p>';
+                    echo '<p>Person ID: ' . esc_html($result['person_id'] ?? 'N/A') . '</p>';
+                    echo '<p>Event ID: ' . esc_html($result['event_id'] ?? 'N/A') . '</p>';
+                    echo '<p>Check admin-webinar-debug.log for detailed processing steps.</p>';
+                } else {
+                    echo '<h3>Registration Failed</h3>';
+                    echo '<p>Please check admin-webinar-debug.log for error details.</p>';
+                }
+            } catch (Exception $e) {
+                echo '<h3>Registration Error</h3>';
+                echo '<p>Error: ' . esc_html($e->getMessage()) . '</p>';
+                error_log('DTR Admin Test Error: ' . $e->getMessage(), 3, $admin_log_file);
+            }
+        } else {
+            echo '<h3>Handler Function Not Available</h3>';
+            echo '<p>The dtr_handle_live_webinar_registration function could not be loaded.</p>';
+        }
+        
+        wp_die(); // Important: terminate admin-post processing
+    }
+    
+    /**
+     * Handle admin test lead generation (Form 31) form submission
+     */
+    public function handle_admin_test_lead_generation() {
+        // Verify nonce for security (optional for admin-only testing)
+        if (!current_user_can('manage_options')) {
+            wp_die('Unauthorized access.');
+        }
+        
+        // Extract form data
+        $lead_data = [
+            'post_id' => sanitize_text_field($_POST['post_id'] ?? ''),
+            'email' => sanitize_email($_POST['email'] ?? ''),
+            'first_name' => sanitize_text_field($_POST['first_name'] ?? ''),
+            'last_name' => sanitize_text_field($_POST['last_name'] ?? ''),
+            'person_id' => sanitize_text_field($_POST['person_id'] ?? ''),
+            'lead_question' => sanitize_textarea_field($_POST['lead_question'] ?? ''),
+            'cf_mailing_list_member_sponsor_1_optin' => !empty($_POST['cf_mailing_list_member_sponsor_1_optin']) ? 1 : 0
+        ];
+        
+        // Log to admin debug file first
+        $admin_log_file = plugin_dir_path(__FILE__) . 'logs/lead-generation-admin-debug.log';
+        $debug_lines = [];
+        foreach ($lead_data as $key => $value) {
+            $debug_lines[] = "[$key] => $value";
+        }
+        $debug_entry = date('Y-m-d H:i:s') . " - Admin Test Lead Generation:\n" . implode("\n", $debug_lines) . "\n\n";
+        error_log($debug_entry, 3, $admin_log_file);
+        
+        // Include the lead generation handler
+        $handler_file = plugin_dir_path(__FILE__) . 'includes/form-handler-lead-generation-registration.php';
+        if (!file_exists($handler_file)) {
+            echo '<h3>Handler File Not Found</h3>';
+            echo '<p>Expected: ' . esc_html($handler_file) . '</p>';
+            wp_die();
+        }
+        
+        require_once $handler_file;
+        
+        // Process using existing handler
+        if (function_exists('dtr_handle_lead_generation_registration')) {
+            try {
+                $result = dtr_handle_lead_generation_registration($lead_data);
+                
+                if (!empty($result['success'])) {
+                    echo '<h3>Lead Generation Successful</h3>';
+                    echo '<p>Lead ID: ' . esc_html($result['lead_id'] ?? 'N/A') . '</p>';
+                    echo '<p>Person ID: ' . esc_html($result['person_id'] ?? 'N/A') . '</p>';
+                    echo '<p>Check lead-generation-registration-debug.log for detailed processing steps.</p>';
+                } else {
+                    echo '<h3>Lead Generation Failed</h3>';
+                    echo '<p>Please check lead-generation-registration-debug.log for error details.</p>';
+                    if (!empty($result['error'])) {
+                        echo '<p>Error: ' . esc_html($result['error']) . '</p>';
+                    }
+                }
+            } catch (Exception $e) {
+                echo '<h3>Lead Generation Error</h3>';
+                echo '<p>Error: ' . esc_html($e->getMessage()) . '</p>';
+                error_log('DTR Admin Lead Gen Test Error: ' . $e->getMessage(), 3, $admin_log_file);
+            }
+        } else {
+            echo '<h3>Handler Function Not Available</h3>';
+            echo '<p>The dtr_handle_lead_generation_registration function could not be loaded.</p>';
+        }
+        
+        wp_die(); // Important: terminate admin-post processing
+    }
+    
     // Settings field callbacks
     public function api_section_callback() {
         echo '<p>' . __('Configure your Workbooks API connection settings.', 'dtr-workbooks') . '</p>';
@@ -2026,6 +2244,11 @@ class DTR_Workbooks_Integration {
             dtr_custom_log("Ninja Forms submission data: " . print_r($data, true));
         }
         
+        // Handle webinar registration for form 2
+        if (isset($data['id']) && intval($data['id']) === 2) {
+            $this->handle_webinar_registration_form_2($data);
+        }
+        
         // Handle membership registration for form 15
         if (isset($data['id']) && intval($data['id']) === 15) {
             $this->handle_membership_registration($data);
@@ -2048,6 +2271,80 @@ class DTR_Workbooks_Integration {
         
         // Merge arrays safely
         return array_merge($array1, $array2);
+    }
+    
+    /**
+     * Handle webinar registration for Form ID 2
+     */
+    private function handle_webinar_registration_form_2($form_data) {
+        $debug_log_file = defined('DTR_WORKBOOKS_LOG_DIR')
+            ? DTR_WORKBOOKS_LOG_DIR . 'live-webinar-registration-debug.log'
+            : dirname(__FILE__) . '/logs/live-webinar-registration-debug.log';
+        
+        $debug_id = 'NF2-' . uniqid();
+        file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] === FORM ID 2 SUBMISSION CAPTURED (SUBMIT_DATA FILTER) ===\n", FILE_APPEND | LOCK_EX);
+        file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Debug ID: $debug_id\n", FILE_APPEND | LOCK_EX);
+        file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Form Data: " . print_r($form_data, true) . "\n", FILE_APPEND | LOCK_EX);
+        
+        // Extract fields from Ninja Forms data
+        $fields = $form_data['fields'] ?? [];
+        $flat = [];
+        foreach ($fields as $field) {
+            if (isset($field['key'])) {
+                $flat[$field['key']] = $field['value'] ?? '';
+            }
+        }
+        
+        file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Extracted fields: " . print_r($flat, true) . "\n", FILE_APPEND | LOCK_EX);
+        
+        // Get post ID from form data or extract from current context
+        $post_id = $flat['post_id'] ?? null;
+        if (!$post_id && isset($_SERVER['HTTP_REFERER'])) {
+            if (preg_match('/\/webinars\/([^\/]+)\//i', $_SERVER['HTTP_REFERER'], $matches)) {
+                $post = get_page_by_path($matches[1], OBJECT, 'webinars');
+                if ($post) {
+                    $post_id = $post->ID;
+                    file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Extracted post_id from referrer: $post_id\n", FILE_APPEND | LOCK_EX);
+                }
+            }
+        }
+        
+        if (!$post_id) {
+            file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] ERROR: Could not determine post_id for webinar registration\n", FILE_APPEND | LOCK_EX);
+            return;
+        }
+        
+        // Prepare registration data
+        $registration_data = [
+            'post_id' => $post_id,
+            'speaker_question' => $flat['question_for_speaker'] ?? '',
+            'cf_mailing_list_member_sponsor_1_optin' => !empty($flat['cf_mailing_list_member_sponsor_1_optin']) ? 1 : 0
+        ];
+        
+        file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Registration data prepared: " . print_r($registration_data, true) . "\n", FILE_APPEND | LOCK_EX);
+        
+        // Call the webinar registration handler
+        if (file_exists(dirname(__FILE__) . '/includes/form-handler-live-webinar-registration.php')) {
+            require_once(dirname(__FILE__) . '/includes/form-handler-live-webinar-registration.php');
+            
+            if (function_exists('dtr_handle_live_webinar_registration')) {
+                file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Calling dtr_handle_live_webinar_registration\n", FILE_APPEND | LOCK_EX);
+                $result = dtr_handle_live_webinar_registration($registration_data);
+                file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Registration result: " . print_r($result, true) . "\n", FILE_APPEND | LOCK_EX);
+                
+                // Register user locally if successful
+                if (!empty($result['success']) && is_user_logged_in()) {
+                    if (function_exists('register_user_for_event')) {
+                        register_user_for_event(get_current_user_id(), $post_id);
+                        file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] User registered locally for event $post_id\n", FILE_APPEND | LOCK_EX);
+                    }
+                }
+            } else {
+                file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] ERROR: dtr_handle_live_webinar_registration function not found\n", FILE_APPEND | LOCK_EX);
+            }
+        } else {
+            file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] ERROR: Live webinar registration handler file not found\n", FILE_APPEND | LOCK_EX);
+        }
     }
     
     /**
@@ -2459,6 +2756,117 @@ class DTR_Workbooks_Integration {
         // Also log to main plugin log
         dtr_custom_log($message);
     }
+    
+    /**
+     * Admin page for viewing and managing registered events
+     */
+    public function admin_registered_events_page() {
+        if (!current_user_can('manage_options')) {
+            wp_die('Unauthorized access.');
+        }
+        
+        // Handle delete request
+        if (isset($_POST['delete_registration']) && isset($_POST['user_id']) && isset($_POST['event_id'])) {
+            check_admin_referer('delete_registration', 'delete_nonce');
+            $user_id = intval($_POST['user_id']);
+            $event_id = intval($_POST['event_id']);
+            
+            $registered_events = get_user_meta($user_id, 'registered_events', true);
+            if (is_array($registered_events) && in_array($event_id, $registered_events)) {
+                $registered_events = array_diff($registered_events, [$event_id]);
+                update_user_meta($user_id, 'registered_events', $registered_events);
+                echo '<div class="notice notice-success"><p>Registration deleted successfully.</p></div>';
+            }
+        }
+        
+        // Get all users with registered events
+        $users_with_events = get_users([
+            'meta_key' => 'registered_events',
+            'meta_compare' => 'EXISTS'
+        ]);
+        
+        ?>
+        <div class="wrap plugin-admin-content">
+            <h1>Registered Events</h1>
+            <h2>View and manage user registrations for webinars and events.</h2>
+
+            <?php if (empty($users_with_events)): ?>
+                <div class="notice notice-info">
+                    <p>No registered events found.</p>
+                </div>
+            <?php else: ?>
+                <table class="wp-list-table widefat fixed striped">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Event Title</th>
+                            <th>Event ID</th>
+                            <th>Registration Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($users_with_events as $user): ?>
+                            <?php 
+                            $registered_events = get_user_meta($user->ID, 'registered_events', true);
+                            $registered_events = is_array($registered_events) ? $registered_events : [];
+                            ?>
+                            <?php foreach ($registered_events as $event_id): ?>
+                                <?php 
+                                $post = get_post($event_id);
+                                $event_title = $post ? $post->post_title : 'Event not found';
+                                ?>
+                                <tr>
+                                    <td><?php echo esc_html($user->display_name); ?></td>
+                                    <td><?php echo esc_html($user->user_email); ?></td>
+                                    <td>
+                                        <?php if ($post): ?>
+                                            <a href="<?php echo get_edit_post_link($event_id); ?>" target="_blank">
+                                                <?php echo esc_html($event_title); ?>
+                                            </a>
+                                        <?php else: ?>
+                                            <?php echo esc_html($event_title); ?>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?php echo esc_html($event_id); ?></td>
+                                    <td>
+                                        <?php 
+                                        // Try to get registration date from user meta or show N/A
+                                        $reg_date = get_user_meta($user->ID, 'event_' . $event_id . '_registration_date', true);
+                                        echo $reg_date ? esc_html(date('Y-m-d H:i:s', $reg_date)) : 'N/A';
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <form method="post" style="display: inline;">
+                                            <?php wp_nonce_field('delete_registration', 'delete_nonce'); ?>
+                                            <input type="hidden" name="user_id" value="<?php echo esc_attr($user->ID); ?>">
+                                            <input type="hidden" name="event_id" value="<?php echo esc_attr($event_id); ?>">
+                                            <input type="submit" name="delete_registration" value="Delete" 
+                                                   class="button button-secondary" 
+                                                   onclick="return confirm('Are you sure you want to delete this registration?');">
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+            
+            <br>
+            <div class="card">
+                <h2>Usage Notes</h2>
+                <ul>
+                    <li>This page shows all users who have successfully registered for webinars or events.</li>
+                    <li>Registrations are tracked locally in WordPress user meta and synced with Workbooks CRM.</li>
+                    <li>Use the "Delete" button to remove registrations for testing purposes.</li>
+                    <li>Deleting a registration here only removes the local WordPress record - it does not affect Workbooks CRM records.</li>
+                </ul>
+            </div>
+        </div>
+        <?php
+    }
 }
 
 // Initialize the plugin
@@ -2564,7 +2972,8 @@ function dtr_create_workbooks_person($data, $debug_id = '') {
         
         dtr_custom_log("Creating person in Workbooks: " . print_r($person_data, true));
         
-        $response = $workbooks->assertCreate('crm/people', [$person_data]);
+        $person_payload = [$person_data];
+        $response = $workbooks->assertCreate('crm/people', $person_payload);
         
         if (isset($response['affected_objects'][0]['id'])) {
             $person_id = $response['affected_objects'][0]['id'];
@@ -2607,7 +3016,8 @@ function dtr_create_workbooks_ticket($person_id, $event_reference, $debug_id = '
         
         dtr_custom_log("Creating ticket in Workbooks: " . print_r($ticket_data, true));
         
-        $response = $workbooks->assertCreate('crm/cases', [$ticket_data]);
+        $ticket_payload = [$ticket_data];
+        $response = $workbooks->assertCreate('crm/cases', $ticket_payload);
         
         if (isset($response['affected_objects'][0]['id'])) {
             $ticket_id = $response['affected_objects'][0]['id'];
