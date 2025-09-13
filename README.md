@@ -845,41 +845,108 @@ add_action('wp_ajax_get_workbooks_titles', 'dtr_ajax_get_workbooks_titles');
 ---
 
 ## Plugin Folder Structure (excluding `archive/`)
-
 ```
 dtr-workbooks-crm-integration/
-├── dtr-workbooks-crm-integration.php
+├── dtr-workbooks-crm-integration.php (Main plugin file)
 ├── includes/
 │   ├── class-acf-ninjaforms-merge.php
 │   ├── class-array-merge-safety.php
 │   ├── class-employer-sync.php
 │   ├── class-form-submission-override.php
-│   ├── class-helper-functions.php
+│   ├── class-helper-functions.php (TOI/AOI mapping)
 │   ├── class-loader.php
 │   ├── core/
 │   ├── form-handler-gated-content-reveal.php
 │   ├── form-handler-media-planner.php
 │   ├── form-handler-membership-registration.php
-│   ├── form-handler-webinars.php
-│   ├── form-submission-processors-ninjaform-hooks.php
-│   └── form-submission-processors-submission-fix.php
-├── shortcodes/
-│   ├── dtr-forgot-password.php
-│   ├── dtr-my-account-details.php
-│   └── dtr-shortcodes.php
-├── js/
+│   ├── form-handler-webinars.php (Webinar registration & mailing list handler)
+│   ├── form-submission-processors-ninjaform-hooks.php (New Ninja Forms handler)
+│   ├── form-submission-processors-submission-fix.php
+│   ├── ninja-forms-membership-registration.php (Membership registration handler - Form 15)
+│   ├── ninja-forms-simple-hook.php
+│   ├── dtr-shortcodes.php (Shortcode functionality)
+│   ├── workbooks-employer-sync.php (Employer sync)
+│   ├── media-planner-ajax-handler.php (Media planner AJAX handler)
 ├── assets/
-│   └── json/
-│       └── employers.json
-├── logs/
+│   ├── admin.css (Admin styling)
+│   └── dtr-ninjaform-title-select.js (Frontend scripts)
+├── js/
+│   ├── admin.js (Admin interface)
+│   ├── employers-sync.js (Employer management)
+│   └── webinar-endpoint.js (Webinar functionality)
 ├── lib/
-│   └── workbooks_api.php
+│   └── workbooks_api.php (Workbooks API wrapper)
+├── logs/ (Debug and error logs)
 ├── scripts/
 │   ├── setup.sh
 │   ├── deploy.sh
 │   ├── post-commit-sync.sh
 │   ├── config.example.sh
 │   └── README.md
+└── .github/
+   └── workflows/deploy.yml (GitHub Actions deployment)
+```
+```
+dtr-workbooks-crm-integration/
+├── dtr-workbooks-crm-integration.php (Main plugin file)
+├── LICENSE
+├── README.md
+├── readme.txt
+├── admin/                  # Admin UI, debug logs, and admin-specific handlers
+│   ├── admin-webinar-debug.log
+│   ├── admin-webinar-registeration-debug.log
+│   ├── connection-debug.log
+│   ├── content-api-settings.php
+│   ├── content-employer-sync.php
+│   ├── content-knowledge-base.php
+│   ├── content-member-registrations.php
+│   ├── content-person-record.php
+│   ├── content-test-webinar.php
+│   ├── form-handler-admin-webinar-registration.php
+│   ├── gated-content-admin.js
+│   ├── gated-content-ajax.php
+│   ├── archive/                  # Archived admin logs
+│   └── ... (other admin PHP/JS files)
+├── archive/                # Archived files and logs
+├── assets/
+│   ├── css/
+│   ├── js/
+│   └── json/
+│       └── employers.json
+├── includes/
+│   ├── class-acf-ninjaforms-merge.php
+│   ├── class-admin-employer-sync.php
+│   ├── class-array-merge-safety.php
+│   ├── class-employer-sync.php
+│   ├── class-form-submission-override.php
+│   ├── class-helper-functions.php
+│   ├── class-lead-generation-registration.php
+│   ├── class-loader.php
+│   ├── class-webinar-registration.php
+│   ├── dtr-membership-mode-shortcode.php
+│   ├── form-handler-gated-content-reveal.php
+│   ├── form-handler-lead-generation-registration.php
+│   ├── form-handler-live-webinar-registration.php
+│   ├── form-handler-media-planner.php
+│   ├── form-handler-membership-registration.php
+│   ├── form-submission-processors-ninjaform-hooks.php
+│   └── ... (other includes)
+├── js/
+│   ├── admin.js
+│   └── ... (other JS files)
+├── lib/
+│   └── ... (library files, e.g., workbooks_api.php)
+├── logs/                   # Debug and error logs
+├── scripts/
+│   ├── setup.sh
+│   ├── deploy.sh
+│   ├── post-commit-sync.sh
+│   ├── config.example.sh
+│   └── README.md
+├── shortcodes/
+│   └── ... (shortcode PHP files)
+└── .github/
+   └── workflows/deploy.yml (GitHub Actions deployment)
 ```
 
 ninjafoms-full-country-names/
