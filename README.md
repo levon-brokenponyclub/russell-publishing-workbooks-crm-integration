@@ -11,8 +11,9 @@ A production-ready WordPress plugin that integrates WordPress with the DTR Workb
 
 ---
 
-
 ## Comprehensive Feature Summary
+
+A comprehensive WordPress plugin enabling seamless integration between WordPress and DTR Workbooks CRM. This solution powers automated user registration, advanced ACF-driven content gating, dynamic form generation from content metadata, robust event/ticket/lead creation, intelligent employer search, bidirectional account preference syncing, and detailed debugging across ALL gated content types (not just webinars).
 
 ### 🔗 Core CRM Integration
 * Secure API wrapper with timeout/error surfacing & lock_version handling
@@ -95,7 +96,6 @@ A production-ready WordPress plugin that integrates WordPress with the DTR Workb
 - Placeholder for JS logging/debug code is kept for future use.
 - Logic is modular and clearly commented for easy adaptation to Lead Generation or other flows.
 
-A comprehensive WordPress plugin enabling seamless integration between WordPress and DTR Workbooks CRM. This solution powers automated user registration, advanced ACF-driven content gating, dynamic form generation from content metadata, robust event/ticket/lead creation, intelligent employer search, bidirectional account preference syncing, and detailed debugging across ALL gated content types (not just webinars).
 ---
 
 ## Installation & Setup
@@ -201,80 +201,6 @@ Sync Steps:
 5. Disable debug mode post‑diagnosis
 
 ---
-
-## Developer Information
-
-dtr-workbooks-crm-integration/
-├── dtr-workbooks-crm-integration.php
-├── includes/
-│   ├── class-acf-ninjaforms-merge.php
-│   ├── class-array-merge-safety.php
-│   ├── class-employer-sync.php
-│   ├── class-form-submission-override.php
-│   ├── class-helper-functions.php
-│   ├── class-loader.php
-│   ├── core/
-│   ├── form-handler-gated-content-reveal.php
-│   ├── form-handler-media-planner.php
-│   ├── form-handler-membership-registration.php
-│   ├── form-handler-webinars.php
-│   ├── form-submission-processors-ninjaform-hooks.php
-│   └── form-submission-processors-submission-fix.php
-├── shortcodes/
-│   ├── dtr-forgot-password.php
-│   ├── dtr-my-account-details.php
-│   └── dtr-shortcodes.php
-├── js/
-├── assets/
-│   └── json/
-│       └── employers.json
-├── logs/
-├── lib/
-│   └── workbooks_api.php
-├── scripts/
-│   ├── setup.sh
-│   ├── deploy.sh
-│   ├── post-commit-sync.sh
-│   ├── config.example.sh
-│   └── README.md
-
-### Plugin Structure (Current)
-
-```
-dtr-workbooks-crm-integration/
-├── dtr-workbooks-crm-integration.php
-├── includes/
-│   ├── class-acf-ninjaforms-merge.php
-│   ├── class-array-merge-safety.php
-│   ├── class-employer-sync.php
-│   ├── class-form-submission-override.php
-│   ├── class-helper-functions.php
-│   ├── class-loader.php
-│   ├── core/
-│   ├── form-handler-gated-content-reveal.php
-│   ├── form-handler-media-planner.php
-│   ├── form-handler-membership-registration.php
-│   ├── form-handler-webinars.php
-│   ├── form-submission-processors-ninjaform-hooks.php
-│   └── form-submission-processors-submission-fix.php
-├── shortcodes/
-│   ├── dtr-forgot-password.php
-│   ├── dtr-my-account-details.php
-│   └── dtr-shortcodes.php
-├── js/
-├── assets/
-│   └── json/
-│       └── employers.json
-├── logs/
-├── lib/
-│   └── workbooks_api.php
-├── scripts/
-│   ├── setup.sh
-│   ├── deploy.sh
-│   ├── post-commit-sync.sh
-│   ├── config.example.sh
-│   └── README.md
-```
 
 ### Logging Helpers
 * `dtr_admin_log($message, $file)` – gated by debug mode
