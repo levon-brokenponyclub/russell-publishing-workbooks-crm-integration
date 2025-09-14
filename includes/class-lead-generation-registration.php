@@ -6,16 +6,78 @@
  * When control_content="true", it controls the entire page content display logic.
  */
 function workbooks_lead_generation_registration_shortcode($atts = []) {
-    // Parse shortcode attributes
+    // Parse shortcode attributes first
     $atts = shortcode_atts([
         'control_content' => 'false',
         'lead_generation_id' => '31'
     ], $atts);
 
-    $control_content = filter_var($atts['control_content'], FILTER_VALIDATE_BOOLEAN);
     $form_id = intval($atts['lead_generation_id']);
+    $post_id = get_the_ID();
+    $user_id = get_current_user_id();
+    
+    // Enqueue CSS and JavaScript files for lead generation registration
+    $plugin_url = plugin_dir_url(dirname(__FILE__));
+    $plugin_path = plugin_dir_path(dirname(__FILE__));
+    
+    // Get file modification times for cache-busting
+    $css_file = $plugin_path . 'assets/css/lead-generation-registration.css';
+    $js_file = $plugin_path . 'assets/js/lead-generation-registration.js';
+    $css_version = file_exists($css_file) ? filemtime($css_file) : '1.0.0';
+    $js_version = file_exists($js_file) ? filemtime($js_file) : '1.0.0';
+    
+    // Only enqueue once per page load
+    static $assets_enqueued = false;
+    if (!$assets_enqueued) {
+        // Enqueue CSS
+        wp_enqueue_style(
+            'dtr-lead-generation-registration-css',
+            $plugin_url . 'assets/css/lead-generation-registration.css',
+            array(),
+            $css_version
+        );
+        
+        // Enqueue JavaScript
+        wp_enqueue_script(
+            'dtr-lead-generation-registration-js',
+            $plugin_url . 'assets/js/lead-generation-registration.js',
+            array('jquery'),
+            $js_version,
+            true
+        );
+        
+        // Get ACF questions to determine if we need ACF integration
+        $restricted = function_exists('get_field') ? get_field('restricted_content_fields', $post_id) : [];
+        $acf_questions = !empty($restricted['add_questions']) ? $restricted['add_questions'] : [];
+        
+        // Localize script with PHP data
+        wp_localize_script(
+            'dtr-lead-generation-registration-js',
+            'ajax_object',
+            array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'user_id' => $user_id,
+                'form_id' => $form_id,
+                'post_id' => $post_id,
+                'nonce' => wp_create_nonce('mark_ninja_form_completed'),
+                'has_acf_questions' => !empty($acf_questions) ? '1' : '0'
+            )
+        );
+        
+        $assets_enqueued = true;
+    }
+    
+    // Add hidden login form for modal use (only for non-logged-in users)
+    if (!is_user_logged_in()) {
+        echo '<div id="nf-login-modal-form" style="display:none;">';
+        echo do_shortcode('[ninja_form id=3]');
+        echo '</div>';
+    }
+    
+    $control_content = filter_var($atts['control_content'], FILTER_VALIDATE_BOOLEAN);
 
     ob_start();
+    // Re-declare variables since we moved the parsing above
     $post_id = get_the_ID();
     $lead_fields = function_exists('get_field') ? get_field('lead_fields', $post_id) : [];
     $lead_form = $lead_fields['lead_generation_form'] ?? ['id' => $form_id];
@@ -49,9 +111,25 @@ function workbooks_lead_generation_registration_shortcode($atts = []) {
     // --- END essential logging only ---
 
     $user_id = get_current_user_id();
-    $has_completed_form = $user_is_logged_in && function_exists('user_has_completed_form')
-        ? user_has_completed_form($user_id, $lead_form['id'], $post_id)
-        : false;
+    
+    // Check if form 31 has been completed - multiple methods for reliability
+    $has_completed_form = false;
+    
+    if ($user_is_logged_in) {
+        // Method 1: Check for form completion in user meta
+        $completed_forms = get_user_meta($user_id, 'completed_ninja_forms', true);
+        if (is_array($completed_forms)) {
+            $has_completed_form = in_array($form_id, $completed_forms) || in_array("{$form_id}_{$post_id}", $completed_forms);
+        }
+        
+        // Method 2: Check for specific form completion meta
+        if (!$has_completed_form) {
+            $form_completed_meta = get_user_meta($user_id, "completed_form_{$form_id}_{$post_id}", true);
+            $has_completed_form = !empty($form_completed_meta);
+        }
+        
+        // Method 3: Check if success message exists on page (JavaScript detection handled in external JS file)
+    }
 
     // Check if user has saved to collection
     $saved_to_collection = false;
@@ -80,13 +158,14 @@ function workbooks_lead_generation_registration_shortcode($atts = []) {
         } else {
             if ($has_completed_form) {
                 // Show full content for users who completed form
-                echo '<div class="form-completion-notice" style="background: #d4edda; color: #155724; padding: 15px; border-radius: 4px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
-                    <strong>✓ Content Unlocked:</strong> You have completed the required form and can now access this content.
+                // Static notice is hidden by default, toast notification will be shown via JavaScript
+                echo '<div class="form-completion-notice" style="background: #d4edda; color: #155724; padding: 15px; border-radius: 4px; margin-bottom: 20px; border: 1px solid #c3e6cb; display: none;">
+                    <strong>&#10003; Content Unlocked:</strong> You have completed the required form and can now access this content.
                 </div>';
                 get_template_part('components/global/main-content');
                 return ob_get_clean();
             } else {
-                // Show logged-in user content before form submission
+                // Show logged-in user content before form submission (WITHOUT the form - form should only be in sidebar)
                 $logged_in_content = !empty($restricted['logged_in_user_-_before_form_submission']) 
                     ? $restricted['logged_in_user_-_before_form_submission'] 
                     : '';
@@ -99,130 +178,6 @@ function workbooks_lead_generation_registration_shortcode($atts = []) {
                 } else {
                     // Fallback to existing gated content template if no custom content
                     get_template_part('components/single-content/gated-content-logged-in');
-                }
-                
-                return ob_get_clean();
-
-                $extra_fields_markup = '';
-                if ($add_additional_questions && !empty($acf_questions)) {
-                    $extra_fields_markup .= '<form id="acf-questions-form" style="margin-bottom:15px;" onsubmit="return false;">';
-                    foreach ($acf_questions as $i => $question) {
-                        $type = isset($question['type_of_question']) ? $question['type_of_question'] : 'text';
-                        $title = isset($question['question_title']) ? $question['question_title'] : '';
-                        $extra_fields_markup .= '<div style="margin-bottom:10px;">';
-                        $extra_fields_markup .= '<label class="question-label" for="acf_question_' . $i . '">' . esc_html($title) . '</label><br />';
-                        if ($type === 'dropdown' && !empty($question['dropdown_options'])) {
-                            $extra_fields_markup .= '<select name="acf_question_' . $i . '" id="acf_question_' . $i . '">';
-                            foreach ($question['dropdown_options'] as $opt) {
-                                $extra_fields_markup .= '<option value="' . esc_attr($opt['option']) . '">' . esc_html($opt['option']) . '</option>';
-                            }
-                            $extra_fields_markup .= '</select>';
-                        } elseif ($type === 'checkbox' && !empty($question['checkbox_options'])) {
-                            foreach ($question['checkbox_options'] as $j => $opt) {
-                                $extra_fields_markup .= '<label class="answer-label"><input type="checkbox" name="acf_question_' . $i . '[]" value="' . esc_attr($opt['checkbox']) . '"> ' . esc_html($opt['checkbox']) . '</label> ';
-                            }
-                        } elseif ($type === 'radio' && !empty($question['radio_options'])) {
-                            foreach ($question['radio_options'] as $j => $opt) {
-                                $extra_fields_markup .= '<label class="answer-label"><input type="radio" name="acf_question_' . $i . '" value="' . esc_attr($opt['radio']) . '"> ' . esc_html($opt['radio']) . '</label> ';
-                            }
-                        } elseif ($type === 'textarea') {
-                            $extra_fields_markup .= '<textarea name="acf_question_' . $i . '" id="acf_question_' . $i . '" rows="4" style="width:100%"></textarea>';
-                        } else {
-                            $extra_fields_markup .= '<input type="text" name="acf_question_' . $i . '" id="acf_question_' . $i . '" value="" />';
-                        }
-                        $extra_fields_markup .= '</div>';
-                    }
-                    $extra_fields_markup .= '</form>';
-                }
-                if (!empty($extra_fields_markup)) {
-                    echo $extra_fields_markup;
-                }
-                echo do_shortcode('[ninja_form id="' . esc_attr($lead_form['id']) . '"]');
-                echo '</div>'; // close .gated-lead-form-content
-                
-                // Add JavaScript to inject ACF answers into Ninja Form on submission
-                if (!empty($acf_questions)) {
-                    echo '<script>
-                    jQuery(document).ready(function($) {
-                        // Function to get ACF answers
-                        function getAcfAnswers() {
-                            var answers = {};
-                            $("[id^=\'acf_question_\']").each(function() {
-                                var fieldId = $(this).attr("id");
-                                var fieldName = $(this).attr("name");
-                                var value = "";
-
-                                if ($(this).is(":checkbox")) {
-                                    var checkedValues = [];
-                                    $("[name=\'" + fieldName + "\']:checked").each(function() {
-                                        checkedValues.push($(this).val());
-                                    });
-                                    value = checkedValues.join(", ");
-                                } else if ($(this).is(":radio")) {
-                                    value = $("[name=\'" + fieldName + "\']:checked").val() || "";
-                                } else {
-                                    value = $(this).val() || "";
-                                }
-
-                                if (value) {
-                                    answers[fieldName] = value;
-                                }
-                            });
-                            return answers;
-                        }
-
-                        // Function to inject ACF answers into Ninja Form
-                        function injectAcfAnswersToNinjaForm(ninjaForm) {
-                            var acfAnswers = getAcfAnswers();
-                            console.log("ACF Questions Debug:", acfAnswers);
-
-                            // Create hidden fields for each ACF answer
-                            Object.entries(acfAnswers).forEach(function(entry) {
-                                var fieldName = entry[0];
-                                var fieldValue = entry[1];
-
-                                // Check if field already exists
-                                var existingField = ninjaForm.querySelector("[name=\'" + fieldName + "\']");
-                                if (existingField) {
-                                    existingField.value = fieldValue;
-                                } else {
-                                    // Create new hidden field
-                                    var hiddenField = document.createElement("input");
-                                    hiddenField.type = "hidden";
-                                    hiddenField.name = fieldName;
-                                    hiddenField.value = fieldValue;
-                                    ninjaForm.appendChild(hiddenField);
-                                }
-                            });
-                        }
-
-                        // Wait for Ninja Form to be ready
-                        function setupNinjaFormIntegration() {
-                            var ninjaForm = document.querySelector(".ninja-forms-form");
-                            if (!ninjaForm) {
-                                setTimeout(setupNinjaFormIntegration, 300);
-                                return;
-                            }
-
-                            // Avoid double-binding
-                            if (ninjaForm.getAttribute("data-acf-inject-listener")) return;
-                            ninjaForm.setAttribute("data-acf-inject-listener", "1");
-
-                            // Listen for form submission
-                            ninjaForm.addEventListener("submit", function(e) {
-                                injectAcfAnswersToNinjaForm(ninjaForm);
-                            });
-                        }
-
-                        // Initialize when page loads
-                        setupNinjaFormIntegration();
-
-                        // Also try when Ninja Forms fires its ready event
-                        $(document).on("nfFormReady", function(e) {
-                            setTimeout(setupNinjaFormIntegration, 100);
-                        });
-                    });
-                    </script>';
                 }
                 
                 return ob_get_clean();
@@ -243,54 +198,30 @@ function workbooks_lead_generation_registration_shortcode($atts = []) {
         $reveal_text = '<div class="reveal-text">Login or Register for this event</div>';
     } elseif (!$has_completed_form) {
         // Logged in, no form submission: "Register Now" (no link, triggers form)
-        $button_html = '<button class="event-register-button" onclick="document.querySelector(\'.gated-lead-form-content\').scrollIntoView({behavior: \'smooth\'});">Register Now</button>';
+        $button_html = '<button class="event-register-button not-registered" onclick="document.querySelector(\'.gated-lead-form-content\').scrollIntoView({behavior: \'smooth\'});">Register Now</button>';
         $reveal_text = '';
     } elseif (!$saved_to_collection) {
         // Logged in, form submitted: "Save to Collection"
         $button_html = '<button class="event-register-button save-to-collection" data-post-id="' . esc_attr($post_id) . '">Save to Collection</button>';
-        $reveal_text = '';
+        $reveal_text = '<div class="reveal-text">You have registered for this event</div>';
     } else {
-        // Logged in, saved to collection: "Saved to Collection" + "Click to view your collection"
-        $button_html = '<button class="event-register-button saved-to-collection" disabled>Saved to Collection</button>';
-        $reveal_text = '<div class="reveal-text"><a href="/my-collection">Click to view your collection</a></div>';
+        // Logged in, saved to collection: Split button with options
+        $uid = 'ks' . uniqid(); // unique id for this instance
+        $button_html = '<div class="ks-split-btn">
+                <a href="/my-account/?page-view=my-collection" class="ks-main-btn" role="button">Saved to Collection</a>
+                <button type="button" class="ks-toggle-btn" aria-haspopup="true" aria-expanded="false" aria-controls="' . $uid . '-menu" title="Open menu">
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+
+                <ul id="' . $uid . '-menu" class="ks-menu" role="menu">
+                    <li role="none"><a role="menuitem" href="#" class="no-decoration remove-from-collection-btn">Remove</a></li>
+                    <li role="none"><a role="menuitem" href="/my-account/?page-view=my-collection">View My Collection</a></li>
+                </ul>
+            </div>';
+        $reveal_text = '<div class="reveal-text">Event has been saved to collection</div>';
     }
 
-    // Add JavaScript for Save to Collection functionality
-    if (!$has_completed_form || !$saved_to_collection) {
-        echo '<script>
-        jQuery(document).ready(function($) {
-            $(".save-to-collection").on("click", function(e) {
-                e.preventDefault();
-                var button = $(this);
-                var postId = button.data("post-id");
-
-                button.prop("disabled", true).text("Saving...");
-
-                $.ajax({
-                    url: "' . admin_url('admin-ajax.php') . '",
-                    type: "POST",
-                    data: {
-                        action: "save_to_collection",
-                        post_id: postId
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            button.removeClass("save-to-collection").addClass("saved-to-collection").text("Saved to Collection").prop("disabled", true);
-                            button.after(\'<div class="reveal-text"><a href="/my-collection">Click to view your collection</a></div>\');
-                        } else {
-                            button.prop("disabled", false).text("Save to Collection");
-                            alert("Error saving to collection: " + (response.data.message || "Unknown error"));
-                        }
-                    },
-                    error: function() {
-                        button.prop("disabled", false).text("Save to Collection");
-                        alert("Error saving to collection. Please try again.");
-                    }
-                });
-            });
-        });
-        </script>';
-    }
+    // Save to Collection functionality is handled in external JavaScript file
 
     // Not logged in: show login/register CTA with split button
     if (!$user_is_logged_in) {
@@ -313,232 +244,7 @@ function workbooks_lead_generation_registration_shortcode($atts = []) {
             <div class="reveal-text">Login or Register for this event</div>
         </div>
 
-        <style>
-        /* Wrapper full width */
-        .ks-split-btn {
-            display: flex;
-            width: 100%;
-            position: relative;
-            font-size: 0.95rem;
-            line-height: 1.2;
-            min-height: 48px;
-        }
-
-        /* Main + toggle buttons */
-        .ks-main-btn,
-        .ks-toggle-btn {
-            display: flex;
-            align-items: center;
-            justify-content: left;
-            padding: 0.6rem 0.95rem;
-            border: 0;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .ks-main-btn {
-            flex: 1;
-            background: #871f80;
-            color: #fff;
-            border-radius: 3px 0 0 0;
-            text-decoration: none;
-        }
-
-        .ks-toggle-btn {
-            flex: 0 0 60px;
-            background: #871f80;
-            color: #fff;
-            border-radius: 0 3px 0 0;
-            justify-content: center;
-        }
-
-        .ks-toggle-btn:hover {
-            background: #6e1a6e;
-        }
-
-        .ks-toggle-btn[aria-expanded="true"] {
-            background: #6e1a6e;
-        }
-
-        .ks-toggle-btn i {
-            font-family: 'Font Awesome 6 Pro';
-            font-weight: 400;
-            content: '\f078'; /* Unicode for fa-chevron-down */
-        }
-
-        .ks-toggle-btn[aria-expanded="true"] i {
-            content: '\f077'; /* Unicode for fa-chevron-up */
-        }
-
-        /* Dropdown menu (hidden by default, animated slide) */
-        .ks-menu {
-            position: absolute;
-            top: calc(100% + 0px);
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50%;
-            background-color:#871f80;
-            border-radius: 0 0 3px 3px !important;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-            z-index: 9999;
-
-            display: flex;
-            justify-content: space-around;
-
-            /* transition */
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: max-height 0.35s ease, 
-                        opacity 0.35s ease, 
-                        padding 0.35s ease,
-                        width 0.35s ease;
-            padding: 0; /* collapse spacing when closed */
-        }
-
-        /* Open state: slide, fade + expand to full width */
-        .ks-menu.ks-open {
-            max-height: 200px; /* large enough for contents */
-            opacity: 1;
-            padding: 0; /* spacing appears smoothly */
-            width: 100%;
-            border-radius: 0 0 3px 3px !important;
-        }
-
-        .ks-menu li {
-            flex: 1;
-            text-align: center;
-            margin-bottom:0;
-            list-style: none;
-        }
-
-        .ks-menu a {
-            display: block;
-            padding: 12px;
-            color: #fff;
-            text-decoration: none;
-            font-size:0.75rem;
-            font-weight: bold;
-            border-radius: 0 0 3px 3px;
-            background: #009fe3;
-        }
-
-        .ks-menu a.login-button {
-            display: block;
-            padding: 12px;
-            color: #fff;
-            text-decoration: none;
-            font-size:0.75rem;
-            font-weight: bold;
-            border-radius: 0 0 3px 3px;
-            background: #871f80;
-        }
-
-        .ks-menu a.login-button:hover {
-            background: #6e1a6e;
-        }
-
-        .ks-menu a:hover {
-            background: #007bbf;
-        }
-
-        .event-registration .reveal-text {
-            padding:0.45rem 0.85rem;
-            margin-top:4px;
-        }
-        </style>
-
-        <div id="nf-login-modal-form" style="display:none;">
-HTML;
-        echo do_shortcode('[ninja_form id="3"]');
-        echo <<<HTML
-        </div>
-
-        <script>
-        // Define openLoginModal function globally
-        function openLoginModal() {
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <button class="modal-close">&times;</button>
-                    <div class="modal-body"></div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-
-            // Move the form HTML into the modal body
-            const formDiv = document.getElementById('nf-login-modal-form');
-            if (formDiv && formDiv.firstElementChild) {
-                modal.querySelector('.modal-body').appendChild(formDiv.firstElementChild.cloneNode(true));
-            } else {
-                modal.querySelector('.modal-body').innerHTML = '<p>Form could not be loaded. Please try again later.</p>';
-            }
-
-            // Close modal functionality
-            const closeButton = modal.querySelector('.modal-close');
-            closeButton.addEventListener('click', function () {
-                document.body.removeChild(modal);
-            });
-
-            // Close modal when clicking outside
-            modal.addEventListener('click', function (e) {
-                if (e.target === modal) {
-                    document.body.removeChild(modal);
-                }
-            });
-        }
-
-        (function () {
-            function closeAllExcept(exceptMenu) {
-                document.querySelectorAll('.ks-menu.ks-open').forEach(function (m) {
-                    if (m !== exceptMenu) {
-                        m.classList.remove('ks-open');
-                        var t = document.querySelector('[aria-controls="' + m.id + '"]');
-                        if (t) t.setAttribute('aria-expanded', 'false');
-                    }
-                });
-            }
-
-            document.addEventListener('DOMContentLoaded', function () {
-                document.querySelectorAll('.ks-split-btn').forEach(function (container) {
-                    var toggle = container.querySelector('.ks-toggle-btn');
-                    var menu = container.querySelector('.ks-menu');
-                    if (!toggle || !menu) return;
-
-                    toggle.addEventListener('click', function (e) {
-                        e.stopPropagation();
-                        var isOpen = menu.classList.toggle('ks-open');
-                        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-                        closeAllExcept(isOpen ? menu : null);
-                    });
-
-                    // Close when menu item clicked
-                    menu.querySelectorAll('a').forEach(function (a) {
-                        a.addEventListener('click', function () {
-                            menu.classList.remove('ks-open');
-                            toggle.setAttribute('aria-expanded', 'false');
-                        });
-                    });
-
-                    // Keyboard: Esc to close
-                    container.addEventListener('keydown', function (e) {
-                        if (e.key === 'Escape') {
-                            menu.classList.remove('ks-open');
-                            toggle.setAttribute('aria-expanded', 'false');
-                        }
-                    });
-                });
-
-                // Clicking outside closes all menus
-                document.addEventListener('click', function () {
-                    closeAllExcept(null);
-                });
-            });
-        })();
-        </script>
+        
 HTML;
         return ob_get_clean();
     }
@@ -589,85 +295,7 @@ HTML;
         echo do_shortcode('[ninja_form id="' . esc_attr($lead_form['id']) . '"]');
         echo '</div>'; // close .gated-lead-form-content
         
-        // Add JavaScript to inject ACF answers into Ninja Form on submission
-        if (!empty($acf_questions)) {
-            echo '<script>
-            jQuery(document).ready(function($) {
-                // Function to get ACF answers
-                function getAcfAnswers() {
-                    var answers = {};
-                    $("[id^=\'acf_question_\']").each(function() {
-                        var fieldId = $(this).attr("id");
-                        var fieldName = $(this).attr("name");
-                        var value = "";
-
-                        if ($(this).is(":checkbox")) {
-                            var checkedValues = [];
-                            $("[name=\'" + fieldName + "\']:checked").each(function() {
-                                checkedValues.push($(this).val());
-                            });
-                            value = checkedValues.join(", ");
-                        } else if ($(this).is(":radio")) {
-                            value = $("[name=\'" + fieldName + "\']:checked").val() || "";
-                        } else {
-                            value = $(this).val() || "";
-                        }
-
-                        if (value) {
-                            answers[fieldName] = value;
-                        }
-                    });
-                    return answers;
-                }
-
-                // Function to inject ACF answers into Ninja Form
-                function injectAcfAnswersToNinjaForm(ninjaForm) {
-                    var acfAnswers = getAcfAnswers();
-                    console.log("ACF Questions Debug:", acfAnswers);
-
-                    // Create hidden fields for each ACF answer
-                    Object.keys(acfAnswers).forEach(function(fieldName) {
-                        var existingHidden = ninjaForm.querySelector("[name=\'" + fieldName + "\']");
-                        if (existingHidden) {
-                            existingHidden.value = acfAnswers[fieldName];
-                        } else {
-                            var hiddenField = document.createElement("input");
-                            hiddenField.type = "hidden";
-                            hiddenField.name = fieldName;
-                            hiddenField.value = acfAnswers[fieldName];
-                            ninjaForm.appendChild(hiddenField);
-                        }
-                    });
-                }
-
-                // Wait for Ninja Form to be ready
-                function setupNinjaFormIntegration() {
-                    var ninjaForm = document.querySelector(".ninja-forms-form");
-                    if (!ninjaForm) {
-                        setTimeout(setupNinjaFormIntegration, 300);
-                        return;
-                    }
-
-                    // Avoid double-binding
-                    if (ninjaForm.getAttribute("data-acf-inject-listener")) return;
-                    ninjaForm.setAttribute("data-acf-inject-listener", "1");
-
-                    // Listen for form submission
-                    ninjaForm.addEventListener("submit", function(e) {
-                        injectAcfAnswersToNinjaForm(ninjaForm);
-                    });
-                }
-
-                // Initialize when page loads
-                setupNinjaFormIntegration();
-
-                // Also try when Ninja Forms fires its ready event
-                $(document).on("nfFormReady", function(e) {
-                    setTimeout(setupNinjaFormIntegration, 100);
-                });
-            });
-            </script>';
-        }
+        // ACF integration and form success detection is handled in external JavaScript file
     }
     
     echo '</div>';
@@ -675,3 +303,276 @@ HTML;
     return ob_get_clean();
 }
 add_shortcode('workbooks-lead-generation-registration', 'workbooks_lead_generation_registration_shortcode');
+
+/**
+ * AJAX handler to mark a Ninja Form as completed for a user
+ */
+function mark_ninja_form_completed_ajax_handler() {
+    // Verify nonce
+    if (!wp_verify_nonce($_POST['nonce'], 'mark_ninja_form_completed')) {
+        wp_die('Security check failed');
+    }
+    
+    $user_id = intval($_POST['user_id']);
+    $form_id = intval($_POST['form_id']);
+    $post_id = intval($_POST['post_id']);
+    
+    // Verify user
+    if ($user_id !== get_current_user_id()) {
+        wp_die('Invalid user');
+    }
+    
+    // Get existing completed forms
+    $completed_forms = get_user_meta($user_id, 'completed_ninja_forms', true);
+    if (!is_array($completed_forms)) {
+        $completed_forms = [];
+    }
+    
+    // Add this form to completed list (both with and without post ID)
+    $form_key = $form_id;
+    $form_post_key = "{$form_id}_{$post_id}";
+    
+    if (!in_array($form_key, $completed_forms)) {
+        $completed_forms[] = $form_key;
+    }
+    if (!in_array($form_post_key, $completed_forms)) {
+        $completed_forms[] = $form_post_key;
+    }
+    
+    // Update user meta
+    update_user_meta($user_id, 'completed_ninja_forms', $completed_forms);
+    update_user_meta($user_id, "completed_form_{$form_id}_{$post_id}", current_time('mysql'));
+    
+    wp_send_json_success([
+        'message' => 'Form marked as completed',
+        'form_id' => $form_id,
+        'post_id' => $post_id,
+        'completed_forms' => $completed_forms
+    ]);
+}
+add_action('wp_ajax_mark_ninja_form_completed', 'mark_ninja_form_completed_ajax_handler');
+add_action('wp_ajax_nopriv_mark_ninja_form_completed', 'mark_ninja_form_completed_ajax_handler');
+
+/**
+ * AJAX handler to remove a post from user's collection
+ */
+function remove_from_collection_ajax_handler() {
+    // Verify nonce
+    if (!wp_verify_nonce($_POST['nonce'], 'mark_ninja_form_completed')) {
+        wp_die('Security check failed');
+    }
+    
+    $post_id = intval($_POST['post_id']);
+    $user_id = get_current_user_id();
+    
+    // Verify user is logged in
+    if (!$user_id) {
+        wp_send_json_error('User not logged in');
+        return;
+    }
+    
+    // Get current saved collection
+    $saved_collection = get_user_meta($user_id, 'saved_collection', true);
+    if (!is_array($saved_collection)) {
+        $saved_collection = [];
+    }
+    
+    // Remove post from collection
+    $key = array_search($post_id, $saved_collection);
+    if ($key !== false) {
+        unset($saved_collection[$key]);
+        $saved_collection = array_values($saved_collection); // Re-index array
+        
+        // Update user meta
+        update_user_meta($user_id, 'saved_collection', $saved_collection);
+        
+        wp_send_json_success([
+            'message' => 'Post removed from collection successfully',
+            'post_id' => $post_id,
+            'collection' => $saved_collection
+        ]);
+    } else {
+        wp_send_json_error('Post not found in collection');
+    }
+}
+add_action('wp_ajax_remove_from_collection', 'remove_from_collection_ajax_handler');
+add_action('wp_ajax_nopriv_remove_from_collection', 'remove_from_collection_ajax_handler');
+
+/**
+ * Helper function to check if a user has completed a specific form
+ * @param int $user_id User ID
+ * @param int $form_id Form ID
+ * @param int $post_id Optional post ID for form-post combination
+ * @return bool
+ */
+function user_has_completed_form($user_id, $form_id, $post_id = null) {
+    if (!$user_id || !$form_id) {
+        return false;
+    }
+    
+    // Check user meta for completed forms
+    $completed_forms = get_user_meta($user_id, 'completed_ninja_forms', true);
+    if (is_array($completed_forms)) {
+        // Check for form ID alone
+        if (in_array($form_id, $completed_forms)) {
+            return true;
+        }
+        
+        // Check for form ID + post ID combination
+        if ($post_id && in_array("{$form_id}_{$post_id}", $completed_forms)) {
+            return true;
+        }
+    }
+    
+    // Check specific meta key if post ID provided
+    if ($post_id) {
+        $form_completed = get_user_meta($user_id, "completed_form_{$form_id}_{$post_id}", true);
+        if (!empty($form_completed)) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+/**
+ * Clear form completion status for a user (for testing purposes)
+ * @param int $user_id User ID
+ * @param int $form_id Form ID to clear (optional - if not provided, clears all)
+ * @param int $post_id Post ID (optional)
+ * @return bool Success status
+ */
+function clear_user_form_completion($user_id, $form_id = null, $post_id = null) {
+    if (!$user_id) {
+        return false;
+    }
+    
+    if ($form_id && $post_id) {
+        // Clear specific form-post combination
+        delete_user_meta($user_id, "completed_form_{$form_id}_{$post_id}");
+        
+        // Remove from completed forms array
+        $completed_forms = get_user_meta($user_id, 'completed_ninja_forms', true);
+        if (is_array($completed_forms)) {
+            $completed_forms = array_diff($completed_forms, [$form_id, "{$form_id}_{$post_id}"]);
+            update_user_meta($user_id, 'completed_ninja_forms', $completed_forms);
+        }
+        
+        return true;
+    } elseif ($form_id) {
+        // Clear specific form ID from all posts
+        $completed_forms = get_user_meta($user_id, 'completed_ninja_forms', true);
+        if (is_array($completed_forms)) {
+            $completed_forms = array_filter($completed_forms, function($item) use ($form_id) {
+                return $item != $form_id && !preg_match("/^{$form_id}_\d+$/", $item);
+            });
+            update_user_meta($user_id, 'completed_ninja_forms', $completed_forms);
+        }
+        
+        // Clear all form-specific meta keys
+        global $wpdb;
+        $wpdb->delete(
+            $wpdb->usermeta,
+            [
+                'user_id' => $user_id,
+                'meta_key' => $wpdb->prepare('completed_form_%d_%%', $form_id)
+            ],
+            ['%d', '%s']
+        );
+        
+        return true;
+    } else {
+        // Clear all form completions
+        delete_user_meta($user_id, 'completed_ninja_forms');
+        
+        // Clear all completed_form_* meta keys
+        global $wpdb;
+        $wpdb->delete(
+            $wpdb->usermeta,
+            [
+                'user_id' => $user_id,
+                'meta_key' => 'completed_form_%'
+            ],
+            ['%d', '%s']
+        );
+        
+        return true;
+    }
+}
+
+/**
+ * Admin function to clear form completions via URL parameter
+ * Usage: add ?clear_form_completion=1 to any page URL (admin only)
+ */
+function handle_clear_form_completion_request() {
+    // Only allow for administrators
+    if (!current_user_can('administrator')) {
+        return;
+    }
+    
+    if (isset($_GET['clear_form_completion'])) {
+        $user_id = get_current_user_id();
+        $form_id = isset($_GET['form_id']) ? intval($_GET['form_id']) : 31; // Default to form 31
+        $post_id = isset($_GET['post_id']) ? intval($_GET['post_id']) : get_the_ID();
+        
+        $success = clear_user_form_completion($user_id, $form_id, $post_id);
+        
+        if ($success) {
+            // Add success message
+            add_action('wp_footer', function() use ($form_id, $post_id) {
+                echo '<div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); 
+                           background: #28a745; color: white; padding: 10px 20px; border-radius: 4px; 
+                           z-index: 9999; font-weight: bold;">
+                    Form completion cleared (Form ID: ' . $form_id . ', Post ID: ' . $post_id . ')
+                </div>';
+                echo '<script>setTimeout(function() {
+                    var msg = document.querySelector("div[style*=\'position: fixed\']");
+                    if (msg) msg.remove();
+                }, 3000);</script>';
+            });
+        }
+        
+        // Redirect to clean URL (remove query parameters)
+        $clean_url = remove_query_arg(['clear_form_completion', 'form_id', 'post_id']);
+        if ($clean_url !== $_SERVER['REQUEST_URI']) {
+            wp_redirect($clean_url);
+            exit;
+        }
+    }
+}
+add_action('template_redirect', 'handle_clear_form_completion_request');
+
+/**
+ * AJAX handler to clear form completion (admin only)
+ */
+function clear_form_completion_ajax_handler() {
+    // Only allow for administrators
+    if (!current_user_can('administrator')) {
+        wp_die('Access denied');
+    }
+    
+    // Verify nonce
+    if (!wp_verify_nonce($_POST['nonce'], 'clear_form_completion')) {
+        wp_die('Security check failed');
+    }
+    
+    $user_id = intval($_POST['user_id']) ?: get_current_user_id();
+    $form_id = intval($_POST['form_id']) ?: 31;
+    $post_id = intval($_POST['post_id']) ?: null;
+    
+    $success = clear_user_form_completion($user_id, $form_id, $post_id);
+    
+    if ($success) {
+        wp_send_json_success([
+            'message' => 'Form completion cleared successfully',
+            'form_id' => $form_id,
+            'post_id' => $post_id,
+            'user_id' => $user_id
+        ]);
+    } else {
+        wp_send_json_error('Failed to clear form completion');
+    }
+    
+}
+
+add_action('wp_ajax_clear_form_completion', 'clear_form_completion_ajax_handler');

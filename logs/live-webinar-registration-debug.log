@@ -1500,3 +1500,2159 @@ RESULT INFORMATION:
 )
 
 [2025-09-13 16:30:41] User registered locally for event 161189
+[2025-09-13 18:21:15] === FORM ID 2 SUBMISSION CAPTURED (SUBMIT_DATA FILTER) ===
+[2025-09-13 18:21:15] Debug ID: NF2-68c5b61b3e25a
+[2025-09-13 18:21:15] Form Data: Array
+(
+    [id] => 2
+    [fields] => Array
+        (
+            [2] => Array
+                (
+                    [value] => 
+                    [id] => 2
+                    [key] => register
+                )
+
+            [56] => Array
+                (
+                    [value] => Final Webinar - Levon - August 2025
+                    [id] => 56
+                    [key] => webinar_title
+                )
+
+            [58] => Array
+                (
+                    [value] => 1
+                    [id] => 58
+                    [key] => cf_mailing_list_member_sponsor_1_optin
+                )
+
+            [68] => Array
+                (
+                    [value] => 161189
+                    [id] => 68
+                    [key] => post_id
+                )
+
+            [385] => Array
+                (
+                    [value] => 
+                    [id] => 385
+                    [key] => add_questions
+                )
+
+            [387] => Array
+                (
+                    [value] => Testing final Front End Form
+                    [id] => 387
+                    [key] => question_for_speaker
+                )
+
+        )
+
+    [settings] => Array
+        (
+            [objectType] => Form Setting
+            [editActive] => 1
+            [title] => Webinar Registration Form
+            [show_title] => 0
+            [allow_public_link] => 0
+            [embed_form] => 
+            [clear_complete] => 1
+            [hide_complete] => 1
+            [default_label_pos] => above
+            [wrapper_class] => 
+            [element_class] => 
+            [form_title_heading_level] => 3
+            [key] => 
+            [add_submit] => 1
+            [changeEmailErrorMsg] => Please enter a valid email address!
+            [changeDateErrorMsg] => Please enter a valid date!
+            [confirmFieldErrorMsg] => These fields must match!
+            [fieldNumberNumMinError] => Number Min Error
+            [fieldNumberNumMaxError] => Number Max Error
+            [fieldNumberIncrementBy] => Please increment by 
+            [formErrorsCorrectErrors] => Please correct errors before submitting this form.
+            [validateRequiredField] => This is a required field.
+            [honeypotHoneypotError] => Honeypot Error
+            [fieldsMarkedRequired] => Fields marked with an <span class="ninja-forms-req-symbol">*</span> are required
+            [currency] => 
+            [unique_field_error] => A form with this value has already been submitted.
+            [logged_in] => 
+            [not_logged_in_msg] => 
+            [sub_limit_msg] => The form has reached its submission limit.
+            [calculations] => Array
+                (
+                )
+
+            [drawerDisabled] => 
+            [conditions] => Array
+                (
+                    [0] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 6
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                    [1] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 4
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                    [2] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 5
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [objectDomain] => display
+            [save_progress_allow_multiple] => 
+            [save_progress_table_legend] => Load saved progress
+            [save_progress_table_columns] => Array
+                (
+                    [0] => Array
+                        (
+                            [errors] => Array
+                                (
+                                )
+
+                            [max_options] => 0
+                            [label] => Column Title
+                            [field] => {field}
+                            [order] => 0
+                            [settingModel] => Array
+                                (
+                                    [settings] => 
+                                    [hide_merge_tags] => 
+                                    [error] => 
+                                    [name] => save_progress_table_columns
+                                    [type] => option-repeater
+                                    [label] => Save Table Columns <a href="#" class="nf-add-new">Add New</a>
+                                    [width] => full
+                                    [group] => primary
+                                    [columns] => Array
+                                        (
+                                            [field] => Array
+                                                (
+                                                    [header] => Field Key
+                                                    [default] => 
+                                                )
+
+                                        )
+
+                                    [value] => Array
+                                        (
+                                            [0] => Array
+                                                (
+                                                    [label] => Column Title
+                                                    [field] => {field}
+                                                    [order] => 0
+                                                )
+
+                                        )
+
+                                    [tmpl_row] => tmpl-nf-save-progress-table-columns-repeater-row
+                                )
+
+                        )
+
+                )
+
+            [container_styles_show_advanced_css] => 0
+            [title_styles_show_advanced_css] => 0
+            [row_styles_show_advanced_css] => 0
+            [row-odd_styles_show_advanced_css] => 0
+            [success-msg_styles_show_advanced_css] => 0
+            [error_msg_styles_show_advanced_css] => 0
+            [mp_breadcrumb] => 1
+            [mp_progress_bar] => 1
+            [mp_display_titles] => 0
+            [breadcrumb_container_styles_show_advanced_css] => 0
+            [breadcrumb_buttons_styles_show_advanced_css] => 0
+            [breadcrumb_button_hover_styles_show_advanced_css] => 0
+            [breadcrumb_active_button_styles_show_advanced_css] => 0
+            [progress_bar_container_styles_show_advanced_css] => 0
+            [progress_bar_fill_styles_show_advanced_css] => 0
+            [part_titles_styles_show_advanced_css] => 0
+            [navigation_container_styles_show_advanced_css] => 0
+            [previous_button_styles_show_advanced_css] => 0
+            [next_button_styles_show_advanced_css] => 0
+            [navigation_hover_styles_show_advanced_css] => 0
+            [ninjaForms] => Ninja Forms
+            [fieldTextareaRTEInsertLink] => Insert Link
+            [fieldTextareaRTEInsertMedia] => Insert Media
+            [fieldTextareaRTESelectAFile] => Select a file
+            [formHoneypot] => If you are a human seeing this field, please leave it empty.
+            [fileUploadOldCodeFileUploadInProgress] => File Upload in Progress.
+            [fileUploadOldCodeFileUpload] => FILE UPLOAD
+            [currencySymbol] => &#36;
+            [thousands_sep] => ,
+            [decimal_point] => .
+            [siteLocale] => en_GB
+            [dateFormat] => m/d/Y
+            [startOfWeek] => 1
+            [of] => of
+            [previousMonth] => Previous Month
+            [nextMonth] => Next Month
+            [months] => Array
+                (
+                    [0] => January
+                    [1] => February
+                    [2] => March
+                    [3] => April
+                    [4] => May
+                    [5] => June
+                    [6] => July
+                    [7] => August
+                    [8] => September
+                    [9] => October
+                    [10] => November
+                    [11] => December
+                )
+
+            [monthsShort] => Array
+                (
+                    [0] => Jan
+                    [1] => Feb
+                    [2] => Mar
+                    [3] => Apr
+                    [4] => May
+                    [5] => Jun
+                    [6] => Jul
+                    [7] => Aug
+                    [8] => Sep
+                    [9] => Oct
+                    [10] => Nov
+                    [11] => Dec
+                )
+
+            [weekdays] => Array
+                (
+                    [0] => Sunday
+                    [1] => Monday
+                    [2] => Tuesday
+                    [3] => Wednesday
+                    [4] => Thursday
+                    [5] => Friday
+                    [6] => Saturday
+                )
+
+            [weekdaysShort] => Array
+                (
+                    [0] => Sun
+                    [1] => Mon
+                    [2] => Tue
+                    [3] => Wed
+                    [4] => Thu
+                    [5] => Fri
+                    [6] => Sat
+                )
+
+            [weekdaysMin] => Array
+                (
+                    [0] => Su
+                    [1] => Mo
+                    [2] => Tu
+                    [3] => We
+                    [4] => Th
+                    [5] => Fr
+                    [6] => Sa
+                )
+
+            [recaptchaConsentMissing] => reCaptcha validation couldn&#039;t load.
+            [recaptchaMissingCookie] => reCaptcha v3 validation couldn&#039;t load the cookie needed to submit the form.
+            [recaptchaConsentEvent] => Accept reCaptcha cookies before sending the form.
+            [save_progress_actions] => Array
+                (
+                    [4] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [5] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [6] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [16] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [45] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [140] => Array
+                        (
+                            [active] => 
+                        )
+
+                )
+
+            [currency_symbol] => 
+            [beforeForm] => <fieldset class="nf-saves-cont">
+
+    <legend>Load saved progress</legend>
+
+    <div class="form-save-loading">
+        <!-- Loading message container. Will be removed during rendering. -->
+    </div>
+
+    <table></table>
+
+</fieldset>
+
+            [beforeFields] => 
+            [afterFields] => 
+            [afterForm] => 
+        )
+
+    [extra] => Array
+        (
+        )
+
+)
+
+[2025-09-13 18:21:15] Extracted fields: Array
+(
+    [register] => 
+    [webinar_title] => Final Webinar - Levon - August 2025
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+    [post_id] => 161189
+    [add_questions] => 
+    [question_for_speaker] => Testing final Front End Form
+)
+
+[2025-09-13 18:21:15] Registration data prepared: Array
+(
+    [post_id] => 161189
+    [speaker_question] => Testing final Front End Form
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 18:21:15] Calling dtr_handle_live_webinar_registration
+[2025-09-13 18:21:15] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-13 18:21:15] RAW $_POST: Array
+(
+    [action] => nf_ajax_submit
+    [security] => 6521339ac4
+    [formData] => {"id":"2","fields":{"2":{"value":"","id":2},"56":{"value":"Final Webinar - Levon - August 2025","id":56},"58":{"value":1,"id":58},"68":{"value":"161189","id":68},"385":{"value":"","id":385},"387":{"value":"Testing final Front End Form","id":387}},"settings":{"objectType":"Form Setting","editActive":true,"title":"Webinar Registration Form","show_title":0,"allow_public_link":0,"embed_form":"","clear_complete":1,"hide_complete":1,"default_label_pos":"above","wrapper_class":"","element_class":"","form_title_heading_level":"3","key":"","add_submit":1,"changeEmailErrorMsg":"Please enter a valid email address!","changeDateErrorMsg":"Please enter a valid date!","confirmFieldErrorMsg":"These fields must match!","fieldNumberNumMinError":"Number Min Error","fieldNumberNumMaxError":"Number Max Error","fieldNumberIncrementBy":"Please increment by ","formErrorsCorrectErrors":"Please correct errors before submitting this form.","validateRequiredField":"This is a required field.","honeypotHoneypotError":"Honeypot Error","fieldsMarkedRequired":"Fields marked with an <span class=\"ninja-forms-req-symbol\">*<\/span> are required","currency":"","unique_field_error":"A form with this value has already been submitted.","logged_in":false,"not_logged_in_msg":"","sub_limit_msg":"The form has reached its submission limit.","calculations":[],"drawerDisabled":false,"conditions":[{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":6,"trigger":"deactivate_action","type":"action","modelType":"else"}]},{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":4,"trigger":"deactivate_action","type":"action","modelType":"else"}]},{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":5,"trigger":"deactivate_action","type":"action","modelType":"else"}]}],"objectDomain":"display","save_progress_allow_multiple":false,"save_progress_table_legend":"Load saved progress","save_progress_table_columns":[{"errors":[],"max_options":0,"label":"Column Title","field":"{field}","order":0,"settingModel":{"settings":false,"hide_merge_tags":false,"error":false,"name":"save_progress_table_columns","type":"option-repeater","label":"Save Table Columns <a href=\"#\" class=\"nf-add-new\">Add New<\/a>","width":"full","group":"primary","columns":{"field":{"header":"Field Key","default":""}},"value":[{"label":"Column Title","field":"{field}","order":0}],"tmpl_row":"tmpl-nf-save-progress-table-columns-repeater-row"}}],"container_styles_show_advanced_css":0,"title_styles_show_advanced_css":0,"row_styles_show_advanced_css":0,"row-odd_styles_show_advanced_css":0,"success-msg_styles_show_advanced_css":0,"error_msg_styles_show_advanced_css":0,"mp_breadcrumb":1,"mp_progress_bar":1,"mp_display_titles":0,"breadcrumb_container_styles_show_advanced_css":0,"breadcrumb_buttons_styles_show_advanced_css":0,"breadcrumb_button_hover_styles_show_advanced_css":0,"breadcrumb_active_button_styles_show_advanced_css":0,"progress_bar_container_styles_show_advanced_css":0,"progress_bar_fill_styles_show_advanced_css":0,"part_titles_styles_show_advanced_css":0,"navigation_container_styles_show_advanced_css":0,"previous_button_styles_show_advanced_css":0,"next_button_styles_show_advanced_css":0,"navigation_hover_styles_show_advanced_css":0,"ninjaForms":"Ninja Forms","fieldTextareaRTEInsertLink":"Insert Link","fieldTextareaRTEInsertMedia":"Insert Media","fieldTextareaRTESelectAFile":"Select a file","formHoneypot":"If you are a human seeing this field, please leave it empty.","fileUploadOldCodeFileUploadInProgress":"File Upload in Progress.","fileUploadOldCodeFileUpload":"FILE UPLOAD","currencySymbol":"&#36;","thousands_sep":",","decimal_point":".","siteLocale":"en_GB","dateFormat":"m\/d\/Y","startOfWeek":"1","of":"of","previousMonth":"Previous Month","nextMonth":"Next Month","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthsShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"weekdaysShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"weekdaysMin":["Su","Mo","Tu","We","Th","Fr","Sa"],"recaptchaConsentMissing":"reCaptcha validation couldn&#039;t load.","recaptchaMissingCookie":"reCaptcha v3 validation couldn&#039;t load the cookie needed to submit the form.","recaptchaConsentEvent":"Accept reCaptcha cookies before sending the form.","save_progress_actions":{"4":{"active":null},"5":{"active":null},"6":{"active":null},"16":{"active":null},"45":{"active":null},"140":{"active":null}},"currency_symbol":"","beforeForm":"<fieldset class=\"nf-saves-cont\">\n\n    <legend>Load saved progress<\/legend>\n\n    <div class=\"form-save-loading\">\n        <!-- Loading message container. Will be removed during rendering. -->\n    <\/div>\n\n    <table><\/table>\n\n<\/fieldset>\n","beforeFields":"","afterFields":"","afterForm":""},"extra":[]}
+)
+
+[2025-09-13 18:21:15] Registration Data (arg): Array
+(
+    [post_id] => 161189
+    [speaker_question] => Testing final Front End Form
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 18:21:15] ✅ Using post_id: 161189
+[2025-09-13 18:21:15] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-13 18:21:15] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-13 18:21:15] ℹ️ Form data - Speaker question: 'Testing final Front End Form', Sponsor optin: 1
+[2025-09-13 18:21:15] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-13 18:21:15] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5832
+[2025-09-13 18:21:15] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 18:21:15] ✅ STEP 3: Person created/updated
+[2025-09-13 18:21:17] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 18:21:17] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-13 18:21:18] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 18:21:18] ✅ STEP 5: Added to Mailing List
+[2025-09-13 18:21:18] ✅ STEP 6: Speaker Question = Testing final Front End Form
+[2025-09-13 18:21:18] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 18:21:18] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-13 18:21:18] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Testing final Front End Form
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819760
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-13 18:21:18] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Testing final Front End Form
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819760
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+[2025-09-13 18:21:18] Registration result: Array
+(
+    [success] => 1
+    [ticket_id] => 819760
+    [person_id] => 4318866
+    [event_id] => 5832
+    [debug_id] => 
+)
+
+[2025-09-13 18:21:18] User registered locally for event 161189
+[2025-09-13 19:35:28] === FORM ID 2 SUBMISSION CAPTURED (SUBMIT_DATA FILTER) ===
+[2025-09-13 19:35:28] Debug ID: NF2-68c5c780950d8
+[2025-09-13 19:35:28] Form Data: Array
+(
+    [id] => 2
+    [fields] => Array
+        (
+            [2] => Array
+                (
+                    [value] => 
+                    [id] => 2
+                    [key] => register
+                )
+
+            [56] => Array
+                (
+                    [value] => Final Webinar - Levon - August 2025
+                    [id] => 56
+                    [key] => webinar_title
+                )
+
+            [58] => Array
+                (
+                    [value] => 1
+                    [id] => 58
+                    [key] => cf_mailing_list_member_sponsor_1_optin
+                )
+
+            [68] => Array
+                (
+                    [value] => 161189
+                    [id] => 68
+                    [key] => post_id
+                )
+
+            [385] => Array
+                (
+                    [value] => 
+                    [id] => 385
+                    [key] => add_questions
+                )
+
+            [387] => Array
+                (
+                    [value] => Front end restore
+                    [id] => 387
+                    [key] => question_for_speaker
+                )
+
+        )
+
+    [settings] => Array
+        (
+            [objectType] => Form Setting
+            [editActive] => 1
+            [title] => Webinar Registration Form
+            [show_title] => 0
+            [allow_public_link] => 0
+            [embed_form] => 
+            [clear_complete] => 1
+            [hide_complete] => 1
+            [default_label_pos] => above
+            [wrapper_class] => 
+            [element_class] => 
+            [form_title_heading_level] => 3
+            [key] => 
+            [add_submit] => 1
+            [changeEmailErrorMsg] => Please enter a valid email address!
+            [changeDateErrorMsg] => Please enter a valid date!
+            [confirmFieldErrorMsg] => These fields must match!
+            [fieldNumberNumMinError] => Number Min Error
+            [fieldNumberNumMaxError] => Number Max Error
+            [fieldNumberIncrementBy] => Please increment by 
+            [formErrorsCorrectErrors] => Please correct errors before submitting this form.
+            [validateRequiredField] => This is a required field.
+            [honeypotHoneypotError] => Honeypot Error
+            [fieldsMarkedRequired] => Fields marked with an <span class="ninja-forms-req-symbol">*</span> are required
+            [currency] => 
+            [unique_field_error] => A form with this value has already been submitted.
+            [logged_in] => 
+            [not_logged_in_msg] => 
+            [sub_limit_msg] => The form has reached its submission limit.
+            [calculations] => Array
+                (
+                )
+
+            [drawerDisabled] => 
+            [conditions] => Array
+                (
+                    [0] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 6
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                    [1] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 4
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                    [2] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 5
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [objectDomain] => display
+            [save_progress_allow_multiple] => 
+            [save_progress_table_legend] => Load saved progress
+            [save_progress_table_columns] => Array
+                (
+                    [0] => Array
+                        (
+                            [errors] => Array
+                                (
+                                )
+
+                            [max_options] => 0
+                            [label] => Column Title
+                            [field] => {field}
+                            [order] => 0
+                            [settingModel] => Array
+                                (
+                                    [settings] => 
+                                    [hide_merge_tags] => 
+                                    [error] => 
+                                    [name] => save_progress_table_columns
+                                    [type] => option-repeater
+                                    [label] => Save Table Columns <a href="#" class="nf-add-new">Add New</a>
+                                    [width] => full
+                                    [group] => primary
+                                    [columns] => Array
+                                        (
+                                            [field] => Array
+                                                (
+                                                    [header] => Field Key
+                                                    [default] => 
+                                                )
+
+                                        )
+
+                                    [value] => Array
+                                        (
+                                            [0] => Array
+                                                (
+                                                    [label] => Column Title
+                                                    [field] => {field}
+                                                    [order] => 0
+                                                )
+
+                                        )
+
+                                    [tmpl_row] => tmpl-nf-save-progress-table-columns-repeater-row
+                                )
+
+                        )
+
+                )
+
+            [container_styles_show_advanced_css] => 0
+            [title_styles_show_advanced_css] => 0
+            [row_styles_show_advanced_css] => 0
+            [row-odd_styles_show_advanced_css] => 0
+            [success-msg_styles_show_advanced_css] => 0
+            [error_msg_styles_show_advanced_css] => 0
+            [mp_breadcrumb] => 1
+            [mp_progress_bar] => 1
+            [mp_display_titles] => 0
+            [breadcrumb_container_styles_show_advanced_css] => 0
+            [breadcrumb_buttons_styles_show_advanced_css] => 0
+            [breadcrumb_button_hover_styles_show_advanced_css] => 0
+            [breadcrumb_active_button_styles_show_advanced_css] => 0
+            [progress_bar_container_styles_show_advanced_css] => 0
+            [progress_bar_fill_styles_show_advanced_css] => 0
+            [part_titles_styles_show_advanced_css] => 0
+            [navigation_container_styles_show_advanced_css] => 0
+            [previous_button_styles_show_advanced_css] => 0
+            [next_button_styles_show_advanced_css] => 0
+            [navigation_hover_styles_show_advanced_css] => 0
+            [ninjaForms] => Ninja Forms
+            [fieldTextareaRTEInsertLink] => Insert Link
+            [fieldTextareaRTEInsertMedia] => Insert Media
+            [fieldTextareaRTESelectAFile] => Select a file
+            [formHoneypot] => If you are a human seeing this field, please leave it empty.
+            [fileUploadOldCodeFileUploadInProgress] => File Upload in Progress.
+            [fileUploadOldCodeFileUpload] => FILE UPLOAD
+            [currencySymbol] => &#36;
+            [thousands_sep] => ,
+            [decimal_point] => .
+            [siteLocale] => en_GB
+            [dateFormat] => m/d/Y
+            [startOfWeek] => 1
+            [of] => of
+            [previousMonth] => Previous Month
+            [nextMonth] => Next Month
+            [months] => Array
+                (
+                    [0] => January
+                    [1] => February
+                    [2] => March
+                    [3] => April
+                    [4] => May
+                    [5] => June
+                    [6] => July
+                    [7] => August
+                    [8] => September
+                    [9] => October
+                    [10] => November
+                    [11] => December
+                )
+
+            [monthsShort] => Array
+                (
+                    [0] => Jan
+                    [1] => Feb
+                    [2] => Mar
+                    [3] => Apr
+                    [4] => May
+                    [5] => Jun
+                    [6] => Jul
+                    [7] => Aug
+                    [8] => Sep
+                    [9] => Oct
+                    [10] => Nov
+                    [11] => Dec
+                )
+
+            [weekdays] => Array
+                (
+                    [0] => Sunday
+                    [1] => Monday
+                    [2] => Tuesday
+                    [3] => Wednesday
+                    [4] => Thursday
+                    [5] => Friday
+                    [6] => Saturday
+                )
+
+            [weekdaysShort] => Array
+                (
+                    [0] => Sun
+                    [1] => Mon
+                    [2] => Tue
+                    [3] => Wed
+                    [4] => Thu
+                    [5] => Fri
+                    [6] => Sat
+                )
+
+            [weekdaysMin] => Array
+                (
+                    [0] => Su
+                    [1] => Mo
+                    [2] => Tu
+                    [3] => We
+                    [4] => Th
+                    [5] => Fr
+                    [6] => Sa
+                )
+
+            [recaptchaConsentMissing] => reCaptcha validation couldn&#039;t load.
+            [recaptchaMissingCookie] => reCaptcha v3 validation couldn&#039;t load the cookie needed to submit the form.
+            [recaptchaConsentEvent] => Accept reCaptcha cookies before sending the form.
+            [save_progress_actions] => Array
+                (
+                    [4] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [5] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [6] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [16] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [45] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [140] => Array
+                        (
+                            [active] => 
+                        )
+
+                )
+
+            [currency_symbol] => 
+            [beforeForm] => <fieldset class="nf-saves-cont">
+
+    <legend>Load saved progress</legend>
+
+    <div class="form-save-loading">
+        <!-- Loading message container. Will be removed during rendering. -->
+    </div>
+
+    <table></table>
+
+</fieldset>
+
+            [beforeFields] => 
+            [afterFields] => 
+            [afterForm] => 
+        )
+
+    [extra] => Array
+        (
+        )
+
+)
+
+[2025-09-13 19:35:28] Extracted fields: Array
+(
+    [register] => 
+    [webinar_title] => Final Webinar - Levon - August 2025
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+    [post_id] => 161189
+    [add_questions] => 
+    [question_for_speaker] => Front end restore
+)
+
+[2025-09-13 19:35:28] Registration data prepared: Array
+(
+    [post_id] => 161189
+    [speaker_question] => Front end restore
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 19:35:28] Calling dtr_handle_live_webinar_registration
+[2025-09-13 19:35:28] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-13 19:35:28] RAW $_POST: Array
+(
+    [action] => nf_ajax_submit
+    [security] => 39100c825f
+    [formData] => {"id":"2","fields":{"2":{"value":"","id":2},"56":{"value":"Final Webinar - Levon - August 2025","id":56},"58":{"value":1,"id":58},"68":{"value":"161189","id":68},"385":{"value":"","id":385},"387":{"value":"Front end restore","id":387}},"settings":{"objectType":"Form Setting","editActive":true,"title":"Webinar Registration Form","show_title":0,"allow_public_link":0,"embed_form":"","clear_complete":1,"hide_complete":1,"default_label_pos":"above","wrapper_class":"","element_class":"","form_title_heading_level":"3","key":"","add_submit":1,"changeEmailErrorMsg":"Please enter a valid email address!","changeDateErrorMsg":"Please enter a valid date!","confirmFieldErrorMsg":"These fields must match!","fieldNumberNumMinError":"Number Min Error","fieldNumberNumMaxError":"Number Max Error","fieldNumberIncrementBy":"Please increment by ","formErrorsCorrectErrors":"Please correct errors before submitting this form.","validateRequiredField":"This is a required field.","honeypotHoneypotError":"Honeypot Error","fieldsMarkedRequired":"Fields marked with an <span class=\"ninja-forms-req-symbol\">*<\/span> are required","currency":"","unique_field_error":"A form with this value has already been submitted.","logged_in":false,"not_logged_in_msg":"","sub_limit_msg":"The form has reached its submission limit.","calculations":[],"drawerDisabled":false,"conditions":[{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":6,"trigger":"deactivate_action","type":"action","modelType":"else"}]},{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":4,"trigger":"deactivate_action","type":"action","modelType":"else"}]},{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":5,"trigger":"deactivate_action","type":"action","modelType":"else"}]}],"objectDomain":"display","save_progress_allow_multiple":false,"save_progress_table_legend":"Load saved progress","save_progress_table_columns":[{"errors":[],"max_options":0,"label":"Column Title","field":"{field}","order":0,"settingModel":{"settings":false,"hide_merge_tags":false,"error":false,"name":"save_progress_table_columns","type":"option-repeater","label":"Save Table Columns <a href=\"#\" class=\"nf-add-new\">Add New<\/a>","width":"full","group":"primary","columns":{"field":{"header":"Field Key","default":""}},"value":[{"label":"Column Title","field":"{field}","order":0}],"tmpl_row":"tmpl-nf-save-progress-table-columns-repeater-row"}}],"container_styles_show_advanced_css":0,"title_styles_show_advanced_css":0,"row_styles_show_advanced_css":0,"row-odd_styles_show_advanced_css":0,"success-msg_styles_show_advanced_css":0,"error_msg_styles_show_advanced_css":0,"mp_breadcrumb":1,"mp_progress_bar":1,"mp_display_titles":0,"breadcrumb_container_styles_show_advanced_css":0,"breadcrumb_buttons_styles_show_advanced_css":0,"breadcrumb_button_hover_styles_show_advanced_css":0,"breadcrumb_active_button_styles_show_advanced_css":0,"progress_bar_container_styles_show_advanced_css":0,"progress_bar_fill_styles_show_advanced_css":0,"part_titles_styles_show_advanced_css":0,"navigation_container_styles_show_advanced_css":0,"previous_button_styles_show_advanced_css":0,"next_button_styles_show_advanced_css":0,"navigation_hover_styles_show_advanced_css":0,"ninjaForms":"Ninja Forms","fieldTextareaRTEInsertLink":"Insert Link","fieldTextareaRTEInsertMedia":"Insert Media","fieldTextareaRTESelectAFile":"Select a file","formHoneypot":"If you are a human seeing this field, please leave it empty.","fileUploadOldCodeFileUploadInProgress":"File Upload in Progress.","fileUploadOldCodeFileUpload":"FILE UPLOAD","currencySymbol":"&#36;","thousands_sep":",","decimal_point":".","siteLocale":"en_GB","dateFormat":"m\/d\/Y","startOfWeek":"1","of":"of","previousMonth":"Previous Month","nextMonth":"Next Month","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthsShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"weekdaysShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"weekdaysMin":["Su","Mo","Tu","We","Th","Fr","Sa"],"recaptchaConsentMissing":"reCaptcha validation couldn&#039;t load.","recaptchaMissingCookie":"reCaptcha v3 validation couldn&#039;t load the cookie needed to submit the form.","recaptchaConsentEvent":"Accept reCaptcha cookies before sending the form.","save_progress_actions":{"4":{"active":null},"5":{"active":null},"6":{"active":null},"16":{"active":null},"45":{"active":null},"140":{"active":null}},"currency_symbol":"","beforeForm":"<fieldset class=\"nf-saves-cont\">\n\n    <legend>Load saved progress<\/legend>\n\n    <div class=\"form-save-loading\">\n        <!-- Loading message container. Will be removed during rendering. -->\n    <\/div>\n\n    <table><\/table>\n\n<\/fieldset>\n","beforeFields":"","afterFields":"","afterForm":""},"extra":[]}
+)
+
+[2025-09-13 19:35:28] Registration Data (arg): Array
+(
+    [post_id] => 161189
+    [speaker_question] => Front end restore
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 19:35:28] ✅ Using post_id: 161189
+[2025-09-13 19:35:28] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-13 19:35:28] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-13 19:35:28] ℹ️ Form data - Speaker question: 'Front end restore', Sponsor optin: 1
+[2025-09-13 19:35:28] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-13 19:35:28] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5832
+[2025-09-13 19:35:28] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 19:35:28] ✅ STEP 3: Person created/updated
+[2025-09-13 19:35:30] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 19:35:30] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-13 19:35:31] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 19:35:31] ✅ STEP 5: Added to Mailing List
+[2025-09-13 19:35:31] ✅ STEP 6: Speaker Question = Front end restore
+[2025-09-13 19:35:31] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 19:35:31] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-13 19:35:31] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Front end restore
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819772
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-13 19:35:31] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Front end restore
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819772
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+[2025-09-13 19:35:31] Registration result: Array
+(
+    [success] => 1
+    [ticket_id] => 819772
+    [person_id] => 4318866
+    [event_id] => 5832
+    [debug_id] => 
+)
+
+[2025-09-13 19:35:31] User registered locally for event 161189
+[2025-09-13 20:13:16] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-13 20:13:16] RAW $_POST: Array
+(
+    [_wpnonce] => 12673f18e7
+    [_wp_http_referer] => /wp-admin/admin.php?page=dtr-workbooks-webinar-test
+    [webinar_selection] => 161189
+    [speaker_question] => Test question from dynamic webinar selection
+    [sponsor_optin] => 1
+    [test_submission] => 
+)
+
+[2025-09-13 20:13:16] Registration Data (arg): Array
+(
+    [post_id] => 161189
+    [speaker_question] => Test question from dynamic webinar selection
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 20:13:16] ✅ Using post_id: 161189
+[2025-09-13 20:13:16] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-13 20:13:16] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-13 20:13:16] ℹ️ Form data - Speaker question: 'Test question from dynamic webinar selection', Sponsor optin: 1
+[2025-09-13 20:13:16] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-13 20:13:16] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5832
+[2025-09-13 20:13:16] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 20:13:16] ✅ STEP 3: Person created/updated
+[2025-09-13 20:13:18] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 20:13:18] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-13 20:13:19] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 20:13:19] ✅ STEP 5: Added to Mailing List
+[2025-09-13 20:13:19] ✅ STEP 6: Speaker Question = Test question from dynamic webinar selection
+[2025-09-13 20:13:19] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 20:13:19] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-13 20:13:19] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819774
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-13 20:13:19] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test question from dynamic webinar selection
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819774
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+[2025-09-13 21:00:24] === FORM ID 2 SUBMISSION CAPTURED (SUBMIT_DATA FILTER) ===
+[2025-09-13 21:00:24] Debug ID: NF2-68c5db6898813
+[2025-09-13 21:00:24] Form Data: Array
+(
+    [id] => 2
+    [fields] => Array
+        (
+            [2] => Array
+                (
+                    [value] => 
+                    [id] => 2
+                    [key] => register
+                )
+
+            [56] => Array
+                (
+                    [value] => Final Webinar - Levon - August 2025
+                    [id] => 56
+                    [key] => webinar_title
+                )
+
+            [58] => Array
+                (
+                    [value] => 1
+                    [id] => 58
+                    [key] => cf_mailing_list_member_sponsor_1_optin
+                )
+
+            [68] => Array
+                (
+                    [value] => 161189
+                    [id] => 68
+                    [key] => post_id
+                )
+
+            [385] => Array
+                (
+                    [value] => 
+                    [id] => 385
+                    [key] => add_questions
+                )
+
+            [387] => Array
+                (
+                    [value] => dfdfdffdf
+                    [id] => 387
+                    [key] => question_for_speaker
+                )
+
+        )
+
+    [settings] => Array
+        (
+            [objectType] => Form Setting
+            [editActive] => 1
+            [title] => Webinar Registration Form
+            [show_title] => 0
+            [allow_public_link] => 0
+            [embed_form] => 
+            [clear_complete] => 1
+            [hide_complete] => 1
+            [default_label_pos] => above
+            [wrapper_class] => 
+            [element_class] => 
+            [form_title_heading_level] => 3
+            [key] => 
+            [add_submit] => 1
+            [changeEmailErrorMsg] => Please enter a valid email address!
+            [changeDateErrorMsg] => Please enter a valid date!
+            [confirmFieldErrorMsg] => These fields must match!
+            [fieldNumberNumMinError] => Number Min Error
+            [fieldNumberNumMaxError] => Number Max Error
+            [fieldNumberIncrementBy] => Please increment by 
+            [formErrorsCorrectErrors] => Please correct errors before submitting this form.
+            [validateRequiredField] => This is a required field.
+            [honeypotHoneypotError] => Honeypot Error
+            [fieldsMarkedRequired] => Fields marked with an <span class="ninja-forms-req-symbol">*</span> are required
+            [currency] => 
+            [unique_field_error] => A form with this value has already been submitted.
+            [logged_in] => 
+            [not_logged_in_msg] => 
+            [sub_limit_msg] => The form has reached its submission limit.
+            [calculations] => Array
+                (
+                )
+
+            [drawerDisabled] => 
+            [conditions] => Array
+                (
+                    [0] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 6
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                    [1] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 4
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                    [2] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 5
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [objectDomain] => display
+            [save_progress_allow_multiple] => 
+            [save_progress_table_legend] => Load saved progress
+            [save_progress_table_columns] => Array
+                (
+                    [0] => Array
+                        (
+                            [errors] => Array
+                                (
+                                )
+
+                            [max_options] => 0
+                            [label] => Column Title
+                            [field] => {field}
+                            [order] => 0
+                            [settingModel] => Array
+                                (
+                                    [settings] => 
+                                    [hide_merge_tags] => 
+                                    [error] => 
+                                    [name] => save_progress_table_columns
+                                    [type] => option-repeater
+                                    [label] => Save Table Columns <a href="#" class="nf-add-new">Add New</a>
+                                    [width] => full
+                                    [group] => primary
+                                    [columns] => Array
+                                        (
+                                            [field] => Array
+                                                (
+                                                    [header] => Field Key
+                                                    [default] => 
+                                                )
+
+                                        )
+
+                                    [value] => Array
+                                        (
+                                            [0] => Array
+                                                (
+                                                    [label] => Column Title
+                                                    [field] => {field}
+                                                    [order] => 0
+                                                )
+
+                                        )
+
+                                    [tmpl_row] => tmpl-nf-save-progress-table-columns-repeater-row
+                                )
+
+                        )
+
+                )
+
+            [container_styles_show_advanced_css] => 0
+            [title_styles_show_advanced_css] => 0
+            [row_styles_show_advanced_css] => 0
+            [row-odd_styles_show_advanced_css] => 0
+            [success-msg_styles_show_advanced_css] => 0
+            [error_msg_styles_show_advanced_css] => 0
+            [mp_breadcrumb] => 1
+            [mp_progress_bar] => 1
+            [mp_display_titles] => 0
+            [breadcrumb_container_styles_show_advanced_css] => 0
+            [breadcrumb_buttons_styles_show_advanced_css] => 0
+            [breadcrumb_button_hover_styles_show_advanced_css] => 0
+            [breadcrumb_active_button_styles_show_advanced_css] => 0
+            [progress_bar_container_styles_show_advanced_css] => 0
+            [progress_bar_fill_styles_show_advanced_css] => 0
+            [part_titles_styles_show_advanced_css] => 0
+            [navigation_container_styles_show_advanced_css] => 0
+            [previous_button_styles_show_advanced_css] => 0
+            [next_button_styles_show_advanced_css] => 0
+            [navigation_hover_styles_show_advanced_css] => 0
+            [ninjaForms] => Ninja Forms
+            [fieldTextareaRTEInsertLink] => Insert Link
+            [fieldTextareaRTEInsertMedia] => Insert Media
+            [fieldTextareaRTESelectAFile] => Select a file
+            [formHoneypot] => If you are a human seeing this field, please leave it empty.
+            [fileUploadOldCodeFileUploadInProgress] => File Upload in Progress.
+            [fileUploadOldCodeFileUpload] => FILE UPLOAD
+            [currencySymbol] => &#36;
+            [thousands_sep] => ,
+            [decimal_point] => .
+            [siteLocale] => en_GB
+            [dateFormat] => m/d/Y
+            [startOfWeek] => 1
+            [of] => of
+            [previousMonth] => Previous Month
+            [nextMonth] => Next Month
+            [months] => Array
+                (
+                    [0] => January
+                    [1] => February
+                    [2] => March
+                    [3] => April
+                    [4] => May
+                    [5] => June
+                    [6] => July
+                    [7] => August
+                    [8] => September
+                    [9] => October
+                    [10] => November
+                    [11] => December
+                )
+
+            [monthsShort] => Array
+                (
+                    [0] => Jan
+                    [1] => Feb
+                    [2] => Mar
+                    [3] => Apr
+                    [4] => May
+                    [5] => Jun
+                    [6] => Jul
+                    [7] => Aug
+                    [8] => Sep
+                    [9] => Oct
+                    [10] => Nov
+                    [11] => Dec
+                )
+
+            [weekdays] => Array
+                (
+                    [0] => Sunday
+                    [1] => Monday
+                    [2] => Tuesday
+                    [3] => Wednesday
+                    [4] => Thursday
+                    [5] => Friday
+                    [6] => Saturday
+                )
+
+            [weekdaysShort] => Array
+                (
+                    [0] => Sun
+                    [1] => Mon
+                    [2] => Tue
+                    [3] => Wed
+                    [4] => Thu
+                    [5] => Fri
+                    [6] => Sat
+                )
+
+            [weekdaysMin] => Array
+                (
+                    [0] => Su
+                    [1] => Mo
+                    [2] => Tu
+                    [3] => We
+                    [4] => Th
+                    [5] => Fr
+                    [6] => Sa
+                )
+
+            [recaptchaConsentMissing] => reCaptcha validation couldn&#039;t load.
+            [recaptchaMissingCookie] => reCaptcha v3 validation couldn&#039;t load the cookie needed to submit the form.
+            [recaptchaConsentEvent] => Accept reCaptcha cookies before sending the form.
+            [save_progress_actions] => Array
+                (
+                    [4] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [5] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [6] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [16] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [45] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [140] => Array
+                        (
+                            [active] => 
+                        )
+
+                )
+
+            [currency_symbol] => 
+            [beforeForm] => <fieldset class="nf-saves-cont">
+
+    <legend>Load saved progress</legend>
+
+    <div class="form-save-loading">
+        <!-- Loading message container. Will be removed during rendering. -->
+    </div>
+
+    <table></table>
+
+</fieldset>
+
+            [beforeFields] => 
+            [afterFields] => 
+            [afterForm] => 
+        )
+
+    [extra] => Array
+        (
+        )
+
+)
+
+[2025-09-13 21:00:24] Extracted fields: Array
+(
+    [register] => 
+    [webinar_title] => Final Webinar - Levon - August 2025
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+    [post_id] => 161189
+    [add_questions] => 
+    [question_for_speaker] => dfdfdffdf
+)
+
+[2025-09-13 21:00:24] Registration data prepared: Array
+(
+    [post_id] => 161189
+    [speaker_question] => dfdfdffdf
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 21:00:24] Calling dtr_handle_live_webinar_registration
+[2025-09-13 21:00:24] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-13 21:00:24] RAW $_POST: Array
+(
+    [action] => nf_ajax_submit
+    [security] => 6d4017e5f5
+    [formData] => {"id":"2","fields":{"2":{"value":"","id":2},"56":{"value":"Final Webinar - Levon - August 2025","id":56},"58":{"value":1,"id":58},"68":{"value":"161189","id":68},"385":{"value":"","id":385},"387":{"value":"dfdfdffdf","id":387}},"settings":{"objectType":"Form Setting","editActive":true,"title":"Webinar Registration Form","show_title":0,"allow_public_link":0,"embed_form":"","clear_complete":1,"hide_complete":1,"default_label_pos":"above","wrapper_class":"","element_class":"","form_title_heading_level":"3","key":"","add_submit":1,"changeEmailErrorMsg":"Please enter a valid email address!","changeDateErrorMsg":"Please enter a valid date!","confirmFieldErrorMsg":"These fields must match!","fieldNumberNumMinError":"Number Min Error","fieldNumberNumMaxError":"Number Max Error","fieldNumberIncrementBy":"Please increment by ","formErrorsCorrectErrors":"Please correct errors before submitting this form.","validateRequiredField":"This is a required field.","honeypotHoneypotError":"Honeypot Error","fieldsMarkedRequired":"Fields marked with an <span class=\"ninja-forms-req-symbol\">*<\/span> are required","currency":"","unique_field_error":"A form with this value has already been submitted.","logged_in":false,"not_logged_in_msg":"","sub_limit_msg":"The form has reached its submission limit.","calculations":[],"drawerDisabled":false,"conditions":[{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":6,"trigger":"deactivate_action","type":"action","modelType":"else"}]},{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":4,"trigger":"deactivate_action","type":"action","modelType":"else"}]},{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":5,"trigger":"deactivate_action","type":"action","modelType":"else"}]}],"objectDomain":"display","save_progress_allow_multiple":false,"save_progress_table_legend":"Load saved progress","save_progress_table_columns":[{"errors":[],"max_options":0,"label":"Column Title","field":"{field}","order":0,"settingModel":{"settings":false,"hide_merge_tags":false,"error":false,"name":"save_progress_table_columns","type":"option-repeater","label":"Save Table Columns <a href=\"#\" class=\"nf-add-new\">Add New<\/a>","width":"full","group":"primary","columns":{"field":{"header":"Field Key","default":""}},"value":[{"label":"Column Title","field":"{field}","order":0}],"tmpl_row":"tmpl-nf-save-progress-table-columns-repeater-row"}}],"container_styles_show_advanced_css":0,"title_styles_show_advanced_css":0,"row_styles_show_advanced_css":0,"row-odd_styles_show_advanced_css":0,"success-msg_styles_show_advanced_css":0,"error_msg_styles_show_advanced_css":0,"mp_breadcrumb":1,"mp_progress_bar":1,"mp_display_titles":0,"breadcrumb_container_styles_show_advanced_css":0,"breadcrumb_buttons_styles_show_advanced_css":0,"breadcrumb_button_hover_styles_show_advanced_css":0,"breadcrumb_active_button_styles_show_advanced_css":0,"progress_bar_container_styles_show_advanced_css":0,"progress_bar_fill_styles_show_advanced_css":0,"part_titles_styles_show_advanced_css":0,"navigation_container_styles_show_advanced_css":0,"previous_button_styles_show_advanced_css":0,"next_button_styles_show_advanced_css":0,"navigation_hover_styles_show_advanced_css":0,"ninjaForms":"Ninja Forms","fieldTextareaRTEInsertLink":"Insert Link","fieldTextareaRTEInsertMedia":"Insert Media","fieldTextareaRTESelectAFile":"Select a file","formHoneypot":"If you are a human seeing this field, please leave it empty.","fileUploadOldCodeFileUploadInProgress":"File Upload in Progress.","fileUploadOldCodeFileUpload":"FILE UPLOAD","currencySymbol":"&#36;","thousands_sep":",","decimal_point":".","siteLocale":"en_GB","dateFormat":"m\/d\/Y","startOfWeek":"1","of":"of","previousMonth":"Previous Month","nextMonth":"Next Month","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthsShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"weekdaysShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"weekdaysMin":["Su","Mo","Tu","We","Th","Fr","Sa"],"recaptchaConsentMissing":"reCaptcha validation couldn&#039;t load.","recaptchaMissingCookie":"reCaptcha v3 validation couldn&#039;t load the cookie needed to submit the form.","recaptchaConsentEvent":"Accept reCaptcha cookies before sending the form.","save_progress_actions":{"4":{"active":null},"5":{"active":null},"6":{"active":null},"16":{"active":null},"45":{"active":null},"140":{"active":null}},"currency_symbol":"","beforeForm":"<fieldset class=\"nf-saves-cont\">\n\n    <legend>Load saved progress<\/legend>\n\n    <div class=\"form-save-loading\">\n        <!-- Loading message container. Will be removed during rendering. -->\n    <\/div>\n\n    <table><\/table>\n\n<\/fieldset>\n","beforeFields":"","afterFields":"","afterForm":""},"extra":[]}
+)
+
+[2025-09-13 21:00:24] Registration Data (arg): Array
+(
+    [post_id] => 161189
+    [speaker_question] => dfdfdffdf
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-13 21:00:24] ✅ Using post_id: 161189
+[2025-09-13 21:00:24] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-13 21:00:24] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-13 21:00:24] ℹ️ Form data - Speaker question: 'dfdfdffdf', Sponsor optin: 1
+[2025-09-13 21:00:24] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-13 21:00:24] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5832
+[2025-09-13 21:00:24] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-13 21:00:24] ✅ STEP 3: Person created/updated
+[2025-09-13 21:00:26] ✅ STEP 4: Ticket Created/Updated
+[2025-09-13 21:00:26] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-13 21:00:28] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-13 21:00:28] ✅ STEP 5: Added to Mailing List
+[2025-09-13 21:00:28] ✅ STEP 6: Speaker Question = dfdfdffdf
+[2025-09-13 21:00:28] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-13 21:00:28] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-13 21:00:28] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => dfdfdffdf
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819776
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-13 21:00:28] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => dfdfdffdf
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819776
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+[2025-09-13 21:00:28] Registration result: Array
+(
+    [success] => 1
+    [ticket_id] => 819776
+    [person_id] => 4318866
+    [event_id] => 5832
+    [debug_id] => 
+)
+
+[2025-09-13 21:00:28] User registered locally for event 161189
+[2025-09-14 00:30:04] === FORM ID 2 SUBMISSION CAPTURED (SUBMIT_DATA FILTER) ===
+[2025-09-14 00:30:04] Debug ID: NF2-68c60c8c59bd5
+[2025-09-14 00:30:04] Form Data: Array
+(
+    [id] => 2
+    [fields] => Array
+        (
+            [2] => Array
+                (
+                    [value] => 
+                    [id] => 2
+                    [key] => register
+                )
+
+            [56] => Array
+                (
+                    [value] => Final Webinar - Levon - August 2025
+                    [id] => 56
+                    [key] => webinar_title
+                )
+
+            [58] => Array
+                (
+                    [value] => 1
+                    [id] => 58
+                    [key] => cf_mailing_list_member_sponsor_1_optin
+                )
+
+            [68] => Array
+                (
+                    [value] => 161189
+                    [id] => 68
+                    [key] => post_id
+                )
+
+            [385] => Array
+                (
+                    [value] => 
+                    [id] => 385
+                    [key] => add_questions
+                )
+
+            [387] => Array
+                (
+                    [value] => Testing before committing changes
+                    [id] => 387
+                    [key] => question_for_speaker
+                )
+
+        )
+
+    [settings] => Array
+        (
+            [objectType] => Form Setting
+            [editActive] => 1
+            [title] => Webinar Registration Form
+            [show_title] => 0
+            [allow_public_link] => 0
+            [embed_form] => 
+            [clear_complete] => 1
+            [hide_complete] => 1
+            [default_label_pos] => above
+            [wrapper_class] => 
+            [element_class] => 
+            [form_title_heading_level] => 3
+            [key] => 
+            [add_submit] => 1
+            [changeEmailErrorMsg] => Please enter a valid email address!
+            [changeDateErrorMsg] => Please enter a valid date!
+            [confirmFieldErrorMsg] => These fields must match!
+            [fieldNumberNumMinError] => Number Min Error
+            [fieldNumberNumMaxError] => Number Max Error
+            [fieldNumberIncrementBy] => Please increment by 
+            [formErrorsCorrectErrors] => Please correct errors before submitting this form.
+            [validateRequiredField] => This is a required field.
+            [honeypotHoneypotError] => Honeypot Error
+            [fieldsMarkedRequired] => Fields marked with an <span class="ninja-forms-req-symbol">*</span> are required
+            [currency] => 
+            [unique_field_error] => A form with this value has already been submitted.
+            [logged_in] => 
+            [not_logged_in_msg] => 
+            [sub_limit_msg] => The form has reached its submission limit.
+            [calculations] => Array
+                (
+                )
+
+            [drawerDisabled] => 
+            [conditions] => Array
+                (
+                    [0] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 6
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                    [1] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 4
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                    [2] => Array
+                        (
+                            [collapsed] => 
+                            [process] => 1
+                            [connector] => all
+                            [when] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [connector] => AND
+                                            [key] => speaker_question
+                                            [comparator] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => when
+                                        )
+
+                                )
+
+                            [then] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => speaker_question
+                                            [trigger] => 
+                                            [value] => 
+                                            [type] => field
+                                            [modelType] => then
+                                        )
+
+                                )
+
+                            [else] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [key] => 5
+                                            [trigger] => deactivate_action
+                                            [type] => action
+                                            [modelType] => else
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [objectDomain] => display
+            [save_progress_allow_multiple] => 
+            [save_progress_table_legend] => Load saved progress
+            [save_progress_table_columns] => Array
+                (
+                    [0] => Array
+                        (
+                            [errors] => Array
+                                (
+                                )
+
+                            [max_options] => 0
+                            [label] => Column Title
+                            [field] => {field}
+                            [order] => 0
+                            [settingModel] => Array
+                                (
+                                    [settings] => 
+                                    [hide_merge_tags] => 
+                                    [error] => 
+                                    [name] => save_progress_table_columns
+                                    [type] => option-repeater
+                                    [label] => Save Table Columns <a href="#" class="nf-add-new">Add New</a>
+                                    [width] => full
+                                    [group] => primary
+                                    [columns] => Array
+                                        (
+                                            [field] => Array
+                                                (
+                                                    [header] => Field Key
+                                                    [default] => 
+                                                )
+
+                                        )
+
+                                    [value] => Array
+                                        (
+                                            [0] => Array
+                                                (
+                                                    [label] => Column Title
+                                                    [field] => {field}
+                                                    [order] => 0
+                                                )
+
+                                        )
+
+                                    [tmpl_row] => tmpl-nf-save-progress-table-columns-repeater-row
+                                )
+
+                        )
+
+                )
+
+            [container_styles_show_advanced_css] => 0
+            [title_styles_show_advanced_css] => 0
+            [row_styles_show_advanced_css] => 0
+            [row-odd_styles_show_advanced_css] => 0
+            [success-msg_styles_show_advanced_css] => 0
+            [error_msg_styles_show_advanced_css] => 0
+            [mp_breadcrumb] => 1
+            [mp_progress_bar] => 1
+            [mp_display_titles] => 0
+            [breadcrumb_container_styles_show_advanced_css] => 0
+            [breadcrumb_buttons_styles_show_advanced_css] => 0
+            [breadcrumb_button_hover_styles_show_advanced_css] => 0
+            [breadcrumb_active_button_styles_show_advanced_css] => 0
+            [progress_bar_container_styles_show_advanced_css] => 0
+            [progress_bar_fill_styles_show_advanced_css] => 0
+            [part_titles_styles_show_advanced_css] => 0
+            [navigation_container_styles_show_advanced_css] => 0
+            [previous_button_styles_show_advanced_css] => 0
+            [next_button_styles_show_advanced_css] => 0
+            [navigation_hover_styles_show_advanced_css] => 0
+            [ninjaForms] => Ninja Forms
+            [fieldTextareaRTEInsertLink] => Insert Link
+            [fieldTextareaRTEInsertMedia] => Insert Media
+            [fieldTextareaRTESelectAFile] => Select a file
+            [formHoneypot] => If you are a human seeing this field, please leave it empty.
+            [fileUploadOldCodeFileUploadInProgress] => File Upload in Progress.
+            [fileUploadOldCodeFileUpload] => FILE UPLOAD
+            [currencySymbol] => &#36;
+            [thousands_sep] => ,
+            [decimal_point] => .
+            [siteLocale] => en_GB
+            [dateFormat] => m/d/Y
+            [startOfWeek] => 1
+            [of] => of
+            [previousMonth] => Previous Month
+            [nextMonth] => Next Month
+            [months] => Array
+                (
+                    [0] => January
+                    [1] => February
+                    [2] => March
+                    [3] => April
+                    [4] => May
+                    [5] => June
+                    [6] => July
+                    [7] => August
+                    [8] => September
+                    [9] => October
+                    [10] => November
+                    [11] => December
+                )
+
+            [monthsShort] => Array
+                (
+                    [0] => Jan
+                    [1] => Feb
+                    [2] => Mar
+                    [3] => Apr
+                    [4] => May
+                    [5] => Jun
+                    [6] => Jul
+                    [7] => Aug
+                    [8] => Sep
+                    [9] => Oct
+                    [10] => Nov
+                    [11] => Dec
+                )
+
+            [weekdays] => Array
+                (
+                    [0] => Sunday
+                    [1] => Monday
+                    [2] => Tuesday
+                    [3] => Wednesday
+                    [4] => Thursday
+                    [5] => Friday
+                    [6] => Saturday
+                )
+
+            [weekdaysShort] => Array
+                (
+                    [0] => Sun
+                    [1] => Mon
+                    [2] => Tue
+                    [3] => Wed
+                    [4] => Thu
+                    [5] => Fri
+                    [6] => Sat
+                )
+
+            [weekdaysMin] => Array
+                (
+                    [0] => Su
+                    [1] => Mo
+                    [2] => Tu
+                    [3] => We
+                    [4] => Th
+                    [5] => Fr
+                    [6] => Sa
+                )
+
+            [recaptchaConsentMissing] => reCaptcha validation couldn&#039;t load.
+            [recaptchaMissingCookie] => reCaptcha v3 validation couldn&#039;t load the cookie needed to submit the form.
+            [recaptchaConsentEvent] => Accept reCaptcha cookies before sending the form.
+            [save_progress_actions] => Array
+                (
+                    [4] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [5] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [6] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [16] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [45] => Array
+                        (
+                            [active] => 
+                        )
+
+                    [140] => Array
+                        (
+                            [active] => 
+                        )
+
+                )
+
+            [currency_symbol] => 
+            [beforeForm] => <fieldset class="nf-saves-cont">
+
+    <legend>Load saved progress</legend>
+
+    <div class="form-save-loading">
+        <!-- Loading message container. Will be removed during rendering. -->
+    </div>
+
+    <table></table>
+
+</fieldset>
+
+            [beforeFields] => 
+            [afterFields] => 
+            [afterForm] => 
+        )
+
+    [extra] => Array
+        (
+        )
+
+)
+
+[2025-09-14 00:30:04] Extracted fields: Array
+(
+    [register] => 
+    [webinar_title] => Final Webinar - Levon - August 2025
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+    [post_id] => 161189
+    [add_questions] => 
+    [question_for_speaker] => Testing before committing changes
+)
+
+[2025-09-14 00:30:04] Registration data prepared: Array
+(
+    [post_id] => 161189
+    [speaker_question] => Testing before committing changes
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-14 00:30:04] Calling dtr_handle_live_webinar_registration
+[2025-09-14 00:30:04] === dtr_handle_live_webinar_registration ENTRY ===
+[2025-09-14 00:30:04] RAW $_POST: Array
+(
+    [action] => nf_ajax_submit
+    [security] => adb3acf781
+    [formData] => {"id":"2","fields":{"2":{"value":"","id":2},"56":{"value":"Final Webinar - Levon - August 2025","id":56},"58":{"value":1,"id":58},"68":{"value":"161189","id":68},"385":{"value":"","id":385},"387":{"value":"Testing before committing changes","id":387}},"settings":{"objectType":"Form Setting","editActive":true,"title":"Webinar Registration Form","show_title":0,"allow_public_link":0,"embed_form":"","clear_complete":1,"hide_complete":1,"default_label_pos":"above","wrapper_class":"","element_class":"","form_title_heading_level":"3","key":"","add_submit":1,"changeEmailErrorMsg":"Please enter a valid email address!","changeDateErrorMsg":"Please enter a valid date!","confirmFieldErrorMsg":"These fields must match!","fieldNumberNumMinError":"Number Min Error","fieldNumberNumMaxError":"Number Max Error","fieldNumberIncrementBy":"Please increment by ","formErrorsCorrectErrors":"Please correct errors before submitting this form.","validateRequiredField":"This is a required field.","honeypotHoneypotError":"Honeypot Error","fieldsMarkedRequired":"Fields marked with an <span class=\"ninja-forms-req-symbol\">*<\/span> are required","currency":"","unique_field_error":"A form with this value has already been submitted.","logged_in":false,"not_logged_in_msg":"","sub_limit_msg":"The form has reached its submission limit.","calculations":[],"drawerDisabled":false,"conditions":[{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":6,"trigger":"deactivate_action","type":"action","modelType":"else"}]},{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":4,"trigger":"deactivate_action","type":"action","modelType":"else"}]},{"collapsed":false,"process":1,"connector":"all","when":[{"connector":"AND","key":"speaker_question","comparator":"","value":"","type":"field","modelType":"when"}],"then":[{"key":"speaker_question","trigger":"","value":"","type":"field","modelType":"then"}],"else":[{"key":5,"trigger":"deactivate_action","type":"action","modelType":"else"}]}],"objectDomain":"display","save_progress_allow_multiple":false,"save_progress_table_legend":"Load saved progress","save_progress_table_columns":[{"errors":[],"max_options":0,"label":"Column Title","field":"{field}","order":0,"settingModel":{"settings":false,"hide_merge_tags":false,"error":false,"name":"save_progress_table_columns","type":"option-repeater","label":"Save Table Columns <a href=\"#\" class=\"nf-add-new\">Add New<\/a>","width":"full","group":"primary","columns":{"field":{"header":"Field Key","default":""}},"value":[{"label":"Column Title","field":"{field}","order":0}],"tmpl_row":"tmpl-nf-save-progress-table-columns-repeater-row"}}],"container_styles_show_advanced_css":0,"title_styles_show_advanced_css":0,"row_styles_show_advanced_css":0,"row-odd_styles_show_advanced_css":0,"success-msg_styles_show_advanced_css":0,"error_msg_styles_show_advanced_css":0,"mp_breadcrumb":1,"mp_progress_bar":1,"mp_display_titles":0,"breadcrumb_container_styles_show_advanced_css":0,"breadcrumb_buttons_styles_show_advanced_css":0,"breadcrumb_button_hover_styles_show_advanced_css":0,"breadcrumb_active_button_styles_show_advanced_css":0,"progress_bar_container_styles_show_advanced_css":0,"progress_bar_fill_styles_show_advanced_css":0,"part_titles_styles_show_advanced_css":0,"navigation_container_styles_show_advanced_css":0,"previous_button_styles_show_advanced_css":0,"next_button_styles_show_advanced_css":0,"navigation_hover_styles_show_advanced_css":0,"ninjaForms":"Ninja Forms","fieldTextareaRTEInsertLink":"Insert Link","fieldTextareaRTEInsertMedia":"Insert Media","fieldTextareaRTESelectAFile":"Select a file","formHoneypot":"If you are a human seeing this field, please leave it empty.","fileUploadOldCodeFileUploadInProgress":"File Upload in Progress.","fileUploadOldCodeFileUpload":"FILE UPLOAD","currencySymbol":"&#36;","thousands_sep":",","decimal_point":".","siteLocale":"en_GB","dateFormat":"m\/d\/Y","startOfWeek":"1","of":"of","previousMonth":"Previous Month","nextMonth":"Next Month","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthsShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"weekdaysShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"weekdaysMin":["Su","Mo","Tu","We","Th","Fr","Sa"],"recaptchaConsentMissing":"reCaptcha validation couldn&#039;t load.","recaptchaMissingCookie":"reCaptcha v3 validation couldn&#039;t load the cookie needed to submit the form.","recaptchaConsentEvent":"Accept reCaptcha cookies before sending the form.","save_progress_actions":{"4":{"active":null},"5":{"active":null},"6":{"active":null},"16":{"active":null},"45":{"active":null},"140":{"active":null}},"currency_symbol":"","beforeForm":"<fieldset class=\"nf-saves-cont\">\n\n    <legend>Load saved progress<\/legend>\n\n    <div class=\"form-save-loading\">\n        <!-- Loading message container. Will be removed during rendering. -->\n    <\/div>\n\n    <table><\/table>\n\n<\/fieldset>\n","beforeFields":"","afterFields":"","afterForm":""},"extra":[]}
+)
+
+[2025-09-14 00:30:04] Registration Data (arg): Array
+(
+    [post_id] => 161189
+    [speaker_question] => Testing before committing changes
+    [cf_mailing_list_member_sponsor_1_optin] => 1
+)
+
+[2025-09-14 00:30:04] ✅ Using post_id: 161189
+[2025-09-14 00:30:04] ℹ️ User is logged in - ID: 28, Email: levon.gravett@supersonicplayground.com
+[2025-09-14 00:30:04] ℹ️ User details - First: 'Levon', Last: 'Gravett', Person ID: '4318866'
+[2025-09-14 00:30:04] ℹ️ Form data - Speaker question: 'Testing before committing changes', Sponsor optin: 1
+[2025-09-14 00:30:04] ✅ STEP 1: Processing Webinar Form (ID 161189)
+[2025-09-14 00:30:04] ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: 5832
+[2025-09-14 00:30:04] ✅ STEP 3: Person found via user meta (ID: 4318866)
+[2025-09-14 00:30:04] ✅ STEP 3: Person created/updated
+[2025-09-14 00:30:06] ✅ STEP 4: Ticket Created/Updated
+[2025-09-14 00:30:06] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-09-14 00:30:07] ℹ️ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-09-14 00:30:07] ✅ STEP 5: Added to Mailing List
+[2025-09-14 00:30:07] ✅ STEP 6: Speaker Question = Testing before committing changes
+[2025-09-14 00:30:07] ✅ STEP 7: Sponsor Optin = Yes
+[2025-09-14 00:30:07] 🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!
+[2025-09-14 00:30:07] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Testing before committing changes
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819784
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-09-14 00:30:07] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Testing before committing changes
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 819784
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+[2025-09-14 00:30:07] Registration result: Array
+(
+    [success] => 1
+    [ticket_id] => 819784
+    [person_id] => 4318866
+    [event_id] => 5832
+    [debug_id] => 
+)
+
+[2025-09-14 00:30:07] User registered locally for event 161189

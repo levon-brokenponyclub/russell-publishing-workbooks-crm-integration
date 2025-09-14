@@ -59,7 +59,114 @@ workbooks_ajax.ajax_url = <?php echo json_encode(admin_url('admin-ajax.php')); ?
     <p><strong>Next Scheduled Sync:</strong>
     <?php
     $next_sync = wp_next_scheduled('workbooks_daily_employer_sync');
-    echo $next_sync ? date('Y-m-d H:i:s', $next_sync) : 'Not scheduled';
+    if ($next_sync) {
+        echo date('Y-m-d H:i:s', $next_sync);
+    } else {
+        echo 'Not scheduled';
+    }
     ?>
     </p>
+    <div>
+        <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+            <input type="hidden" name="action" value="<?php echo WORKBOOKS_TOGGLE_CRON_ACTION; ?>">
+            <input type="hidden" name="toggle_cron" value="1">
+            <button type="submit" class="button button-secondary">
+                <?php echo wp_next_scheduled('workbooks_daily_employer_sync') ? 'Disable Cron' : 'Enable Cron'; ?>
+            </button>
+        </form>
+    </div>
+    <?php
+    if (isset($_POST['toggle_cron'])) {
+        if (wp_next_scheduled('workbooks_daily_employer_sync')) {
+            wp_clear_scheduled_hook('workbooks_daily_employer_sync');
+        } else {
+            wp_schedule_event(strtotime('tomorrow midnight'), 'daily', 'workbooks_daily_employer_sync');
+        }
+        wp_redirect($_SERVER['REQUEST_URI']);
+        exit;
+    }
+    ?>
 </div>
+<?php
+add_action('wp_ajax_load_employers', 'workbooks_load_employers');
+function workbooks_load_employers() {
+    global $wpdb;
+
+    // Verify nonce
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'workbooks_nonce')) {
+        wp_send_json_error(['message' => 'Invalid nonce']);
+    }
+
+    // Pagination parameters
+    $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+    $per_page = 10;
+    $offset = ($page - 1) * $per_page;
+
+    // Query employers
+    $results = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT id, name, last_updated FROM wp_workbooks_employers ORDER BY last_updated DESC LIMIT %d OFFSET %d",
+            $per_page,
+            $offset
+        )
+    );
+
+    if (!$results) {
+        wp_send_json_error(['message' => 'No employers found']);
+    }
+
+    // Format response
+    $employers = array_map(function ($row) {
+        return [
+            'id' => $row->id,
+            'name' => $row->name,
+            'last_updated' => $row->last_updated,
+        ];
+    }, $results);
+
+    wp_send_json_success(['employers' => $employers]);
+}
+
+add_action('wp_ajax_fetch_workbooks_organisations_batch', 'workbooks_fetch_organisations_batch');
+function workbooks_fetch_organisations_batch() {
+    global $wpdb;
+
+    // Verify nonce
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'workbooks_nonce')) {
+        wp_send_json_error(['message' => 'Invalid nonce']);
+    }
+
+    // Pagination parameters
+    $start = isset($_POST['start']) ? intval($_POST['start']) : 0;
+    $batch_size = isset($_POST['batch_size']) ? intval($_POST['batch_size']) : 100;
+
+    // Query organisations
+    $results = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT id, name, last_updated FROM wp_workbooks_employers ORDER BY last_updated DESC LIMIT %d OFFSET %d",
+            $batch_size,
+            $start
+        )
+    );
+
+    if (!$results) {
+        wp_send_json_error(['message' => 'No organisations found']);
+    }
+
+    // Format response
+    $organisations = array_map(function ($row) {
+        return [
+            'id' => $row->id,
+            'name' => $row->name,
+            'last_updated' => $row->last_updated,
+        ];
+    }, $results);
+
+    $has_more = count($organisations) === $batch_size;
+
+    wp_send_json_success([
+        'organisations' => $organisations,
+        'has_more' => $has_more,
+        'total' => $wpdb->get_var("SELECT COUNT(*) FROM wp_workbooks_employers")
+    ]);
+}

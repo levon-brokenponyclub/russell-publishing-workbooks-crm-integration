@@ -4,7 +4,7 @@
 
 **Author**: Supersonic Playground / Levon Gravett  
 **Website**: https://www.supersonicplayground.com  
-**Version**: 2.0.0 (V2)
+**Version**: 2.1.0
 
 A production-ready WordPress plugin that integrates WordPress with the DTR Workbooks CRM. V2 focuses on modular admin code, robust debugging that is gated for production, comprehensive gated-content and Ninja Forms integration (ACF-driven), and reliable Workbooks person/employer/ticket/lead creation and synchronization.
 
@@ -218,11 +218,33 @@ Disable afterward to reduce I/O.
 * Scripts in `scripts/` (setup, deploy, post-commit sync) – optional CI
 * Ensure permissions allow writing to `logs/` and `assets/json/`
 
-
+---
 
 ## Changelog (Highlights)
 
-### 2.1.x (In Progress – September 2025)
+### Backend Improvements
+- **Database Fixes**: Resolved issues with database table creation to ensure proper functionality.
+- **AJAX Handlers**: Improved AJAX functionality for dynamic updates without page reloads.
+- **Shortcodes**: Implemented shortcodes for displaying user details dynamically.
+- **Logout Functionality**: Ensured consistent logout behavior after password updates, including redirection to the homepage.
+
+### Frontend Enhancements
+- **Form Submission Animations**: Added animations for better user experience during form submissions.
+- **Gated Content Buttons**: Updated buttons to use relative URLs and trigger modals for login functionality.
+- **Button Alignment**: Ensured buttons are displayed side by side inline for better visual alignment.
+- **Text Centering**: Adjusted button styles to ensure text is perfectly vertically centered.
+
+### Usability and UX/UI Improvements
+- Enhanced user interface for gated content, including updated button styles and alignment.
+- Improved accessibility and responsiveness across various components.
+- Streamlined user interactions with modals and dynamic updates.
+
+### Future Plans
+- Further optimization of AJAX handlers.
+- Additional UX/UI improvements based on user feedback.
+- Integration with more CRM features.
+
+### 2.1.0
 - Refactored both webinar and lead generation registration logic into dedicated, modular classes and handler files for maintainability and testability.
 - All registration shortcodes (webinar and lead gen) are always loaded and registered, ensuring UI is available wherever needed.
 - Unified and robust logging for all registration flows, with step-by-step debug output and specialized logs for lead generation and webinars.
@@ -241,9 +263,6 @@ Disable afterward to reduce I/O.
 - Column Width Fixes: First column adapts to content, second and third columns have a max width of 250px with ellipsis for overflow.
 - Toggle Button for Workbooks Fields: The "Show Workbooks API Fields for this User" link is now a button with improved JS toggle logic and accessibility.
 - Ninja Forms Country Select: The Ninja Forms - Full Country Names plugin now processes selects inside containers with `.full-iso-country-names`, only logs the selected country (not all options) in the console, both on load and change, handles both ISO code and full country name as selected value (with reverse lookup for code), and uses improved MutationObserver and logging for dynamic forms.
-
-## License
-Proprietary software developed by Supersonic Playground for DTR (Drug Target Review). All rights reserved.
 
 ---
 

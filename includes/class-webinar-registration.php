@@ -47,386 +47,37 @@ function workbooks_webinar_registration_shortcode($atts) {
 
     ob_start();
     
-    // Add global styles and scripts for split buttons
-    echo <<<HTML
-    <style>
-    /* Wrapper full width */
-    .ks-split-btn {
-        display: flex;
-        width: 100%;
-        position: relative;
-        font-size: 0.95rem;
-        line-height: 1.2;
-        min-height: 48px;
-    }
-
-    /* Main + toggle buttons */
-    .ks-main-btn,
-    .ks-toggle-btn {
-        display: flex;
-        align-items: center;
-        justify-content: left;
-        padding: 0.6rem 0.95rem;
-        border: 0;
-        cursor: pointer;
-        font-weight: 600;
-    }
-
-    .ks-main-btn {
-        flex: 1;
-        background: #009fe3;
-        color: #fff;
-        border-radius: 3px 0 0 0;
-        text-decoration: none;
-    }
-
-    .ks-toggle-btn {
-        flex: 0 0 60px;
-        background: #009fe3;
-        color: #fff;
-        border-radius: 0 3px 0 0;
-        justify-content: center;
-    }
-
-    .ks-toggle-btn:hover {
-        background: #007bbf;
-    }
-
-    .ks-toggle-btn[aria-expanded="true"] {
-        background: #007bbf;
-    }
-
-    .ks-toggle-btn i {
-        font-family: 'Font Awesome 6 Pro';
-        font-weight: 400;
-        content: '\\f078'; /* Unicode for fa-chevron-down */
-    }
-
-    .ks-toggle-btn[aria-expanded="true"] i {
-        content: '\\f077'; /* Unicode for fa-chevron-up */
-    }
-
-    /* Dropdown menu (hidden by default, animated slide) */
-    .ks-menu {
-        position: absolute;
-        top: calc(100% + 0px);
-        left: 50%;
-        transform: translateX(-50%);
-        width: 50%;
-        background-color:#871f80;
-        /* border: 1px solid rgba(0,0,0,0.1); */
-        border-radius: 0 0 3px 3px !important;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        /* box-shadow: 0 6px 16px rgba(0,0,0,0.08); */
-        z-index: 9999;
-
-        display: flex;
-        justify-content: space-around;
-
-        /* transition */
-        max-height: 0;
-        opacity: 0;
-        overflow: hidden;
-        transition: max-height 0.35s ease, 
-                    opacity 0.35s ease, 
-                    padding 0.35s ease,
-                    width 0.35s ease;
-        padding: 0; /* collapse spacing when closed */
-    }
-
-    /* Open state: slide, fade + expand to full width */
-    .ks-menu.ks-open {
-        max-height: 200px; /* large enough for contents */
-        opacity: 1;
-        padding: 0; /* spacing appears smoothly */
-        width: 100%;
-        border-radius: 0 0 3px 3px !important;
-    }
-
-    .ks-menu li {
-        flex: 1;
-        text-align: center;
-        margin-bottom:0;
-        list-style: none;
-    }
-
-    .ks-menu a {
-        display: block;
-        padding: 12px;
-        color: #fff;
-        text-decoration: none;
-        font-size:0.75rem;
-        font-weight: bold;
-        border-radius: 0 0 3px 3px;
-        background: #009fe3;
-    }
-
-    .ks-menu a.login-button {
-        display: block;
-        padding: 12px;
-        color: #fff;
-        text-decoration: none;
-        font-size:0.75rem;
-        font-weight: bold;
-        border-radius: 0 0 3px 3px;
-        background: #871f80;
-    }
-
-    .ks-menu a.login-button:hover {
-        background: #6e1a6e;
-    }
-
-    .ks-menu a.calendar-btn {
-        display: block;
-        padding: 12px;
-        color: #fff;
-        text-decoration: none;
-        font-size:0.75rem;
-        font-weight: bold;
-        border-radius: 0 0 3px 3px;
-        background: #871f80;
-    }
-
-    .ks-menu a.calendar-btn:hover {
-        background: #6e1a6e;
-    }
-
-    .ks-menu a:hover {
-        background: #007bbf;
-    }
-
-    .event-registration .reveal-text {
-        padding:0.45rem 0.85rem;
-        margin-top:4px;
-    }
-
-    .is-registered .ks-main-btn {
-        background: #871f80;
-    }
-
-    .is-registered .ks-toggle-btn {
-        flex: 0 0 60px;
-        background: #871f80;
-        color: #fff;
-        border-radius: 0 3px 0 0;
-        justify-content: center;
-    }
-
-    .is-registered .ks-toggle-btn:hover {
-        background: #6e1a6e;
-    }
-
-    .ks-toggle-btn[aria-expanded="true"] {
-        background: #6e1a6e;
-    }
-
-    /* Modal Styles */
-    .modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 10000;
-    }
-
-    .modal-content {
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        max-width: 500px;
-        width: 90%;
-        max-height: 80vh;
-        overflow-y: auto;
-        position: relative;
-    }
-
-    .modal-close {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        background: none;
-        border: none;
-        font-size: 24px;
-        cursor: pointer;
-        color: #666;
-        padding: 0;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .modal-close:hover {
-        color: #000;
-    }
-
-    .modal-body {
-        margin-top: 10px;
-    }
-
-    .modal-body .nf-form-wrap {
-        margin: 0;
-    }
-
-    .modal-body .nf-form-title h3 {
-        margin-top: 0;
-        text-align: center;
-    }
-    </style>
-
-    <div id="nf-login-modal-form" style="display:none;">
-HTML;
-    echo do_shortcode('[ninja_form id=3]');
-    echo <<<HTML
-    </div>
-
-    <script>
-    // Add custom CSS to override any redirect behavior in login form
-    document.addEventListener('DOMContentLoaded', function() {
-        // Check for any login forms and add current page URL as redirect
-        const hiddenForm = document.querySelector('#nf-login-modal-form form');
-        if (hiddenForm) {
-            // Add current URL as hidden field to prevent redirection
-            let redirectField = hiddenForm.querySelector('input[name="redirect_to"]');
-            if (!redirectField) {
-                redirectField = document.createElement('input');
-                redirectField.type = 'hidden';
-                redirectField.name = 'redirect_to';
-                hiddenForm.appendChild(redirectField);
-            }
-            redirectField.value = window.location.href;
-            console.log('Added redirect field to login form:', redirectField.value);
-        }
-    });
-    </script>
-
-    <script>
-    // Define openLoginModal function globally
-    function openLoginModal() {
-        const modal = document.createElement('div');
-        modal.className = 'modal';
-        modal.innerHTML = `
-            <div class="modal-content">
-                <button class="modal-close">&times;</button>
-                <div class="modal-body">
-                    <h2>Login</h2>
-                    <div id="modal-form-container"></div>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-
-        // Instead of moving the form, let's make the original form visible in the modal
-        const formDiv = document.getElementById('nf-login-modal-form');
-        const modalFormContainer = modal.querySelector('#modal-form-container');
+    // Enqueue CSS and JavaScript files for webinar registration
+    $plugin_url = plugin_dir_url(dirname(__FILE__));
+    $css_version = filemtime(plugin_dir_path(dirname(__FILE__)) . 'assets/css/webinar-registration.css');
+    $js_version = filemtime(plugin_dir_path(dirname(__FILE__)) . 'assets/js/webinar-registration.js');
+    
+    // Only enqueue once per page load
+    static $assets_enqueued = false;
+    if (!$assets_enqueued) {
+        wp_enqueue_style(
+            'dtr-webinar-registration-css',
+            $plugin_url . 'assets/css/webinar-registration.css',
+            array(),
+            $css_version
+        );
         
-        if (formDiv) {
-            // Move the actual form div (not just innerHTML) to preserve event handlers
-            formDiv.style.display = 'block';
-            modalFormContainer.appendChild(formDiv);
-            console.log('Original form div moved to modal with preserved handlers');
-        } else {
-            modalFormContainer.innerHTML = '<p>Login form could not be loaded. Please refresh the page and try again.</p>';
-        }
-
-        // Close modal functionality
-        const closeButton = modal.querySelector('.modal-close');
-        closeButton.addEventListener('click', function () {
-            // Move the form back to its original location before closing
-            if (formDiv && formDiv.parentNode === modalFormContainer) {
-                document.body.appendChild(formDiv);
-                formDiv.style.display = 'none';
-            }
-            document.body.removeChild(modal);
-        });
-
-        // Close modal when clicking outside
-        modal.addEventListener('click', function (e) {
-            if (e.target === modal) {
-                // Move the form back to its original location before closing
-                if (formDiv && formDiv.parentNode === modalFormContainer) {
-                    document.body.appendChild(formDiv);
-                    formDiv.style.display = 'none';
-                }
-                document.body.removeChild(modal);
-            }
-        });
-
-        // Listen for Ninja Forms submission responses on the original form
-        if (typeof jQuery !== 'undefined') {
-            jQuery(document).on('nfFormSubmitResponse', function(e, response, formId) {
-                console.log('Ninja Forms response received:', response, 'Form ID:', formId);
-                if (formId == 3 && response && response.success) {
-                    console.log('Login successful!');
-                    // Close modal and reload page
-                    if (formDiv && formDiv.parentNode === modalFormContainer) {
-                        document.body.appendChild(formDiv);
-                        formDiv.style.display = 'none';
-                    }
-                    document.body.removeChild(modal);
-                    window.location.reload();
-                }
-            });
-        }
+        wp_enqueue_script(
+            'dtr-webinar-registration.js',
+            $plugin_url . 'assets/js/webinar-registration.js',
+            array('jquery'),
+            $js_version,
+            true
+        );
+        
+        $assets_enqueued = true;
     }
 
-    (function () {
-        function closeAllExcept(exceptMenu) {
-            document.querySelectorAll('.ks-menu.ks-open').forEach(function (m) {
-                if (m !== exceptMenu) {
-                    m.classList.remove('ks-open');
-                    var t = document.querySelector('[aria-controls="' + m.id + '"]');
-                    if (t) t.setAttribute('aria-expanded', 'false');
-                }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.ks-split-btn').forEach(function (container) {
-                var toggle = container.querySelector('.ks-toggle-btn');
-                var menu = container.querySelector('.ks-menu');
-                if (!toggle || !menu) return;
-
-                toggle.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    var isOpen = menu.classList.toggle('ks-open');
-                    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-                    closeAllExcept(isOpen ? menu : null);
-                });
-
-                // Close when menu item clicked
-                menu.querySelectorAll('a').forEach(function (a) {
-                    a.addEventListener('click', function () {
-                        menu.classList.remove('ks-open');
-                        toggle.setAttribute('aria-expanded', 'false');
-                    });
-                });
-
-                // Keyboard: Esc to close
-                container.addEventListener('keydown', function (e) {
-                    if (e.key === 'Escape') {
-                        menu.classList.remove('ks-open');
-                        toggle.setAttribute('aria-expanded', 'false');
-                    }
-                });
-            });
-
-            // Clicking outside closes all menus
-            document.addEventListener('click', function () {
-                closeAllExcept(null);
-            });
-        });
-    })();
-    </script>
-HTML;
+    
+    // Hidden login form for modal use
+    echo '<div id="nf-login-modal-form" style="display:none;">';
+    echo do_shortcode('[ninja_form id=3]');
+    echo '</div>';
 
     // ----------------------------------------------------------------------
     // Step 1: Gather Event & User Data
@@ -449,7 +100,7 @@ HTML;
     if ( ! $user_is_logged_in ) {
         $uid = 'ks' . uniqid(); // unique id for this instance
         echo <<<HTML
-        <div style="font-size:2rem;font-weight:bold;color:#b00;text-align:center;margin:2em 0;">STEP: Not Logged In</div>
+        <!-- <div style="font-size:2rem;font-weight:bold;color:#b00;text-align:center;margin:2em 0;">STEP: Not Logged In</div> -->
             <div class="full-page vertical-half-margin event-registration">
 
             <!-- split button -->
@@ -553,7 +204,7 @@ HTML;
             echo <<<HTML
             <!-- split button for registered users -->
             <div class="ks-split-btn">
-                <a href="/free-membership" class="ks-main-btn" role="button">You have registered for this Webinar</a>
+                <a href="/free-membership" class="ks-main-btn" role="button">You are registered for this Webinar</a>
                 <button type="button" class="ks-toggle-btn" aria-haspopup="true" aria-expanded="false" aria-controls="{$uid}-menu" title="Open menu">
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>

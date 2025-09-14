@@ -58,8 +58,9 @@ if (!function_exists('workbooks_read_employers_json')) {
 // Schedule the cron job on activation
 register_activation_hook(__FILE__, 'workbooks_schedule_employer_sync');
 function workbooks_schedule_employer_sync() {
+    // Schedule the cron job to run daily at midnight
     if (!wp_next_scheduled('workbooks_daily_employer_sync')) {
-        wp_schedule_event(time(), 'daily', 'workbooks_daily_employer_sync');
+        wp_schedule_event(strtotime('tomorrow midnight'), 'daily', 'workbooks_daily_employer_sync');
     }
 }
 
@@ -736,3 +737,40 @@ add_action('wp_ajax_resync_workbooks_employer', function() {
         wp_send_json_error('Exception: ' . $e->getMessage());
     }
 }); */
+
+/**
+ * Define WORKBOOKS_NF_PATH if not already defined
+ */
+if (!defined('WORKBOOKS_NF_PATH')) {
+    define('WORKBOOKS_NF_PATH', plugin_dir_path(__FILE__));
+}
+
+// Add a function to toggle the cron job
+function toggle_workbooks_cron($enable) {
+    if ($enable) {
+        if (!wp_next_scheduled('workbooks_daily_employer_sync')) {
+            wp_schedule_event(strtotime('tomorrow midnight'), 'daily', 'workbooks_daily_employer_sync');
+        }
+    } else {
+        wp_clear_scheduled_hook('workbooks_daily_employer_sync');
+    }
+}
+
+// Add a function to handle the cron toggle via admin_post
+define('WORKBOOKS_TOGGLE_CRON_ACTION', 'workbooks_toggle_cron');
+add_action('admin_post_' . WORKBOOKS_TOGGLE_CRON_ACTION, function() {
+    if (!current_user_can('manage_options')) {
+        wp_die(__('You do not have sufficient permissions to access this page.'));
+    }
+
+    if (isset($_POST['toggle_cron'])) {
+        if (wp_next_scheduled('workbooks_daily_employer_sync')) {
+            wp_clear_scheduled_hook('workbooks_daily_employer_sync');
+        } else {
+            wp_schedule_event(strtotime('tomorrow midnight'), 'daily', 'workbooks_daily_employer_sync');
+        }
+    }
+
+    wp_redirect(admin_url('admin.php?page=workbooks-employer-sync'));
+    exit;
+});

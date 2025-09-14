@@ -2758,14 +2758,23 @@ class DTR_Workbooks_Integration {
     }
     
     /**
-     * Admin page for viewing and managing registered events
+     * Admin page for viewing and managing registered events and lead generation submissions
      */
     public function admin_registered_events_page() {
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized access.');
         }
         
-        // Handle delete request
+        global $wpdb;
+        
+        // Handle manual table creation request
+        if (isset($_POST['create_tables'])) {
+            check_admin_referer('create_tables', 'create_tables_nonce');
+            $this->create_database_tables();
+            echo '<div class="notice notice-success"><p>Database tables have been created/updated successfully.</p></div>';
+        }
+        
+        // Handle delete request for webinar registrations
         if (isset($_POST['delete_registration']) && isset($_POST['user_id']) && isset($_POST['event_id'])) {
             check_admin_referer('delete_registration', 'delete_nonce');
             $user_id = intval($_POST['user_id']);
@@ -2775,94 +2784,274 @@ class DTR_Workbooks_Integration {
             if (is_array($registered_events) && in_array($event_id, $registered_events)) {
                 $registered_events = array_diff($registered_events, [$event_id]);
                 update_user_meta($user_id, 'registered_events', $registered_events);
-                echo '<div class="notice notice-success"><p>Registration deleted successfully.</p></div>';
+                echo '<div class="notice notice-success"><p>Webinar registration deleted successfully.</p></div>';
             }
         }
         
-        // Get all users with registered events
+        // Handle delete request for lead generation submissions
+        if (isset($_POST['delete_lead_submission']) && isset($_POST['submission_id']) && isset($_POST['user_id'])) {
+            check_admin_referer('delete_lead_submission', 'delete_lead_nonce');
+            $submission_id = intval($_POST['submission_id']);
+            $user_id = intval($_POST['user_id']);
+            $form_id = intval($_POST['form_id'] ?? 0);
+            $post_id = intval($_POST['post_id'] ?? 0);
+            
+            // Delete from submissions table
+            $submissions_table = $wpdb->prefix . 'dtr_workbooks_submissions';
+            $deleted = $wpdb->delete($submissions_table, ['id' => $submission_id]);
+            
+            if ($deleted !== false) {
+                // Clean up user meta
+                if ($form_id && $post_id) {
+                    delete_user_meta($user_id, "completed_form_{$form_id}_{$post_id}");
+                }
+                
+                // Update completed ninja forms array
+                $completed_forms = get_user_meta($user_id, 'completed_ninja_forms', true);
+                if (is_array($completed_forms)) {
+                    if ($post_id) {
+                        $completed_forms = array_filter($completed_forms, function($item) use ($post_id) {
+                            return !isset($item['post_id']) || $item['post_id'] != $post_id;
+                        });
+                    }
+                    update_user_meta($user_id, 'completed_ninja_forms', $completed_forms);
+                }
+                
+                echo '<div class="notice notice-success"><p>Lead generation submission deleted successfully.</p></div>';
+            } else {
+                echo '<div class="notice notice-error"><p>Failed to delete lead generation submission.</p></div>';
+            }
+        }
+        
+        // Get all users with registered events (webinars)
         $users_with_events = get_users([
             'meta_key' => 'registered_events',
             'meta_compare' => 'EXISTS'
         ]);
         
+        // Get all lead generation submissions from database
+        $submissions_table = $wpdb->prefix . 'dtr_workbooks_submissions';
+        $lead_submissions = $wpdb->get_results("
+            SELECT s.*, u.display_name, u.user_email, s.submission_data
+            FROM $submissions_table s
+            LEFT JOIN {$wpdb->users} u ON JSON_EXTRACT(s.submission_data, '$.user_id') = u.ID
+            ORDER BY s.created_at DESC
+        ");
+        
+        // Handle potential SQL errors
+        if ($wpdb->last_error) {
+            echo '<div class="notice notice-error"><p>Database error: ' . esc_html($wpdb->last_error) . '</p></div>';
+            $lead_submissions = [];
+        }
+        
+        // Parse submission data to extract form and post IDs
+        foreach ($lead_submissions as $submission) {
+            $data = json_decode($submission->submission_data, true);
+            $submission->user_id = $data['user_id'] ?? null;
+            $submission->post_id = $data['post_id'] ?? null;
+            $submission->form_fields = $data;
+            
+            // Get user details if user_id is available but display_name is null
+            if ($submission->user_id && !$submission->display_name) {
+                $user = get_user_by('ID', $submission->user_id);
+                if ($user) {
+                    $submission->display_name = $user->display_name;
+                    $submission->user_email = $user->user_email;
+                }
+            }
+        }
+        
         ?>
         <div class="wrap plugin-admin-content">
-            <h1>Registered Events</h1>
-            <h2>View and manage user registrations for webinars and events.</h2>
+            <h1>Registered Events & Lead Generation</h1>
+            <h2>View and manage user registrations for webinars and lead generation submissions.</h2>
 
-            <?php if (empty($users_with_events)): ?>
-                <div class="notice notice-info">
-                    <p>No registered events found.</p>
-                </div>
-            <?php else: ?>
-                <table class="wp-list-table widefat fixed striped">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Event Title</th>
-                            <th>Event ID</th>
-                            <th>Registration Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($users_with_events as $user): ?>
-                            <?php 
-                            $registered_events = get_user_meta($user->ID, 'registered_events', true);
-                            $registered_events = is_array($registered_events) ? $registered_events : [];
-                            ?>
-                            <?php foreach ($registered_events as $event_id): ?>
+            <div style="margin-bottom: 20px;">
+                <button type="button" class="button" onclick="toggleSection('webinar-section')">Toggle Webinar Registrations</button>
+                <button type="button" class="button" onclick="toggleSection('lead-section')">Toggle Lead Generation Submissions</button>
+            </div>
+
+            <script>
+            function toggleSection(sectionId) {
+                var section = document.getElementById(sectionId);
+                if (section.style.display === 'none') {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            }
+            </script>
+
+            <!-- Webinar Registrations Section -->
+            <div id="webinar-section">
+                <h3>Webinar Registrations</h3>
+                <?php if (empty($users_with_events)): ?>
+                    <div class="notice notice-info">
+                        <p>No webinar registrations found.</p>
+                    </div>
+                <?php else: ?>
+                    <table class="wp-list-table widefat fixed striped">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Event Title</th>
+                                <th>Event ID</th>
+                                <th>Registration Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($users_with_events as $user): ?>
                                 <?php 
-                                $post = get_post($event_id);
-                                $event_title = $post ? $post->post_title : 'Event not found';
+                                $registered_events = get_user_meta($user->ID, 'registered_events', true);
+                                $registered_events = is_array($registered_events) ? $registered_events : [];
+                                ?>
+                                <?php foreach ($registered_events as $event_id): ?>
+                                    <?php 
+                                    $post = get_post($event_id);
+                                    $event_title = $post ? $post->post_title : 'Event not found';
+                                    ?>
+                                    <tr>
+                                        <td><span class="badge" style="background: #0073aa; color: white; padding: 2px 6px; border-radius: 3px;">Webinar</span></td>
+                                        <td><?php echo esc_html($user->display_name); ?></td>
+                                        <td><?php echo esc_html($user->user_email); ?></td>
+                                        <td>
+                                            <?php if ($post): ?>
+                                                <a href="<?php echo get_edit_post_link($event_id); ?>" target="_blank">
+                                                    <?php echo esc_html($event_title); ?>
+                                                </a>
+                                            <?php else: ?>
+                                                <?php echo esc_html($event_title); ?>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?php echo esc_html($event_id); ?></td>
+                                        <td>
+                                            <?php 
+                                            // Try to get registration date from user meta or show N/A
+                                            $reg_date = get_user_meta($user->ID, 'event_' . $event_id . '_registration_date', true);
+                                            echo $reg_date ? esc_html(date('Y-m-d H:i:s', $reg_date)) : 'N/A';
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <form method="post" style="display: inline;">
+                                                <?php wp_nonce_field('delete_registration', 'delete_nonce'); ?>
+                                                <input type="hidden" name="user_id" value="<?php echo esc_attr($user->ID); ?>">
+                                                <input type="hidden" name="event_id" value="<?php echo esc_attr($event_id); ?>">
+                                                <input type="submit" name="delete_registration" value="Delete" 
+                                                       class="button button-secondary" 
+                                                       onclick="return confirm('Are you sure you want to delete this webinar registration?');">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
+            </div>
+
+            <br>
+
+            <!-- Lead Generation Submissions Section -->
+            <div id="lead-section">
+                <h3>Lead Generation Submissions</h3>
+                <?php if (empty($lead_submissions)): ?>
+                    <div class="notice notice-info">
+                        <p>No lead generation submissions found.</p>
+                    </div>
+                <?php else: ?>
+                    <table class="wp-list-table widefat fixed striped">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Form/Post</th>
+                                <th>Submission ID</th>
+                                <th>Status</th>
+                                <th>Submitted Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($lead_submissions as $submission): ?>
+                                <?php
+                                $post_title = 'Unknown';
+                                if ($submission->post_id) {
+                                    $post = get_post($submission->post_id);
+                                    $post_title = $post ? $post->post_title : "Post ID {$submission->post_id} (not found)";
+                                }
                                 ?>
                                 <tr>
-                                    <td><?php echo esc_html($user->display_name); ?></td>
-                                    <td><?php echo esc_html($user->user_email); ?></td>
+                                    <td><span class="badge" style="background: #46b450; color: white; padding: 2px 6px; border-radius: 3px;">Lead Gen</span></td>
+                                    <td><?php echo esc_html($submission->display_name ?: 'Unknown User'); ?></td>
+                                    <td><?php echo esc_html($submission->user_email ?: 'Unknown Email'); ?></td>
                                     <td>
-                                        <?php if ($post): ?>
-                                            <a href="<?php echo get_edit_post_link($event_id); ?>" target="_blank">
-                                                <?php echo esc_html($event_title); ?>
+                                        <?php if ($submission->post_id && $post): ?>
+                                            <a href="<?php echo get_edit_post_link($submission->post_id); ?>" target="_blank">
+                                                <?php echo esc_html($post_title); ?>
                                             </a>
+                                            <br><small>Form ID: <?php echo esc_html($submission->form_id); ?></small>
                                         <?php else: ?>
-                                            <?php echo esc_html($event_title); ?>
+                                            <?php echo esc_html($post_title); ?>
+                                            <br><small>Form ID: <?php echo esc_html($submission->form_id); ?></small>
                                         <?php endif; ?>
                                     </td>
-                                    <td><?php echo esc_html($event_id); ?></td>
+                                    <td><?php echo esc_html($submission->id); ?></td>
                                     <td>
-                                        <?php 
-                                        // Try to get registration date from user meta or show N/A
-                                        $reg_date = get_user_meta($user->ID, 'event_' . $event_id . '_registration_date', true);
-                                        echo $reg_date ? esc_html(date('Y-m-d H:i:s', $reg_date)) : 'N/A';
-                                        ?>
+                                        <span class="status-<?php echo esc_attr($submission->status); ?>"><?php echo esc_html(ucfirst($submission->status)); ?></span>
                                     </td>
+                                    <td><?php echo esc_html($submission->created_at); ?></td>
                                     <td>
                                         <form method="post" style="display: inline;">
-                                            <?php wp_nonce_field('delete_registration', 'delete_nonce'); ?>
-                                            <input type="hidden" name="user_id" value="<?php echo esc_attr($user->ID); ?>">
-                                            <input type="hidden" name="event_id" value="<?php echo esc_attr($event_id); ?>">
-                                            <input type="submit" name="delete_registration" value="Delete" 
+                                            <?php wp_nonce_field('delete_lead_submission', 'delete_lead_nonce'); ?>
+                                            <input type="hidden" name="submission_id" value="<?php echo esc_attr($submission->id); ?>">
+                                            <input type="hidden" name="user_id" value="<?php echo esc_attr($submission->user_id); ?>">
+                                            <input type="hidden" name="form_id" value="<?php echo esc_attr($submission->form_id); ?>">
+                                            <input type="hidden" name="post_id" value="<?php echo esc_attr($submission->post_id); ?>">
+                                            <input type="submit" name="delete_lead_submission" value="Delete" 
                                                    class="button button-secondary" 
-                                                   onclick="return confirm('Are you sure you want to delete this registration?');">
+                                                   onclick="return confirm('Are you sure you want to delete this lead generation submission?');">
                                         </form>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
+            </div>
             
             <br>
             <div class="card">
                 <h2>Usage Notes</h2>
+                <h4>Webinar Registrations</h4>
                 <ul>
-                    <li>This page shows all users who have successfully registered for webinars or events.</li>
-                    <li>Registrations are tracked locally in WordPress user meta and synced with Workbooks CRM.</li>
-                    <li>Use the "Delete" button to remove registrations for testing purposes.</li>
-                    <li>Deleting a registration here only removes the local WordPress record - it does not affect Workbooks CRM records.</li>
+                    <li>Shows users who have successfully registered for webinars or events.</li>
+                    <li>Registrations are tracked in WordPress user meta under 'registered_events'.</li>
+                    <li>Synced with Workbooks CRM when registration occurs.</li>
                 </ul>
+                <h4>Lead Generation Submissions</h4>
+                <ul>
+                    <li>Shows all form submissions captured through the lead generation system.</li>
+                    <li>Data is stored in the custom database table 'dtr_workbooks_submissions'.</li>
+                    <li>Includes both successful and failed Workbooks CRM synchronizations.</li>
+                </ul>
+                <h4>Important Notes</h4>
+                <ul>
+                    <li>Use the "Delete" button to remove records for testing purposes.</li>
+                    <li>Deleting records here only removes the local WordPress data - it does not affect Workbooks CRM records.</li>
+                    <li>Both sections can be toggled on/off using the buttons above.</li>
+                </ul>
+                
+                <style>
+                .status-pending { color: #d54e21; }
+                .status-completed { color: #46b450; }
+                .status-failed { color: #dc3232; }
+                .status-processing { color: #ffb900; }
+                .badge { font-size: 11px; font-weight: bold; text-transform: uppercase; }
+                </style>
             </div>
         </div>
         <?php

@@ -186,55 +186,63 @@ add_shortcode('dtr-my-account-details', function() {
     </form>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var form = document.querySelector('.dtr-account-form');
-        var btn = form.querySelector('.dtr-input-button');
-        btn.value = 'Update Details';
-        var originalBtnText = btn.value;
-        var dots = 0;
-        var submitting = false;
-        var submitInterval;
+        const form = document.querySelector('.dtr-account-form');
+
+        if (!form) {
+            console.error('Form with class .dtr-account-form not found in the DOM.');
+            return;
+        }
+
+        if (!(form instanceof HTMLFormElement)) {
+            console.error('The selected element is not a valid HTMLFormElement.');
+            return;
+        }
+
+        console.log('Form element found and is valid.'); // Debugging log
+
+        const btn = form.querySelector('.dtr-input-button');
+        const originalBtnText = btn.value;
+        let dots = 0;
+        let submitting = false;
+        let submitInterval;
 
         function animateSubmitting() {
             dots = (dots + 1) % 4;
-            btn.value = 'Updating' + '.'.repeat(dots);
-            console.log('Button Animation Present');
+            btn.value = 'Submitting' + '.'.repeat(dots);
         }
 
         form.addEventListener('submit', function(e) {
-            if (!form.checkValidity()) return;
+            e.preventDefault(); // Prevent default form submission
+
+            if (!form.checkValidity()) {
+                console.error('Form validation failed. Please check the required fields.');
+                return;
+            }
+
             btn.disabled = true;
             submitting = true;
             submitInterval = setInterval(animateSubmitting, 500);
 
-            // Check for success or error message
-            var checkCompletion = setInterval(function() {
-                var successMsg = document.querySelector('.updated');
-                var errorMsg = document.querySelector('.error');
-                if (successMsg || errorMsg) {
-                    clearInterval(submitInterval);
-                    clearInterval(checkCompletion);
-                    submitting = false;
-                    if (successMsg) {
-                        btn.value = 'Details Updated!';
-                        setTimeout(function() {
-                            btn.value = originalBtnText;
-                            btn.disabled = false;
-                        }, 2000);
-                    } else {
-                        btn.value = originalBtnText;
-                        btn.disabled = false;
-                    }
-                }
-            }, 100);
+            // Simulate form submission for debugging
+            setTimeout(function() {
+                clearInterval(submitInterval);
+                btn.value = 'Details Updated!';
 
-            // Fallback timeout
+                setTimeout(function() {
+                    btn.value = originalBtnText;
+                    btn.disabled = false;
+                    submitting = false;
+                }, 2000);
+            }, 3000); // Simulate a 3-second submission delay
+
+            // Fallback timeout to reset button state
             setTimeout(function() {
                 if (submitting) {
                     clearInterval(submitInterval);
-                    clearInterval(checkCompletion);
                     btn.disabled = false;
                     btn.value = originalBtnText;
                     submitting = false;
+                    console.error('Fallback timeout triggered.');
                 }
             }, 10000);
         });
@@ -242,4 +250,68 @@ add_shortcode('dtr-my-account-details', function() {
     </script>
     <?php
     return ob_get_clean();
+});
+
+add_shortcode('dtr-my-account-details_table', function() {
+    if (!is_user_logged_in()) return '<p>You must be logged in to view your account details.</p>';
+
+    $current_user = wp_get_current_user();
+    $user_meta = [
+        'title' => get_user_meta($current_user->ID, 'person_title', true),
+        'first_name' => get_user_meta($current_user->ID, 'first_name', true),
+        'last_name' => get_user_meta($current_user->ID, 'last_name', true),
+        'email' => $current_user->user_email,
+        'job_title' => get_user_meta($current_user->ID, 'job_title', true),
+        'employer' => get_user_meta($current_user->ID, 'employer_name', true),
+        'telephone' => get_user_meta($current_user->ID, 'telephone', true),
+        'country' => get_user_meta($current_user->ID, 'country', true),
+        'town_city' => get_user_meta($current_user->ID, 'town', true),
+        'post_zip_code' => get_user_meta($current_user->ID, 'postcode', true),
+    ];
+
+    ob_start();
+    ?>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th colspan="2">Personal Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><th>Title</th><td><?php echo esc_html($user_meta['title']); ?></td></tr>
+            <tr><th>First Name</th><td><?php echo esc_html($user_meta['first_name']); ?></td></tr>
+            <tr><th>Last Name</th><td><?php echo esc_html($user_meta['last_name']); ?></td></tr>
+            <tr><th>Email Address</th><td><?php echo esc_html($user_meta['email']); ?></td></tr>
+            <tr><th>Job Title</th><td><?php echo esc_html($user_meta['job_title']); ?></td></tr>
+            <tr><th>Employer</th><td><?php echo esc_html($user_meta['employer']); ?></td></tr>
+            <tr><th>Telephone</th><td><?php echo esc_html($user_meta['telephone']); ?></td></tr>
+            <tr><th>Country</th><td><?php echo esc_html($user_meta['country']); ?></td></tr>
+            <tr><th>Town / City</th><td><?php echo esc_html($user_meta['town_city']); ?></td></tr>
+            <tr><th>Post / Zip Code</th><td><?php echo esc_html($user_meta['post_zip_code']); ?></td></tr>
+        </tbody>
+    </table>
+    <?php
+    return ob_get_clean();
+});
+
+// Add AJAX action to fetch updated user details
+add_action('wp_ajax_get_updated_user_details', function() {
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'User not logged in']);
+    }
+
+    $current_user = wp_get_current_user();
+    $user_meta = [
+        'title' => get_user_meta($current_user->ID, 'person_title', true),
+        'first_name' => get_user_meta($current_user->ID, 'first_name', true),
+        'last_name' => get_user_meta($current_user->ID, 'last_name', true),
+        'job_title' => get_user_meta($current_user->ID, 'job_title', true),
+        'employer' => get_user_meta($current_user->ID, 'employer_name', true),
+        'telephone' => get_user_meta($current_user->ID, 'telephone', true),
+        'country' => get_user_meta($current_user->ID, 'country', true),
+        'town_city' => get_user_meta($current_user->ID, 'town', true),
+        'post_zip_code' => get_user_meta($current_user->ID, 'postcode', true),
+    ];
+
+    wp_send_json_success(['user_meta' => $user_meta]);
 });

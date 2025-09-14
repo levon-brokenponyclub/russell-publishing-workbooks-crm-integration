@@ -702,10 +702,10 @@ nf-field .nf-field-container.checkbox-container label {
   text-align: center !important;
 }
 .dtr-account-form .error {
-  background:#ff3b30 !important;
+  background:#e34356 !important;
 }
 .dtr-account-content input[type="submit"]:hover {
-  background: #009fe3 !important;
+  background: #871f80 !important;
 }
 
 /* ---------------------------------------------------------------
@@ -1285,4 +1285,60 @@ input[type="submit"].form-button-element {
     font-weight:600;
     font-size:13px;
     /* border:3px solid #fff; */
+}
+
+
+.image-only-hero-content.shifted-hero {
+    border-width:30px 30px 20px 30px !important;
+}
+
+.gated-preview-content.standfirst p {
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+}
+
+.gated-content-signup-container {
+    background:#dff2f9;
+    padding:45px;
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.06);
+    border-radius:5px;
+    margin: 55px 0 0;
+}
+
+.gated-content-signup-container p {
+    font-size:17px !important;
+    line-height:24px !important;
+    text-wrap: pretty;
+}
+#gated-content-signup-button,
+#member-sidebar-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    height: 48px !important;
+    max-width: 200px;
+    min-width: 200px;
+    min-height: 48px;
+    line-height: normal !important;
+    padding: 0 1rem;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 10px 0 0 !important;
+    text-transform: none !important;
+}
+#gated-content-signup-button::after,
+#member-sidebar-btn::after {
+    width: 40px !important;
+    height: 48px !important;
+    line-height: 48px !important;
+    padding: 0 !important;
+    right: 0 !important;
+}
+#gated-content-signup-button.purple-button:hover {
+    background-color: #009fe3 !important;
+}
+#member-sidebar-btn {
+  background-color: #009fe3 !important;
+  margin:20px 0 !important;
 }

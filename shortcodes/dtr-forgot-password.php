@@ -21,9 +21,15 @@ add_shortcode('dtr-forgot-password', function() {
         } else {
             // Update password
             wp_set_password($new_password, $current_user->ID);
-            // Optionally log out and force re-login
+            // Log out the user
             wp_logout();
-            $message = "Password updated successfully! Please log in again.";
+
+            // Clear authentication cookies
+            wp_clear_auth_cookie();
+
+            // Redirect to homepage
+            wp_redirect(home_url());
+            exit;
         }
     }
 
