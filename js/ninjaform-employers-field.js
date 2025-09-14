@@ -6,17 +6,16 @@
 (function($){
     if(typeof $==='undefined'||typeof $.fn.select2==='undefined'||typeof workbooks_ajax==='undefined'){return;}
 
-    var CACHE = {}; // key: term|page -> results
-    var PENDING = {};
     var initAttempts = 0;
     var MAX_INIT_ATTEMPTS = 15; // ~9s
     var totalLogged = false;
 
-    function cacheKey(term,page){return (term||'')+'|'+page;}
-
     // Core logic to initialize a select as a workbooks employer field
     function initEmployerSelect($el){
         if(!$el || !$el.length) return;
+        
+        console.log('[DTR Employers] About to initialize Select2 on:', $el.attr('id'));
+        
         $el.empty();
         $el.select2({
             placeholder:'Select an employer or type to add new',
@@ -25,40 +24,63 @@
             tags:true,
             minimumInputLength:0,
             ajax:{
-                transport:function(params,success,failure){
-                    var term=params.data.term||''; var page=params.data.page||1; var key=cacheKey(term,page);
-                    if(CACHE[key]){ success(CACHE[key]); return; }
-                    if(PENDING[key]){ PENDING[key].push({success:success,failure:failure}); return; }
-                    PENDING[key]=[{success:success,failure:failure}];
-                    $.ajax({
-                        url: workbooks_ajax.ajax_url,
-                        type:'GET',
-                        data:{ action:'fetch_workbooks_employers_select2', nonce:workbooks_ajax.nonce, term:term, page:page },
-                        dataType:'json'
-                    }).done(function(data){
-                        CACHE[key]=data;
-                        (PENDING[key]||[]).forEach(function(cb){ cb.success(data); });
-                        delete PENDING[key];
-                    }).fail(function(jqXHR,textStatus,error){
-                        var status = jqXHR.status;
-                        var raw = jqXHR.responseText;
-                        console.error('[DTR Employers] AJAX failure status='+status+' term="'+term+'" page='+page, raw);
-                        // Provide empty result structure to Select2 to avoid JS exception
-                        var empty = { results: [], pagination: { more:false } };
-                        (PENDING[key]||[]).forEach(function(cb){ try{ cb.success(empty); }catch(e){} });
-                        delete PENDING[key];
-                    });
+                url: workbooks_ajax.ajax_url,
+                type: 'GET',
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    var term = params.term || '';
+                    var page = params.page || 1;
+                    console.log('[DTR Employers] AJAX request - term:', term, 'page:', page);
+                    return {
+                        action: 'fetch_workbooks_employers_select2',
+                        nonce: workbooks_ajax.nonce,
+                        term: term,
+                        page: page
+                    };
                 },
-                delay:250,
-                data:function(params){ return { term:params.term||'', page:params.page||1 }; },
-                processResults:function(data,params){ params.page=params.page||1; return data; },
-                cache:true
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
+                    console.log('[DTR Employers] Processing results:', data);
+                    
+                    // Ensure we have the correct data structure
+                    var results = data.results || [];
+                    var pagination = data.pagination || { more: false };
+                    
+                    console.log('[DTR Employers] Results count:', results.length);
+                    console.log('[DTR Employers] Sample results:', results.slice(0, 5));
+                    
+                    return {
+                        results: results,
+                        pagination: {
+                            more: pagination.more
+                        }
+                    };
+                },
+                cache: true
             },
-            createTag:function(params){ var t=$.trim(params.term); if(!t) return null; return { id:t, text:t+' (New)', newTag:true }; }
+            templateResult: function(item) {
+                if (item.loading) {
+                    return item.text;
+                }
+                console.log('[DTR Employers] Template result for:', item);
+                return item.text;
+            },
+            createTag:function(params){ 
+                var t=$.trim(params.term); 
+                if(!t) return null; 
+                return { id:t, text:t+' (New)', newTag:true }; 
+            }
+        }).on('select2:open', function() {
+            console.log('[DTR Employers] Select2 opened - starting search');
+            // Trigger the search immediately when opened
+            var $search = $(this).data('select2').$dropdown.find('.select2-search__field');
+            if ($search.length) {
+                $search.trigger('input');
+            }
+        }).on('select2:select', function(e) {
+            console.log('[DTR Employers] Item selected:', e.params.data);
         });
-
-        // Prefetch first page for snappier UX
-        $.get(workbooks_ajax.ajax_url,{action:'fetch_workbooks_employers_select2',nonce:workbooks_ajax.nonce,term:'',page:1});
 
         // Optional debug: log dataset stats if debug query flag present
         if (window.location.search.indexOf('dtr_employers_debug=1') !== -1) {

@@ -260,7 +260,7 @@ HTML;
         
         $extra_fields_markup = '';
         if ($add_additional_questions && !empty($acf_questions)) {
-            $extra_fields_markup .= '<form id="acf-questions-form" style="margin-bottom:15px;" onsubmit="return false;">';
+            $extra_fields_markup .= '<form id="acf-questions-form" onsubmit="return false;">';
             foreach ($acf_questions as $i => $question) {
                 $type = isset($question['type_of_question']) ? $question['type_of_question'] : 'text';
                 $title = isset($question['question_title']) ? $question['question_title'] : '';

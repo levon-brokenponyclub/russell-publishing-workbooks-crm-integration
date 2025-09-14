@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------
-   Saved Collection Grid: Clickable, Arrow Alignment, Hover, White Text
+    #1. Collection Grid Styles - Clickable, Hover Effects, Colors
 --------------------------------------------------------------- */
 
 .collection-grid-all,
@@ -9,11 +9,21 @@
   background: #009fe3 !important;
   color: #fff !important;
   position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: stretch !important;
+  height: 100% !important;
 }
+
 .collection-grid-all .content,
 .collection-grid-project .content {
   color: #fff !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  justify-content: flex-start !important;
 }
+
 .collection-grid-all .label-icon,
 .collection-grid-project .label-icon {
   display: flex !important;
@@ -21,19 +31,34 @@
   gap: 0.5em !important;
   color: #fff !important;
 }
+
 .collection-grid-all .icon,
-.collection-grid-project .icon {
+.collection-grid-project .icon,
+.collection-grid-all .arrow .icon,
+.collection-grid-project .arrow .icon,
+.collection-grid-project .label-icon .icon.event::after {
   color: #fff !important;
   fill: #fff !important;
 }
+
 .collection-grid-all h5,
 .collection-grid-project h5 {
   color: #fff !important;
+  margin: 0 0 1em 0 !important;
+  line-height: 30px !important;
+  min-height: 2.4em !important;
+  display: flex !important;
+  align-items: flex-end !important;
 }
+
 .collection-grid-all p,
 .collection-grid-project p {
   color: #fff !important;
+  margin: 0 !important;
+  padding-top: 0.5em !important;
+  flex-shrink: 0 !important;
 }
+
 .collection-grid-all .arrow,
 .collection-grid-project .arrow {
   align-self: flex-end !important;
@@ -43,36 +68,35 @@
   justify-content: flex-end !important;
   position: static !important;
 }
-.collection-grid-all .arrow .icon,
 
-.collection-grid-project .arrow .icon,
-.collection-grid-project .label-icon .icon.event::after {
-  color: #fff !important;
-  fill: #fff !important;
-}
 .collection-grid-all.clickable-container,
 .collection-grid-project.clickable-container {
   cursor: pointer !important;
   text-decoration: none !important;
 }
+
 .collection-grid-all.clickable-container:active,
 .collection-grid-project.clickable-container:active {
   filter: brightness(0.95) !important;
 }
+
 .collection-grid-all a,
 .collection-grid-project a {
   color: #fff !important;
   text-decoration: none !important;
 }
+
 .collection-grid-all a:hover,
 .collection-grid-project a:hover {
   text-decoration: underline !important;
 }
 
+/* --- Collection Grid Hover States --- */
 .collection-grid-all:hover,
 .collection-grid-project:hover {
   background: #871f80 !important;
 }
+
 .collection-grid-all:hover .content,
 .collection-grid-project:hover .content,
 .collection-grid-all:hover .label-icon,
@@ -90,50 +114,21 @@
   color: #fff !important;
   fill: #fff !important;
 }
+
 .collection-grid-all:hover .label-icon .icon::after,
 .collection-grid-project:hover .label-icon .icon::after {
   color: #fff !important;
 }
+
 .collection-grid-all:hover .arrow .icon,
 .collection-grid-project:hover .arrow .icon {
   background: #008dc7 !important;
 }
+
 /* ---------------------------------------------------------------
-   Saved Collection Grid: Equal Height, Title/Description Alignment
+    #2. DTR Workbooks Plugin Styles
 --------------------------------------------------------------- */
-.collection-grid-all,
-.collection-grid-project {
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: stretch !important;
-  height: 100% !important;
-}
-.collection-grid-all .content,
-.collection-grid-project .content {
-  display: flex !important;
-  flex-direction: column !important;
-  flex: 1 1 auto !important;
-  justify-content: flex-start !important;
-}
-.collection-grid-all h5,
-.collection-grid-project h5 {
-  margin: 0 0 1em 0 !important;
-  line-height: 30px !important;
-  min-height: 2.4em !important;
-  display: flex !important;
-  align-items: flex-end !important;
-}
-.collection-grid-all p,
-.collection-grid-project p {
-  margin: 0 !important;
-  padding-top: 0.5em !important;
-  flex-shrink: 0 !important;
-}
-.collection-grid-all .arrow,
-.collection-grid-project .arrow {
-  margin-top: auto !important;
-}
-/* DTR Workbooks Frontend Styles */
+
 .dtr-workbooks-form {
     margin: 20px 0 !important;
 }
@@ -152,7 +147,7 @@
 }
 
 /* ---------------------------------------------------------------
-    #1. Membership Form Styles
+    #3. Membership Form Styles
 --------------------------------------------------------------- */
 
 /* --- Container & Typography --- */
@@ -166,19 +161,13 @@
   display: none !important;
 }
 
-#membership-form-container h1,
+/* #membership-form-container h1,
 #membership-form-container h2,
 #membership-form-container h3,
-#membership-form-container h4,
-/* ---------------------------------------------------------------
-#membership-form-container .list-checkbox-wrap .nf-field-element li label,
-#membership-form-container .list-radio-wrap .nf-field-element li label {
-  margin-left: 30px !important;
-  top: 3px !important;
-  position: relative !important;
-}
+#membership-form-container h4 {
+} */
 
-/* --- Headings & Descriptions --- */
+/* --- Form Field Labels --- */
 #membership-form-container .label-above .nf-field-label {
   margin-bottom: 0 !important;
 }
@@ -190,6 +179,22 @@
   line-height: 30px;
 }
 
+#membership-form-container #nf-label-field-168,
+#membership-form-container #nf-label-field-169 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: 600 !important;
+}
+
+#membership-form-container #nf-label-field-153,
+#membership-form-container #nf-label-field-154 {
+  font-size: 20px !important;
+  margin-bottom: 5px !important;
+  font-weight: 600 !important;
+  display: block !important;
+}
+
+/* --- Form Input Styling --- */
 #membership-form-container input[type="text"],
 #membership-form-container input[type="password"],
 #membership-form-container input[type="email"],
@@ -204,8 +209,33 @@
   box-shadow: none !important;
   border-radius: 5px;
   font-family: "Titillium Web", Sans-serif !important;
-  border: 0 !important;
+  border: 2px solid #f2f2f2 !important;
   font-size: 14px !important;
+  min-height:50px !important;
+  color:#333333 !important;
+}
+
+#membership-form-container input[type="text"]:focus,
+#membership-form-container input[type="password"]:focus,
+#membership-form-container input[type="email"]:focus,
+#membership-form-container input[type="number"]:focus,
+#membership-form-container input[type="tel"]:focus,
+#membership-form-container input[type="search"]:focus,
+#membership-form-container input[type="checkbox"]:focus,
+#membership-form-container input[type="radio"]:focus,
+#membership-form-container select:focus,
+#membership-form-container textarea:focus,
+#membership-form-container .nf-pass input[type="text"],
+#membership-form-container .nf-pass input[type="password"],
+#membership-form-container .nf-pass input[type="email"],
+#membership-form-container .nf-pass input[type="number"],
+#membership-form-container .nf-pass input[type="tel"],
+#membership-form-container .nf-pass input[type="search"],
+#membership-form-container .nf-pass input[type="checkbox"],
+#membership-form-container .nf-pass input[type="radio"],
+#membership-form-container .nf-pass select,
+#membership-form-container .nf-pass textarea {
+  border-color:#4caf50 !important;
 }
 
 /* --- Checkbox, Radio, Image Lists --- */
@@ -234,70 +264,44 @@
   position: relative;
 }
 
-/* --- Headings & Descriptions --- */
-#membership-form-container #nf-label-field-168,
-#membership-form-container #nf-label-field-169 {
-  font-size: 18px;
-  margin-bottom: 20px;
-  font-weight: 600 !important;
-}
-#membership-form-container .nf-field-description,
-#membership-form-container .nf-field-description span {
-  margin-bottom: 25px;
-  font-size: 16px !important;
-}
-
-/* --------------------------------------------------------------------------
- * My Account Overview Dashboard Grid
- * -------------------------------------------------------------------------- */
-.my-account .overview-dashboard-grid {
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: stretch !important;
-  align-items: stretch !important;
-  gap: 0 !important;
-  width: 100% !important;
-  margin: 0 auto !important;
-  max-width: 1320px !important;
-}
-.my-account .overview-dashboard-grid > div {
-  flex: 1 1 0 !important;
-  min-width: 0 !important;
-  padding: 0 1.5em !important;
-  box-sizing: border-box !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: stretch !important;
-  align-items: stretch !important;
-  margin:0 !important;
-}
-.my-account .overview-dashboard-grid .collection-grid-all,
-.my-account .overview-dashboard-grid .collection-grid {
-  height: 100% !important;
-  min-height: 320px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-start !important;
-}
-.my-account .overview-dashboard-grid .collection-grid-project {
-  min-height: 80px !important;
-}
-@media (max-width: 900px) {
-  .my-account .overview-dashboard-grid {
-    flex-direction: column !important;
-  }
-  .my-account .overview-dashboard-grid > div {
-    padding: 0 !important;
-    margin-bottom: 2em !important;
-  }
-}
+/* --- Form Descriptions --- */
 #membership-form-container .nf-field-description,
 #membership-form-container .nf-field-description span {
   margin-bottom: 25px !important;
   font-size: 16px !important;
 }
 
-/* --- Breadcrumbs/Progress --- */
+/* --- Error States --- */
+#membership-form-container .nf-error .nf-field-element .nf-element {
+    background-color: #ff3b300f !important;
+    border-width: 2px !important;
+    border-style: solid !important;
+    border-color: #ff3b30 !important;
+}
+
+#membership-form-container .nf-form-content .nf-error-wrap .nf-error-msg {
+  position: relative !important;
+  margin-top: -40px !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  left: 2px;
+  font-weight: 600;
+}
+
+#membership-form-container .nf-form-errors .nf-error-msg {
+  display: block !important;
+  margin: 0 !important;
+  padding: 9px 16px !important;
+  border: 0 !important;
+  background-color: #ff3b30 !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  position: relative !important;
+  top:5px !important;
+  left:5px;
+}
+
+/* --- Breadcrumbs & Progress --- */
 #membership-form-container ul.nf-breadcrumbs {
   display: flex !important;
   justify-content: space-evenly !important;
@@ -305,9 +309,11 @@
   position: relative !important;
   top: -17px !important;
 }
+
 #membership-form-container ul.nf-breadcrumbs li.active a {
   background: #871f80 !important;
 }
+
 #membership-form-container ul.nf-breadcrumbs li a {
   width: 32px !important;
   height: 32px !important;
@@ -318,31 +324,34 @@
   color: #fff !important;
   font-weight: 700 !important;
 }
+
 #membership-form-container .nf-progress-container {
   margin: 0 !important;
   border: none !important;
   background-color: #f2f2f2 !important;
 }
+
 #membership-form-container .nf-progress {
   height: 3px !important;
 }
+
 #membership-form-container .nf-next-previous::after,
 #membership-form-container .nf-breadcrumbs::after {
   display: none !important;
 }
 
-/* --- Inline Buttons --- */
+/* --- Button Styling --- */
 #membership-form-container .nf-form-wrap .inline-buttons .nf-field-container {
   display: flex !important;
   justify-content: space-between !important;
   gap: 10px !important;
 }
+
 #membership-form-container .nf-form-wrap .inline-buttons button {
   display: inline-block !important;
   width: auto !important;
 }
 
-/* --- Submit Button & Container --- */
 #membership-form-container .submit-container {
   float: right !important;
   margin-top: 40px !important;
@@ -352,15 +361,21 @@
 #membership-form-container [type="button"],
 #membership-form-container [type="submit"],
 #membership-form-container button {
-  background: #008dc7 !important;
-  border: 0 !important;
-  color: #fff !important;
-  font-weight: 500 !important;
-  font-family: "Titillium Web", Sans-serif !important;
-  font-size: 15px !important;
-  font-weight: 600 !important;
-  text-transform: uppercase !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    height: 48px !important;
+    max-width: 130px;
+    min-width: 130px;
+    min-height: 48px;
+    line-height: normal !important;
+    padding: 0 1rem;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: none !important;
 }
+
 #membership-form-container [type="button"]:hover,
 #membership-form-container [type="submit"]:hover,
 #membership-form-container button:hover {
@@ -381,13 +396,16 @@
   appearance: none !important;
   clear:both !important;
 }
+
 #membership-form-container .checkbox:not(last-of-type) {
   display: inline-block !important;
   margin-right: 40px !important;
 }
+
 #membership-form-container .checkbox {
   position: relative !important;
 }
+
 #membership-form-container .checkbox label {
   position: absolute !important;
   top: 0 !important;
@@ -400,6 +418,7 @@
   cursor: pointer !important;
   transition: background-color 300ms ease, color 300ms ease, box-shadow 300ms ease !important;
 }
+
 #membership-form-container .checkbox label:after {
   content: "" !important;
   position: absolute !important;
@@ -413,20 +432,25 @@
   transform: rotate(-45deg) !important;
   transition: opacity 300ms ease !important;
 }
+
 #membership-form-container .checkbox input {
   visibility: hidden !important;
 }
+
 #membership-form-container .checkbox input:checked + label {
   background-color: #fff !important;
   border-color: #fff !important;
 }
+
 #membership-form-container .checkbox input:checked + label:after {
   opacity: 1 !important;
 }
+
 #membership-form-container .checkbox:nth-child(1) input:checked + label {
   background-color: #fff !important;
   border-color: #fff !important;
 }
+
 #membership-form-container .checkbox span {
   display: inline-flex !important;
   color: #fff !important;
@@ -438,40 +462,16 @@
   font-weight: 600 !important;
 }
 
-/* --- Miscellaneous Membership Form Customizations --- */
-.full-page.vertical-half-margin.event-registration .nf-field {
-  margin-bottom: 10px !important;
-}
-.label-above .nf-field-label {
-  margin: 0 !important;
-}
-nf-field .nf-field-container.checkbox-container label {
-  font-size: 16px !important;
-}
-
-/* --- Section Titles and Adjustments --- */
-#membership-form-container #nf-label-field-153,
-#membership-form-container #nf-label-field-154 {
-  font-size: 20px !important;
-  margin-bottom: 5px !important;
-  font-weight: 600 !important;
-  display: block !important;
-}
+/* --- Specific Field Customizations --- */
 #membership-form-container #nf-field-155 {
   top: -33px !important;
   width:auto !important;
 }
 
-/* --- Hide Select2 Clear Button --- */
-#membership-form-container [type="button"].select2-selection__clear {
-  display: none !important;
-}
-
-/* Ensure the checkbox field stays full width in the left column */
-#nf-field-232-container.confirm-container {
+#membership-form-container #nf-field-232-container.confirm-container {
   width: 100% !important;
-  max-width: none !important;
-  margin: 1.5em 0 0 0 !important; /* Space after text/divider */
+  max-width: 430px !important;
+  margin: 1.5em 0 0 0 !important;
   padding: 0 !important;
   box-sizing: border-box !important;
   background: none !important;
@@ -480,110 +480,148 @@ nf-field .nf-field-container.checkbox-container label {
   align-items: flex-start !important;
 }
 
-/* Style the label and input side by side, always left aligned */
-#nf-field-232-container .nf-field-label,
-#nf-field-232-container .nf-field-element {
+#membership-form-container #nf-field-232-container .nf-field-label,
+#membership-form-container #nf-field-232-container .nf-field-element {
   display: inline-flex !important;
   align-items: center !important;
   gap: 0.5em !important;
   margin: 0 !important;
   padding: 0 !important;
+  width: 430px !important;
 }
 
-/* Checkbox input styles for consistency */
-#nf-field-232-container input[type="checkbox"] {
+#membership-form-container #nf-field-232-container input[type="checkbox"] {
   width: 28px !important;
   height: 28px !important;
   min-width: 28px !important;
   min-height: 28px !important;
   margin-right: 12px !important;
   margin-left: 0 !important;
-  accent-color: #871f80 !important; /* or your brand color */
+  accent-color: #871f80 !important;
 }
 
-/* Make sure label text fits and wraps naturally in the column */
-#nf-label-field-232 {
-  font-size: 1.1em !important;
-  color: #fff !important;
-  font-family: inherit !important;
-  line-height: 1.3 !important;
-  margin: 0 !important;
-  font-weight: 400 !important;
-  display: inline !important;
-  white-space: normal !important;
+#membership-form-container #nf-label-field-232 {
+    font-size: 0.8rem !important;
+    color: #fff !important;
+    font-family: inherit !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+    font-weight: 400 !important;
+    display: inline !important;
+    white-space: normal !important;
+    padding-left: 45px;
+    max-width: 600px !important;
+    line-height: 20px !important;
 }
 
-/* Responsive: make sure it scales with column width */
-@media (max-width: 900px) {
-  #nf-field-232-container.confirm-container {
-    margin-top: 1em !important;
-    font-size: 1em !important;
-  }
-  #nf-label-field-232 {
-    font-size: 1em !important;
-  }
-}
-
-/* --- Positioning and Miscellaneous --- */
-#nf-field-232-container {
+#membership-form-container #nf-field-232-container {
   position: absolute !important;
   left: -75% !important;
   top: 60% !important;
 }
-#nf-label-field-232 {
-  max-width: 400px !important;
-  line-height: 20px !important;
-  color: #fff !important;
+
+/* --- Select2 Dropdown Styling --- */
+#membership-form-container .select2-dropdown {
+  border:0 !important;
 }
 
-#ea11y-widget-container .ea11y-widget-footer {
+#membership-form-container [type="button"].select2-selection__clear {
   display: none !important;
 }
 
-/* --- Spinner Overlay for Loading --- */
-#nf-spinner-overlay {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  background: rgba(255, 255, 255, 0.8) !important;
-  z-index: 9999 !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-}
-.nf-spinner {
-  border: 6px solid #f3f3f3 !important;
-  border-top: 6px solid #3498db !important;
-  border-radius: 50% !important;
-  width: 50px !important;
-  height: 50px !important;
-  animation: nf-spin 1s linear infinite !important;
-}
-@keyframes nf-spin {
-  0% { transform: rotate(0deg) !important; }
-  100% { transform: rotate(360deg) !important; }
+/* --- Miscellaneous Form Adjustments --- */
+.full-page.vertical-half-margin.event-registration .nf-field {
+  margin-bottom: 10px !important;
 }
 
-/* --- Responsive Membership Form Adjustments --- */
+.label-above .nf-field-label {
+  margin: 0 !important;
+}
+
+nf-field .nf-field-container.checkbox-container label {
+  font-size: 16px !important;
+}
+
+/* --- Membership Form Responsive --- */
 @media screen and (max-width: 540px) {
   .author-information h1 {
     font-size: 2rem !important;
   }
 }
 
+@media (max-width: 900px) {
+  #membership-form-container #nf-field-232-container.confirm-container {
+    margin-top: 1em !important;
+    font-size: 1em !important;
+  }
+  #membership-form-container #nf-label-field-232 {
+    font-size: 1em !important;
+  }
+}
+
 /* ---------------------------------------------------------------
-    #2. Russell Publishing General Styles
+    #4. My Account Overview Dashboard Grid
+--------------------------------------------------------------- */
+
+.my-account .overview-dashboard-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: stretch !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  max-width: 1320px !important;
+}
+
+.my-account .overview-dashboard-grid > div {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  padding: 0 1.5em !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: stretch !important;
+  align-items: stretch !important;
+  margin:0 !important;
+}
+
+.my-account .overview-dashboard-grid .collection-grid-all,
+.my-account .overview-dashboard-grid .collection-grid {
+  height: 100% !important;
+  min-height: 320px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+.my-account .overview-dashboard-grid .collection-grid-project {
+  min-height: 80px !important;
+}
+
+@media (max-width: 900px) {
+  .my-account .overview-dashboard-grid {
+    flex-direction: column !important;
+  }
+  .my-account .overview-dashboard-grid > div {
+    padding: 0 !important;
+    margin-bottom: 2em !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+    #5. Russell Publishing General Styles
 --------------------------------------------------------------- */
 
 /* --- Ad Blocks and Article Listing --- */
 .ad-container {
   margin: 0 0 1rem 0 !important;
 }
+
 .article-listing .content h4 {
   min-height: 5rem !important;
 }
+
 .advertising-tech-specs .one-third-page {
   margin-top: 3rem !important;
 }
@@ -593,6 +631,7 @@ nf-field .nf-field-container.checkbox-container label {
   position: relative !important;
   cursor: pointer !important;
 }
+
 .menu-icon-nb_webinar {
   display: none !important;
 }
@@ -601,6 +640,7 @@ nf-field .nf-field-container.checkbox-container label {
 .select2-container {
   width: 100% !important;
 }
+
 .enable-select2 .select2-container--default .select2-selection--single {
   background-color: #f2f2f2 !important;
   box-shadow: none !important;
@@ -611,11 +651,15 @@ nf-field .nf-field-container.checkbox-container label {
   line-height: 45px !important;
   padding: 0 1rem !important;
   min-height: 2.5rem !important;
+  border:2px solid #f2f2f2 !important;
+  min-height:52px !important
 }
+
 .select2-container .select2-selection--single .select2-selection__rendered {
   padding: 0 !important;
   line-height: 50px !important;
 }
+
 .select2-container--default .select2-selection--single .select2-selection__arrow {
   height: 48px !important;
   position: absolute !important;
@@ -624,18 +668,7 @@ nf-field .nf-field-container.checkbox-container label {
   width: 20px !important;
 }
 
-/* --- Account/My Account Styles --- */
-.my-account-navigation li a {
-  color: #5c5c5c !important;
-}
-.my-account-navigation li a:hover {
-  color: #871f80 !important;
-}
-.my-account-navigation li.active a {
-  color: #871f80 !important;
-  font-weight: 600 !important;
-}
-
+/* --- Account/My Account Navigation --- */
 .my-account-navigation {
     position: relative !important;
     display: flex !important;
@@ -657,12 +690,18 @@ nf-field .nf-field-container.checkbox-container label {
     display: block !important;
     padding: 10px 15px !important;
     text-decoration: none !important;
-    color: #333 !important;
+    color: #5c5c5c !important;
     transition: color 0.3s ease !important;
 }
 
+.my-account-navigation li a:hover,
 .my-account-navigation li:hover a {
     color: #871f80 !important;
+}
+
+.my-account-navigation li.active a {
+    color: #871f80 !important;
+    font-weight: 600 !important;
 }
 
 .my-account-navigation li:after {
@@ -679,14 +718,12 @@ nf-field .nf-field-container.checkbox-container label {
     transition: transform 0.3s ease !important;
 }
 
-.my-account-navigation li.active:after {
-    transform: scaleX(1) !important;
-}
-
+.my-account-navigation li.active:after,
 .my-account-navigation li:hover:after {
     transform: scaleX(1) !important;
 }
 
+/* --- Account Messages --- */
 .my-account .updated,
 .dtr-form-success-message,
 .dtr-account-form .error {
@@ -701,17 +738,20 @@ nf-field .nf-field-container.checkbox-container label {
   margin-bottom:0 !important;
   text-align: center !important;
 }
+
 .dtr-account-form .error {
   background:#e34356 !important;
 }
+
 .dtr-account-content input[type="submit"]:hover {
   background: #871f80 !important;
 }
 
 /* ---------------------------------------------------------------
-    #3. Account Pages - Tabbed UI & Data Table
+    #6. Account Pages - Tabbed UI & Data Table
 --------------------------------------------------------------- */
 
+/* --- Container Layout --- */
 .dtr-account-container {
   display: flex !important;
   gap: 0 !important;
@@ -720,6 +760,7 @@ nf-field .nf-field-container.checkbox-container label {
   background: #f2f2f2 !important;
   margin-bottom:3rem !important;
 }
+
 .dtr-account-sidebar {
   width: 33.3% !important;
   background: #dff2f9 !important;
@@ -728,15 +769,25 @@ nf-field .nf-field-container.checkbox-container label {
   color: #333333 !important;
   border-radius: 5px !important;
 }
+
+.dtr-account-content {
+  width: 66.6% !important;
+  padding: 2rem !important;
+  box-sizing: border-box !important;
+}
+
+/* --- Tab Navigation --- */
 .dtr-account-tabs {
   list-style: none !important;
   padding: 0 !important;
   margin: 0 !important;
 }
+
 .dtr-account-tabs li {
   margin-bottom: 16px !important;
   list-style: none !important;
 }
+
 .dtr-account-tab-link {
   display: block !important;
   padding: 14px 18px !important;
@@ -749,44 +800,38 @@ nf-field .nf-field-container.checkbox-container label {
   cursor: pointer !important;
   font-size: 0.8rem !important;
 }
+
 .dtr-account-tab-link.active,
 .dtr-account-tab-link:hover {
   background: #871f80 !important;
   color: #fff !important;
 }
-.dtr-account-content {
-  width: 66.6% !important;
-  padding: 2rem !important;
-  box-sizing: border-box !important;
-}
-.dtr-account-content .label-icon {
-  padding-top: 10px !important;
-}
+
+/* --- Tab Content --- */
 .dtr-account-tab-content {
   display: none !important;
 }
+
 .dtr-account-tab-content.active {
   display: block !important;
 }
-.data-table thead tr th {
-  background-color:#009fe3 !important;
-  color:#fff !important;
-  font-weight:bold !important;
+
+.dtr-account-content .label-icon {
+  padding-top: 10px !important;
 }
-.dtr-account-container table th,
-.dtr-account-container table td {
-  text-align: left !important;
-  font-size:16px !important;
-}
+
+/* --- Form Styling --- */
 .dtr-account-tab-content .dtr-account-form {
   width: 100% !important;
   margin-bottom: 2rem !important;
 }
+
 .dtr-account-form .dtr-form-group {
   display: flex !important;
   flex-wrap: wrap !important;
   gap: 28px !important;
 }
+
 .dtr-form-label {
   display: block !important;
   width: 48% !important;
@@ -794,12 +839,15 @@ nf-field .nf-field-container.checkbox-container label {
   font-size: 16px !important;
   font-weight: 500 !important;
 }
+
 .dtr-form-label.full-width {
   width: 100% !important;
 }
+
 .dtr-form-label.half-width {
   width: 48% !important;
 }
+
 .dtr-form-input,
 .dtr-form-label select,
 .dtr-form-label input,
@@ -814,6 +862,7 @@ nf-field .nf-field-container.checkbox-container label {
   box-sizing: border-box !important;
   margin-top:8px !important;
 }
+
 .dtr-form-input:focus,
 .dtr-form-label select:focus,
 .dtr-form-label input:focus,
@@ -821,111 +870,6 @@ nf-field .nf-field-container.checkbox-container label {
   outline: 2px solid #009fe3 !important;
   background: #e7f7fc !important;
 }
-/* --- Full Width Animated Form Button --- */
-/* DISABLED: Problematic CSS that causes positioning conflicts with input elements
-.dtr-form-button,
-.form-button-element {
-  position: relative !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  box-sizing: border-box !important;
-  font-weight: bold !important;
-  font-family: "Titillium Web", Sans-serif !important;
-  font-size: 0.75rem !important;
-  padding: 0 1.25rem !important;
-  border-radius: 5px !important;
-  margin-top: 1rem !important;
-  cursor: pointer !important;
-  min-width: 2.5rem !important;
-  min-height: 2.5rem !important;
-  color: #fff !important;
-  border: none !important;
-  background: #009fe3 !important;
-  transition: background 0.2s !important;
-  overflow: hidden !important;
-}
-.dtr-form-button:hover,
-.form-button-element:hover {
-  background: #009fe3 !important;
-}
-.dtr-form-button::before,
-.form-button-element::before {
-  content: "" !important;
-  position: absolute !important;
-  left: 0 !important; top: 0 !important; bottom: 0 !important;
-  width: 0% !important;
-  background: #871f80 !important;
-  z-index: 1 !important;
-  transition: width 0.8s cubic-bezier(.6,.01,0,1) !important;
-  pointer-events: none !important;
-}
-.dtr-form-button.animating-bg::before,
-.form-button-element.animating-bg::before,
-.dtr-form-button.registered::before,
-.form-button-element.registered::before {
-  width: 100% !important;
-}
-.dtr-form-button.registered,
-.form-button-element.registered {
-  background: #871f80 !important;
-}
-.dtr-form-button .btn-content,
-.form-button-element .btn-content {
-  position: relative !important;
-  z-index: 2 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-}
-*/
-/* DISABLED: Complex spinner animations no longer used
-.fa-solid.icon.spinner {
-  margin-right: 0.5em !important;
-  opacity: 0 !important;
-  transition: opacity 0.25s !important;
-  animation: none !important;
-  background: none !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: #fff !important;
-}
-.fa-solid.icon.spinner.spin {
-  opacity: 1 !important;
-  animation: spin 0.8s linear infinite !important;
-  background: linear-gradient(90deg, #fff 0%, #871f80 100%) !important;
-  background-size: 200% 100% !important;
-  background-position: 0 0 !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  animation-name: spin, spinnerColorMask !important;
-  animation-duration: 0.8s, 0.8s !important;
-  animation-iteration-count: infinite, 1 !important;
-  animation-timing-function: linear, ease-in-out !important;
-  animation-fill-mode: forwards !important;
-}
-@keyframes spinnerColorMask {
-  0% {
-    background-position: 0 0 !important;
-  }
-  100% {
-    background-position: 100% 0 !important;
-  }
-}
-@keyframes spin {
-  100% { transform: rotate(360deg) !important; }
-}
-.fa-solid.icon.check {
-  color: #fff !important;
-  margin-right: 0.5em !important;
-  opacity: 1 !important;
-}
-.btn-text {
-  display: inline-block !important;
-}
-*/
 
 /* --- Data Table Styling --- */
 .data-table {
@@ -933,13 +877,24 @@ nf-field .nf-field-container.checkbox-container label {
   border-collapse: collapse !important;
   margin-bottom: 2rem !important;
 }
+
+.data-table thead tr th {
+  background-color:#009fe3 !important;
+  color:#fff !important;
+  font-weight:bold !important;
+}
+
 .data-table th,
-.data-table td {
+.data-table td,
+.dtr-account-container table th,
+.dtr-account-container table td {
+  text-align: left !important;
+  font-size:16px !important;
   padding: 0.6rem 1rem !important;
   border-bottom: 1px solid #e0e0e0 !important;
 }
 
-/* --- Responsive Account Layout --- */
+/* --- Account Responsive Layout --- */
 @media screen and (max-width: 900px) {
   .dtr-account-container {
     flex-direction: column !important;
@@ -963,10 +918,10 @@ nf-field .nf-field-container.checkbox-container label {
 }
 
 /* ---------------------------------------------------------------
-    #4. Ninja Forms - Full-Width Submit Button
+    #7. Ninja Forms - Full-Width Submit Button
 --------------------------------------------------------------- */
 
-/* --- Full Width Submit Button for Ninja Forms --- */
+/* --- Submit Button Container --- */
 .nf-field-container.submit-container .nf-field-element,
 .nf-field-container.submit-container .field-wrap,
 .nf-field-container.submit-container input[type="submit"].form-button-element {
@@ -987,7 +942,6 @@ nf-field .nf-field-container.checkbox-container label {
   justify-content: flex-end !important;
 }
 
-/* Force submit button to full width and hide extra flex children */
 .submit-container.form-button-container {
   display: block !important;
   width: 100% !important;
@@ -1001,7 +955,6 @@ nf-field .nf-field-container.checkbox-container label {
   display: block !important;
 }
 
-/* Make the wrapping container take full width */
 .submit-container .field-wrap,
 .submit-container .nf-field-element {
   width: 100% !important;
@@ -1010,7 +963,7 @@ nf-field .nf-field-container.checkbox-container label {
   margin: 0 !important;
 }
 
-/* Make the button itself stretch 100% */
+/* --- Button Styling --- */
 .submit-container .form-button-element,
 .dtr-input-button,
 .dtr-account-tab-content .dtr-input-button {
@@ -1037,16 +990,17 @@ nf-field .nf-field-container.checkbox-container label {
   max-width:300px !important;
   margin:20px auto !important;
 }
+
 .submit-container .form-button-element:hover,
 .dtr-account-tab-content .dtr-input-button:hover {
   background:#871f80 !important;
 }
+
 .dtr-account-tab-content .dtr-input-button:disabled {
     opacity:1 !important;
     background:#871f80 !important;
 }
 
-/* Ensure parent containers do not restrict width */
 .submit-container,
 .submit-container .nf-field,
 .submit-container .nf-field-element {
@@ -1055,7 +1009,6 @@ nf-field .nf-field-container.checkbox-container label {
   margin: 0 !important;
 }
 
-/* Remove max-width if Ninja Forms sets one */
 .submit-container .form-button-element,
 .submit-container .nf-field input[type="submit"] {
     max-width: none !important;
@@ -1067,55 +1020,12 @@ nf-field .nf-field-container.checkbox-container label {
     justify-content: center !important;
 }
 
-/* Additional specific targeting for Ninja Forms buttons */
-input[type="submit"].ninja-forms-field,
-input[type="submit"].nf-element,
-input[type="submit"].dtr-input-button,
-input[type="submit"].custom-btn-decorated,
-input[type="submit"].form-button-element {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    line-height: normal !important;
-    height: 48px !important;
-    padding: 0 1rem !important;
-    box-sizing: border-box !important;
-}
-
 /* ---------------------------------------------------------------
-    #5. Ninja Forms - Loading Animation
-
-
-.nf-loading-overlay {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  background: rgba(255,255,255,0.7) !important;
-  z-index: 9999 !important;
-}
-.nf-loading-spinner {
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  width: 50px !important;
-  height: 50px !important;
-  border: 5px solid #ccc !important;
-  border-top-color: #0073aa !important;
-  animation: spin 1s linear infinite !important;
-}
-@keyframes spin {
-  to { transform: rotate(360deg) !important; }
-}
-
-
-/* ---------------------------------------------------------------
-    #4. Gated Lead Forms & Webinars
+    #8. Gated Lead Forms & Webinars
 --------------------------------------------------------------- */
 
-.gated-lead-form-content {
+/* --- Container Styling --- */
+.gated-lead-form-content.webinars {
   margin-top: -45px !important;
   padding: 1.5rem !important;
   padding-top: 2rem !important;
@@ -1126,16 +1036,36 @@ input[type="submit"].form-button-element {
   width: 93.996% !important;
   font-family: "Titillium Web", Sans-serif !important;
 }
+
+.gated-lead-form-content {
+  margin-top: -10px !important;
+  padding: 1.5rem !important;
+  padding-top: 1.5rem !important;
+  padding-bottom: 1rem !important;
+  border-radius: 5px !important;
+  background: #f2f2f2 !important;
+  z-index: 0 !important;
+  position: relative !important;
+  width: 100% !important;
+  font-family: "Titillium Web", Sans-serif !important;
+}
+
+.gated-lead-form-content .nf-form-cont {
+  margin-top:-70px;
+}
+
 .gated-lead-form-content.webinars label {
   color:#333333 !important;
   font-size:19px !important;
   font-weight:400 !important;
 }
+
 .gated-lead-form-content.webinars .checkbox-container .checkbox-wrap label {
   font-size:16px !important;
   font-weight:normal !important;
 }
 
+/* --- Form Input Styling --- */
 .gated-lead-form-content input[type='checkbox'] {
   width: 1.25rem !important;
   min-width: 1.25rem !important;
@@ -1149,12 +1079,14 @@ input[type="submit"].form-button-element {
   background-color: #fff !important;
   border:1px solid #ddd !important;
 }
+
 #acf-questions-form label.question-label {
   margin-bottom: 0 !important;
   display: block !important;
   font-size: 19px !important;
   color: #424242 !important;
 }
+
 .gated-lead-form-content label.answer-label,
 .gated-lead-form-content select,
 .gated-lead-form-content textarea {
@@ -1163,10 +1095,12 @@ input[type="submit"].form-button-element {
   display: block !important;
   font-size:16px !important;
 }
+
 .gated-lead-form-content select {
   width: 100% !important;
   background: #fff !important;
 }
+
 #acf-questions-form input[type='radio'],
 #acf-questions-form input[type='checkbox'],
 #acf-questions-form textarea,
@@ -1178,13 +1112,16 @@ input[type="submit"].form-button-element {
   position: relative !important;
   margin-right: 8px !important;
 }
+
 #acf-questions-form input[type='radio'],
 #acf-questions-form input[type='checkbox'] {
   top:7px !important;
 }
+
 .gated-lead-form-content.webinars textarea {
   margin-bottom: 20px !important;
 }
+
 .gated-lead-form-content.webinars label.answer-label,
 .gated-lead-form-content.webinars select,
 .gated-lead-form-content.webinars textarea {
@@ -1203,10 +1140,10 @@ input[type="submit"].form-button-element {
 }
 
 /* ---------------------------------------------------------------
-    #4.1. ACF Radio Button & Checkbox Alignment
+    #8.1. ACF Radio Button & Checkbox Alignment
 --------------------------------------------------------------- */
 
-/* ACF Radio Button Label Styling for Perfect Vertical Alignment */
+/* --- ACF Radio Button Label Styling --- */
 .acf-radio-label {
   display: flex !important;
   align-items: center !important;
@@ -1223,7 +1160,7 @@ input[type="submit"].form-button-element {
   flex-shrink: 0 !important;
 }
 
-/* ACF Checkbox Label Styling for Perfect Vertical Alignment */
+/* --- ACF Checkbox Label Styling --- */
 .acf-checkbox-label {
   display: flex !important;
   align-items: center !important;
@@ -1241,52 +1178,65 @@ input[type="submit"].form-button-element {
   border:1px solid #2f2f2f !important;
 }
 
-/* @media screen and (min-width: 62.5em) {
-  #header .inner-container.desktop-container {
-    margin:0.5rem 4% !important;
-  }
-} */
+/* ---------------------------------------------------------------
+    #9. Miscellaneous UI Elements
+--------------------------------------------------------------- */
 
+/* --- Accessibility Widget --- */
+#ea11y-widget-container .ea11y-widget-footer {
+  display: none !important;
+}
+
+/* --- Button Variations --- */
 .full-page.vertical-half-margin.event-registration.purple-button .event-register-button {
   background-color: #871f80 !important;
 }
+
 .full-page.vertical-half-margin.event-registration.purple-button .event-register-button:hover {
   background-color: #009fe3 !important;
 }
 
+#gated-content-signup-button,
+#member-sidebar-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    height: 48px !important;
+    max-width: 200px;
+    min-width: 200px;
+    min-height: 48px;
+    line-height: normal !important;
+    padding: 0 1rem;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 10px 0 0 !important;
+    text-transform: none !important;
+}
+
+#gated-content-signup-button::after,
+#member-sidebar-btn::after {
+    width: 40px !important;
+    height: 48px !important;
+    line-height: 48px !important;
+    padding: 0 !important;
+    right: 0 !important;
+}
+
+#gated-content-signup-button.purple-button:hover {
+    background-color: #009fe3 !important;
+}
+
+#member-sidebar-btn {
+  background-color: #009fe3 !important;
+  margin:20px 0 !important;
+}
+
+/* --- Content Containers --- */
 .image-only-hero-content.shifted-hero h1 {
   min-height:130px !important;
   max-height:130px !important
 }
-
-.facetwp-template publication.publication-listing {
-  background:#f2f2f25f !important;
-}
-
-.facetwp-template publication.publication-listing .content {
-  padding-right:25px !important;
-}
-
-.facetwp-template publication.publication-listing .image-layover-icon.publication {
-  background:#fff !important;
-}
-.date.top-right {
-    min-width: 2rem;
-    min-height: 2rem;
-    height: 2rem;
-    line-height: 2rem;
-    padding: 0 1rem;
-    background:#009fe3;
-    position: absolute;
-    top:0;
-    right:0;
-    border-radius:0 0 0 0.25rem;
-    color:#fff;
-    font-weight:600;
-    font-size:13px;
-    /* border:3px solid #fff; */
-}
-
 
 .image-only-hero-content.shifted-hero {
     border-width:30px 30px 20px 30px !important;
@@ -1310,35 +1260,996 @@ input[type="submit"].form-button-element {
     line-height:24px !important;
     text-wrap: pretty;
 }
-#gated-content-signup-button,
-#member-sidebar-btn {
-    display: inline-flex !important;
+
+/* --- Publication & Date Styling --- */
+.facetwp-template publication.publication-listing {
+  background:#f2f2f25f !important;
+  border:1px solid #dddddd;
+  border-radius:3px;
+}
+
+.facetwp-template publication.publication-listing .content {
+  padding-right:25px !important;
+}
+
+.facetwp-template publication.publication-listing .image-layover-icon.publication {
+  background:#fff !important;
+}
+
+.date.top-right {
+    min-width: 2rem;
+    min-height: 2rem;
+    height: 2rem;
+    line-height: 2rem;
+    padding: 0 1rem;
+    background:#009fe3;
+    position: absolute;
+    top:0;
+    right:0;
+    border-radius:0 0 0 0.25rem;
+    color:#fff;
+    font-weight:600;
+    font-size:13px;
+}
+
+.clickable-container img {
+  object-fit: cover !important;
+  aspect-ratio: 16/9 !important;
+}
+
+/* Theme Modal Specific Styles */
+#login-modal-container.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+#login-modal-container.modal.modal-open {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
     align-items: center;
     justify-content: center;
-    height: 48px !important;
-    max-width: 200px;
-    min-width: 200px;
-    min-height: 48px;
-    line-height: normal !important;
-    padding: 0 1rem;
-    border-radius: 4px;
-    font-size: 15px;
+}
+
+/* ========================================
+   UNIVERSAL BUTTON UTILITY CLASSES
+   Ready for frontend.css integration
+   ======================================== */
+
+/* Wrapper full width */
+.ks-split-btn {
+    display: flex;
+    width: 100%;
+    position: relative;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    min-height: 52px;
+}
+
+/* Main + toggle buttons */
+.ks-main-btn,
+.ks-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 0.6rem 0.95rem;
+    border: 0;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.ks-main-btn {
+    flex: 1;
+    border-radius: 3px 0 0 0;
+    text-decoration: none;
+}
+
+.ks-toggle-btn {
+    flex: 0 0 60px;
+    /* background: #6f1c6f; */
+    color: #fff;
+    border-radius: 0 3px 0 0;
+    justify-content: center;
+}
+
+.ks-toggle-btn i {
+    font-family: 'Font Awesome 6 Pro';
+    font-weight: 400;
+    content: '\f078'; /* Unicode for fa-chevron-down */
+}
+
+.ks-toggle-btn[aria-expanded="true"] i {
+    content: '\f077'; /* Unicode for fa-chevron-up */
+}
+
+/* Dropdown menu (hidden by default, animated slide) */
+.ks-menu {
+    position: absolute;
+    top: calc(100% + 0px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    width: 100%;
+    /* border: 1px solid rgba(0,0,0,0.1); */
+    border-radius: 0 0 3px 3px !important;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    /* box-shadow: 0 6px 16px rgba(0,0,0,0.08); */
+    z-index: 9999;
+
+    display: flex;
+    justify-content: space-around;
+
+    /* transition for slide down effect */
+    opacity: 0;
+    visibility: hidden;
+    transform-origin: top center;
+    transition: opacity 0.25s ease, 
+                visibility 0.25s ease,
+                transform 0.25s ease;
+}
+
+/* Open state: slide down */
+.ks-menu.ks-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    width: 100%;
+    border-radius: 0 0 3px 3px !important;
+}
+
+.ks-menu li {
+    flex: 1;
+    text-align: center;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.ks-menu a {
+    display: block;
+    padding: 12px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 0 0 3px 3px;
+}
+
+/* Base shimmer effect - required for all shimmer effects */
+.shimmer-effect {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.shimmer-effect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
+}
+
+.shimmer-effect:hover::before {
+    left: 100%;
+}
+
+/* ========================================
+   UNIVERSAL BUTTON COLOR CLASSES
+   ======================================== */
+
+/* Purple theme (brand color) */
+.btn-purple {
+    background: linear-gradient(135deg, #871f80 0%, #6e1a6e 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-purple:hover {
+    background: linear-gradient(135deg, #6e1a6e 0%, #5a1557 100%);
+    
+    
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Blue theme */
+.btn-blue {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%) !important;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-blue:hover {
+    background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Green theme */
+.btn-green {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-green:hover {
+    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Red theme */
+.btn-red {
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-red:hover {
+    background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Orange theme */
+.btn-orange {
+    background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-orange:hover {
+    background: linear-gradient(135deg, #dd6b20 0%, #c05621 100%);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Teal theme */
+.btn-teal {
+    background: linear-gradient(135deg, #38b2ac 0%, #319795 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-teal:hover {
+    background: linear-gradient(135deg, #319795 0%, #2c7a7b 100%);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Dark blue theme */
+.btn-dark-blue {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-dark-blue:hover {
+    background: linear-gradient(135deg, #1a202c 0%, #171923 100%);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Gray theme */
+.btn-gray {
+    background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-gray:hover {
+    background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Pink theme */
+.btn-pink {
+    background: linear-gradient(135deg, #ed64a6 0%, #d53f8c 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-pink:hover {
+    background: linear-gradient(135deg, #d53f8c 0%, #b83280 100%);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Cyan theme */
+.btn-cyan {
+    background: linear-gradient(135deg, #0bc5ea 0%, #00b3d7 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-cyan:hover {
+    background: linear-gradient(135deg, #00b3d7 0%, #0987a0 100%);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Indigo theme */
+.btn-indigo {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-indigo:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #5b21b6 100%);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Gold theme */
+.btn-gold {
+    background: linear-gradient(135deg, #f6e05e 0%, #ecc94b 100%);
+    color: #2d3748;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+    background: linear-gradient(135deg, #ecc94b 0%, #d69e2e 100%);
+    color: #2d3748;
+    text-decoration: none;
+}
+
+/* White theme */
+.btn-white {
+    background: #ffffff;
+    color: #2d3748;
+    border: 2px solid #e2e8f0;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-white:hover {
+    background: #f7fafc;
+    color: #2d3748;
+    text-decoration: none;
+}
+
+/* Black theme */
+.btn-black {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-black:hover {
+    background: linear-gradient(135deg, #1a202c 0%, #171923 100%);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* ========================================
+   BUTTON SIZE VARIANTS
+   ======================================== */
+
+.btn-xs {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    min-height: 28px;
+    font-weight: 500;
+}
+
+.btn-small, .btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    min-height: 36px;
+    font-weight: 500;
+}
+
+.btn-medium, .btn-md {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    min-height: 44px;
+    font-weight: 600;
+}
+
+.btn-large, .btn-lg {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+    min-height: 56px;
+    font-weight: 600;
+}
+
+.btn-xl {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    min-height: 64px;
+    font-weight: 600;
+}
+
+.btn-2xl {
+    padding: 1.2rem 2.5rem;
+    font-size: 1.4rem;
+    min-height: 72px;
     font-weight: 700;
-    margin: 0 10px 0 0 !important;
-    text-transform: none !important;
 }
-#gated-content-signup-button::after,
-#member-sidebar-btn::after {
+
+/* ========================================
+   BUTTON SHAPE VARIANTS
+   ======================================== */
+
+.btn-rounded {
+    border-radius: 6px;
+}
+
+.btn-rounded-md {
+    border-radius: 8px;
+}
+
+.btn-rounded-lg {
+    border-radius: 12px;
+}
+
+.btn-pill {
+    border-radius: 50px;
+}
+
+.btn-square {
+    border-radius: 0;
+}
+
+.btn-subtle {
+    border-radius: 4px;
+}
+
+/* ========================================
+   BUTTON WIDTH VARIANTS
+   ======================================== */
+
+.btn-full {
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+
+.btn-auto {
+    width: auto;
+    display: inline-block;
+}
+
+.btn-fit {
+    width: fit-content;
+    display: inline-block;
+}
+
+/* ========================================
+   ANIMATION VARIANTS
+   ======================================== */
+
+/* Shimmer speed variants */
+.shimmer-fast::before {
+    transition: left 0.3s ease;
+}
+
+.shimmer-slow::before {
+    transition: left 0.8s ease !important;
+}
+
+/* Shimmer intensity variants */
+.shimmer-subtle::before {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+.shimmer-strong::before {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+/* Gold shimmer variant */
+.btn-gold.shimmer-effect::before {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+}
+
+/* Pulse effect */
+.btn-pulse {
+    animation: btn-pulse 2s infinite;
+}
+
+@keyframes btn-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(135, 31, 128, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(135, 31, 128, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(135, 31, 128, 0);
+    }
+}
+
+/* Bounce effect on hover */
+.btn-bounce:hover {
+    animation: btn-bounce 0.6s;
+}
+
+@keyframes btn-bounce {
+    0%, 20%, 60%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    80% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Shake effect */
+.btn-shake:hover {
+    animation: btn-shake 0.5s;
+}
+
+@keyframes btn-shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-2px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(2px);
+    }
+}
+
+/* ========================================
+   BUTTON STATE VARIANTS
+   ======================================== */
+
+.btn-loading {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: btn-spin 0.8s linear infinite;
+}
+
+@keyframes btn-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ========================================
+   OUTLINE BUTTON VARIANTS
+   ======================================== */
+
+.btn-outline-purple {
+    background: transparent;
+    color: #871f80;
+    border: 2px solid #871f80;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-purple:hover {
+    background: #871f80;
+    color: #fff;
+}
+
+.btn-outline-blue {
+    background: transparent;
+    color: #4299e1;
+    border: 2px solid #4299e1;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-blue:hover {
+    background: #4299e1;
+    color: #fff;
+}
+
+.btn-outline-green {
+    background: transparent;
+    color: #48bb78;
+    border: 2px solid #48bb78;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-green:hover {
+    background: #48bb78;
+    color: #fff;
+}
+
+.btn-outline-red {
+    background: transparent;
+    color: #f56565;
+    border: 2px solid #f56565;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-red:hover {
+    background: #f56565;
+    color: #fff;
+}
+
+/* ========================================
+   GHOST BUTTON VARIANTS
+   ======================================== */
+
+.btn-ghost {
+    background: transparent;
+    border: none;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+.btn-ghost:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.btn-ghost-purple {
+    background: transparent;
+    border: none;
+    color: #871f80;
+    transition: all 0.3s ease;
+}
+
+.btn-ghost-purple:hover {
+    background: rgba(135, 31, 128, 0.1);
+    color: #6e1a6e;
+    
+}
+
+/* ========================================
+   TOGGLE SWITCH STYLING (CodyHouse Style)
+   ======================================== */
+
+.swp-toggle {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    cursor: pointer !important;
+    user-select: none !important;
+}
+
+.swp-toggle-checkbox {
+    position: absolute !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    pointer-events: none !important;
+}
+
+.swp-toggle-switch {
+    position: relative !important;
+    display: inline-block !important;
+    width: 48px !important;
+    height: 24px !important;
+    background: #e2e8f0 !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+    border: 2px solid #e2e8f0 !important;
+}
+
+.swp-toggle-switch--mini {
     width: 40px !important;
-    height: 48px !important;
-    line-height: 48px !important;
-    padding: 0 !important;
-    right: 0 !important;
+    height: 20px !important;
+    border-radius: 10px !important;
 }
-#gated-content-signup-button.purple-button:hover {
-    background-color: #009fe3 !important;
+
+.swp-toggle-switch::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 2px !important;
+    left: 2px !important;
+    width: 16px !important;
+    height: 16px !important;
+    background: #fff !important;
+    border-radius: 50% !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
-#member-sidebar-btn {
-  background-color: #009fe3 !important;
-  margin:20px 0 !important;
+
+.swp-toggle-switch--mini::before {
+    width: 12px !important;
+    height: 12px !important;
 }
+
+/* Active/Checked State */
+.swp-toggle-checkbox:checked + .swp-toggle-switch {
+    background: #48bb78 !important;
+    border-color: #48bb78 !important;
+}
+
+.swp-toggle-checkbox:checked + .swp-toggle-switch::before {
+    transform: translateX(24px) !important;
+}
+
+.swp-toggle-checkbox:checked + .swp-toggle-switch--mini::before {
+    transform: translateX(20px) !important;
+}
+
+/* Focus State */
+.swp-toggle-switch:focus,
+.swp-toggle-checkbox:focus + .swp-toggle-switch {
+    outline: 2px solid #48bb78 !important;
+    outline-offset: 2px !important;
+}
+
+/* Hover State */
+.swp-toggle:hover .swp-toggle-switch {
+    background: #cbd5e0 !important;
+    border-color: #cbd5e0 !important;
+}
+
+.swp-toggle:hover .swp-toggle-checkbox:checked + .swp-toggle-switch {
+    background: #48bb78 !important;
+    border-color: #48bb78 !important;
+}
+
+/* Text Styling */
+.swp-toggle .swp-p {
+    font-family: "Titillium Web", Sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: #fff !important;
+    margin: 0 !important;
+}
+
+/* Disabled State */
+.swp-toggle-checkbox:disabled + .swp-toggle-switch {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}
+
+.swp-toggle-checkbox:disabled + .swp-toggle-switch::before {
+    background: #f7fafc !important;
+}
+
+/* Accessibility improvements */
+.swp-toggle-switch[role="switch"][aria-checked="true"] {
+    background: #48bb78 !important;
+    border-color: #48bb78 !important;
+}
+
+.swp-toggle-switch[role="switch"][aria-checked="false"] {
+    background: #e2e8f036 !important;
+    border-color: #e2e8f0 !important;
+}
+
+form.searchwp-form .swp-flex--gap-md {
+  row-gap: 1rem !important;
+}
+
+.homepage-hero .hero-image-carousel .carousel-cell .inner-container .button {
+    flex: 1 !important;
+    height:52px !important;
+    border-radius: 3px !important;
+    text-decoration: none !important;
+    font-size:18px !important;
+    font-weight:600 !important;
+    position: relative !important;
+    overflow: hidden !important;
+    transition: all 0.3s ease !important;
+    line-height:1.2rem !important;
+    min-width: 250px !important;
+    margin-top:35px !important
+}
+
+.button.large:after {
+  line-height:1.5rem !important;
+}
+
+/* ========================================
+   USAGE EXAMPLES IN COMMENTS
+   ======================================== */
+
+/*
+USAGE EXAMPLES:
+
+Basic colored buttons:
+<button class="btn-purple">Purple Button</button>
+<button class="btn-blue">Blue Button</button>
+<a class="btn-green" href="#">Green Link</a>
+
+With sizes:
+<button class="btn-purple btn-small">Small Purple</button>
+<button class="btn-blue btn-large">Large Blue</button>
+<button class="btn-green btn-xl">XL Green</button>
+
+With shapes:
+<button class="btn-purple btn-pill">Pill Purple</button>
+<button class="btn-blue btn-rounded">Rounded Blue</button>
+
+With effects:
+<button class="btn-purple shimmer-effect">Shimmer Purple</button>
+<button class="btn-blue btn-pulse">Pulsing Blue</button>
+<button class="btn-green btn-bounce">Bouncy Green</button>
+
+Full width:
+<button class="btn-purple btn-full">Full Width</button>
+
+Outline variants:
+<button class="btn-outline-purple">Outline Purple</button>
+<button class="btn-outline-blue btn-large">Large Outline Blue</button>
+
+Ghost variants:
+<button class="btn-ghost-purple">Ghost Purple</button>
+
+Loading state:
+<button class="btn-purple btn-loading">Loading...</button>
+
+Combinations:
+<button class="btn-purple btn-large btn-pill shimmer-effect">Large Pill Purple with Shimmer</button>
+<a class="btn-blue btn-medium btn-rounded btn-full" href="#">Medium Rounded Full Width Blue Link</a>
+
+*/
+
+/* ========================================
+   LOGIN MODAL FORM STYLING
+   ======================================== */
+
+.login-modal form {
+  width: 100% !important;
+}
+
+.login-modal .nf-form-cont {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 25px !important;
+    min-height: 100% !important;
+    padding: 2rem 0 !important;
+    width:100% !important;
+}
+
+.login-modal .nf-form-wrap {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+.login-modal .nf-form-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+}
+
+.login-modal .nf-form-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+}
+
+.login-modal .nf-mp-body {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 25px !important;
+}
+
+.login-modal .nf-row {
+    margin-bottom: 20px !important;
+    width: 100% !important;
+}
+
+.login-modal .nf-field-container {
+    margin-bottom: 0 !important;
+    width: 100% !important;
+}
+
+.login-modal input[type="text"],
+.login-modal input[type="password"] {
+    width: 100% !important;
+    padding: 0.75rem !important;
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 5px !important;
+    font-family: "Titillium Web", Sans-serif !important;
+    font-size: 14px !important;
+    max-height: 48px !important;
+    box-sizing: border-box !important;
+}
+
+.login-modal input[type="text"]:focus,
+.login-modal input[type="password"]:focus {
+    border-color: #009fe3 !important;
+    outline: none !important;
+}
+
+.login-modal .nf-field-label label {
+    font-family: "Titillium Web", Sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    margin-bottom: 5px !important;
+    display: block !important;
+}
+
+.login-modal input[type="submit"] {
+    width: 100% !important;
+    margin-top: -10px !important;
+}
+
+.login-modal .html-wrap a {
+    color: #009fe3 !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    text-align: right;
+}
+
+.login-modal .html-wrap a:hover {
+    text-decoration: underline !important;
+}
+

@@ -218,7 +218,7 @@ function workbooks_webinar_registration_shortcode($atts) {
             <div class="reveal-text">Webinar has been added to Events & Webinars</div>
             HTML;
         } else {
-            echo '<button class="webinar-register-button webinar-registration not-registered" data-event-id="' . esc_attr($post_id) . '">Register Now</button>';
+            echo '<a class="webinar-register-button btn-blue webinar-registration not-registered" data-event-id="' . esc_attr($post_id) . '">Register Now</a>';
         }
         echo '</div>';
         

@@ -656,7 +656,6 @@ class DTR_Workbooks_Integration {
             [$this, 'admin_person_record_page']
         );
 
-
         // Registered Users listing
         add_submenu_page(
             'dtr-workbooks',
@@ -665,6 +664,16 @@ class DTR_Workbooks_Integration {
             'manage_options',
             'dtr-workbooks-users',
             [$this, 'admin_registered_users_page']
+        );
+
+        // Form Loader
+        add_submenu_page(
+            'dtr-workbooks',
+            __('Form Loader', 'dtr-workbooks'),
+            __('Form Loader', 'dtr-workbooks'),
+            'manage_options',
+            'dtr-workbooks-form-loader',
+            [$this, 'admin_form_loader_page']
         );
 
         // Employer Sync page
@@ -697,21 +706,21 @@ class DTR_Workbooks_Integration {
             [$this, 'admin_toi_aoi_mapping_page']
         );
 
-        // Webinar Registration Test page
+        // Webinar Registration page
         add_submenu_page(
             'dtr-workbooks',
-            __('Webinar Registration Test', 'dtr-workbooks'),
-            __('Webinar Registration Test', 'dtr-workbooks'),
+            __('Webinar Registration', 'dtr-workbooks'),
+            __('Webinar Registration', 'dtr-workbooks'),
             'manage_options',
             'dtr-workbooks-webinar-test',
             [$this, 'admin_webinar_test_page']
         );
 
-        // Lead Generation Test page
+        // Lead Registration page
         add_submenu_page(
             'dtr-workbooks',
-            __('Lead Generation Test', 'dtr-workbooks'),
-            __('Lead Generation Test', 'dtr-workbooks'),
+            __('Lead Registration', 'dtr-workbooks'),
+            __('Lead Registration', 'dtr-workbooks'),
             'manage_options',
             'dtr-workbooks-lead-generation-test',
             [$this, 'admin_lead_generation_test_page']
@@ -1166,6 +1175,20 @@ class DTR_Workbooks_Integration {
             include $file;
         } else {
             echo '<p>'.esc_html__('The file admin/content-member-registrations.php was not found.','dtr-workbooks').'</p>';
+        }
+        echo '</div>';
+    }
+
+    /**
+     * Form Loader page
+     */
+    public function admin_form_loader_page() {
+        $file = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/ninja-forms-loader.php';
+        echo '<div class="wrap plugin-admin-content"><h1>'.esc_html__('Form Loader','dtr-workbooks').'</h1>';
+        if (file_exists($file)) {
+            include $file;
+        } else {
+            echo '<p>'.esc_html__('The file admin/ninja-forms-loader.php was not found.','dtr-workbooks').'</p>';
         }
         echo '</div>';
     }
@@ -3610,4 +3633,248 @@ add_action('wp_ajax_dtr_get_workbooks_event_fields', function() {
         wp_send_json_error(['message' => 'Workbooks API error: ' . $e->getMessage()]);
     }
 });
+
+// Add Ninja Forms loader for all submissions
+/* add_action('wp_footer', function() {
+    // Get loader settings
+    $loader_options = get_option('dtr_ninja_forms_loader', [
+        'enabled' => 1,
+        'logo_color' => get_template_directory_uri() . '/img/logos/DTR_Logo-02.svg',
+        'logo_white' => get_template_directory_uri() . '/img/logos/DTR_Logo-01.svg',
+        'background_color' => 'rgba(255,255,255,0.8)',
+        'progress_color' => '#871f80',
+        'text_color' => '#871f80',
+        'submitting_text' => 'Submitting...',
+        'success_text' => 'Submission Successful',
+        'logo_size' => '7rem',
+        'animation_speed' => '0.3s',
+    ]);
+    
+    // Only render if enabled
+    if (!$loader_options['enabled']) {
+        return;
+    }
+    ?>
+    <style>
+    #nf-modern-loader-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: <?php echo esc_attr($loader_options['background_color']); ?>;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity <?php echo esc_attr($loader_options['animation_speed']); ?> ease;
+    }
+    #nf-modern-loader-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .nf-modern-loader-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    #nf-modern-loader-logo {
+      max-width: <?php echo esc_attr($loader_options['logo_size']); ?>;
+      transform: scale(0);
+      opacity: 0;
+      transition: transform <?php echo esc_attr($loader_options['animation_speed']); ?> ease 0.4s, opacity <?php echo esc_attr($loader_options['animation_speed']); ?> ease 0.4s;
+      margin-bottom: 1rem;
+    }
+    #nf-modern-loader-overlay.active #nf-modern-loader-logo {
+      transform: scale(1);
+      opacity: 1;
+    }
+    #nf-modern-loader-progress {
+      position: absolute;
+      bottom: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: <?php echo esc_attr($loader_options['progress_color']); ?>;
+      z-index: 1;
+      transition: bottom 0.2s linear;
+    }
+    #nf-modern-loader-message {
+      font-size: 1.25rem;
+      color: <?php echo esc_attr($loader_options['text_color']); ?>;
+      font-weight: bold;
+      margin-top: 1rem;
+      font-family: "Titillium Web", Sans-serif !important;
+      z-index: 3;
+      position: relative;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    #nf-modern-loader-message.visible {
+      opacity: 1;
+    }
+    #nf-modern-loader-message::before {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      color: #fff;
+      z-index: 1;
+      clip-path: inset(100% 0 0 0);
+      transition: clip-path 0.2s linear;
+    }
+    #nf-modern-loader-message.progress-active::before {
+      clip-path: var(--progress-clip, inset(100% 0 0 0));
+    }
+    </style>
+
+    <div id="nf-modern-loader-overlay">
+      <div class="nf-modern-loader-content">
+        <img id="nf-modern-loader-logo"
+             src="<?php echo esc_url($loader_options['logo_color']); ?>"
+             data-logo-color="<?php echo esc_url($loader_options['logo_color']); ?>"
+             data-logo-white="<?php echo esc_url($loader_options['logo_white']); ?>"
+             alt="Logo">
+        <div id="nf-modern-loader-message" data-text="<?php echo esc_attr($loader_options['submitting_text']); ?>"><?php echo esc_html($loader_options['submitting_text']); ?></div>
+      </div>
+      <div id="nf-modern-loader-progress"></div>
+    </div>
+
+    <script>
+    jQuery(function($) {
+      // Check if loader is enabled
+      console.log('Ninja Forms Loader initialized');
+      
+      var $overlay = $('#nf-modern-loader-overlay');
+      var $logo = $('#nf-modern-loader-logo');
+      var $progress = $('#nf-modern-loader-progress');
+      var $message = $('#nf-modern-loader-message');
+
+      var submitMsgTimeout, successMsgTimeout, hideTimeout;
+      var submittingShown = false;
+
+      function resetMessage() {
+        $message.removeClass('visible progress-active');
+        $message.text('<?php echo esc_js($loader_options['submitting_text']); ?>');
+        $message.attr('data-text', '<?php echo esc_js($loader_options['submitting_text']); ?>');
+        $message.css('--progress-clip', 'inset(100% 0 0 0)');
+        submittingShown = false;
+      }
+
+      function startLoader() {
+        console.log('startLoader() called');
+        clearTimeout(submitMsgTimeout);
+        clearTimeout(successMsgTimeout);
+        clearTimeout(hideTimeout);
+        $overlay.addClass('active');
+        console.log('Overlay activated');
+        $logo.attr('src', $logo.data('logo-color'));
+        $progress.css('bottom', '-100%');
+        resetMessage();
+
+        // Fade in "Submitting..." after 2s
+        submitMsgTimeout = setTimeout(function() {
+          $message.text('<?php echo esc_js($loader_options['submitting_text']); ?>');
+          $message.attr('data-text', '<?php echo esc_js($loader_options['submitting_text']); ?>');
+          $message.addClass('visible progress-active');
+          console.log('Message shown: submitting');
+          submittingShown = true;
+        }, 2000);
+      }
+      function updateProgress(percent) {
+        var newBottom = -100 + percent;
+        $progress.css('bottom', newBottom + '%');
+        
+        // Change logo to white version when progress reaches 50%
+        if (percent >= 50) {
+          $logo.attr('src', $logo.data('logo-white'));
+        }
+        
+        // Update text clipping mask to reveal white text progressively
+        var clipValue = Math.max(0, 100 - percent);
+        $message.css('--progress-clip', 'inset(' + clipValue + '% 0 0 0)');
+      }
+      function endLoader() {
+        $progress.css('bottom', '0%');
+        // Ensure text is fully white when progress reaches 100%
+        $message.css('--progress-clip', 'inset(0% 0 0 0)');
+
+        // If "Submitting..." hasn't shown yet, show it now (for edge cases)
+        if (!submittingShown) {
+          $message.text('<?php echo esc_js($loader_options['submitting_text']); ?>');
+          $message.attr('data-text', '<?php echo esc_js($loader_options['submitting_text']); ?>');
+          $message.addClass('visible progress-active');
+          submittingShown = true;
+        }
+
+        // Change to "Submission Successful" and keep visible for 2 seconds
+        successMsgTimeout = setTimeout(function() {
+          var successText = '<?php echo esc_js($loader_options['success_text']); ?>';
+          $message.text(successText);
+          $message.attr('data-text', successText);
+          // Remain visible for another 2 seconds, then fade out
+          hideTimeout = setTimeout(function() {
+            $overlay.removeClass('active');
+            $progress.css('bottom', '-100%');
+            // Fade out message for next time
+            $message.removeClass('visible progress-active');
+            $message.css('--progress-clip', 'inset(100% 0 0 0)');
+          }, 2000);
+        }, 200); // slight pause for smoothness, adjust as desired
+      }
+
+      // Show loader on Ninja Forms submit button click
+      $(document).on('click', '.nf-form-content input[type="submit"], .nf-form-content button[type="submit"], .ninja-forms-field[type="submit"], input.ninja-forms-field[type="submit"]', function(e) {
+        console.log('Ninja Forms submit button clicked, starting loader...');
+        startLoader();
+      });
+
+      // Alternative: Also trigger on form submission
+      $(document).on('submit', '.nf-form', function(e) {
+        console.log('Ninja Forms form submitted, starting loader...');
+        startLoader();
+      });
+
+      // Listen for Ninja Forms specific events
+      $(document).on('nf:submit', function(e) {
+        console.log('Ninja Forms nf:submit event, starting loader...');
+        startLoader();
+      });
+
+      // Catch any submit button clicks more broadly
+      $(document).on('click', 'input[type="submit"], button[type="submit"]', function(e) {
+        // Check if this is within a Ninja Form
+        if ($(this).closest('.nf-form-cont').length > 0 || $(this).closest('.ninja-forms-form').length > 0) {
+          console.log('Submit button in Ninja Form detected, starting loader...');
+          startLoader();
+        }
+      });
+
+      // Progress bar for AJAX
+      $(document).on('nfFormSubmit', function(e, formData) {
+        $(document).ajaxSend(function(event, jqXHR, settings) {
+          if (settings.url && settings.url.indexOf('ninja-forms-ajax.php') !== -1) {
+            if (jqXHR.upload) {
+              jqXHR.upload.addEventListener('progress', function(evt) {
+                if (evt.lengthComputable) {
+                  var percent = Math.round((evt.loaded / evt.total) * 100);
+                  updateProgress(percent);
+                }
+              }, false);
+            }
+          }
+        });
+      });
+
+      // Change message and hide loader on submission complete
+      $(document).on('nfFormSubmitResponse', function(e, response) {
+        endLoader();
+      });
+    });
+    </script>
+    <?php
+}); */
 ?>
