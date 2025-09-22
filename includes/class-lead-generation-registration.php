@@ -182,8 +182,19 @@ function workbooks_lead_generation_registration_shortcode($atts = []) {
                     : '';
                 
                 if (!empty($logged_in_content)) {
+                    // Get post feature image for custom logged-in content
+                    $post_feature_image = function_exists('get_field') ? get_field('post_feature_image', $post_id) : '';
+                    
                     // Display the custom logged-in user content before form submission
                     echo '<div class="gated-logged-in-content full-page main-body-content" style="margin-bottom:65px;">';
+                    
+                    // Show post_feature_image if it exists (for logged-in users with custom content)
+                    if ( $post_feature_image ) {
+                        $image_url = is_array($post_feature_image) ? $post_feature_image['url'] : $post_feature_image;
+                        $image_alt = is_array($post_feature_image) ? $post_feature_image['alt'] : '';
+                        echo '<img src="' . esc_url($image_url) . '" alt="' . esc_attr($image_alt) . '" style="width:100%;max-height:220px;object-fit:cover;border-radius:3px;margin-bottom:30px;">';
+                    }
+                    
                     echo wpautop($logged_in_content);
                     echo '</div>';
                 } else {
@@ -358,49 +369,17 @@ add_action('wp_ajax_mark_ninja_form_completed', 'mark_ninja_form_completed_ajax_
 add_action('wp_ajax_nopriv_mark_ninja_form_completed', 'mark_ninja_form_completed_ajax_handler');
 
 /**
- * AJAX handler to remove a post from user's collection
+ * AJAX handler to remove a post from user's collection (DEPRECATED - use theme handler)
+ * This is kept for backwards compatibility but should not be used
  */
 function remove_from_collection_ajax_handler() {
-    // Verify nonce
-    if (!wp_verify_nonce($_POST['nonce'], 'mark_ninja_form_completed')) {
-        wp_die('Security check failed');
-    }
-    
-    $post_id = intval($_POST['post_id']);
-    $user_id = get_current_user_id();
-    
-    // Verify user is logged in
-    if (!$user_id) {
-        wp_send_json_error('User not logged in');
-        return;
-    }
-    
-    // Get current saved collection
-    $saved_collection = get_user_meta($user_id, 'saved_collection', true);
-    if (!is_array($saved_collection)) {
-        $saved_collection = [];
-    }
-    
-    // Remove post from collection
-    $key = array_search($post_id, $saved_collection);
-    if ($key !== false) {
-        unset($saved_collection[$key]);
-        $saved_collection = array_values($saved_collection); // Re-index array
-        
-        // Update user meta
-        update_user_meta($user_id, 'saved_collection', $saved_collection);
-        
-        wp_send_json_success([
-            'message' => 'Post removed from collection successfully',
-            'post_id' => $post_id,
-            'collection' => $saved_collection
-        ]);
-    } else {
-        wp_send_json_error('Post not found in collection');
-    }
+    // This handler is deprecated - the theme now handles collection removal
+    wp_send_json_error(['message' => 'This handler is deprecated. Please use the theme collection handler.']);
 }
-add_action('wp_ajax_remove_from_collection', 'remove_from_collection_ajax_handler');
-add_action('wp_ajax_nopriv_remove_from_collection', 'remove_from_collection_ajax_handler');
+
+// Uncomment these lines if you want to completely remove the plugin's collection handlers
+// add_action('wp_ajax_remove_from_collection', 'remove_from_collection_ajax_handler');
+// add_action('wp_ajax_nopriv_remove_from_collection', 'remove_from_collection_ajax_handler');
 
 /**
  * Helper function to check if a user has completed a specific form

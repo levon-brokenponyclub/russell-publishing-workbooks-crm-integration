@@ -246,8 +246,8 @@ jQuery(document).ready(function($) {
                 type: "POST",
                 data: {
                     action: "remove_from_collection",
-                    post_id: postId,
-                    nonce: ajax_object.nonce
+                    post_id: postId
+                    // Note: No nonce required for theme-based remove handler
                 },
                 success: function(response) {
                     if (response.success) {

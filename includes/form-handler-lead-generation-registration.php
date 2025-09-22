@@ -213,7 +213,7 @@ function dtr_register_workbooks_lead(
     }
     $step++;
 
-    // STEP 2: Person lookup (logged-in users already exist in Workbooks)
+    // STEP 3: Person lookup (logged-in users already exist in Workbooks)
     $person_id = null;
     $person_step_success = false;
     $person_step_reason = '';
@@ -258,28 +258,43 @@ function dtr_register_workbooks_lead(
     }
     $step++;
 
-    // STEP 3: Lead Created/Updated
-    $lead_payload = [[
-        'event_id' => $lead_id,  // Use event_id instead of lead_id based on your Workbooks schema
-        'person_id' => $person_id,
+    // STEP 4: Lead Created/Updated
+    $lead_payload = [
+        'assigned_to' => 1,  // Default queue - you may need to adjust this based on your Workbooks setup
+        'person_lead_party[name]' => trim(($first_name . ' ' . $last_name)) ?: $email,
+        'person_lead_party[person_first_name]' => $first_name,
+        'person_lead_party[person_last_name]' => $last_name,
         'name' => trim(($first_name . ' ' . $last_name)) ?: $email,
-        'status' => 'New',
-        'lead_question' => $merged_questions,
-        'sponsor_1_optin' => (int)$cf_mailing_list_member_sponsor_1_optin
-    ]];
+        'sales_lead_status_type' => 'New',
+        'comment' => $merged_questions,
+        'cf_lead_lead_event_reference' => $lead_id,
+        'cf_lead_marketing_optin' => (int)$cf_mailing_list_member_sponsor_1_optin
+    ];
 
     $lead_result = null;
     $lead_step_success = false;
     $lead_step_reason = '';
+    
+    // Debug log the payload before sending
+    dtr_lead_debug("🔍 Lead payload: " . json_encode($lead_payload));
+    
     try {
-        $lead_result = $workbooks->create('crm/leads.api', $lead_payload);
-        if (!empty($lead_result['affected_objects'][0]['id'])) {
+        $lead_result = $workbooks->assertCreate('crm/sales_leads.api', $lead_payload);
+        dtr_lead_debug("🔍 Lead result: " . json_encode($lead_result));
+        if (!empty($lead_result['data'][0]['id'])) {
             $lead_step_success = true;
+            dtr_lead_debug("🔍 Lead ID created: " . $lead_result['data'][0]['id']);
         } else {
-            $lead_step_reason = 'No lead ID returned';
+            $lead_step_reason = 'No lead ID returned - ' . json_encode($lead_result);
         }
     } catch (Exception $e) {
         $lead_step_reason = $e->getMessage();
+        dtr_lead_debug("🔍 Lead creation exception: " . $lead_step_reason);
+        
+        // If it's a 404 error, it's likely the endpoint or field names
+        if (strpos($lead_step_reason, '404') !== false) {
+            dtr_lead_debug("🔍 404 error suggests wrong endpoint or field names");
+        }
     }
     if ($lead_step_success) {
         dtr_lead_debug("✅ STEP {$step}: Lead Created/Updated");

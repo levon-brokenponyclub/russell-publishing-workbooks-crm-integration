@@ -294,8 +294,7 @@ class DTR_Workbooks_Integration {
      */
     private function check_dependencies() {
         $dependencies = [
-            'ninja-forms/ninja-forms.php' => 'Ninja Forms',
-            'advanced-custom-fields/acf.php' => 'Advanced Custom Fields'
+            'ninja-forms/ninja-forms.php' => 'Ninja Forms'
         ];
 
         $missing = [];
@@ -303,6 +302,14 @@ class DTR_Workbooks_Integration {
             if (!is_plugin_active($plugin)) {
                 $missing[] = $name;
             }
+        }
+
+        // Check for ACF (either free or Pro version)
+        $acf_active = is_plugin_active('advanced-custom-fields/acf.php') || 
+                     is_plugin_active('advanced-custom-fields-pro/acf.php');
+        
+        if (!$acf_active) {
+            $missing[] = 'Advanced Custom Fields';
         }
 
         if (!empty($missing)) {
@@ -1822,8 +1829,7 @@ class DTR_Workbooks_Integration {
      */
     private function get_system_status() {
         $dependencies = [
-            'ninja-forms/ninja-forms.php' => 'Ninja Forms',
-            'advanced-custom-fields/acf.php' => 'Advanced Custom Fields'
+            'ninja-forms/ninja-forms.php' => 'Ninja Forms'
         ];
         
         $status = ['dependencies' => []];
@@ -1835,6 +1841,20 @@ class DTR_Workbooks_Integration {
                 'version' => $this->get_plugin_version($plugin)
             ];
         }
+        
+        // Add ACF status (check both free and Pro versions)
+        $acf_free_active = is_plugin_active('advanced-custom-fields/acf.php');
+        $acf_pro_active = is_plugin_active('advanced-custom-fields-pro/acf.php');
+        $acf_active = $acf_free_active || $acf_pro_active;
+        
+        $acf_plugin_path = $acf_pro_active ? 'advanced-custom-fields-pro/acf.php' : 'advanced-custom-fields/acf.php';
+        $acf_name = $acf_pro_active ? 'Advanced Custom Fields PRO' : 'Advanced Custom Fields';
+        
+        $status['dependencies'][$acf_plugin_path] = [
+            'name' => $acf_name,
+            'active' => $acf_active,
+            'version' => $acf_active ? $this->get_plugin_version($acf_plugin_path) : ''
+        ];
         
         return $status;
     }

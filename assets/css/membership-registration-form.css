@@ -792,16 +792,16 @@ input:checked + .toggle-slider:before {
     display: block;
 }
 
-.button.global.btn-small {
+.navigation-buttons .button.global.btn-small {
     min-width:160px !important;
     margin:0;
 }
 
-.button.global.btn-small.left {
+.navigation-buttons .button.global.btn-small.left {
     padding-left:0.8rem !important
 }
 
-.button.global.btn-small {
+.navigation-buttons .button.global.btn-small {
     min-width:160px !important;
 }
 

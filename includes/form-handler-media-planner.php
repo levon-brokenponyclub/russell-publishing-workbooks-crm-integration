@@ -94,9 +94,12 @@ add_action('wp_ajax_nopriv_dtr_media_planner_form_submit', 'dtr_handle_media_pla
 function dtr_handle_media_planner_form_submit() {
     dtr_media_planner_log('=== MEDIA PLANNER FORM SUBMISSION START ===');
     
+    // Log received POST data for debugging
+    dtr_media_planner_log('Raw POST data: ' . json_encode($_POST));
+    
     // Verify nonce
     if (!wp_verify_nonce($_POST['nonce'], 'dtr_html_form_submit')) {
-        dtr_media_planner_log('SECURITY: Invalid nonce provided');
+        dtr_media_planner_log('SECURITY ERROR: Invalid nonce provided');
         wp_send_json_error(['message' => 'Security verification failed']);
         return;
     }
@@ -179,7 +182,9 @@ function dtr_handle_media_planner_form_submit() {
         // Get Workbooks instance with clean logging for AJAX
         $workbooks = dtr_get_clean_workbooks_instance();
         if (!$workbooks) {
-            throw new Exception('Failed to get Workbooks instance');
+            dtr_media_planner_log('ERROR: Failed to get Workbooks instance');
+            wp_send_json_error(['message' => 'Workbooks API connection failed']);
+            return;
         }
 
         dtr_media_planner_log('Workbooks instance obtained successfully');
@@ -187,7 +192,9 @@ function dtr_handle_media_planner_form_submit() {
         // Create or find person in Workbooks
         $person_result = dtr_create_or_find_person($workbooks, $form_data);
         if (!$person_result['success']) {
-            throw new Exception('Failed to create/find person: ' . $person_result['message']);
+            dtr_media_planner_log('ERROR: Failed to create/find person: ' . $person_result['message']);
+            wp_send_json_error(['message' => 'Failed to create/find person: ' . $person_result['message']]);
+            return;
         }
 
         $person_id = $person_result['person_id'];
@@ -196,10 +203,14 @@ function dtr_handle_media_planner_form_submit() {
         // Create event registration (ticket) for EVENT-2571 (ID: 5137)
         $ticket_result = dtr_create_event_ticket($workbooks, $person_id, $hidden_data);
         if (!$ticket_result['success']) {
-            throw new Exception('Failed to create event ticket: ' . $ticket_result['message']);
+            dtr_media_planner_log('ERROR: Failed to create event ticket: ' . $ticket_result['message']);
+            wp_send_json_error(['message' => 'Failed to create event ticket: ' . $ticket_result['message']]);
+            return;
         }
 
         dtr_media_planner_log('Event ticket created successfully: ' . json_encode($ticket_result));
+
+        dtr_media_planner_log('=== MEDIA PLANNER FORM SUBMISSION SUCCESS ===');
 
         // Success response
         wp_send_json_success([
@@ -210,9 +221,10 @@ function dtr_handle_media_planner_form_submit() {
         ]);
 
     } catch (Exception $e) {
-        dtr_media_planner_log('ERROR: ' . $e->getMessage());
-        dtr_media_planner_log('ERROR Trace: ' . $e->getTraceAsString());
-        wp_send_json_error(['message' => 'Failed to process request: ' . $e->getMessage()]);
+        dtr_media_planner_log('=== MEDIA PLANNER FORM SUBMISSION FAILED ===');
+        dtr_media_planner_log('EXCEPTION: ' . $e->getMessage());
+        dtr_media_planner_log('EXCEPTION Trace: ' . $e->getTraceAsString());
+        wp_send_json_error(['message' => 'Failed to process request. Please try again.']);
     }
 }
 
@@ -223,18 +235,20 @@ function dtr_create_or_find_person($workbooks, $form_data) {
     dtr_media_planner_log('Creating/finding person in Workbooks');
 
     try {
-        // First, try to find existing person by email
-        $filter_limit_select = [
-            '_filter_json' => json_encode([
-                ['main_location[email]', 'eq', $form_data['email']]
-            ]),
-            '_limit' => 1
+        // First, try to find existing person by email using assertGet
+        $filter_params = [
+            '_start' => 0,
+            '_limit' => 1,
+            '_ff[]' => 'main_location[email]',
+            '_ft[]' => 'eq', 
+            '_fc[]' => $form_data['email'],
+            '_select_columns[]' => ['id', 'lock_version', 'name', 'person_first_name', 'person_last_name']
         ];
 
-        $find_response = $workbooks->get('crm/people.api', $filter_limit_select);
+        $find_response = $workbooks->assertGet('crm/people.api', $filter_params);
         dtr_media_planner_log('Person search response: ' . json_encode($find_response));
 
-        if (!$find_response['success'] || empty($find_response['data'])) {
+        if (empty($find_response['data'])) {
             // Person doesn't exist, create new one
             dtr_media_planner_log('Person not found, creating new person');
 
@@ -245,7 +259,6 @@ function dtr_create_or_find_person($workbooks, $form_data) {
                 'main_location[email]' => $form_data['email'],
                 'main_location[telephone]' => $form_data['phone'],
                 'person_job_title' => $form_data['jobTitle'],
-                'website' => '', // No website field in form
                 'main_location[country]' => $form_data['country'],
                 'main_location[town]' => $form_data['city'],
                 'person_type' => 'Contact',
@@ -263,14 +276,14 @@ function dtr_create_or_find_person($workbooks, $form_data) {
                 $person_data['cf_person_claimed_employer'] = $form_data['organisation'];
             }
 
-            $create_response = $workbooks->create('crm/people.api', $person_data);
+            $create_response = $workbooks->assertCreate('crm/people.api', $person_data);
             dtr_media_planner_log('Person creation response: ' . json_encode($create_response));
 
-            if (!$create_response['success']) {
-                return ['success' => false, 'message' => 'Failed to create person'];
+            if (empty($create_response['data'][0]['id'])) {
+                return ['success' => false, 'message' => 'Failed to create person - no ID returned'];
             }
 
-            $person_id = $create_response['affected_objects'][0]['id'];
+            $person_id = $create_response['data'][0]['id'];
             dtr_media_planner_log("New person created with ID: $person_id");
 
         } else {
@@ -293,7 +306,7 @@ function dtr_create_or_find_person($workbooks, $form_data) {
                 $update_data['cf_person_claimed_employer'] = $form_data['organisation'];
             }
 
-            $update_response = $workbooks->update('crm/people.api', $update_data);
+            $update_response = $workbooks->assertUpdate('crm/people.api', $update_data);
             dtr_media_planner_log('Person update response: ' . json_encode($update_response));
         }
 
@@ -317,6 +330,9 @@ function dtr_create_event_ticket($workbooks, $person_id, $hidden_data) {
         $ticket_data = [
             'event_id' => $event_id,
             'person_id' => $person_id,
+            'name' => 'DTR Media Planner 2025', // Required field - matches working example
+            'badge_name' => '', // Will be filled by person name from Workbooks
+            'email' => '', // Will be filled from person record
             'ticket_type' => 'Delegate',
             'ticket_status' => 'Registered',
             'registration_status' => 'Confirmed',
@@ -325,31 +341,94 @@ function dtr_create_event_ticket($workbooks, $person_id, $hidden_data) {
             'attended' => 'No',
             'registration_method' => 'Website',
             'data_source_reference' => $hidden_data['data_source_detail'],
-            'cf_customer_order_brand_for_pdf' => $hidden_data['cf_customer_order_brand_for_pdf'],
-            'cf_customer_order_line_item_brand' => $hidden_data['cf_customer_order_line_item_brand'],
-            'cf_customer_order_line_item_rp_product_delegate' => $hidden_data['cf_customer_order_line_item_rp_product_delegate'],
-            'cf_customer_order_line_item_subproduct_event' => $hidden_data['cf_customer_order_line_item_subproduct_event'],
-            'cf_customer_order_line_item_streams' => $hidden_data['cf_customer_order_line_item_streams'],
-            'cf_customer_order_line_item_campaign_delegate' => $hidden_data['cf_customer_order_line_item_campaign_delegate'],
-            'cf_customer_order_line_item_campaign_reference_2' => $hidden_data['cf_customer_order_line_item_campaign_reference_2'],
-            'cf_customer_order_line_item_delegate_type' => $hidden_data['cf_customer_order_line_item_delegate_type'],
-            'cf_customer_order_line_item_delegate_type_608' => $hidden_data['cf_customer_order_line_item_delegate_type_608'],
-            'cf_customer_order_line_item_delegate_ticket_type' => $hidden_data['cf_customer_order_line_item_delegate_ticket_type'],
-            'cf_customer_order_line_item_attended' => $hidden_data['cf_customer_order_line_item_attended'],
-            'cf_customer_order_line_item_dinner' => $hidden_data['cf_customer_order_line_item_dinner'],
-            'assigned_to_name' => $hidden_data['assigned_to'],
+            // Custom fields from working example
+            'cf_event_ticket_dtr_news' => false,
+            'cf_event_ticket_dtr_third_party' => false,
+            'cf_event_ticket_epr_news' => false,
+            'cf_event_ticket_epr_third_party' => false,
+            'cf_event_ticket_grr_news' => false,
+            'cf_event_ticket_grr_third_party' => false,
+            'cf_event_ticket_iar_news' => false,
+            'cf_event_ticket_iar_third_party' => false,
+            'cf_event_ticket_it_news' => false,
+            'cf_event_ticket_it_third_party' => false,
+            'cf_event_ticket_nf_news' => false,
+            'cf_event_ticket_nf_third_party' => false,
+            'cf_event_ticket_event_vip' => false,
+            'cf_event_ticket_speaker_created' => false,
+            'cf_event_ticket_sponsor_optin' => false,
         ];
 
         dtr_media_planner_log('Creating ticket with data: ' . json_encode($ticket_data));
 
-        $response = $workbooks->create('event/tickets.api', $ticket_data);
-        dtr_media_planner_log('Event ticket creation response: ' . json_encode($response));
-
-        if (!$response['success']) {
-            return ['success' => false, 'message' => 'Failed to create event ticket'];
+        try {
+            $response = $workbooks->assertCreate('event/tickets.api', $ticket_data);
+            dtr_media_planner_log('Event ticket creation response: ' . json_encode($response));
+        } catch (Exception $e) {
+            dtr_media_planner_log('EXCEPTION during ticket creation: ' . $e->getMessage());
+            
+            // Try with regular create method to see the raw response
+            try {
+                dtr_media_planner_log('Trying regular create method...');
+                $raw_response = $workbooks->create('event/tickets.api', $ticket_data);
+                dtr_media_planner_log('Raw create response: ' . json_encode($raw_response));
+                
+                // If raw response has success flag, use it
+                if (isset($raw_response['success']) && $raw_response['success']) {
+                    $response = $raw_response;
+                } else {
+                    throw new Exception('Create method also failed: ' . json_encode($raw_response));
+                }
+            } catch (Exception $e2) {
+                dtr_media_planner_log('Both methods failed: ' . $e2->getMessage());
+                throw $e; // Re-throw original exception
+            }
         }
 
-        $ticket_id = $response['affected_objects'][0]['id'];
+        // Check multiple possible response formats for ticket ID
+        $ticket_id = null;
+        
+        dtr_media_planner_log('Analyzing response structure...');
+        dtr_media_planner_log('Response type: ' . gettype($response));
+        if (is_array($response)) {
+            dtr_media_planner_log('Response keys: ' . json_encode(array_keys($response)));
+        }
+        
+        // Try different response formats based on create vs assertCreate
+        if (!empty($response['data'][0]['id'])) {
+            $ticket_id = $response['data'][0]['id'];
+            dtr_media_planner_log('Found ticket ID in data[0][id]: ' . $ticket_id);
+        } elseif (!empty($response['affected_objects'][0]['id'])) {
+            $ticket_id = $response['affected_objects'][0]['id'];
+            dtr_media_planner_log('Found ticket ID in affected_objects[0][id]: ' . $ticket_id);
+        } elseif (!empty($response['id'])) {
+            $ticket_id = $response['id'];
+            dtr_media_planner_log('Found ticket ID in direct id: ' . $ticket_id);
+        } else {
+            dtr_media_planner_log('No ticket ID found in standard locations');
+            dtr_media_planner_log('TICKET CREATION DEBUGGING - Full response structure: ' . print_r($response, true));
+        }
+        
+        if (!$ticket_id) {
+            $error_details = [];
+            if (isset($response['errors'])) {
+                $error_details[] = 'API Errors: ' . json_encode($response['errors']);
+            }
+            if (isset($response['success'])) {
+                $error_details[] = 'Success Flag: ' . ($response['success'] ? 'true' : 'false');
+            }
+            if (isset($response['flash'])) {
+                $error_details[] = 'Flash Message: ' . $response['flash'];
+            }
+            
+            $error_message = 'Failed to create event ticket - no ID found in response';
+            if (!empty($error_details)) {
+                $error_message .= '. Details: ' . implode(', ', $error_details);
+            }
+            
+            return ['success' => false, 'message' => $error_message];
+        }
+
         dtr_media_planner_log("Event ticket created successfully with ID: $ticket_id");
 
         return [
@@ -360,6 +439,13 @@ function dtr_create_event_ticket($workbooks, $person_id, $hidden_data) {
 
     } catch (Exception $e) {
         dtr_media_planner_log('Error creating event ticket: ' . $e->getMessage());
+        dtr_media_planner_log('Exception details: ' . print_r($e, true));
+        
+        // If it's an API response error, try to extract more details
+        if (strpos($e->getMessage(), 'Unexpected response') !== false) {
+            dtr_media_planner_log('This appears to be an API response format issue');
+        }
+        
         return ['success' => false, 'message' => $e->getMessage()];
     }
 }
