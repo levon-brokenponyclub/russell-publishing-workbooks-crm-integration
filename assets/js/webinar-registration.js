@@ -1,3 +1,81 @@
+// Single initialization function for toggle buttons
+function initializeToggleButtons() {
+    console.log('Initializing webinar toggle buttons...');
+    
+    // Find all toggle buttons
+    document.querySelectorAll('.is-toggle').forEach(function(button) {
+        // Skip if already initialized
+        if (button.hasAttribute('data-toggle-initialized')) {
+            console.log('Skipping already initialized webinar button:', button);
+            return;
+        }
+        
+        const menuId = button.getAttribute('aria-controls');
+        const menu = document.getElementById(menuId);
+        
+        console.log('Found uninitialized webinar toggle button:', button, 'Menu:', menu);
+        
+        if (menu) {
+            // Mark as initialized to prevent double initialization
+            button.setAttribute('data-toggle-initialized', 'true');
+            
+            // IMPORTANT: Mark as initialized for frontend.js too to prevent conflicts
+            button.setAttribute('data-initialized', 'true');
+            
+            // Remove any existing onclick to avoid conflicts
+            button.onclick = null;
+            
+            // Add click event listener (not onclick to avoid conflicts with other code)
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Webinar toggle button clicked!', this, menu);
+                
+                const isCurrentlyOpen = menu.classList.contains('ks-open');
+                
+                // Close all other menus first
+                document.querySelectorAll('.ks-menu').forEach(function(m) {
+                    if (m !== menu) {
+                        m.classList.remove('ks-open');
+                        const btn = document.querySelector('[aria-controls="' + m.id + '"]');
+                        if (btn) {
+                            btn.setAttribute('aria-expanded', 'false');
+                            btn.classList.remove('toggle-open');
+                        }
+                    }
+                });
+                
+                // Toggle this menu
+                if (!isCurrentlyOpen) {
+                    menu.classList.add('ks-open');
+                    this.setAttribute('aria-expanded', 'true');
+                    this.classList.add('toggle-open');
+                    console.log('Webinar menu opened');
+                } else {
+                    menu.classList.remove('ks-open');
+                    this.setAttribute('aria-expanded', 'false');
+                    this.classList.remove('toggle-open');
+                    console.log('Webinar menu closed');
+                }
+            });
+            
+            console.log('Webinar toggle handler added to button');
+        }
+    });
+}
+
+// Initialize buttons immediately when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing webinar toggle buttons immediately');
+    initializeToggleButtons();
+    
+    // Re-initialize any buttons that might have been missed during DOMContentLoaded
+    setTimeout(function() {
+        initializeToggleButtons();
+        console.log("Webinar toggle buttons re-initialized");
+    }, 100);
+});
+
 // Add custom CSS to override any redirect behavior in login form
 document.addEventListener('DOMContentLoaded', function() {
     // Check for any login forms and add current page URL as redirect
@@ -147,50 +225,34 @@ function openLoginModal() {
     }
 }
 
-(function () {
-    function closeAllExcept(exceptMenu) {
-        document.querySelectorAll('.ks-menu.ks-open').forEach(function (m) {
-            if (m !== exceptMenu) {
-                m.classList.remove('ks-open');
-                var t = document.querySelector('[aria-controls="' + m.id + '"]');
-                if (t) t.setAttribute('aria-expanded', 'false');
-            }
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.ks-split-btn').forEach(function (container) {
-            var toggle = container.querySelector('.ks-toggle-btn');
-            var menu = container.querySelector('.ks-menu');
-            if (!toggle || !menu) return;
-
-            toggle.addEventListener('click', function (e) {
-                e.stopPropagation();
-                var isOpen = menu.classList.toggle('ks-open');
-                toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-                closeAllExcept(isOpen ? menu : null);
-            });
-
-            // Close when menu item clicked
-            menu.querySelectorAll('a').forEach(function (a) {
-                a.addEventListener('click', function () {
-                    menu.classList.remove('ks-open');
-                    toggle.setAttribute('aria-expanded', 'false');
-                });
-            });
-
-            // Keyboard: Esc to close
-            container.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape') {
-                    menu.classList.remove('ks-open');
-                    toggle.setAttribute('aria-expanded', 'false');
+// Click outside to close menus and ESC key handler
+document.addEventListener('DOMContentLoaded', function() {
+    // Clicking outside closes all menus
+    document.addEventListener('click', function(e) {
+        // Close all menus if clicking outside
+        if (!e.target.closest('.ks-split-btn')) {
+            document.querySelectorAll('.ks-menu.ks-open').forEach(function(menu) {
+                menu.classList.remove('ks-open');
+                const button = document.querySelector('[aria-controls="' + menu.id + '"]');
+                if (button) {
+                    button.setAttribute('aria-expanded', 'false');
+                    button.classList.remove('toggle-open');
                 }
             });
-        });
-
-        // Clicking outside closes all menus
-        document.addEventListener('click', function () {
-            closeAllExcept(null);
-        });
+        }
     });
-})();
+    
+    // ESC key closes all menus
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.ks-menu.ks-open').forEach(function(menu) {
+                menu.classList.remove('ks-open');
+                const button = document.querySelector('[aria-controls="' + menu.id + '"]');
+                if (button) {
+                    button.setAttribute('aria-expanded', 'false');
+                    button.classList.remove('toggle-open');
+                }
+            });
+        }
+    });
+});

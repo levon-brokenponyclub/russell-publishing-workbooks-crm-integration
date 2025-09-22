@@ -4,7 +4,7 @@
 
 **Author**: Supersonic Playground / Levon Gravett  
 **Website**: https://www.supersonicplayground.com  
-**Version**: 2.1.0
+**Version**: 2.1.1
 
 A production-ready WordPress plugin that integrates WordPress with the DTR Workbooks CRM. V2 focuses on modular admin code, robust debugging that is gated for production, comprehensive gated-content and Ninja Forms integration (ACF-driven), and reliable Workbooks person/employer/ticket/lead creation and synchronization.
 
@@ -30,6 +30,15 @@ A comprehensive WordPress plugin enabling seamless integration between WordPress
 * Automatic extraction of ACF questions, sponsor opt-in, campaign references
 * Hidden field (post_id / campaign) resilience & logging (for debugging sessions)
 
+### 📝 **HTML Form Builder & Registration System**
+* **Custom HTML Form Handler**: Dedicated AJAX-powered handler for native HTML forms with full CRM integration
+* **Form Nonce Security**: Advanced nonce-based security system with automatic generation and validation
+* **Registration Shortcodes**: Flexible `[dtr_membership_registration]` shortcode with customizable attributes
+* **Real-time Form Processing**: Complete membership registration with WordPress user creation and Workbooks CRM sync
+* **Development Mode**: Built-in development/test mode with form submission debugging and validation
+* **Login Integration**: Seamless integration with theme login modals and fallback authentication systems
+* **Form State Management**: Dynamic form states with loading animations, success/error feedback, and user guidance
+
 ### 👤 Membership & My Account
 * My Account preference & AOI/TOI form synchronizes changes back to Workbooks
 * Admin updates mirror into user meta (bidirectional parity)
@@ -51,6 +60,15 @@ A comprehensive WordPress plugin enabling seamless integration between WordPress
 * Structured step logging for membership & account update flows
 * Optional verbose admin logs gated by plugin debug setting
 * Log reset workflow to prepare clean test baselines
+
+### 🎛️ **Enhanced Admin Interface & Tools**
+* **Comprehensive Form Testing**: Built-in test forms for webinars, lead generation, and membership registration
+* **Advanced Debug Console**: Real-time debugging with detailed request/response logging and error tracking
+* **Form Handler Analytics**: Complete visibility into form submissions, success rates, and processing times  
+* **Test Mode Configuration**: Granular test mode controls for different form types (Ninja Forms, HTML forms, etc.)
+* **Connection Status Dashboard**: Live API connection monitoring with detailed status reports
+* **Log Management Tools**: Advanced log viewer with filtering, search, and automatic cleanup features
+* **User Management Enhancement**: Extended user profile integration with Workbooks CRM data synchronization
 
 ### 🛡️ Resilience & Migration
 * Backward-compatible employer JSON read/write helpers
@@ -145,8 +163,14 @@ Update the call so that all required arguments are passed individually, matching
 * Add / modify fields – forms adapt automatically (no manual Ninja Forms edits)
 * Standard core + marketing + AOI/TOI + employer fields are auto-recognized
 
+**HTML Form Builder Usage**
+* Use the `[dtr_membership_registration]` shortcode to display custom HTML registration forms
+* Forms support real-time validation, AJAX submission, and CRM integration
+* Built-in development mode for testing and debugging
+* Automatic WordPress user creation with Workbooks CRM synchronization
+
 **Registration Process**
-1. User submits dynamic form
+1. User submits dynamic form (Ninja Forms or HTML)
 2. (Optional) WordPress user created / updated
 3. Fields mapped & sanitized → Workbooks person create/update
 4. Sales Lead always created
@@ -243,6 +267,15 @@ Disable afterward to reduce I/O.
 - Further optimization of AJAX handlers.
 - Additional UX/UI improvements based on user feedback.
 - Integration with more CRM features.
+
+### 2.1.1
+- **HTML Form Builder & Registration System**: Complete custom HTML form implementation with dedicated AJAX handlers for membership registration, featuring advanced security with nonce-based validation and real-time processing with CRM integration.
+- **Enhanced Admin Interface**: Comprehensive admin dashboard improvements including built-in test forms for all registration types, advanced debug console with real-time logging, and granular test mode configuration for different form handlers.
+- **Form State Management**: Dynamic form states with loading animations, success/error feedback, user guidance, and seamless integration with theme login modals and fallback authentication systems.
+- **Development Mode**: Built-in development and testing capabilities with form submission debugging, validation testing, and comprehensive error tracking for safe development and troubleshooting.
+- **Extended User Management**: Enhanced user profile integration with bidirectional Workbooks CRM data synchronization and improved admin user management tools.
+- **Log Management Tools**: Advanced log viewer with filtering, search capabilities, automatic cleanup features, and specialized logging for HTML form submissions and membership registration flows.
+- **Security Enhancements**: Improved nonce handling, CSRF protection, and secure form processing with comprehensive validation and sanitization of all user inputs.
 
 ### 2.1.0
 - Refactored both webinar and lead generation registration logic into dedicated, modular classes and handler files for maintainability and testability.
@@ -671,14 +704,19 @@ dtr-workbooks-crm-integration/
 ├── dtr-workbooks-crm-integration.php (Main plugin file)
 ├── includes/
 │   ├── ninja-forms-membership-registration.php (Membership registration handler - Form 15)
+│   ├── form-handler-html-membership-registration.php (HTML form handler with CRM integration)
 │   ├── ninja-forms-simple-hook.php (New Ninja Forms handler)
 │   ├── helper-functions.php (TOI/AOI mapping)
 │   ├── dtr-shortcodes.php (Shortcode functionality)
 │   ├── workbooks-employer-sync.php (Employer sync)
 │   ├── webinar-handler.php (Webinar registration & mailing list handler)
 │   └── media-planner-ajax-handler.php (Media planner AJAX handler)
+├── shortcodes/
+│   └── membership-registration-shortcode.php (HTML membership registration shortcode)
 ├── assets/
 │   ├── admin.css (Admin styling)
+│   ├── css/membership-registration-form.css (HTML form styling)
+│   ├── js/lead-generation-registration.js (Form interactions & login modal)
 │   └── dtr-ninjaform-title-select.js (Frontend scripts)
 ├── js/
 │   ├── admin.js (Admin interface)
@@ -708,6 +746,14 @@ The plugin uses the Workbooks REST API with:
 ```php
 // User Registration
 add_action('nf_after_final_submit', 'nf_workbooks_user_register_submission');
+
+// HTML Form Processing
+add_action('wp_ajax_dtr_html_form_submit', 'dtr_html_form_submit_handler');
+add_action('wp_ajax_nopriv_dtr_html_form_submit', 'dtr_html_form_submit_handler');
+
+// Form Security
+add_action('wp_ajax_dtr_get_form_nonce', 'dtr_html_get_form_nonce');
+add_action('wp_ajax_nopriv_dtr_get_form_nonce', 'dtr_html_get_form_nonce');
 
 // Employer Sync
 add_action('workbooks_daily_employer_sync', 'workbooks_sync_employers_cron');

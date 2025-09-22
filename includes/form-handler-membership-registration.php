@@ -159,13 +159,23 @@ function dtr_nf_membership_process($form_data) {
  * Data collection & validation
  * -------------------------------------------------------------------------- */
 function dtr_nf_collect_membership_data(array $flat, $debug_id) {
+    // Normalize title field - handle form values like ".Dr" to "Dr."
+    $raw_title = dtr_nf_pick($flat, ['title','141']);
+    $title = dtr_nf_normalize_title($raw_title);
+    
+    // Debug employer field processing
+    $raw_employer = dtr_nf_pick($flat, ['employer','employer_name','218']);
+    dtr_reg_log("[{$debug_id}] NF DEBUG: Raw title from form: '{$raw_title}' -> normalized: '{$title}'");
+    dtr_reg_log("[{$debug_id}] NF DEBUG: Raw employer from form: '{$raw_employer}'");
+    dtr_reg_log("[{$debug_id}] NF DEBUG: Form data keys available: " . implode(', ', array_keys($flat)));
+    
     $data = [
         'email'      => sanitize_email(dtr_nf_pick($flat, ['email_address','144'])),
         'password'   => dtr_nf_pick($flat, ['password','221']),
         'first_name' => sanitize_text_field(dtr_nf_pick($flat, ['first_name','142'])),
         'last_name'  => sanitize_text_field(dtr_nf_pick($flat, ['last_name','143'])),
-        'employer'   => sanitize_text_field(dtr_nf_pick($flat, ['employer','employer_name','218'])),
-        'title'      => sanitize_text_field(dtr_nf_pick($flat, ['title','141'])),
+        'employer'   => sanitize_text_field($raw_employer),
+        'title'      => sanitize_text_field($title),
         'telephone'  => sanitize_text_field(dtr_nf_pick($flat, ['telephone','146'])),
         'country'    => sanitize_text_field(dtr_nf_pick($flat, ['country','148'],'South Africa')),
         'town'       => sanitize_text_field(dtr_nf_pick($flat, ['town','149'])),
@@ -182,6 +192,12 @@ function dtr_nf_collect_membership_data(array $flat, $debug_id) {
         dtr_reg_log("[{$debug_id}] NF WARNING: User already exists (WP) for email {$data['email']}");
         return false;
     }
+    // Ensure both Employer and Claimed Employer fields are synchronized
+    $employer_name = sanitize_text_field($raw_employer);
+    $data['employer'] = $employer_name;
+    $data['claimed_employer'] = $employer_name;
+    dtr_reg_log("[{$debug_id}] NF DEBUG: Title: '{$title}', Employer Name: '{$employer_name}', Claimed Employer: '{$data['claimed_employer']}'");
+
     return $data;
 }
 
@@ -233,17 +249,32 @@ function dtr_nf_apply_marketing_and_interests($user_id, array $data, $debug_id) 
  * AOI Mapping
  * -------------------------------------------------------------------------- */
 function dtr_nf_handle_aoi_mapping($user_id, $debug_id) {
-    if (!function_exists('dtr_get_aoi_field_names') || !function_exists('dtr_map_toi_to_aoi')) return false;
+    if (!function_exists('dtr_get_aoi_field_names') || !function_exists('dtr_map_toi_to_aoi')) {
+        dtr_reg_log("[{$debug_id}] NF DEBUG: AOI mapping functions not available");
+        return false;
+    }
     // Derive TOI selections from meta (so we rely on persisted data)
     $toi_fields = [ 'cf_person_business','cf_person_diseases','cf_person_drugs_therapies','cf_person_genomics_3774','cf_person_research_development','cf_person_technology','cf_person_tools_techniques' ];
     $selected_toi = [];
-    foreach ($toi_fields as $tf) { if ((int) get_user_meta($user_id,$tf,true) === 1) $selected_toi[] = $tf; }
+    foreach ($toi_fields as $tf) { 
+        $val = (int) get_user_meta($user_id,$tf,true);
+        dtr_reg_log("[{$debug_id}] NF DEBUG: TOI field '{$tf}' = {$val}");
+        if ($val === 1) $selected_toi[] = $tf; 
+    }
     dtr_reg_log("[{$debug_id}] NF DEBUG: TOIs selected for AOI mapping: " . json_encode($selected_toi));
-    if (!$selected_toi) return true; // nothing to map but not an error
+    if (!$selected_toi) {
+        dtr_reg_log("[{$debug_id}] NF DEBUG: No TOIs selected, skipping AOI mapping");
+        return true; // nothing to map but not an error
+    }
     $aoi_map = dtr_map_toi_to_aoi($selected_toi);
     dtr_reg_log("[{$debug_id}] NF DEBUG: AOI matrix result: " . json_encode($aoi_map));
-    foreach ($aoi_map as $aoi_field=>$aoi_val) update_user_meta($user_id,$aoi_field,$aoi_val);
-    dtr_reg_log("[{$debug_id}] NF DEBUG: AOI mapping applied: " . json_encode($aoi_map));
+    $applied_count = 0;
+    foreach ($aoi_map as $aoi_field=>$aoi_val) {
+        update_user_meta($user_id,$aoi_field,$aoi_val);
+        if ($aoi_val == 1) $applied_count++;
+        dtr_reg_log("[{$debug_id}] NF DEBUG: Set AOI '{$aoi_field}' = {$aoi_val}");
+    }
+    dtr_reg_log("[{$debug_id}] NF DEBUG: AOI mapping applied - {$applied_count} fields set to 1");
     return true;
 }
 
@@ -368,6 +399,33 @@ function dtr_nf_membership_flatten_fields($form_data) {
 }
 function dtr_nf_pick($flat,$candidates,$default='') { foreach ($candidates as $c) if (isset($flat[$c]) && $flat[$c] !== '') return $flat[$c]; return $default; }
 function dtr_nf_to_array($val){ if(is_array($val)) return $val; if($val===''||$val===null) return []; return [$val]; }
+
+/**
+ * Normalize title values from the form to proper format
+ */
+function dtr_nf_normalize_title($raw_title) {
+    if (empty($raw_title)) return '';
+    
+    // Map of form values to proper titles
+    $title_map = [
+        '.Dr' => 'Dr.',
+        'Dr' => 'Dr.',
+        'Mr' => 'Mr.',
+        'Mrs' => 'Mrs.',
+        'Master' => 'Master',
+        'Miss' => 'Miss.',
+        'Ms' => 'Ms.',
+        'Prof' => 'Prof.'
+    ];
+    
+    // Check if we have a direct mapping
+    if (isset($title_map[$raw_title])) {
+        return $title_map[$raw_title];
+    }
+    
+    // If not found, return the sanitized raw value
+    return sanitize_text_field($raw_title);
+}
 
 /* --------------------------------------------------------------------------
  * Summary logger (post-success)

@@ -104,13 +104,10 @@ function workbooks_webinar_registration_shortcode($atts) {
             <div class="full-page vertical-half-margin event-registration">
 
             <!-- split button -->
-            <div class="ks-split-btn">
-                <a href="/free-membership" class="ks-main-btn" role="button">Login or Register Now</a>
-                <button type="button" class="ks-toggle-btn" aria-haspopup="true" aria-expanded="false" aria-controls="{$uid}-menu" title="Open menu">
-                    <i class="fa-solid fa-chevron-down"></i>
-                </button>
+            <div class="ks-split-btn" style="position: relative;">
+                <button type="button" class="ks-main-btn ks-main-btn-global btn-blue shimmer-effect shimmer-slow is-toggle text-left" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="{$uid}-menu">Login or Register Now</button>
 
-                <ul id="{$uid}-menu" class="ks-menu" role="menu">
+                <ul id="{$uid}-menu" class="ks-menu" role="menu" style="z-index: 1002;">
                     <li role="none"><a role="menuitem" href="#" class="login-button" onclick="event.preventDefault(); openLoginModal();">Login</a></li>
                     <li role="none"><a role="menuitem" href="/free-membership">Become a Member</a></li>
                 </ul>
@@ -133,7 +130,7 @@ function workbooks_webinar_registration_shortcode($atts) {
         echo "<!-- LOG: User: Logged In - Additional Questions - Post Not Saved (On Demand Logic) -->\n";
         echo "<script>console.log('[LOG] User: Logged In - Additional Questions - Post Not Saved (On Demand Logic)');</script>\n";
         echo '<div class="full-page vertical-half-margin event-registration">';
-        echo '<button class="event-register-button event-passed">On Demand - Register Now</button>';
+        echo '<button class="ks-main-btn-global btn-purple shimmer-effect shimmer-slow btn-loading not-registered text-left" disabled>On Demand - Register Now</button>';
         echo '</div>';
         if (!empty($webinar_form['id'])) {
             $extra_fields_markup = '';
@@ -198,18 +195,15 @@ function workbooks_webinar_registration_shortcode($atts) {
         echo "<script>console.log('" . addslashes($step_message) . "');</script>\n";
         echo "<!-- LOG: Webinar Type: Live Webinar -->\n";
         echo "<script>console.log('[LOG] Webinar Type: Live Webinar');</script>\n";
-        echo '<div class="full-page vertical-half-margin event-registration is-registered">';
+        echo '<div class="full-page vertical-half-margin event-registration">';
         if ($user_is_registered) {
             $uid = 'ks' . uniqid(); // unique id for this instance
             echo <<<HTML
             <!-- split button for registered users -->
-            <div class="ks-split-btn">
-                <a href="/free-membership" class="ks-main-btn" role="button">You are registered for this Webinar</a>
-                <button type="button" class="ks-toggle-btn" aria-haspopup="true" aria-expanded="false" aria-controls="{$uid}-menu" title="Open menu">
-                    <i class="fa-solid fa-chevron-down"></i>
-                </button>
+            <div class="ks-split-btn btn-green" style="position: relative;">
+                <button type="button" class="ks-main-btn ks-main-btn-global btn-green shimmer-effect shimmer-slow is-toggle text-left" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="{$uid}-menu">You are registered for this Webinar</button>
 
-                <ul id="{$uid}-menu" class="ks-menu" role="menu">
+                <ul id="{$uid}-menu" class="ks-menu" role="menu" style="z-index: 1002;">
                     <li role="none"><a role="menuitem" href="/my-account/?page-view=overview&ics=1&calendar-post-id={$post_id}" class="no-decoration calendar-btn">Add to Calendar</a></li>
                     <li role="none"><a role="menuitem" href="/my-account/?page-view=events-and-webinars">Events & Webinars</a></li>
                 </ul>
@@ -218,7 +212,7 @@ function workbooks_webinar_registration_shortcode($atts) {
             <div class="reveal-text">Webinar has been added to Events & Webinars</div>
             HTML;
         } else {
-            echo '<a class="webinar-register-button btn-blue webinar-registration not-registered" data-event-id="' . esc_attr($post_id) . '">Register Now</a>';
+            echo '<button class="ks-main-btn-global btn-blue shimmer-effect shimmer-slow not-registered webinar-registration text-left" data-event-id="' . esc_attr($post_id) . '" disabled>Register Now</button>';
         }
         echo '</div>';
         
@@ -276,7 +270,7 @@ function workbooks_webinar_registration_shortcode($atts) {
     echo "<!-- LOG: User: Logged In - Registered - Post Saved To Collection (Live & On Demand Logic) -->\n";
     echo "<script>console.log('[LOG] User: Logged In - Registered - Post Saved To Collection (Live & On Demand Logic)');</script>\n";
     echo '<div class="full-page vertical-half-margin event-registration">';
-    echo '<button class="event-register-button event-passed">On Demand - Register Now</button>';
+    echo '<button class="ks-main-btn-global btn-purple shimmer-effect shimmer-slow btn-loading event-passed text-left" disabled>On Demand - Register Now</button>';
     echo '</div>';
     if (!empty($webinar_form['id'])) {
         $extra_fields_markup = '';

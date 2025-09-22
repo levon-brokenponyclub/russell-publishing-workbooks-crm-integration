@@ -1,7 +1,85 @@
 // Lead Generation Registration JavaScript
 // Handles form completion detection, ACF integration, and UI interactions
 
+// Single initialization function for toggle buttons
+function initializeToggleButtons() {
+    console.log('Initializing toggle buttons...');
+    
+    // Find all toggle buttons
+    document.querySelectorAll('.is-toggle').forEach(function(button) {
+        // Skip if already initialized
+        if (button.hasAttribute('data-toggle-initialized')) {
+            console.log('Skipping already initialized button:', button);
+            return;
+        }
+        
+        const menuId = button.getAttribute('aria-controls');
+        const menu = document.getElementById(menuId);
+        
+        console.log('Found uninitialized toggle button:', button, 'Menu:', menu);
+        
+        if (menu) {
+            // Mark as initialized to prevent double initialization
+            button.setAttribute('data-toggle-initialized', 'true');
+            
+            // IMPORTANT: Mark as initialized for frontend.js too to prevent conflicts
+            button.setAttribute('data-initialized', 'true');
+            
+            // Remove any existing onclick to avoid conflicts
+            button.onclick = null;
+            
+            // Add click event listener (not onclick to avoid conflicts with other code)
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Toggle button clicked!', this, menu);
+                
+                const isCurrentlyOpen = menu.classList.contains('ks-open');
+                
+                // Close all other menus first
+                document.querySelectorAll('.ks-menu').forEach(function(m) {
+                    if (m !== menu) {
+                        m.classList.remove('ks-open');
+                        const btn = document.querySelector('[aria-controls="' + m.id + '"]');
+                        if (btn) {
+                            btn.setAttribute('aria-expanded', 'false');
+                            btn.classList.remove('toggle-open');
+                        }
+                    }
+                });
+                
+                // Toggle this menu
+                if (!isCurrentlyOpen) {
+                    menu.classList.add('ks-open');
+                    this.setAttribute('aria-expanded', 'true');
+                    this.classList.add('toggle-open');
+                    console.log('Menu opened');
+                } else {
+                    menu.classList.remove('ks-open');
+                    this.setAttribute('aria-expanded', 'false');
+                    this.classList.remove('toggle-open');
+                    console.log('Menu closed');
+                }
+            });
+            
+            console.log('Toggle handler added to button');
+        }
+    });
+}
+
+// Initialize buttons immediately when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing toggle buttons immediately');
+    initializeToggleButtons();
+});
+
 jQuery(document).ready(function($) {
+    
+    // Re-initialize any buttons that might have been missed during DOMContentLoaded
+    setTimeout(function() {
+        initializeToggleButtons();
+        console.log("Toggle buttons re-initialized on jQuery ready");
+    }, 100);
     
     // Check for content unlocked status and show toast
     function checkForContentUnlockedToast() {
@@ -78,7 +156,7 @@ jQuery(document).ready(function($) {
         var button = $(this);
         var postId = button.data("post-id");
 
-        button.prop("disabled", true).text("Saving...");
+        button.prop("disabled", true).text("Saving...").addClass("btn-loading").removeClass("save-to-collection is-toggle");
 
         $.ajax({
             url: ajax_object.ajax_url,
@@ -89,16 +167,16 @@ jQuery(document).ready(function($) {
             },
             success: function(response) {
                 if (response.success) {
+                    // Remove loading classes before replacing button
+                    button.removeClass("btn-loading");
+                    
                     // Generate unique ID for split button menu
                     var uid = 'ks' + Math.random().toString(36).substr(2, 9);
                     
                     // Create split button HTML
-                    var splitButtonHtml = '<div class="ks-split-btn">' +
-                        '<a href="/my-account/?page-view=my-collection" class="ks-main-btn" role="button">Saved to collection</a>' +
-                        '<button type="button" class="ks-toggle-btn" aria-haspopup="true" aria-expanded="false" aria-controls="' + uid + '-menu" title="Open menu">' +
-                            '<i class="fa-solid fa-chevron-down"></i>' +
-                        '</button>' +
-                        '<ul id="' + uid + '-menu" class="ks-menu" role="menu">' +
+                    var splitButtonHtml = '<div class="ks-split-btn btn-green" style="position: relative;">' +
+                        '<button type="button" class="ks-main-btn ks-main-btn-global btn-green shimmer-effect shimmer-slow is-toggle text-left" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="' + uid + '-menu">Saved to Collection</button>' +
+                        '<ul id="' + uid + '-menu" class="ks-menu" role="menu" style="z-index: 1002;">' +
                             '<li role="none"><a role="menuitem" href="#" class="no-decoration remove-from-collection-btn">Remove</a></li>' +
                             '<li role="none"><a role="menuitem" href="/my-account/?page-view=my-collection">View My Collection</a></li>' +
                         '</ul>' +
@@ -108,20 +186,37 @@ jQuery(document).ready(function($) {
                     button.replaceWith(splitButtonHtml);
                     var nextRevealText = $(".reveal-text").last();
                     if (nextRevealText.length > 0) {
-                        nextRevealText.text("Event has been saved to collection");
+                        nextRevealText.text("Event has been saved to Collection");
                     } else {
-                        $(".event-registration").append('<div class="reveal-text">Event has been saved to collection</div>');
+                        $(".event-registration").append('<div class="reveal-text">Event has been saved to Collection</div>');
                     }
                     
-                    // Initialize split button functionality for the new element
-                    initializeSplitButton();
+                    // Initialize the newly created toggle button
+                    setTimeout(function() {
+                        initializeToggleButtons();
+                        console.log("New toggle button initialized after AJAX");
+                    }, 100);
+
+                    // Persist the correct text after refresh
+                    localStorage.setItem('savedCollectionText', 'Event has been saved to Collection');
+
+                    // On page load, check and set the text if it exists in localStorage
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const savedText = localStorage.getItem('savedCollectionText');
+                        if (savedText) {
+                            const revealText = document.querySelector('.reveal-text');
+                            if (revealText) {
+                                revealText.textContent = savedText;
+                            }
+                        }
+                    });
                 } else {
-                    button.prop("disabled", false).text("Save to Collection");
+                    button.prop("disabled", false).text("Save to Collection").removeClass("btn-loading").addClass("save-to-collection is-toggle");
                     alert("Error saving to collection: " + (response.data.message || "Unknown error"));
                 }
             },
             error: function() {
-                button.prop("disabled", false).text("Save to Collection");
+                button.prop("disabled", false).text("Save to Collection").removeClass("btn-loading").addClass("save-to-collection is-toggle");
                 alert("Error saving to collection. Please try again.");
             }
         });
@@ -143,7 +238,7 @@ jQuery(document).ready(function($) {
             button.text("Removing...");
             var mainButton = button.closest('.ks-split-btn').find('.ks-main-btn');
             if (mainButton.length > 0) {
-                mainButton.text("Removing...");
+                mainButton.text("Removing...").addClass("btn-loading").removeClass("is-toggle");
             }
 
             $.ajax({
@@ -156,12 +251,16 @@ jQuery(document).ready(function($) {
                 },
                 success: function(response) {
                     if (response.success) {
+                        // Remove loading classes before reload
+                        if (mainButton.length > 0) {
+                            mainButton.removeClass("btn-loading").addClass("is-toggle");
+                        }
                         // Reload the page to update the UI
                         window.location.reload();
                     } else {
                         button.text("Remove");
                         if (mainButton.length > 0) {
-                            mainButton.text("Saved to collection");
+                            mainButton.text("Saved to collection").removeClass("btn-loading").addClass("is-toggle");
                         }
                         alert("Error removing from collection: " + (response.data.message || "Unknown error"));
                     }
@@ -169,7 +268,7 @@ jQuery(document).ready(function($) {
                 error: function() {
                     button.text("Remove");
                     if (mainButton.length > 0) {
-                        mainButton.text("Saved to collection");
+                        mainButton.text("Saved to collection").removeClass("btn-loading").addClass("is-toggle");
                     }
                     alert("Error removing from collection. Please try again.");
                 }
@@ -721,63 +820,3 @@ function getToastIcon(type) {
             return '';
     }
 }
-
-// Split Button Functionality
-(function () {
-    function closeAllExcept(exceptMenu) {
-        document.querySelectorAll('.ks-menu.ks-open').forEach(function (m) {
-            if (m !== exceptMenu) {
-                m.classList.remove('ks-open');
-                var t = document.querySelector('[aria-controls="' + m.id + '"]');
-                if (t) t.setAttribute('aria-expanded', 'false');
-            }
-        });
-    }
-
-    function initializeSplitButton() {
-        document.querySelectorAll('.ks-split-btn').forEach(function (container) {
-            var toggle = container.querySelector('.ks-toggle-btn');
-            var menu = container.querySelector('.ks-menu');
-            if (!toggle || !menu) return;
-
-            // Skip if already initialized
-            if (toggle.hasAttribute('data-initialized')) return;
-            toggle.setAttribute('data-initialized', 'true');
-
-            toggle.addEventListener('click', function (e) {
-                e.stopPropagation();
-                var isOpen = menu.classList.toggle('ks-open');
-                toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-                closeAllExcept(isOpen ? menu : null);
-            });
-
-            // Close when menu item clicked
-            menu.querySelectorAll('a').forEach(function (a) {
-                a.addEventListener('click', function () {
-                    menu.classList.remove('ks-open');
-                    toggle.setAttribute('aria-expanded', 'false');
-                });
-            });
-
-            // Keyboard: Esc to close
-            container.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape') {
-                    menu.classList.remove('ks-open');
-                    toggle.setAttribute('aria-expanded', 'false');
-                }
-            });
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        initializeSplitButton();
-
-        // Clicking outside closes all menus
-        document.addEventListener('click', function () {
-            closeAllExcept(null);
-        });
-    });
-
-    // Make initializeSplitButton globally available for dynamic content
-    window.initializeSplitButton = initializeSplitButton;
-})();

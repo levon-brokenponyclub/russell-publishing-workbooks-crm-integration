@@ -1,0 +1,761 @@
+2025-09-22 11:56:01 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 11:56:03 [Media-Planner] === MEDIA PLANNER FORM SUBMISSION START ===
+2025-09-22 11:56:03 [Media-Planner] SECURITY: Invalid nonce provided
+2025-09-22 11:56:04 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 11:59:00 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 11:59:04 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 11:59:06 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 11:59:11 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 11:59:13 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 11:59:26 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 11:59:43 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:00:02 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:00:04 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:03:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:03:39 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:05:09 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:05:11 [Media-Planner] === MEDIA PLANNER FORM SUBMISSION START ===
+2025-09-22 12:05:11 [Media-Planner] SECURITY: Invalid nonce provided
+2025-09-22 12:05:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:05:54 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:06:02 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:07:50 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:07:54 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:08:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:08:06 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:08:06 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:08:06 [Media-Planner] === MEDIA PLANNER FORM SUBMISSION START ===
+2025-09-22 12:08:06 [Media-Planner] Form data collected: {"firstName":"Jane","lastName":"Smith","email":"jane.smith@example.com","jobTitle":"Marketing Manager","organisation":"Test Pharma Company","city":"London","country":"United Kingdom","phone":"+44-1234-567890","canWeHelpFurther":"Request a quote","consent":"1"}
+2025-09-22 12:08:06 [Media-Planner] Hidden data: {"event_id":"5137","data_source_detail":"DTR-MEDIA-PLANNER-2025","download_name":"DTR-MEDIA-PLANNER-2025","type":"Event Registration","lead_source_type":"Event Registration","cf_customer_order_brand_for_pdf":"Drug Target Review","campaign_name":"Media Planner 2025","cf_customer_order_line_item_brand":"DTR","cf_customer_order_line_item_rp_product_delegate":"Media Planner 2025","cf_customer_order_line_item_subproduct_event":"FOC","cf_customer_order_line_item_streams":"N\/A","cf_customer_order_line_item_campaign_delegate":"Media Planner 2025","cf_customer_order_line_item_campaign_reference_2":"CAMP-41496","cf_customer_order_line_item_delegate_type":"Primary","cf_customer_order_line_item_delegate_type_608":"Delegate","cf_customer_order_line_item_delegate_ticket_type":"VIP","cf_customer_order_line_item_attended":"No","cf_customer_order_line_item_dinner":"N\/A","assigned_to":"Unassigned","web_key":"663d4d9f011e521baf6fc92150976b453f3b0a72","success_url":"https:\/\/www.drugtargetreview.com","failure_url":"https:\/\/www.drugtargetreview.com","sales_lead_rating":"Warm","lead_type":"Reader","dtr_subscriber_type":"Prospect","product_mix":"","name1":"","name2":"","org_lead_party_email":""}
+2025-09-22 12:08:06 [Media-Planner] Workbooks instance obtained successfully
+2025-09-22 12:08:06 [Media-Planner] Creating/finding person in Workbooks
+2025-09-22 12:08:07 [Media-Planner] Person search response: {"success":false,"failures":["_filter_json must be an Array of Arrays containing 3 items, found {\"email\":\"jane.smith@example.com\"} Reference: 686203-387224-01514"]}
+2025-09-22 12:08:07 [Media-Planner] Person not found, creating new person
+2025-09-22 12:08:09 [Media-Planner] Person creation response: {"success":true,"affected_object_information":[{"success":true,"errors":[],"warnings":[]}],"affected_objects":[{"cf_person_grr_core_audience":false,"cf_person_les_lubwama":null,"cf_person_epr_assumed_website_aoi":null,"cf_person_nf_assumed_website_aoi":null,"main_location[town]":"London","cf_person_iar_events":false,"cf_person_dtr_engagement":"Unknown","cf_person_epr_nurture_track":true,"main_location[alternate_telephone]":null,"cf_person_interests":null,"cf_person_insights_employees":null,"person_first_name":"Jane","cf_person_fbpa24_speaker":false,"cf_person_ias24_declined":false,"person_suffix":null,"cf_person_grr_tdm":false,"cf_person_iar_leadgen_aoi":null,"cf_person_dtr_order_fulfilment_client_survey":false,"cf_person_business":false,"cf_person_insights_total_score":null,"cf_person_epr_areas_of_interest_310":null,"cf_person_it_advertiser_type":null,"cf_person_iar_engagement":"Unknown","cf_person_grr_engagement":"Unknown","cf_person_insights_first_campaign":null,"cf_person_insights_last_visit":null,"cf_person_registered":false,"cf_person_iar_webinar":false,"cf_person_iar_no_postal":null,"cf_person_iar_editorial_type":null,"cf_person_molecular_diagnostics":false,"_can_read":true,"cf_person_epr_ord_sign_off_only":false,"cf_person_grr_conference_source":null,"cf_person_lead_event_reference":null,"no_post_soliciting":false,"cf_person_nf_subscriber":false,"cf_person_iar_brand_unsubscribe_2106":false,"cf_person_grr_leadgen_aoi":null,"cf_person_ias25_speaker":false,"cf_person_data_matching_picklist":null,"cf_person_grr_assumed_website_aoi":null,"cf_person_iar_ias23":null,"cf_person_dtr_core_audience":false,"person_personal_title":null,"no_phone_soliciting":false,"cf_person_dtr_nurture_track":true,"person_job_title":null,"cf_person_nf_manual_advertiser_type":false,"cf_person_last_login_ip_address":null,"cf_person_science_primary_secondary_audience":null,"cf_person_grr_zmember_reference":null,"queue_entry[updated_at]":"Mon Sep 22 12:08:09 UTC 2025","cf_person_iar_core_audience":false,"id":4348232,"no_email_soliciting":false,"cf_person_dtr_events":false,"cf_person_epr_subscriber":false,"_can_chown":true,"cf_person_transport_primary_secondary_audience":null,"queue_entry[queue[name]]":"Levon Gravett","compliance_special_categories":null,"cf_person_ryan_clarke":null,"_preload_linked_item_association_for_cf_person_nf_online_aoi":"","cf_person_epr_advertiser_type":null,"home_location[email]":"","cf_person_nf_order_fulfilment_client_survey":false,"cf_person_fraser_owen":null,"employer_link":null,"cf_person_epr_news":false,"cf_person_grr_editorial_type":null,"compliance_channels":null,"cf_person_suzy_baverstock":null,"cf_person_force24_nt_deletion":false,"person_salutation":null,"main_location[fax]":null,"cf_person_it_assumed_aoi":null,"cf_person_grr_brand_unsubscribe":false,"cf_person_2022_print":"0.0 GBP 1","cf_person_iar_assumed_aoi":null,"cf_person_it_mode_of_transport_interest":null,"cf_person_dtr_all_brand_unsubscribe":false,"cf_person_it_nurture_track":true,"cf_person_2023_print":"0.0 GBP 1","home_location[town]":"","cf_person_iar_web_member":false,"cf_person_nf_subscriber_type":null,"cf_person_ias24_registered":false,"cf_person_ias25_attended":false,"cf_person_linkedin_url":null,"cf_person_it_subscriber":false,"cf_person_grr_subscriber_type":null,"cf_person_grr_webinar":false,"cf_person_insights_first_term":null,"cf_person_grr_dr23":null,"cf_person_nf_events":false,"cf_person_iar_order_fulfilment_client_survey":false,"owner[login_name]":"levon.gravett@supersonic-playground.com","cf_person_dtr_subscriber_type":null,"cf_person_workbooks":true,"cf_person_grr_news_and_events":false,"cf_person_sponsor_optin":null,"cf_person_grr_webinar_aoi":null,"cf_person_grr_manual_advertiser_type":false,"cf_person_nf_advertiser_type":null,"updated_by_user[person_name]":"Levon Gravett","home_location[alternate_telephone]":"","marketing_campaign_id":null,"cf_person_iar_brand_unsubscribe":false,"cf_person_it_no_postal":null,"cf_person_it_third_party":false,"cf_person_it_leadgen_aoi":null,"cf_person_dtr_no_postal":null,"cf_person_dtr_editorial_type":null,"assigned_to":1117,"cf_person_assays":false,"cf_person_dtr_assumed_website_aoi":null,"cf_person_epr_leadgen_aoi":null,"cf_person_manual_advertiser_type":false,"cf_person_fbpa25_sponsor":false,"cf_person_ias25_sponsor":false,"cf_person_grr_third_party":false,"cf_person_epr_engagement":"Unknown","cf_person_zoe_bryant":null,"cf_person_drugs_therapies":false,"cf_person_joanna_kirby":null,"categories":null,"cf_person_genomics":false,"updated_by_user[login_name]":"levon.gravett@supersonic-playground.com","cf_person_it_webinar_aoi":null,"person_last_name":"Smith","preferred_language":null,"main_location[email]":null,"cf_person_conference_source":null,"cf_person_force24_lead_score":null,"cf_person_nf_fig23":null,"cf_person_personalised_medicine":false,"cf_person_editorial_contact_type":null,"cf_person_iar_assumed_website_aoi":null,"home_location[county_province_state]":"","cf_person_fbpa24_attended":false,"cf_person_it_all_brand_unsubscribe":false,"cf_person_dtr_subscriber":false,"cf_person_epr_editorial_type":null,"cf_person_nf_online_aoi":null,"person_job_role":null,"updated_at":"Mon Sep 22 12:08:08 UTC 2025","cf_person_grr_areas_of_interest_314":null,"created_at":"Mon Sep 22 12:08:08 UTC 2025","cf_person_cell_gene_therapy":false,"cf_person_epr_news_and_events":false,"organisation_num_employees":null,"cf_person_insights_background":null,"cf_person_nf_ord_sign_off_only":false,"cf_person_dtr_webinar_aoi":null,"cf_person_analysis":false,"cf_person_grr_ord_sign_off_only":false,"cf_person_duplicate_person":false,"cf_person_confidence_score_rating":null,"cf_person_nf_engagement":"Unknown","industry":null,"cf_person_epr_zmember_reference":null,"cf_person_act_urn":null,"cf_person_insight_yesterday_score":null,"updated_by":152350,"cf_person_first_login_time":null,"cf_person_2022_digital":"0.0 GBP 1","cf_person_it_events":false,"cf_person_iar_advertiser_type":null,"cf_person_epr_order_fulfilment_client_survey":false,"created_by":152350,"cf_person_nf_webinar":false,"cf_person_nf_all_brand_unsubscribe":false,"cf_person_diseases":false,"cf_person_delegate_blacklist":false,"cf_person_epr_web_member":false,"cf_person_epr_webinar_aoi":null,"cf_person_nf_industry_sector_worked":null,"descriptor":"Jane Smith","cf_person_nf_no_postal":null,"home_location[fax]":"","cf_person_grr_news":false,"cf_person_iar_manual_advertiser_type":false,"spouse_name":null,"queue_entry[queue_id]":1117,"cf_person_screening_sequencing":false,"cf_person_it_conference_attended":null,"cf_person_toxicology":false,"cf_person_nf_zmember_reference":null,"email_opt_in":false,"cf_person_2023_total":"0.0 GBP 1","cf_person_dtr_areas_of_interest_v2":null,"cf_person_authentication_blocked":false,"cf_person_drug_discovery_processes":false,"cf_person_fbpa24_declined":false,"cf_person_dtr_advertiser_type":null,"cf_person_ias25_registered":false,"image_url":null,"cf_person_nf_online_aoi__name":null,"home_location[street_address]":"","cf_person_fbpa24_registered":false,"cf_person_last_login_time":null,"cf_person_dtr_assumed_aoi":null,"cf_person_it_news":false,"cf_person_insights_today_score":null,"cf_person_it_subscriber_type":null,"cf_person_sam_pirani":null,"cf_person_dtr_webinar":false,"facebook_url":null,"main_location[mobile]":null,"cf_person_nf_assumed_aoi":null,"cf_person_insights_link":null,"cf_person_fbpa25_speaker":false,"cf_person_fbpa25_registered":false,"main_location[county_province_state]":null,"photo_url":null,"cf_person_nf_news":false,"home_location[alternate_email]":"","cf_person_it_webinar":false,"biography":null,"cf_person_imaging":false,"cf_person_tools_techniques":false,"owner_id":152350,"cf_person_grr_order_fulfilment_client_survey":false,"home_location[country]":"","cf_person_dtr_news_and_events":false,"cf_person_nf_news_and_events":false,"created_by_user[person_name]":"Levon Gravett","name":"Jane Smith","main_location[email_address_undeliverable]":false,"cf_person_temp_exclusion":false,"cf_person_iar_third_party":false,"cf_person_2022_spex":"0.0 GBP 1","linked_item_association_for_cf_person_nf_online_aoi":null,"cf_person_iar_areas_of_interest_316":null,"cf_person_technology":false,"cf_person_act_company_type":null,"organisation_annual_revenue":"  0","person_middle_name":"","cf_person_frankie_nt_deletion_review":false,"cf_person_it_news_and_events":false,"assistant_phone":null,"cf_person_grr_advertiser_type":null,"cf_person_translational_science":false,"cf_person_fbpa25_attended":false,"cf_person_genomics_3774":false,"cf_person_world_region":null,"cf_person_epr_assumed_aoi":null,"cf_person_epr_sales_contact":null,"cf_person_ias24_sponsor":false,"cf_person_it_zmember_reference":null,"cf_person_grr_subscribers":false,"lead_source_type":"Event Registration","cf_person_it_assumed_website_aoi":null,"cf_person_iar_nurture_track":true,"cf_person_iar_eligible_for_communications_after_30_days":false,"skype_name":null,"cf_person_biomarkers":false,"cf_person_iar_ord_sign_off_only":false,"cf_person_nf_eligible_for_communications_after_30_days":false,"website":"","cf_person_insights_30_days_score":null,"sync_with_mailer":true,"cf_person_insights_industry":null,"cf_person_dtr_ord_sign_off_only":false,"cf_person_is_person_active_or_inactive":"Active","cf_person_iar_news_and_events":false,"special_requirements":null,"cf_person_iar_zmember_reference":null,"cf_person_act_info_source":null,"cf_person_nf_web_member":false,"cf_person_dtr_therapeutic_aoi":null,"cf_person_epr_all_brand_unsubscribe":false,"cf_person_2023_digital":"0.0 GBP 1","cf_person_insights_7_days_score":null,"cf_person_client_nps":null,"cf_person_conference_attendee_type":null,"cf_person_research_development":false,"cf_person_fbpa25_declined":false,"home_location[mobile]":"","cf_person_iar_webinar_aoi":null,"cf_person_grr_assumed_aoi":null,"cf_person_marketing_ringfensed":false,"cf_person_it_engagement":"Unknown","cf_person_nurture_track":false,"imported":false,"cf_person_epr_webinar":false,"main_location[postcode]":null,"cf_person_grr_no_postal":null,"cf_person_location":null,"cf_person_epr_core_audience":false,"created_by_user[login_name]":"levon.gravett@supersonic-playground.com","cf_person_nf_leadgen_aoi":null,"cf_person_dtr_leadgen_aoi":null,"cf_person_insights_first_medium":null,"home_location[postcode]":"","cf_person_dtr_third_party":false,"cf_person_grr_all_brand_unsubscribe":false,"main_location[street_address]":null,"cf_person_external_event_exhibitors":null,"cf_person_job_level":null,"cf_person_epr_foba23":null,"cf_person_iar_news":false,"cf_person_insights_first_visit":null,"cf_person_data_matching":null,"cf_person_stem_cells":false,"cf_person_insights_yesterday_score":null,"cf_person_dan_birchmore":null,"cf_person_iar_conference_attended":null,"cf_person_grr_events":false,"cf_person_idbs_potential_speaker":false,"cf_person_grr_web_member":false,"cf_person_2023_spex":"0.0 GBP 1","cf_person_grr_nurture_track":true,"cf_person_dtr_zmember_reference":null,"home_location[telephone]":"","object_url":"https:\/\/russellpublishing-live.workbooks.com\/link\/3cDMzUTM\/PERS-691417","cf_person_clinical_trials":false,"party_notes":null,"cf_person_confidence_level":null,"cf_person_insights_first_source":null,"cf_person_jess_russell":null,"cf_person_preclinical_research":false,"linked_item_association_for_cf_person_location":null,"cf_person_epr_2":null,"lock_version":0,"cf_person_artificial_intelligencemachine_learning":false,"cf_person_send_media_pack":false,"created_through":"DTR","cf_person_fbpa24_sponsor":false,"twitter_url":null,"cf_person_dtr_news":false,"cf_person_epr_subscriber_type":null,"cf_person_nf_tdm":false,"created_through_reference":"","cf_person_beau_bailey":null,"cf_person_dtr_tdm":false,"cf_person_tony_portelli":null,"cf_person_nf_webinar_aoi":null,"cf_person_insights_revenue":null,"cf_person_ias25_declined":false,"watched":false,"cf_person_grr_conference_attended":null,"cf_person_ias24_attended":false,"cf_person_act_company_name":null,"main_location_id":4427034,"cf_person_epr_no_postal":null,"cf_person_nf_third_party":false,"is_deleted":false,"main_location[country]":"United Kingdom","_link_or_create_employer":null,"employer_name":null,"cf_person_epr_events":false,"_can_chaccess":true,"cf_person_it_editorial_type":null,"cf_person_dtr_eligible_for_communications_after_30_days":false,"cf_person_nf_areas_of_interest_312":null,"cf_person_hit_to_lead":false,"marketing_campaign[name]":"","cf_person_grr_eligible_for_communications_after_30_days":false,"cf_person_nf_nurture_track":true,"cf_person_epr_eligible_for_communications_after_30_days":false,"cf_person_brand":null,"alternate_names":null,"cf_person_iar_tdm":false,"cf_person_informatics":false,"main_location[telephone]":null,"object_ref":"PERS-691417","cf_person_insights_first_content":null,"cf_person_nf_editorial_type":null,"cf_person_it_its23":null,"cf_person_andy_holland":null,"cf_person_verification_picklist":null,"logo_url":null,"cf_person_confidence_score_date":null,"cf_person_claimed_employer":null,"cf_person_epr_third_party":false,"type":"Private::Crm::Person","cf_person_location__name":null,"cf_person_last_issue_sent":null,"_preload_linked_item_association_for_cf_person_location":"","cf_person_2022_total":"0.0 GBP 1","cf_person_ias24_speaker":false,"cf_person_iar_conference_source":null,"cf_person_data_source_detail":null,"cf_person_iar_subscriber":false,"cf_person_targets":false,"cf_person_it_areas_of_interest_318":null,"_can_modify":true,"_can_delete":true,"assistant_name":null,"cf_person_conference_attended":null,"linkedin_url":null,"main_location[alternate_email]":null,"cf_person_nic_losardo":null,"owner[person_name]":"Levon Gravett","cf_person_iar_subscriber_type":null,"cf_person_lab_automation":false,"cf_person_dtr_manual_advertiser_type":false,"cf_person_it_conference_source":null,"cf_person_epr_tdm":false,"gdpr_compliant":false,"cf_person_iar_all_brand_unsubscribe":false,"mailchimp_last_synchronised_at":null,"cf_person_nf_core_audience":false,"cf_person_iar_iaos23":null,"cf_person_dtr_web_member":false}],"updates":{"data":{"immediate":["private_crm_party","private_crm_person","private_crm_organisation","private_crm_opportunity_contact","private_crm_case_contact","private_own_org_currency","private_email_mailing_list_entries","private_crm_campaign_membership","private_accounting_exchange_rates","domain_name"]}},"flash":"saved successfully"}
+2025-09-22 12:08:09 [Media-Planner] New person created with ID: 
+2025-09-22 12:08:09 [Media-Planner] Person created/found with ID: 
+2025-09-22 12:08:09 [Media-Planner] Creating event ticket for person ID: 
+2025-09-22 12:08:09 [Media-Planner] Creating ticket with data: {"event_id":5137,"person_id":null,"ticket_type":"Delegate","ticket_status":"Registered","registration_status":"Confirmed","ticket_price":0,"currency":"GBP","attended":"No","registration_method":"Website","data_source_reference":"DTR-MEDIA-PLANNER-2025","cf_customer_order_brand_for_pdf":"Drug Target Review","cf_customer_order_line_item_brand":"DTR","cf_customer_order_line_item_rp_product_delegate":"Media Planner 2025","cf_customer_order_line_item_subproduct_event":"FOC","cf_customer_order_line_item_streams":"N\/A","cf_customer_order_line_item_campaign_delegate":"Media Planner 2025","cf_customer_order_line_item_campaign_reference_2":"CAMP-41496","cf_customer_order_line_item_delegate_type":"Primary","cf_customer_order_line_item_delegate_type_608":"Delegate","cf_customer_order_line_item_delegate_ticket_type":"VIP","cf_customer_order_line_item_attended":"No","cf_customer_order_line_item_dinner":"N\/A","assigned_to_name":"Unassigned"}
+2025-09-22 12:08:09 [Media-Planner] Error creating event ticket: Non-OK response (404)
+2025-09-22 12:08:09 [Media-Planner] ERROR: Failed to create event ticket: Non-OK response (404)
+2025-09-22 12:08:09 [Media-Planner] ERROR Trace: #0 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-includes/class-wp-hook.php(324): dtr_handle_media_planner_form_submit('')
+#1 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-includes/class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#2 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-includes/plugin.php(517): WP_Hook->do_action(Array)
+#3 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-admin/admin-ajax.php(192): do_action('wp_ajax_dtr_med...')
+#4 {main}
+2025-09-22 12:09:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:09:49 [Media-Planner] === MEDIA PLANNER FORM SUBMISSION START ===
+2025-09-22 12:09:49 [Media-Planner] SECURITY: Invalid nonce provided
+2025-09-22 12:09:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:10:50 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:11:59 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:12:01 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:12:59 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:13:00 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:14:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:14:07 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:15:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:15:07 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:16:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:16:50 [Media-Planner] === MEDIA PLANNER FORM SUBMISSION START ===
+2025-09-22 12:16:50 [Media-Planner] SECURITY: Invalid nonce provided
+2025-09-22 12:16:50 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:17:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:17:24 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:17:25 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:17:32 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:17:33 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:17:33 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:17:34 [Media-Planner] === MEDIA PLANNER FORM SUBMISSION START ===
+2025-09-22 12:17:34 [Media-Planner] Form data collected: {"firstName":"Jane","lastName":"Smith","email":"jane.smith@example.com","jobTitle":"Marketing Manager","organisation":"Test Pharma Company","city":"London","country":"United Kingdom","phone":"+44-1234-567890","canWeHelpFurther":"Request a quote","consent":"1"}
+2025-09-22 12:17:34 [Media-Planner] Hidden data: {"event_id":"5137","data_source_detail":"DTR-MEDIA-PLANNER-2025","download_name":"DTR-MEDIA-PLANNER-2025","type":"Event Registration","lead_source_type":"Event Registration","cf_customer_order_brand_for_pdf":"Drug Target Review","campaign_name":"Media Planner 2025","cf_customer_order_line_item_brand":"DTR","cf_customer_order_line_item_rp_product_delegate":"Media Planner 2025","cf_customer_order_line_item_subproduct_event":"FOC","cf_customer_order_line_item_streams":"N\/A","cf_customer_order_line_item_campaign_delegate":"Media Planner 2025","cf_customer_order_line_item_campaign_reference_2":"CAMP-41496","cf_customer_order_line_item_delegate_type":"Primary","cf_customer_order_line_item_delegate_type_608":"Delegate","cf_customer_order_line_item_delegate_ticket_type":"VIP","cf_customer_order_line_item_attended":"No","cf_customer_order_line_item_dinner":"N\/A","assigned_to":"Unassigned","web_key":"663d4d9f011e521baf6fc92150976b453f3b0a72","success_url":"https:\/\/www.drugtargetreview.com","failure_url":"https:\/\/www.drugtargetreview.com","sales_lead_rating":"Warm","lead_type":"Reader","dtr_subscriber_type":"Prospect","product_mix":"","name1":"","name2":"","org_lead_party_email":""}
+2025-09-22 12:17:34 [Media-Planner] Workbooks instance obtained successfully
+2025-09-22 12:17:34 [Media-Planner] Creating/finding person in Workbooks
+2025-09-22 12:17:35 [Media-Planner] Person search response: {"success":false,"failures":["_filter_json must be an Array of Arrays containing 3 items, found {\"main_location[email]\":\"jane.smith@example.com\"} Reference: 028204-419845-70140"]}
+2025-09-22 12:17:35 [Media-Planner] Person not found, creating new person
+2025-09-22 12:17:36 [Media-Planner] Person creation response: {"success":true,"affected_object_information":[{"success":true,"errors":[],"warnings":[]}],"affected_objects":[{"cf_person_grr_core_audience":false,"cf_person_les_lubwama":null,"cf_person_epr_assumed_website_aoi":null,"cf_person_nf_assumed_website_aoi":null,"main_location[town]":"London","cf_person_iar_events":false,"cf_person_dtr_engagement":"Unknown","cf_person_epr_nurture_track":true,"main_location[alternate_telephone]":null,"cf_person_interests":null,"cf_person_insights_employees":null,"person_first_name":"Jane","cf_person_fbpa24_speaker":false,"cf_person_ias24_declined":false,"person_suffix":null,"cf_person_grr_tdm":false,"cf_person_iar_leadgen_aoi":null,"cf_person_dtr_order_fulfilment_client_survey":false,"cf_person_business":false,"cf_person_insights_total_score":null,"cf_person_epr_areas_of_interest_310":null,"cf_person_it_advertiser_type":null,"cf_person_iar_engagement":"Unknown","cf_person_grr_engagement":"Unknown","cf_person_insights_first_campaign":null,"cf_person_insights_last_visit":null,"cf_person_iar_no_postal":null,"cf_person_registered":false,"cf_person_iar_webinar":false,"cf_person_iar_editorial_type":null,"cf_person_molecular_diagnostics":false,"_can_read":true,"cf_person_epr_ord_sign_off_only":false,"cf_person_grr_conference_source":null,"cf_person_lead_event_reference":null,"no_post_soliciting":false,"cf_person_nf_subscriber":false,"cf_person_iar_brand_unsubscribe_2106":false,"cf_person_grr_leadgen_aoi":null,"cf_person_ias25_speaker":false,"cf_person_data_matching_picklist":null,"cf_person_grr_assumed_website_aoi":null,"cf_person_iar_ias23":null,"cf_person_dtr_core_audience":false,"person_personal_title":null,"no_phone_soliciting":false,"cf_person_dtr_nurture_track":true,"person_job_title":"Marketing Manager","cf_person_nf_manual_advertiser_type":false,"cf_person_last_login_ip_address":null,"cf_person_science_primary_secondary_audience":null,"cf_person_grr_zmember_reference":null,"queue_entry[updated_at]":"Mon Sep 22 12:17:36 UTC 2025","id":4348242,"no_email_soliciting":false,"cf_person_dtr_events":false,"cf_person_epr_subscriber":false,"cf_person_iar_core_audience":false,"_can_chown":true,"cf_person_transport_primary_secondary_audience":null,"queue_entry[queue[name]]":"Levon Gravett","compliance_special_categories":null,"cf_person_ryan_clarke":null,"_preload_linked_item_association_for_cf_person_nf_online_aoi":"","cf_person_epr_advertiser_type":null,"home_location[email]":"","cf_person_nf_order_fulfilment_client_survey":false,"cf_person_fraser_owen":null,"employer_link":null,"cf_person_epr_news":false,"cf_person_grr_editorial_type":null,"compliance_channels":null,"cf_person_suzy_baverstock":null,"cf_person_force24_nt_deletion":false,"person_salutation":null,"main_location[fax]":null,"cf_person_it_assumed_aoi":null,"cf_person_grr_brand_unsubscribe":false,"cf_person_iar_assumed_aoi":null,"cf_person_2022_print":"0.0 GBP 1","cf_person_it_mode_of_transport_interest":null,"cf_person_dtr_all_brand_unsubscribe":false,"cf_person_it_nurture_track":true,"cf_person_2023_print":"0.0 GBP 1","home_location[town]":"","cf_person_iar_web_member":false,"cf_person_nf_subscriber_type":null,"cf_person_ias24_registered":false,"cf_person_ias25_attended":false,"cf_person_linkedin_url":null,"cf_person_it_subscriber":false,"cf_person_grr_subscriber_type":null,"cf_person_grr_webinar":false,"cf_person_insights_first_term":null,"cf_person_grr_dr23":null,"cf_person_nf_events":false,"cf_person_iar_order_fulfilment_client_survey":false,"owner[login_name]":"levon.gravett@supersonic-playground.com","cf_person_dtr_subscriber_type":"Prospect","cf_person_workbooks":true,"cf_person_grr_news_and_events":false,"cf_person_sponsor_optin":null,"cf_person_grr_webinar_aoi":null,"cf_person_grr_manual_advertiser_type":false,"cf_person_nf_advertiser_type":null,"updated_by_user[person_name]":"Levon Gravett","home_location[alternate_telephone]":"","marketing_campaign_id":null,"cf_person_iar_brand_unsubscribe":false,"cf_person_it_no_postal":null,"cf_person_it_third_party":false,"cf_person_it_leadgen_aoi":null,"cf_person_dtr_no_postal":null,"cf_person_dtr_editorial_type":null,"assigned_to":1117,"cf_person_assays":false,"cf_person_dtr_assumed_website_aoi":null,"cf_person_epr_leadgen_aoi":null,"cf_person_fbpa25_sponsor":false,"cf_person_ias25_sponsor":false,"cf_person_manual_advertiser_type":false,"cf_person_grr_third_party":false,"cf_person_epr_engagement":"Unknown","cf_person_zoe_bryant":null,"cf_person_drugs_therapies":false,"cf_person_joanna_kirby":null,"categories":null,"cf_person_it_webinar_aoi":null,"cf_person_genomics":false,"updated_by_user[login_name]":"levon.gravett@supersonic-playground.com","person_last_name":"Smith","preferred_language":null,"main_location[email]":"jane.smith@example.com","cf_person_conference_source":null,"cf_person_force24_lead_score":null,"cf_person_nf_fig23":null,"cf_person_personalised_medicine":false,"cf_person_editorial_contact_type":null,"cf_person_iar_assumed_website_aoi":null,"home_location[county_province_state]":"","cf_person_fbpa24_attended":false,"cf_person_it_all_brand_unsubscribe":false,"cf_person_dtr_subscriber":false,"cf_person_epr_editorial_type":null,"cf_person_nf_online_aoi":null,"person_job_role":null,"updated_at":"Mon Sep 22 12:17:36 UTC 2025","cf_person_grr_areas_of_interest_314":null,"cf_person_epr_news_and_events":false,"created_at":"Mon Sep 22 12:17:36 UTC 2025","cf_person_cell_gene_therapy":false,"organisation_num_employees":null,"cf_person_insights_background":null,"cf_person_nf_ord_sign_off_only":false,"cf_person_dtr_webinar_aoi":null,"cf_person_analysis":false,"cf_person_grr_ord_sign_off_only":false,"cf_person_duplicate_person":false,"cf_person_confidence_score_rating":null,"cf_person_nf_engagement":"Unknown","industry":null,"cf_person_epr_zmember_reference":null,"cf_person_act_urn":null,"cf_person_insight_yesterday_score":null,"updated_by":152350,"cf_person_first_login_time":null,"cf_person_2022_digital":"0.0 GBP 1","cf_person_it_events":false,"cf_person_iar_advertiser_type":null,"cf_person_epr_order_fulfilment_client_survey":false,"created_by":152350,"cf_person_nf_webinar":false,"cf_person_nf_all_brand_unsubscribe":false,"cf_person_diseases":false,"cf_person_delegate_blacklist":false,"cf_person_epr_web_member":false,"cf_person_epr_webinar_aoi":null,"cf_person_nf_industry_sector_worked":null,"descriptor":"Jane Smith","cf_person_nf_no_postal":null,"home_location[fax]":"","cf_person_grr_news":false,"cf_person_iar_manual_advertiser_type":false,"spouse_name":null,"queue_entry[queue_id]":1117,"cf_person_screening_sequencing":false,"cf_person_it_conference_attended":null,"cf_person_toxicology":false,"cf_person_nf_zmember_reference":null,"email_opt_in":false,"cf_person_2023_total":"0.0 GBP 1","cf_person_dtr_areas_of_interest_v2":null,"cf_person_authentication_blocked":false,"cf_person_drug_discovery_processes":false,"cf_person_fbpa24_declined":false,"cf_person_dtr_advertiser_type":null,"cf_person_ias25_registered":false,"image_url":null,"cf_person_nf_online_aoi__name":null,"home_location[street_address]":"","cf_person_fbpa24_registered":false,"cf_person_last_login_time":null,"cf_person_dtr_assumed_aoi":null,"cf_person_it_news":false,"cf_person_insights_today_score":null,"cf_person_it_subscriber_type":null,"cf_person_sam_pirani":null,"cf_person_dtr_webinar":false,"facebook_url":null,"main_location[mobile]":null,"cf_person_nf_assumed_aoi":null,"cf_person_insights_link":null,"cf_person_fbpa25_speaker":false,"cf_person_fbpa25_registered":false,"main_location[county_province_state]":null,"photo_url":null,"cf_person_nf_news":false,"home_location[alternate_email]":"","cf_person_it_webinar":false,"biography":null,"cf_person_imaging":false,"cf_person_tools_techniques":false,"owner_id":152350,"cf_person_grr_order_fulfilment_client_survey":false,"home_location[country]":"","cf_person_dtr_news_and_events":false,"cf_person_nf_news_and_events":false,"created_by_user[person_name]":"Levon Gravett","name":"Jane Smith","main_location[email_address_undeliverable]":false,"cf_person_temp_exclusion":false,"cf_person_iar_third_party":false,"cf_person_2022_spex":"0.0 GBP 1","linked_item_association_for_cf_person_nf_online_aoi":null,"cf_person_iar_areas_of_interest_316":null,"cf_person_technology":false,"cf_person_act_company_type":null,"organisation_annual_revenue":"  0","person_middle_name":null,"cf_person_frankie_nt_deletion_review":false,"cf_person_it_news_and_events":false,"cf_person_grr_advertiser_type":null,"assistant_phone":null,"cf_person_translational_science":false,"cf_person_fbpa25_attended":false,"cf_person_genomics_3774":false,"cf_person_world_region":null,"cf_person_epr_assumed_aoi":null,"cf_person_epr_sales_contact":null,"cf_person_ias24_sponsor":false,"cf_person_it_zmember_reference":null,"cf_person_grr_subscribers":false,"lead_source_type":"Event Registration","cf_person_it_assumed_website_aoi":null,"cf_person_iar_nurture_track":true,"cf_person_iar_eligible_for_communications_after_30_days":false,"skype_name":null,"cf_person_biomarkers":false,"cf_person_iar_ord_sign_off_only":false,"cf_person_nf_eligible_for_communications_after_30_days":false,"website":"","cf_person_insights_30_days_score":null,"sync_with_mailer":true,"cf_person_insights_industry":null,"cf_person_dtr_ord_sign_off_only":false,"cf_person_is_person_active_or_inactive":"Active","cf_person_iar_news_and_events":false,"special_requirements":null,"cf_person_iar_zmember_reference":null,"cf_person_act_info_source":null,"cf_person_nf_web_member":false,"cf_person_dtr_therapeutic_aoi":null,"cf_person_epr_all_brand_unsubscribe":false,"cf_person_2023_digital":"0.0 GBP 1","cf_person_insights_7_days_score":null,"cf_person_client_nps":null,"cf_person_conference_attendee_type":null,"cf_person_research_development":false,"cf_person_fbpa25_declined":false,"home_location[mobile]":"","cf_person_iar_webinar_aoi":null,"cf_person_grr_assumed_aoi":null,"cf_person_marketing_ringfensed":false,"cf_person_it_engagement":"Unknown","cf_person_nurture_track":false,"imported":false,"cf_person_epr_webinar":false,"main_location[postcode]":null,"cf_person_grr_no_postal":null,"cf_person_location":null,"cf_person_epr_core_audience":false,"created_by_user[login_name]":"levon.gravett@supersonic-playground.com","cf_person_nf_leadgen_aoi":null,"cf_person_dtr_leadgen_aoi":null,"cf_person_insights_first_medium":null,"home_location[postcode]":"","cf_person_dtr_third_party":false,"cf_person_grr_all_brand_unsubscribe":false,"main_location[street_address]":null,"cf_person_external_event_exhibitors":null,"cf_person_job_level":null,"cf_person_epr_foba23":null,"cf_person_iar_news":false,"cf_person_insights_first_visit":null,"cf_person_data_matching":null,"cf_person_stem_cells":false,"cf_person_insights_yesterday_score":null,"cf_person_dan_birchmore":null,"cf_person_iar_conference_attended":null,"cf_person_grr_events":false,"cf_person_idbs_potential_speaker":false,"cf_person_grr_web_member":false,"cf_person_2023_spex":"0.0 GBP 1","cf_person_grr_nurture_track":true,"cf_person_dtr_zmember_reference":null,"home_location[telephone]":"","object_url":"https:\/\/russellpublishing-live.workbooks.com\/link\/3cDMzUTM\/PERS-691418","cf_person_clinical_trials":false,"party_notes":null,"cf_person_confidence_level":null,"cf_person_insights_first_source":null,"cf_person_jess_russell":null,"cf_person_preclinical_research":false,"linked_item_association_for_cf_person_location":null,"cf_person_epr_2":null,"lock_version":0,"cf_person_artificial_intelligencemachine_learning":false,"cf_person_send_media_pack":false,"created_through":"DTR","cf_person_fbpa24_sponsor":false,"twitter_url":null,"cf_person_dtr_news":false,"cf_person_epr_subscriber_type":null,"cf_person_nf_tdm":false,"created_through_reference":"","cf_person_beau_bailey":null,"cf_person_dtr_tdm":false,"cf_person_tony_portelli":null,"cf_person_nf_webinar_aoi":null,"cf_person_insights_revenue":null,"cf_person_ias25_declined":false,"watched":false,"cf_person_grr_conference_attended":null,"cf_person_ias24_attended":false,"cf_person_act_company_name":null,"main_location_id":4427044,"cf_person_epr_no_postal":null,"cf_person_nf_third_party":false,"is_deleted":false,"main_location[country]":"United Kingdom","_link_or_create_employer":null,"employer_name":null,"cf_person_epr_events":false,"_can_chaccess":true,"cf_person_it_editorial_type":null,"cf_person_dtr_eligible_for_communications_after_30_days":false,"cf_person_nf_areas_of_interest_312":null,"cf_person_hit_to_lead":false,"marketing_campaign[name]":"","cf_person_grr_eligible_for_communications_after_30_days":false,"cf_person_nf_nurture_track":true,"cf_person_epr_eligible_for_communications_after_30_days":false,"cf_person_brand":null,"alternate_names":null,"cf_person_iar_tdm":false,"cf_person_informatics":false,"main_location[telephone]":"+44-1234-567890","object_ref":"PERS-691418","cf_person_insights_first_content":null,"cf_person_nf_editorial_type":null,"cf_person_it_its23":null,"cf_person_andy_holland":null,"cf_person_verification_picklist":null,"logo_url":null,"cf_person_confidence_score_date":null,"cf_person_claimed_employer":"Test Pharma Company","cf_person_epr_third_party":false,"type":"Private::Crm::Person","cf_person_location__name":null,"cf_person_last_issue_sent":null,"_preload_linked_item_association_for_cf_person_location":"","cf_person_2022_total":"0.0 GBP 1","cf_person_ias24_speaker":false,"cf_person_iar_conference_source":null,"cf_person_data_source_detail":"DTR-MEDIA-PLANNER-2025","cf_person_iar_subscriber":false,"cf_person_targets":false,"cf_person_it_areas_of_interest_318":null,"_can_modify":true,"_can_delete":true,"assistant_name":null,"cf_person_conference_attended":null,"linkedin_url":null,"main_location[alternate_email]":null,"cf_person_nic_losardo":null,"owner[person_name]":"Levon Gravett","cf_person_iar_subscriber_type":null,"cf_person_lab_automation":false,"cf_person_it_conference_source":null,"cf_person_dtr_manual_advertiser_type":false,"cf_person_epr_tdm":false,"gdpr_compliant":false,"cf_person_iar_all_brand_unsubscribe":false,"mailchimp_last_synchronised_at":null,"cf_person_nf_core_audience":false,"cf_person_iar_iaos23":null,"cf_person_dtr_web_member":false}],"updates":{"data":{"immediate":["private_crm_party","private_crm_person","private_crm_organisation","private_crm_opportunity_contact","private_crm_case_contact","private_own_org_currency","private_email_mailing_list_entries","private_crm_campaign_membership","private_accounting_exchange_rates","domain_name"]}},"flash":"saved successfully"}
+2025-09-22 12:17:36 [Media-Planner] New person created with ID: 
+2025-09-22 12:17:36 [Media-Planner] Person created/found with ID: 
+2025-09-22 12:17:36 [Media-Planner] Creating event ticket for person ID: 
+2025-09-22 12:17:36 [Media-Planner] Creating ticket with data: {"event_id":5137,"person_id":null,"ticket_type":"Delegate","ticket_status":"Registered","registration_status":"Confirmed","ticket_price":0,"currency":"GBP","attended":"No","registration_method":"Website","data_source_reference":"DTR-MEDIA-PLANNER-2025","cf_customer_order_brand_for_pdf":"Drug Target Review","cf_customer_order_line_item_brand":"DTR","cf_customer_order_line_item_rp_product_delegate":"Media Planner 2025","cf_customer_order_line_item_subproduct_event":"FOC","cf_customer_order_line_item_streams":"N\/A","cf_customer_order_line_item_campaign_delegate":"Media Planner 2025","cf_customer_order_line_item_campaign_reference_2":"CAMP-41496","cf_customer_order_line_item_delegate_type":"Primary","cf_customer_order_line_item_delegate_type_608":"Delegate","cf_customer_order_line_item_delegate_ticket_type":"VIP","cf_customer_order_line_item_attended":"No","cf_customer_order_line_item_dinner":"N\/A","assigned_to_name":"Unassigned"}
+2025-09-22 12:17:37 [Media-Planner] Error creating event ticket: Non-OK response (404)
+2025-09-22 12:17:37 [Media-Planner] ERROR: Failed to create event ticket: Non-OK response (404)
+2025-09-22 12:17:37 [Media-Planner] ERROR Trace: #0 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-includes/class-wp-hook.php(324): dtr_handle_media_planner_form_submit('')
+#1 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-includes/class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#2 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-includes/plugin.php(517): WP_Hook->do_action(Array)
+#3 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-admin/admin-ajax.php(192): do_action('wp_ajax_dtr_med...')
+#4 {main}
+2025-09-22 12:18:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:18:06 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:18:23 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:18:24 [Media-Planner] === MEDIA PLANNER FORM SUBMISSION START ===
+2025-09-22 12:18:24 [Media-Planner] SECURITY: Invalid nonce provided
+2025-09-22 12:20:01 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:20:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:20:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:20:08 [Media-Planner] === MEDIA PLANNER FORM SUBMISSION START ===
+2025-09-22 12:20:08 [Media-Planner] SECURITY: Invalid nonce provided
+2025-09-22 12:20:11 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:22:04 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:22:07 [Media-Planner] === MEDIA PLANNER FORM SUBMISSION START ===
+2025-09-22 12:22:07 [Media-Planner] SECURITY: Invalid nonce provided
+2025-09-22 12:22:08 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:22:46 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:22:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:22:54 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:23:01 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:23:03 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:23:03 [Media-Planner] === MEDIA PLANNER FORM SUBMISSION START ===
+2025-09-22 12:23:03 [Media-Planner] Form data collected: {"firstName":"Jane","lastName":"Smith","email":"jane.smith@example.com","jobTitle":"Marketing Manager","organisation":"Test Pharma Company","city":"London","country":"United Kingdom","phone":"+44-1234-567890","canWeHelpFurther":"Request a quote","consent":"1"}
+2025-09-22 12:23:03 [Media-Planner] Hidden data: {"event_id":"5137","data_source_detail":"DTR-MEDIA-PLANNER-2025","download_name":"DTR-MEDIA-PLANNER-2025","type":"Event Registration","lead_source_type":"Event Registration","cf_customer_order_brand_for_pdf":"Drug Target Review","campaign_name":"Media Planner 2025","cf_customer_order_line_item_brand":"DTR","cf_customer_order_line_item_rp_product_delegate":"Media Planner 2025","cf_customer_order_line_item_subproduct_event":"FOC","cf_customer_order_line_item_streams":"N\/A","cf_customer_order_line_item_campaign_delegate":"Media Planner 2025","cf_customer_order_line_item_campaign_reference_2":"CAMP-41496","cf_customer_order_line_item_delegate_type":"Primary","cf_customer_order_line_item_delegate_type_608":"Delegate","cf_customer_order_line_item_delegate_ticket_type":"VIP","cf_customer_order_line_item_attended":"No","cf_customer_order_line_item_dinner":"N\/A","assigned_to":"Unassigned","web_key":"663d4d9f011e521baf6fc92150976b453f3b0a72","success_url":"https:\/\/www.drugtargetreview.com","failure_url":"https:\/\/www.drugtargetreview.com","sales_lead_rating":"Warm","lead_type":"Reader","dtr_subscriber_type":"Prospect","product_mix":"","name1":"","name2":"","org_lead_party_email":""}
+2025-09-22 12:23:03 [Media-Planner] Workbooks instance obtained successfully
+2025-09-22 12:23:03 [Media-Planner] Creating/finding person in Workbooks
+2025-09-22 12:23:04 [Media-Planner] Person search response: {"success":false,"failures":["_filter_json must be an Array of Arrays containing 3 items, found {\"main_location[email]\":\"jane.smith@example.com\"} Reference: 729170-3648184-36738"]}
+2025-09-22 12:23:04 [Media-Planner] Person not found, creating new person
+2025-09-22 12:23:06 [Media-Planner] Person creation response: {"success":true,"affected_object_information":[{"success":true,"errors":[],"warnings":[]}],"affected_objects":[{"cf_person_dtr_order_fulfilment_client_survey":false,"cf_person_jess_russell":null,"cf_person_dtr_tdm":false,"main_location[county_province_state]":null,"image_url":null,"cf_person_location":null,"cf_person_dan_birchmore":null,"cf_person_grr_tdm":false,"cf_person_fbpa25_declined":false,"cf_person_iar_conference_source":null,"cf_person_dtr_events":false,"cf_person_it_webinar":false,"cf_person_iar_leadgen_aoi":null,"marketing_campaign[name]":"","cf_person_iar_all_brand_unsubscribe":false,"cf_person_iar_subscriber_type":null,"cf_person_insights_total_score":null,"main_location[telephone]":"+44-1234-567890","cf_person_nf_order_fulfilment_client_survey":false,"cf_person_nf_fig23":null,"cf_person_it_all_brand_unsubscribe":false,"cf_person_nf_news":false,"cf_person_fraser_owen":null,"main_location[fax]":null,"_can_read":true,"cf_person_fbpa24_registered":false,"cf_person_verification_picklist":null,"cf_person_nf_leadgen_aoi":null,"cf_person_imaging":false,"cf_person_iar_assumed_aoi":null,"cf_person_assays":false,"cf_person_force24_nt_deletion":false,"cf_person_brand":null,"cf_person_grr_assumed_aoi":null,"cf_person_ias25_sponsor":false,"industry":null,"cf_person_data_source_detail":"DTR-MEDIA-PLANNER-2025","cf_person_it_assumed_website_aoi":null,"cf_person_grr_eligible_for_communications_after_30_days":false,"cf_person_grr_conference_attended":null,"cf_person_lead_event_reference":null,"cf_person_iar_subscriber":false,"main_location[email]":"jane.smith@example.com","cf_person_dtr_areas_of_interest_v2":null,"cf_person_location__name":null,"cf_person_epr_engagement":"Unknown","cf_person_epr_leadgen_aoi":null,"main_location[postcode]":null,"cf_person_ias25_attended":false,"main_location[street_address]":null,"cf_person_iar_conference_attended":null,"cf_person_conference_attended":null,"name":"Jane Smith","is_deleted":false,"cf_person_manual_advertiser_type":false,"cf_person_2023_spex":"0.0 GBP 1","_can_modify":true,"cf_person_iar_ias23":null,"cf_person_2023_total":"0.0 GBP 1","cf_person_2022_digital":"0.0 GBP 1","cf_person_dtr_eligible_for_communications_after_30_days":false,"cf_person_informatics":false,"cf_person_screening_sequencing":false,"cf_person_idbs_potential_speaker":false,"person_suffix":null,"person_job_role":null,"object_url":"https:\/\/russellpublishing-live.workbooks.com\/link\/3cDMzUTM\/PERS-691419","facebook_url":null,"cf_person_2023_digital":"0.0 GBP 1","cf_person_ias24_declined":false,"organisation_num_employees":null,"cf_person_it_engagement":"Unknown","cf_person_act_company_type":null,"cf_person_act_info_source":null,"cf_person_ias24_registered":false,"cf_person_grr_third_party":false,"cf_person_iar_no_postal":null,"cf_person_workbooks":true,"cf_person_nf_web_member":false,"lock_version":0,"cf_person_grr_all_brand_unsubscribe":false,"employer_name":null,"cf_person_nf_subscriber":false,"cf_person_world_region":null,"home_location[mobile]":"","cf_person_genomics":false,"updated_at":"Mon Sep 22 12:23:06 UTC 2025","cf_person_grr_areas_of_interest_314":null,"cf_person_it_advertiser_type":null,"cf_person_lab_automation":false,"queue_entry[queue[name]]":"Levon Gravett","queue_entry[updated_at]":"Mon Sep 22 12:23:06 UTC 2025","cf_person_epr_nurture_track":true,"cf_person_diseases":false,"linkedin_url":null,"cf_person_dtr_assumed_aoi":null,"cf_person_nf_eligible_for_communications_after_30_days":false,"cf_person_iar_third_party":false,"main_location[alternate_email]":null,"special_requirements":null,"home_location[alternate_telephone]":"","cf_person_iar_order_fulfilment_client_survey":false,"cf_person_insight_yesterday_score":null,"home_location[postcode]":"","cf_person_insights_last_visit":null,"cf_person_grr_leadgen_aoi":null,"cf_person_grr_nurture_track":true,"updated_by":152350,"cf_person_dtr_news":false,"cf_person_nf_news_and_events":false,"cf_person_force24_lead_score":null,"cf_person_dtr_webinar":false,"main_location[country]":"United Kingdom","cf_person_it_assumed_aoi":null,"compliance_channels":null,"cf_person_epr_advertiser_type":null,"cf_person_ryan_clarke":null,"object_ref":"PERS-691419","cf_person_registered":false,"cf_person_grr_dr23":null,"cf_person_nf_events":false,"cf_person_it_news_and_events":false,"cf_person_delegate_blacklist":false,"cf_person_insights_link":null,"main_location_id":4427054,"created_through_reference":"","cf_person_nf_zmember_reference":null,"cf_person_dtr_leadgen_aoi":null,"cf_person_iar_webinar":false,"cf_person_job_level":null,"cf_person_last_issue_sent":null,"cf_person_nf_webinar_aoi":null,"cf_person_grr_subscriber_type":null,"cf_person_analysis":false,"cf_person_science_primary_secondary_audience":null,"_can_chaccess":true,"cf_person_fbpa25_sponsor":false,"cf_person_it_leadgen_aoi":null,"cf_person_beau_bailey":null,"cf_person_grr_manual_advertiser_type":false,"cf_person_biomarkers":false,"cf_person_drug_discovery_processes":false,"cf_person_editorial_contact_type":null,"cf_person_authentication_blocked":false,"cf_person_ias25_speaker":false,"cf_person_insights_first_term":null,"cf_person_grr_ord_sign_off_only":false,"party_notes":null,"cf_person_dtr_advertiser_type":null,"home_location[county_province_state]":"","cf_person_dtr_assumed_website_aoi":null,"cf_person_insights_first_campaign":null,"queue_entry[queue_id]":1117,"cf_person_epr_events":false,"cf_person_grr_brand_unsubscribe":false,"lead_source_type":"Event Registration","cf_person_ias24_speaker":false,"cf_person_epr_tdm":false,"cf_person_it_news":false,"website":"","cf_person_grr_core_audience":false,"cf_person_it_zmember_reference":null,"owner[login_name]":"levon.gravett@supersonic-playground.com","cf_person_epr_assumed_website_aoi":null,"cf_person_conference_attendee_type":null,"created_through":"DTR","cf_person_les_lubwama":null,"cf_person_nf_assumed_website_aoi":null,"home_location[email]":"","cf_person_epr_news":false,"cf_person_dtr_subscriber_type":"Prospect","cf_person_insights_7_days_score":null,"cf_person_duplicate_person":false,"home_location[fax]":"","linked_item_association_for_cf_person_location":null,"person_middle_name":null,"cf_person_nf_assumed_aoi":null,"cf_person_sam_pirani":null,"cf_person_grr_webinar":false,"cf_person_iar_web_member":false,"cf_person_dtr_therapeutic_aoi":null,"cf_person_iar_news_and_events":false,"cf_person_epr_no_postal":null,"cf_person_zoe_bryant":null,"cf_person_nic_losardo":null,"cf_person_data_matching":null,"cf_person_grr_events":false,"cf_person_insights_first_content":null,"home_location[alternate_email]":"","created_by_user[login_name]":"levon.gravett@supersonic-playground.com","cf_person_marketing_ringfensed":false,"cf_person_epr_order_fulfilment_client_survey":false,"person_first_name":"Jane","cf_person_dtr_news_and_events":false,"cf_person_epr_assumed_aoi":null,"mailchimp_last_synchronised_at":null,"cf_person_translational_science":false,"cf_person_nf_engagement":"Unknown","alternate_names":null,"cf_person_nf_nurture_track":true,"cf_person_epr_core_audience":false,"cf_person_hit_to_lead":false,"cf_person_2022_print":"0.0 GBP 1","cf_person_it_its23":null,"employer_link":null,"cf_person_iar_webinar_aoi":null,"cf_person_dtr_all_brand_unsubscribe":false,"cf_person_insights_today_score":null,"cf_person_2023_print":"0.0 GBP 1","cf_person_iar_brand_unsubscribe":false,"cf_person_it_nurture_track":true,"cf_person_insights_employees":null,"main_location[alternate_telephone]":null,"cf_person_nf_editorial_type":null,"cf_person_insights_first_source":null,"cf_person_data_matching_picklist":null,"cf_person_insights_30_days_score":null,"main_location[email_address_undeliverable]":false,"cf_person_it_conference_source":null,"organisation_annual_revenue":"  0","assigned_to":1117,"cf_person_it_webinar_aoi":null,"cf_person_molecular_diagnostics":false,"cf_person_fbpa25_speaker":false,"spouse_name":null,"cf_person_personalised_medicine":false,"cf_person_iar_core_audience":false,"cf_person_iar_tdm":false,"cf_person_it_subscriber":false,"cf_person_nf_no_postal":null,"cf_person_iar_brand_unsubscribe_2106":false,"cf_person_nf_tdm":false,"compliance_special_categories":null,"cf_person_nf_areas_of_interest_312":null,"cf_person_epr_webinar":false,"cf_person_epr_2":null,"cf_person_iar_engagement":"Unknown","cf_person_dtr_ord_sign_off_only":false,"cf_person_epr_zmember_reference":null,"_link_or_create_employer":null,"cf_person_grr_assumed_website_aoi":null,"cf_person_it_third_party":false,"no_email_soliciting":false,"cf_person_iar_eligible_for_communications_after_30_days":false,"cf_person_send_media_pack":false,"cf_person_dtr_engagement":"Unknown","cf_person_nf_all_brand_unsubscribe":false,"cf_person_dtr_nurture_track":true,"cf_person_drugs_therapies":false,"cf_person_targets":false,"cf_person_iar_events":false,"home_location[telephone]":"","gdpr_compliant":false,"cf_person_ias24_sponsor":false,"home_location[street_address]":"","person_personal_title":null,"cf_person_it_conference_attended":null,"cf_person_dtr_manual_advertiser_type":false,"cf_person_grr_no_postal":null,"cf_person_grr_editorial_type":null,"imported":false,"marketing_campaign_id":null,"cf_person_nf_online_aoi":null,"cf_person_epr_subscriber_type":null,"cf_person_last_login_time":null,"cf_person_technology":false,"cf_person_nf_advertiser_type":null,"cf_person_fbpa25_attended":false,"cf_person_it_subscriber_type":null,"main_location[mobile]":null,"cf_person_frankie_nt_deletion_review":false,"cf_person_ias24_attended":false,"cf_person_confidence_score_rating":null,"cf_person_insights_industry":null,"cf_person_grr_webinar_aoi":null,"no_post_soliciting":false,"email_opt_in":false,"cf_person_epr_editorial_type":null,"cf_person_linkedin_url":null,"cf_person_research_development":false,"cf_person_iar_iaos23":null,"cf_person_insights_first_visit":null,"cf_person_it_editorial_type":null,"cf_person_nf_manual_advertiser_type":false,"cf_person_fbpa24_sponsor":false,"cf_person_nf_online_aoi__name":null,"descriptor":"Jane Smith","cf_person_ias25_declined":false,"cf_person_grr_order_fulfilment_client_survey":false,"cf_person_iar_ord_sign_off_only":false,"cf_person_fbpa24_attended":false,"cf_person_confidence_level":null,"cf_person_claimed_employer":"Test Pharma Company","assistant_name":null,"cf_person_genomics_3774":false,"cf_person_nf_webinar":false,"cf_person_it_no_postal":null,"watched":false,"cf_person_fbpa25_registered":false,"cf_person_epr_ord_sign_off_only":false,"preferred_language":null,"cf_person_epr_eligible_for_communications_after_30_days":false,"cf_person_andy_holland":null,"person_job_title":"Marketing Manager","no_phone_soliciting":false,"cf_person_epr_subscriber":false,"cf_person_tony_portelli":null,"cf_person_insights_first_medium":null,"cf_person_iar_zmember_reference":null,"biography":null,"sync_with_mailer":true,"updated_by_user[login_name]":"levon.gravett@supersonic-playground.com","cf_person_is_person_active_or_inactive":"Active","cf_person_temp_exclusion":false,"cf_person_toxicology":false,"cf_person_iar_editorial_type":null,"cf_person_epr_web_member":false,"created_by_user[person_name]":"Levon Gravett","cf_person_dtr_zmember_reference":null,"cf_person_epr_news_and_events":false,"cf_person_transport_primary_secondary_audience":null,"cf_person_grr_subscribers":false,"cf_person_epr_sales_contact":null,"owner_id":152350,"cf_person_insights_yesterday_score":null,"cf_person_iar_areas_of_interest_316":null,"_preload_linked_item_association_for_cf_person_location":"","cf_person_dtr_subscriber":false,"twitter_url":null,"cf_person_stem_cells":false,"photo_url":null,"_can_delete":true,"cf_person_external_event_exhibitors":null,"created_by":152350,"created_at":"Mon Sep 22 12:23:06 UTC 2025","home_location[town]":"","cf_person_joanna_kirby":null,"cf_person_grr_engagement":"Unknown","cf_person_client_nps":null,"cf_person_preclinical_research":false,"cf_person_grr_news_and_events":false,"linked_item_association_for_cf_person_nf_online_aoi":null,"cf_person_epr_webinar_aoi":null,"cf_person_2022_total":"0.0 GBP 1","person_salutation":null,"cf_person_clinical_trials":false,"cf_person_dtr_web_member":false,"cf_person_nf_core_audience":false,"cf_person_epr_all_brand_unsubscribe":false,"cf_person_dtr_no_postal":null,"cf_person_grr_web_member":false,"categories":null,"person_last_name":"Smith","cf_person_2022_spex":"0.0 GBP 1","skype_name":null,"_preload_linked_item_association_for_cf_person_nf_online_aoi":"","cf_person_it_events":false,"type":"Private::Crm::Person","updated_by_user[person_name]":"Levon Gravett","cf_person_grr_zmember_reference":null,"cf_person_nf_subscriber_type":null,"cf_person_dtr_third_party":false,"cf_person_cell_gene_therapy":false,"cf_person_artificial_intelligencemachine_learning":false,"cf_person_nf_industry_sector_worked":null,"home_location[country]":"","cf_person_nurture_track":false,"cf_person_epr_areas_of_interest_310":null,"cf_person_iar_manual_advertiser_type":false,"cf_person_insights_revenue":null,"assistant_phone":null,"cf_person_epr_third_party":false,"cf_person_business":false,"cf_person_act_company_name":null,"id":4348252,"cf_person_ias25_registered":false,"cf_person_fbpa24_declined":false,"cf_person_sponsor_optin":null,"cf_person_confidence_score_date":null,"cf_person_grr_news":false,"_can_chown":true,"cf_person_nf_ord_sign_off_only":false,"main_location[town]":"London","logo_url":null,"cf_person_epr_foba23":null,"cf_person_fbpa24_speaker":false,"cf_person_first_login_time":null,"cf_person_grr_advertiser_type":null,"cf_person_iar_nurture_track":true,"cf_person_dtr_webinar_aoi":null,"cf_person_interests":null,"cf_person_it_areas_of_interest_318":null,"cf_person_iar_assumed_website_aoi":null,"cf_person_act_urn":null,"cf_person_it_mode_of_transport_interest":null,"cf_person_tools_techniques":false,"cf_person_conference_source":null,"cf_person_nf_third_party":false,"cf_person_iar_news":false,"cf_person_dtr_editorial_type":null,"cf_person_dtr_core_audience":false,"cf_person_insights_background":null,"cf_person_suzy_baverstock":null,"cf_person_iar_advertiser_type":null,"cf_person_last_login_ip_address":null,"cf_person_grr_conference_source":null,"owner[person_name]":"Levon Gravett"}],"updates":{"data":{"immediate":["private_crm_party","private_crm_person","private_crm_organisation","private_crm_opportunity_contact","private_crm_case_contact","private_own_org_currency","private_email_mailing_list_entries","private_crm_campaign_membership","private_accounting_exchange_rates","domain_name"]}},"flash":"saved successfully"}
+2025-09-22 12:23:06 [Media-Planner] New person created with ID: 
+2025-09-22 12:23:06 [Media-Planner] Person created/found with ID: 
+2025-09-22 12:23:06 [Media-Planner] Creating event ticket for person ID: 
+2025-09-22 12:23:06 [Media-Planner] Creating ticket with data: {"event_id":5137,"person_id":null,"ticket_type":"Delegate","ticket_status":"Registered","registration_status":"Confirmed","ticket_price":0,"currency":"GBP","attended":"No","registration_method":"Website","data_source_reference":"DTR-MEDIA-PLANNER-2025","cf_customer_order_brand_for_pdf":"Drug Target Review","cf_customer_order_line_item_brand":"DTR","cf_customer_order_line_item_rp_product_delegate":"Media Planner 2025","cf_customer_order_line_item_subproduct_event":"FOC","cf_customer_order_line_item_streams":"N\/A","cf_customer_order_line_item_campaign_delegate":"Media Planner 2025","cf_customer_order_line_item_campaign_reference_2":"CAMP-41496","cf_customer_order_line_item_delegate_type":"Primary","cf_customer_order_line_item_delegate_type_608":"Delegate","cf_customer_order_line_item_delegate_ticket_type":"VIP","cf_customer_order_line_item_attended":"No","cf_customer_order_line_item_dinner":"N\/A","assigned_to_name":"Unassigned"}
+2025-09-22 12:23:07 [Media-Planner] Error creating event ticket: Non-OK response (404)
+2025-09-22 12:23:07 [Media-Planner] ERROR: Failed to create event ticket: Non-OK response (404)
+2025-09-22 12:23:07 [Media-Planner] ERROR Trace: #0 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-includes/class-wp-hook.php(324): dtr_handle_media_planner_form_submit('')
+#1 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-includes/class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#2 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-includes/plugin.php(517): WP_Hook->do_action(Array)
+#3 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-admin/admin-ajax.php(192): do_action('wp_ajax_dtr_med...')
+#4 {main}
+2025-09-22 12:23:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:23:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:25:13 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:25:16 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:25:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:26:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:26:31 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:26:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:28:27 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:28:29 [Media-Planner] === MEDIA PLANNER FORM SUBMISSION START ===
+2025-09-22 12:28:29 [Media-Planner] SECURITY: Invalid nonce provided
+2025-09-22 12:28:29 [Media-Planner] [BOOT] Media planner form handler loaded
+=== NEW TEST Mon Sep 22 14:29:13 SAST 2025 ===
+2025-09-22 12:29:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:29:36 [Media-Planner] === MEDIA PLANNER FORM SUBMISSION START ===
+2025-09-22 12:29:36 [Media-Planner] SECURITY: Invalid nonce provided
+2025-09-22 12:29:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:30:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:30:44 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:31:14 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:31:15 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:31:25 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:31:26 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:31:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:31:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:32:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:32:06 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:32:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:32:15 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:43:00 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:43:04 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:43:06 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:43:10 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:43:11 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:43:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:43:14 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:43:17 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:43:27 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:45:29 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:45:31 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:46:45 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:46:45 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:46:47 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:46:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:46:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:46:55 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:47:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:47:55 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:47:56 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:48:03 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:48:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:48:07 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:48:45 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:48:47 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:48:57 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:50:25 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:50:29 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:50:30 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:50:45 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:51:02 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:52:11 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:52:13 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:52:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:52:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:52:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:52:46 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:53:56 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:53:58 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:53:58 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:14 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:22 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:24 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:25 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:27 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:27 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:43 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:46 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:47 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:50 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:50 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:52 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:52 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:54:58 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:08 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:10 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:18 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:25 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:27 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:27 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:29 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:30 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:31 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:39 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:39 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:41 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:41 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:44 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:44 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:45 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:46 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:46 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:47 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:55:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:56:11 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:56:13 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:56:21 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:56:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:56:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:56:50 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:57:56 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:57:59 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 12:59:56 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:00:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:09 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:17 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:21 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:23 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:26 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:31 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:39 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:41 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:43 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:52 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:54 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:01:55 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:03 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:13 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:14 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:16 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:16 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:18 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:18 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:23 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:25 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:30 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:31 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:32 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:33 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:33 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:39 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:41 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:41 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:52 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:54 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:57 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:58 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:02:58 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:01 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:03 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:04 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:06 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:07 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:09 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:11 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:14 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:14 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:17 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:17 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:22 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:25 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:25 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:32 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:44 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:55 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:03:55 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:29 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:29 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:33 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:44 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:44 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:46 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:46 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:56 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:57 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:58 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:04:59 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:01 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:06 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:06 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:09 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:15 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:15 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:18 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:20 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:20 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:23 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:23 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:26 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:26 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:29 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:29 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:31 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:41 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:45 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:57 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:05:57 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:00 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:02 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:02 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:08 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:08 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:10 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:10 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:14 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:14 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:15 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:15 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:18 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:18 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:18 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:19 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:21 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:24 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:25 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:27 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:30 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:31 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:06:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:07:32 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:07:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:08:27 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:08:30 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:08:31 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:09:33 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:09:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:11:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:11:31 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:11:31 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:12:47 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:12:50 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:12:50 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:12:57 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:13:11 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:13:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:13:23 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:14:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:14:43 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:15:07 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:15:09 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:15:21 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:15:22 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:17:07 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:17:10 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:17:16 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:17:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:17:39 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:17:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:17:52 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:17:59 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:17:59 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:18:02 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:18:02 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:18:03 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:18:04 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:18:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:18:06 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:18:07 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:18:08 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:18:13 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:18:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:18:46 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:19:46 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:19:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:20:01 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:20:02 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:20:23 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:20:25 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:21:04 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:21:24 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:21:25 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:21:54 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:22:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:22:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:23:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:23:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:25:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:25:11 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:25:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:26:15 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:26:19 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:26:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:30:23 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:30:27 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:32:59 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:33:01 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:33:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:33:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:35:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:35:52 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:36:26 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:36:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:38:00 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:38:01 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:38:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:38:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:39:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:39:29 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:39:30 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:41:07 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:41:10 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:41:10 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:41:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:41:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:41:54 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:41:57 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:41:58 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:42:03 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:42:04 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:42:13 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:42:14 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:42:26 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:42:29 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:42:30 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:44:45 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:44:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:44:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:44:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:45:07 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:45:10 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:46:10 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:46:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:46:14 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:46:27 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:46:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:47:13 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:47:14 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:47:15 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:54:46 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:54:50 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:54:52 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:55:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:55:44 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:57:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:57:33 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:57:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:58:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:58:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:58:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:58:58 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:59:03 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:59:14 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:59:15 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 13:59:17 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:00:08 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:00:11 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:00:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:01:09 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:01:11 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:01:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:01:17 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:01:21 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:01:27 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:01:30 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:01:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:03:33 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:03:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:04:16 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:05:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:05:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:05:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:05:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:20:39 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:20:41 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:20:43 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:20:43 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:20:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:20:52 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:21:06 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:21:08 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:21:14 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:21:17 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:21:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:21:33 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:21:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:23:04 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:23:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:23:07 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:23:20 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:23:24 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:23:26 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:23:39 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:25:19 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:25:25 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:28:29 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:28:32 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:28:33 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:28:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:28:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:28:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:28:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:28:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:28:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:29:31 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:29:33 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:29:33 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:30:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:30:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:30:43 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:30:55 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:30:57 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:31:19 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:31:21 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:31:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:31:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:31:39 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:31:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:31:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:31:50 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:32:10 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:32:13 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:32:34 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:32:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:32:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:32:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:33:03 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:33:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:33:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:33:07 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:33:08 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:33:10 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:33:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:33:54 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:33:54 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:34:52 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:34:54 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:35:16 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:35:22 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:36:08 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:36:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:36:16 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:36:16 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:36:18 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:37:19 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:39:21 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:39:24 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:40:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:40:45 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:40:45 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:40:57 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:40:59 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:41:00 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:41:01 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:41:05 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:41:06 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:41:07 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:41:09 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:41:20 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:41:21 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:41:23 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:41:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:41:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:42:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:43:26 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:43:45 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:44:01 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:44:01 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:44:43 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:44:50 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:45:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:45:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:45:56 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:22 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:25 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:35 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:45 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:45 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:55 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:56 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:56 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:57 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:46:57 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:07 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:09 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:09 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:10 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:17 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:20 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:26 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:47 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:48 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:52 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:56 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:57 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:47:57 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:02 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:03 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:03 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:04 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:08 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:10 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:12 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:15 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:15 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:22 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:27 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:27 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:29 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:48:43 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:49:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:49:36 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:49:37 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:49:38 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:49:56 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:50:17 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:50:19 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:50:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:50:51 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:50:52 [Media-Planner] === MEDIA PLANNER FORM SUBMISSION START ===
+2025-09-22 14:50:52 [Media-Planner] Form data collected: {"firstName":"Jane","lastName":"Smith","email":"jane.smith@example.com","jobTitle":"Marketing Manager","organisation":"Test Pharma Company","city":"London","country":"United Kingdom","phone":"+44-1234-567890","canWeHelpFurther":"Request a quote","consent":"1"}
+2025-09-22 14:50:52 [Media-Planner] Hidden data: {"event_id":"5137","data_source_detail":"DTR-MEDIA-PLANNER-2025","download_name":"DTR-MEDIA-PLANNER-2025","type":"Event Registration","lead_source_type":"Event Registration","cf_customer_order_brand_for_pdf":"Drug Target Review","campaign_name":"Media Planner 2025","cf_customer_order_line_item_brand":"DTR","cf_customer_order_line_item_rp_product_delegate":"Media Planner 2025","cf_customer_order_line_item_subproduct_event":"FOC","cf_customer_order_line_item_streams":"N\/A","cf_customer_order_line_item_campaign_delegate":"Media Planner 2025","cf_customer_order_line_item_campaign_reference_2":"CAMP-41496","cf_customer_order_line_item_delegate_type":"Primary","cf_customer_order_line_item_delegate_type_608":"Delegate","cf_customer_order_line_item_delegate_ticket_type":"VIP","cf_customer_order_line_item_attended":"No","cf_customer_order_line_item_dinner":"N\/A","assigned_to":"Unassigned","web_key":"663d4d9f011e521baf6fc92150976b453f3b0a72","success_url":"https:\/\/www.drugtargetreview.com","failure_url":"https:\/\/www.drugtargetreview.com","sales_lead_rating":"Warm","lead_type":"Reader","dtr_subscriber_type":"Prospect","product_mix":"","name1":"","name2":"","org_lead_party_email":""}
+2025-09-22 14:50:52 [Media-Planner] Workbooks instance obtained successfully
+2025-09-22 14:50:52 [Media-Planner] Creating/finding person in Workbooks
+2025-09-22 14:50:53 [Media-Planner] Person search response: {"success":true,"data":[{"cf_person_nurture_track":false,"cf_person_epr_leadgen_aoi":null,"cf_person_toxicology":false,"cf_person_2022_spex":"0.0 GBP 1","cf_person_dtr_assumed_website_aoi":null,"cf_person_ias25_declined":false,"cf_person_science_primary_secondary_audience":null,"cf_person_iar_webinar":false,"cf_person_business":false,"cf_person_grr_manual_advertiser_type":false,"cf_person_authentication_blocked":false,"cf_person_insights_yesterday_score":null,"cf_person_iar_areas_of_interest_316":null,"created_by":152350,"cf_person_ias24_declined":false,"cf_person_location__name":null,"cf_person_epr_all_brand_unsubscribe":false,"cf_person_insights_first_term":null,"cf_person_dtr_news_and_events":false,"cf_person_drug_discovery_processes":false,"cf_person_nf_tdm":false,"logo_url":null,"cf_person_iar_subscriber":false,"cf_person_iar_order_fulfilment_client_survey":false,"cf_person_genomics_3774":false,"biography":null,"cf_person_client_nps":null,"imported":false,"cf_person_act_company_name":null,"compliance_special_categories":null,"home_location[street_address]":"","main_location[alternate_telephone]":null,"updated_by_user[person_name]":"Levon Gravett","cf_person_conference_source":null,"cf_person_andy_holland":null,"cf_person_epr_eligible_for_communications_after_30_days":false,"cf_person_grr_webinar_aoi":null,"main_location[mobile]":null,"type":"Private::Crm::Person","cf_person_epr_no_postal":null,"cf_person_fbpa25_attended":false,"cf_person_grr_events":false,"cf_person_iar_zmember_reference":null,"cf_person_dtr_order_fulfilment_client_survey":false,"cf_person_epr_subscriber_type":null,"cf_person_lab_automation":false,"cf_person_iar_all_brand_unsubscribe":false,"cf_person_it_webinar":false,"person_job_title":"Marketing Manager","cf_person_insights_first_medium":null,"cf_person_analysis":false,"_can_chaccess":true,"cf_person_delegate_blacklist":false,"cf_person_insights_revenue":null,"cf_person_grr_eligible_for_communications_after_30_days":false,"cf_person_technology":false,"cf_person_iar_core_audience":false,"cf_person_it_editorial_type":null,"cf_person_manual_advertiser_type":false,"cf_person_is_person_active_or_inactive":"Active","cf_person_insights_background":null,"cf_person_iar_nurture_track":true,"cf_person_ias25_speaker":false,"cf_person_it_assumed_aoi":null,"cf_person_it_assumed_website_aoi":null,"cf_person_nf_fig23":null,"updated_at":"Mon Sep 22 12:17:36 UTC 2025","cf_person_it_areas_of_interest_318":null,"assistant_name":null,"main_location[email_address_undeliverable]":false,"cf_person_dtr_webinar":false,"no_email_soliciting":false,"person_salutation":null,"cf_person_insights_first_content":null,"cf_person_genomics":false,"cf_person_iar_tdm":false,"cf_person_nf_manual_advertiser_type":false,"cf_person_grr_order_fulfilment_client_survey":false,"main_location[postcode]":null,"no_phone_soliciting":false,"cf_person_nf_news":false,"cf_person_it_no_postal":null,"cf_person_it_third_party":false,"cf_person_dtr_advertiser_type":null,"cf_person_iar_webinar_aoi":null,"person_first_name":"Jane","cf_person_nf_subscriber_type":null,"cf_person_nf_zmember_reference":null,"cf_person_it_conference_attended":null,"cf_person_iar_subscriber_type":null,"cf_person_2023_total":"0.0 GBP 1","cf_person_iar_brand_unsubscribe":false,"cf_person_iar_conference_attended":null,"cf_person_nf_core_audience":false,"cf_person_fbpa25_declined":false,"cf_person_insights_first_visit":null,"cf_person_ias25_sponsor":false,"cf_person_epr_engagement":"Unknown","facebook_url":null,"home_location[alternate_telephone]":"","cf_person_clinical_trials":false,"cf_person_grr_news_and_events":false,"cf_person_epr_zmember_reference":null,"organisation_num_employees":null,"cf_person_molecular_diagnostics":false,"cf_person_ias25_attended":false,"cf_person_it_news":false,"home_location[email]":"","cf_person_insights_first_campaign":null,"linked_item_association_for_cf_person_nf_online_aoi":null,"cf_person_ias24_attended":false,"cf_person_assays":false,"cf_person_it_zmember_reference":null,"cf_person_send_media_pack":false,"alternate_names":null,"cf_person_dtr_areas_of_interest_v2":null,"cf_person_job_level":null,"created_by_user[login_name]":"levon.gravett@supersonic-playground.com","cf_person_iar_news_and_events":false,"cf_person_grr_leadgen_aoi":null,"main_location[alternate_email]":null,"cf_person_epr_webinar":false,"cf_person_diseases":false,"main_location[street_address]":null,"queue_entry[queue_id]":1117,"cf_person_it_advertiser_type":null,"cf_person_first_login_time":null,"cf_person_nf_nurture_track":true,"queue_entry[queue[name]]":"Levon Gravett","cf_person_nf_industry_sector_worked":null,"cf_person_zoe_bryant":null,"is_deleted":false,"cf_person_dtr_eligible_for_communications_after_30_days":false,"cf_person_tools_techniques":false,"cf_person_nf_assumed_website_aoi":null,"cf_person_nf_advertiser_type":null,"owner[person_name]":"Levon Gravett","cf_person_dtr_news":false,"cf_person_2022_digital":"0.0 GBP 1","cf_person_fbpa25_registered":false,"cf_person_conference_attendee_type":null,"cf_person_dtr_web_member":false,"cf_person_nf_webinar":false,"cf_person_iar_leadgen_aoi":null,"cf_person_2023_digital":"0.0 GBP 1","cf_person_grr_news":false,"cf_person_ryan_clarke":null,"created_through":"DTR","cf_person_iar_eligible_for_communications_after_30_days":false,"home_location[county_province_state]":"","cf_person_dtr_manual_advertiser_type":false,"cf_person_nf_online_aoi":null,"cf_person_grr_web_member":false,"main_location[email]":"jane.smith@example.com","cf_person_data_matching":null,"cf_person_iar_assumed_website_aoi":null,"cf_person_it_webinar_aoi":null,"cf_person_grr_no_postal":null,"cf_person_brand":null,"cf_person_fbpa25_speaker":false,"cf_person_fbpa24_registered":false,"cf_person_iar_assumed_aoi":null,"_preload_linked_item_association_for_cf_person_location":"","cf_person_grr_subscribers":false,"categories":null,"cf_person_epr_ord_sign_off_only":false,"cf_person_hit_to_lead":false,"object_ref":"PERS-691418","cf_person_it_nurture_track":true,"cf_person_confidence_score_rating":null,"cf_person_grr_tdm":false,"cf_person_insights_total_score":null,"cf_person_nf_subscriber":false,"cf_person_beau_bailey":null,"object_url":"https:\/\/russellpublishing-live.workbooks.com\/link\/3cDMzUTM\/PERS-691418","skype_name":null,"cf_person_dtr_editorial_type":null,"cf_person_insights_last_visit":null,"cf_person_artificial_intelligencemachine_learning":false,"cf_person_grr_zmember_reference":null,"cf_person_it_mode_of_transport_interest":null,"cf_person_grr_engagement":"Unknown","spouse_name":null,"cf_person_nf_eligible_for_communications_after_30_days":false,"cf_person_iar_conference_source":null,"cf_person_iar_iaos23":null,"cf_person_it_subscriber":false,"cf_person_nf_editorial_type":null,"compliance_channels":null,"cf_person_personalised_medicine":false,"cf_person_iar_editorial_type":null,"cf_person_sam_pirani":null,"created_by_user[person_name]":"Levon Gravett","cf_person_idbs_potential_speaker":false,"main_location[telephone]":"+44-1234-567890","id":4348242,"cf_person_2023_spex":"0.0 GBP 1","cf_person_dtr_zmember_reference":null,"cf_person_biomarkers":false,"website":"","cf_person_epr_foba23":null,"cf_person_dtr_assumed_aoi":null,"cf_person_epr_areas_of_interest_310":null,"cf_person_ias25_registered":false,"employer_name":null,"cf_person_it_leadgen_aoi":null,"cf_person_act_company_type":null,"main_location_id":4427044,"cf_person_insights_link":null,"home_location[mobile]":"","name":"Jane Smith","mailchimp_last_synchronised_at":null,"cf_person_lead_event_reference":null,"cf_person_marketing_ringfensed":false,"linked_item_association_for_cf_person_location":null,"cf_person_fbpa24_attended":false,"cf_person_suzy_baverstock":null,"twitter_url":null,"cf_person_grr_third_party":false,"cf_person_epr_third_party":false,"cf_person_confidence_score_date":null,"cf_person_dtr_events":false,"cf_person_drugs_therapies":false,"cf_person_data_source_detail":"DTR-MEDIA-PLANNER-2025","cf_person_grr_subscriber_type":null,"cf_person_nf_events":false,"cf_person_nf_third_party":false,"cf_person_dtr_leadgen_aoi":null,"person_suffix":null,"cf_person_transport_primary_secondary_audience":null,"cf_person_iar_ord_sign_off_only":false,"cf_person_claimed_employer":"Test Pharma Company","cf_person_grr_dr23":null,"cf_person_fbpa24_sponsor":false,"cf_person_duplicate_person":false,"cf_person_conference_attended":null,"cf_person_2023_print":"0.0 GBP 1","cf_person_it_conference_source":null,"created_at":"Mon Sep 22 12:17:36 UTC 2025","main_location[county_province_state]":null,"cf_person_linkedin_url":null,"cf_person_ias24_registered":false,"lock_version":0,"lead_source_type":"Event Registration","cf_person_last_login_ip_address":null,"cf_person_nf_assumed_aoi":null,"cf_person_fbpa25_sponsor":false,"cf_person_dtr_ord_sign_off_only":false,"cf_person_dtr_subscriber":false,"cf_person_world_region":null,"cf_person_it_news_and_events":false,"cf_person_insights_employees":null,"cf_person_it_all_brand_unsubscribe":false,"cf_person_location":null,"special_requirements":null,"home_location[telephone]":"","cf_person_iar_events":false,"cf_person_2022_print":"0.0 GBP 1","industry":null,"cf_person_les_lubwama":null,"cf_person_translational_science":false,"home_location[country]":"","cf_person_grr_nurture_track":true,"cf_person_dtr_subscriber_type":"Prospect","cf_person_nf_news_and_events":false,"cf_person_epr_news":false,"cf_person_tony_portelli":null,"cf_person_ias24_sponsor":false,"_preload_linked_item_association_for_cf_person_nf_online_aoi":"","cf_person_epr_sales_contact":null,"_link_or_create_employer":null,"cf_person_fbpa24_declined":false,"cf_person_it_engagement":"Unknown","person_job_role":null,"cf_person_temp_exclusion":false,"cf_person_screening_sequencing":false,"watched":false,"updated_by":152350,"cf_person_epr_web_member":false,"image_url":null,"cf_person_registered":false,"cf_person_iar_manual_advertiser_type":false,"_can_read":true,"cf_person_force24_nt_deletion":false,"cf_person_data_matching_picklist":null,"cf_person_epr_webinar_aoi":null,"cf_person_iar_advertiser_type":null,"cf_person_nic_losardo":null,"cf_person_it_its23":null,"cf_person_nf_areas_of_interest_312":null,"cf_person_iar_web_member":false,"party_notes":null,"cf_person_grr_ord_sign_off_only":false,"cf_person_dtr_nurture_track":true,"cf_person_joanna_kirby":null,"sync_with_mailer":true,"cf_person_act_info_source":null,"cf_person_force24_lead_score":null,"marketing_campaign[name]":"","home_location[town]":"","main_location[fax]":null,"cf_person_external_event_exhibitors":null,"cf_person_dtr_all_brand_unsubscribe":false,"cf_person_imaging":false,"cf_person_fraser_owen":null,"organisation_annual_revenue":"  0","cf_person_epr_subscriber":false,"cf_person_verification_picklist":null,"cf_person_dtr_core_audience":false,"cf_person_epr_assumed_aoi":null,"cf_person_epr_assumed_website_aoi":null,"cf_person_nf_webinar_aoi":null,"cf_person_grr_editorial_type":null,"_can_modify":true,"cf_person_epr_advertiser_type":null,"cf_person_interests":null,"cf_person_insights_today_score":null,"cf_person_cell_gene_therapy":false,"owner_id":152350,"cf_person_targets":false,"cf_person_sponsor_optin":null,"cf_person_fbpa24_speaker":false,"cf_person_iar_engagement":"Unknown","cf_person_grr_brand_unsubscribe":false,"cf_person_nf_online_aoi__name":null,"cf_person_dan_birchmore":null,"cf_person_nf_ord_sign_off_only":false,"cf_person_last_issue_sent":null,"assistant_phone":null,"home_location[postcode]":"","cf_person_ias24_speaker":false,"cf_person_nf_leadgen_aoi":null,"cf_person_nf_order_fulfilment_client_survey":false,"gdpr_compliant":false,"cf_person_dtr_third_party":false,"cf_person_dtr_engagement":"Unknown","cf_person_nf_no_postal":null,"cf_person_editorial_contact_type":null,"cf_person_dtr_no_postal":null,"cf_person_grr_areas_of_interest_314":null,"main_location[country]":"United Kingdom","cf_person_iar_third_party":false,"no_post_soliciting":false,"cf_person_epr_events":false,"marketing_campaign_id":null,"cf_person_dtr_webinar_aoi":null,"cf_person_frankie_nt_deletion_review":false,"cf_person_epr_nurture_track":true,"cf_person_nf_engagement":"Unknown","person_last_name":"Smith","cf_person_epr_tdm":false,"_can_chown":true,"email_opt_in":false,"cf_person_insights_industry":null,"cf_person_confidence_level":null,"cf_person_stem_cells":false,"cf_person_it_events":false,"linkedin_url":null,"home_location[fax]":"","cf_person_act_urn":null,"cf_person_insights_7_days_score":null,"cf_person_iar_ias23":null,"_can_delete":true,"cf_person_jess_russell":null,"cf_person_iar_news":false,"cf_person_grr_conference_attended":null,"home_location[alternate_email]":"","created_through_reference":"","cf_person_iar_brand_unsubscribe_2106":false,"cf_person_informatics":false,"updated_by_user[login_name]":"levon.gravett@supersonic-playground.com","cf_person_grr_core_audience":false,"cf_person_it_subscriber_type":null,"cf_person_2022_total":"0.0 GBP 1","person_middle_name":null,"cf_person_preclinical_research":false,"cf_person_workbooks":true,"main_location[town]":"London","cf_person_dtr_therapeutic_aoi":null,"cf_person_last_login_time":null,"queue_entry[updated_at]":"Mon Sep 22 12:17:36 UTC 2025","employer_link":null,"cf_person_grr_webinar":false,"assigned_to":1117,"cf_person_nf_web_member":false,"person_personal_title":null,"owner[login_name]":"levon.gravett@supersonic-playground.com","cf_person_grr_assumed_aoi":null,"cf_person_grr_assumed_website_aoi":null,"cf_person_grr_all_brand_unsubscribe":false,"cf_person_epr_core_audience":false,"cf_person_epr_order_fulfilment_client_survey":false,"cf_person_insights_30_days_score":null,"cf_person_epr_editorial_type":null,"preferred_language":null,"photo_url":null,"descriptor":"Jane Smith","cf_person_grr_conference_source":null,"cf_person_research_development":false,"cf_person_insight_yesterday_score":null,"cf_person_nf_all_brand_unsubscribe":false,"cf_person_iar_no_postal":null,"cf_person_epr_news_and_events":false,"cf_person_insights_first_source":null,"cf_person_epr_2":null,"cf_person_dtr_tdm":false,"cf_person_grr_advertiser_type":null}],"total":2}
+2025-09-22 14:50:53 [Media-Planner] Existing person found with ID: 4348242
+2025-09-22 14:50:54 [Media-Planner] Person update response: {"success":true,"affected_object_information":[{"success":true,"errors":[],"warnings":[]}],"affected_objects":[{"lock_version":0,"id":4348242}],"updates":{"data":{"immediate":["private_crm_party","private_crm_person","private_crm_organisation","private_crm_opportunity_contact","private_crm_case_contact","private_own_org_currency","private_email_mailing_list_entries","private_crm_campaign_membership","private_accounting_exchange_rates","domain_name"]}},"flash":"saved successfully"}
+2025-09-22 14:50:54 [Media-Planner] Person created/found with ID: 4348242
+2025-09-22 14:50:54 [Media-Planner] Creating event ticket for person ID: 4348242
+2025-09-22 14:50:54 [Media-Planner] Creating ticket with data: {"event_id":5137,"person_id":4348242,"ticket_type":"Delegate","ticket_status":"Registered","registration_status":"Confirmed","ticket_price":0,"currency":"GBP","attended":"No","registration_method":"Website","data_source_reference":"DTR-MEDIA-PLANNER-2025","cf_customer_order_brand_for_pdf":"Drug Target Review","cf_customer_order_line_item_brand":"DTR","cf_customer_order_line_item_rp_product_delegate":"Media Planner 2025","cf_customer_order_line_item_subproduct_event":"FOC","cf_customer_order_line_item_streams":"N\/A","cf_customer_order_line_item_campaign_delegate":"Media Planner 2025","cf_customer_order_line_item_campaign_reference_2":"CAMP-41496","cf_customer_order_line_item_delegate_type":"Primary","cf_customer_order_line_item_delegate_type_608":"Delegate","cf_customer_order_line_item_delegate_ticket_type":"VIP","cf_customer_order_line_item_attended":"No","cf_customer_order_line_item_dinner":"N\/A","assigned_to_name":"Unassigned"}
+2025-09-22 14:50:55 [Media-Planner] Event ticket creation response: {"success":false,"errors":{"[]":{"name":"is a required field"}},"affected_object_information":[{"success":false,"errors":{"name":["is a required field"]},"warnings":[]}],"affected_objects":[{"_can_modify":true,"object_ref":null,"cf_event_ticket_ticket_value_net":"  0","cf_event_ticket_iar_news":false,"cf_event_ticket_ticket_value":"0.0 GBP 0","type":"Private::Event::Ticket","cf_event_ticket_dtr_third_party":false,"badge_organisation_name":null,"owner_id":152350,"cf_event_ticket_grr_third_party":false,"cf_event_ticket_epr_third_party":false,"cf_event_ticket_it_third_party":false,"dietary_requirements":null,"cf_event_ticket_grr_news":false,"cf_event_ticket_sponsor_optin":false,"product_id":null,"cf_event_ticket_epr_news":false,"sales_order_id":null,"updated_by_user[person_name]":"","created_at":null,"updated_by_user[login_name]":"","cf_event_ticket_attendee_record":null,"_preload_linked_item_association_for_cf_event_ticket_attendee_record":"","owner[login_name]":"levon.gravett@supersonic-playground.com","_can_read":true,"email":null,"person_id":4348242,"cf_event_ticket_iar_third_party":false,"id":null,"_can_chown":true,"owner[person_name]":"Levon Gravett","updated_at":null,"object_url":"","created_by":null,"event_id":5137,"is_deleted":false,"last_used_at":null,"cf_event_ticket_event_vip":false,"name":null,"photo_url":null,"badge_job_title":null,"cf_event_ticket_process_status":null,"cf_event_ticket_speaker_questions":null,"cf_event_ticket_nf_third_party":false,"linked_item_association_for_cf_event_ticket_attendee_record":null,"cf_event_ticket_ticket_description":null,"status":null,"created_by_user[login_name]":"","cf_event_ticket_speaker_created":false,"cf_event_ticket_campaign_source":null,"_can_delete":true,"updated_by":null,"created_through_reference":"","cf_event_ticket_it_news":false,"created_by_user[person_name]":"","cf_event_ticket_ticket_value_net_gbp":"  0","cf_event_ticket_attendee_record__name":null,"created_through":"DTR","sales_order_line_item_id":null,"accessibility_requirements":null,"badge_name":null,"cf_event_ticket_ticket_category":null,"first_used_at":null,"unique_token":null,"cf_event_ticket_nf_news":false,"_can_chaccess":true,"imported":false,"cf_event_ticket_dtr_news":false,"lock_version":0}]}
+2025-09-22 14:50:55 [Media-Planner] ERROR: Failed to create event ticket: Failed to create event ticket
+2025-09-22 14:50:55 [Media-Planner] ERROR Trace: #0 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-includes/class-wp-hook.php(324): dtr_handle_media_planner_form_submit('')
+#1 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-includes/class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#2 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-includes/plugin.php(517): WP_Hook->do_action(Array)
+#3 /Users/levongravett/Desktop/BPC/Sites/dtr-clone/app/public/wp-admin/admin-ajax.php(192): do_action('wp_ajax_dtr_med...')
+#4 {main}
+2025-09-22 14:51:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:51:29 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:51:30 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:51:32 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:51:33 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:51:44 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:51:49 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:52:19 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:52:20 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:52:21 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:52:39 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:52:40 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:52:42 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:52:53 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:52:55 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:52:56 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:53:02 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:53:02 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:53:28 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:53:29 [Media-Planner] [BOOT] Media planner form handler loaded
+2025-09-22 14:53:55 [Media-Planner] [BOOT] Media planner form handler loaded

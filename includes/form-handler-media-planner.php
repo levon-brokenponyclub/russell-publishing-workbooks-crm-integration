@@ -1,130 +1,365 @@
 <?php
 /**
- * Media Planner 2025 Handler (Form ID 4)
- * Create leads within the DTR Media Planner - 2025
+ * Media Planner Form Handler
+ * Handles form submissions for media planner downloads
+ * Creates leads and event tickets in Workbooks CRM
+ * Event ID: 5137 (EVENT-2571) - DTR Media Planner 2025
  */
-
 if (!defined('ABSPATH')) exit;
 
-// Include debug logger for Media Planner
-require_once __DIR__ . '/media-planner-debug.php';
-
 /* --------------------------------------------------------------------------
- * Logging (kept near top so we can emit a boot message immediately)
+ * Ensure required dependencies are loaded
  * -------------------------------------------------------------------------- */
-function dtr_reg_log($msg) {
-    $timestamp = current_time('Y-m-d H:i:s');
-    $line = "{$timestamp} [Membership-Reg] {$msg}\n";
-    if (defined('DTR_WORKBOOKS_LOG_DIR')) {
-        $file1 = DTR_WORKBOOKS_LOG_DIR . 'media-planner-debug.log';
-        if (!file_exists(dirname($file1))) wp_mkdir_p(dirname($file1));
-        file_put_contents($file1, $line, FILE_APPEND | LOCK_EX);
-        $file2 = DTR_WORKBOOKS_LOG_DIR . 'membership-registration-debug.log';
-        file_put_contents($file2, $line, FILE_APPEND | LOCK_EX);
-    }
-    if (defined('WP_DEBUG') && WP_DEBUG) error_log($line);
+// Load Workbooks API library
+if (!class_exists('WorkbooksApi')) {
+    require_once DTR_WORKBOOKS_PLUGIN_DIR . 'lib/workbooks_api.php';
 }
 
-add_action('wp_ajax_media_planner_submit', 'dtr_media_planner_form_handler');
-add_action('wp_ajax_nopriv_media_planner_submit', 'dtr_media_planner_form_handler');
+// Load helper functions if not already available
+if (!function_exists('get_workbooks_instance')) {
+    require_once DTR_WORKBOOKS_INCLUDES_DIR . 'class-helper-functions.php';
+}
 
-function dtr_media_planner_form_handler() {
-    // ====Media Planner 2025====
-    // Log all hidden fields and values (if present)
-    if (isset($_POST['hidden_fields']) && is_array($_POST['hidden_fields'])) {
-        dtr_media_planner_debug_log('hidden', $_POST['hidden_fields']);
+/* --------------------------------------------------------------------------
+ * Logging
+ * -------------------------------------------------------------------------- */
+function dtr_media_planner_log($msg) {
+    $timestamp = current_time('Y-m-d H:i:s');
+    $line = "{$timestamp} [Media-Planner] {$msg}\n";
+    
+    // Log to WordPress error log
+    if (defined('WP_DEBUG') && WP_DEBUG) {
+        error_log($line);
     }
-    // Log all fields as they are entered (all submitted fields)
-    dtr_media_planner_debug_log('entered', $_POST);
-    header('Content-Type: application/json; charset=utf-8');
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'workbooks_nonce')) {
-        dtr_reg_log('❌ Invalid nonce');
-        wp_send_json_error('Security check failed (invalid nonce)');
+    
+    // Log to specific file
+    if (defined('DTR_WORKBOOKS_LOG_DIR')) {
+        $file = DTR_WORKBOOKS_LOG_DIR . 'media-planner-debug.log';
+        if (!file_exists(dirname($file))) {
+            wp_mkdir_p(dirname($file));
+        }
+        file_put_contents($file, $line, FILE_APPEND | LOCK_EX);
+    }
+}
+
+// Initialize logging - emit boot message
+dtr_media_planner_log('[BOOT] Media planner form handler loaded');
+
+/**
+ * Get a clean Workbooks instance without stdout logging for AJAX requests
+ */
+function dtr_get_clean_workbooks_instance() {
+    try {
+        $options = get_option('dtr_workbooks_options', []);
+        $api_url = $options['api_url'] ?? '';
+        $api_key = $options['api_key'] ?? '';
+        
+        if (empty($api_url) || empty($api_key)) {
+            return false;
+        }
+
+        // Check if WorkbooksApi class exists
+        if (!class_exists('WorkbooksApi')) {
+            return false;
+        }
+        
+        // Initialize Workbooks API without the problematic stdout logger
+        $workbooks = new WorkbooksApi([
+            'application_name' => 'DTR Workbooks Integration',
+            'user_agent' => 'DTR-WordPress-Plugin/2.0.0',
+            'service' => rtrim($api_url, '/'),
+            'api_key' => $api_key,
+            'verify_peer' => true,
+            'connect_timeout' => $options['api_timeout'] ?? 30,
+            'request_timeout' => $options['api_timeout'] ?? 30,
+            // Do NOT set logger_callback to avoid stdout contamination during AJAX
+        ]);
+        
+        return $workbooks;
+        
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
+/* --------------------------------------------------------------------------
+ * AJAX Handler Registration
+ * -------------------------------------------------------------------------- */
+add_action('wp_ajax_dtr_media_planner_form_submit', 'dtr_handle_media_planner_form_submit');
+add_action('wp_ajax_nopriv_dtr_media_planner_form_submit', 'dtr_handle_media_planner_form_submit');
+
+/**
+ * Handle media planner form submission
+ */
+function dtr_handle_media_planner_form_submit() {
+    dtr_media_planner_log('=== MEDIA PLANNER FORM SUBMISSION START ===');
+    
+    // Verify nonce
+    if (!wp_verify_nonce($_POST['nonce'], 'dtr_html_form_submit')) {
+        dtr_media_planner_log('SECURITY: Invalid nonce provided');
+        wp_send_json_error(['message' => 'Security verification failed']);
+        return;
     }
 
-    $fields = [];
-    $expected = [
-        'first_name', 'last_name', 'email_address',
-        'job_title', 'organisation', 'town', 'country', 'telephone'
+    // Collect form data
+    $form_data = [
+        'firstName' => sanitize_text_field($_POST['firstName'] ?? ''),
+        'lastName' => sanitize_text_field($_POST['lastName'] ?? ''),
+        'email' => sanitize_email($_POST['email'] ?? ''),
+        'jobTitle' => sanitize_text_field($_POST['jobTitle'] ?? ''),
+        'organisation' => sanitize_text_field($_POST['organisation'] ?? ''),
+        'city' => sanitize_text_field($_POST['city'] ?? ''),
+        'country' => sanitize_text_field($_POST['country'] ?? ''),
+        'phone' => sanitize_text_field($_POST['phone'] ?? ''),
+        'canWeHelpFurther' => sanitize_text_field($_POST['canWeHelpFurther'] ?? ''),
+        'consent' => sanitize_text_field($_POST['consent'] ?? ''),
     ];
-    foreach ($expected as $field) {
-        if (empty($_POST[$field])) {
-            dtr_reg_log("❌ Missing required field: $field");
-            wp_send_json_error("Missing required field: $field");
+
+    // Collect hidden fields
+    $hidden_data = [
+        'event_id' => sanitize_text_field($_POST['event_id'] ?? '5137'),
+        'data_source_detail' => sanitize_text_field($_POST['data_source_detail'] ?? 'DTR-MEDIA-PLANNER-2025'),
+        'download_name' => sanitize_text_field($_POST['download_name'] ?? 'DTR-MEDIA-PLANNER-2025'),
+        'type' => sanitize_text_field($_POST['type'] ?? 'Event Registration'),
+        'lead_source_type' => sanitize_text_field($_POST['lead_source_type'] ?? 'Event Registration'),
+        'cf_customer_order_brand_for_pdf' => sanitize_text_field($_POST['cf_customer_order_brand_for_pdf'] ?? 'Drug Target Review'),
+        'campaign_name' => sanitize_text_field($_POST['campaign_name'] ?? 'Media Planner 2025'),
+        'cf_customer_order_line_item_brand' => sanitize_text_field($_POST['cf_customer_order_line_item_brand'] ?? 'DTR'),
+        'cf_customer_order_line_item_rp_product_delegate' => sanitize_text_field($_POST['cf_customer_order_line_item_rp_product_delegate'] ?? 'Media Planner 2025'),
+        'cf_customer_order_line_item_subproduct_event' => sanitize_text_field($_POST['cf_customer_order_line_item_subproduct_event'] ?? 'FOC'),
+        'cf_customer_order_line_item_streams' => sanitize_text_field($_POST['cf_customer_order_line_item_streams'] ?? 'N/A'),
+        'cf_customer_order_line_item_campaign_delegate' => sanitize_text_field($_POST['cf_customer_order_line_item_campaign_delegate'] ?? 'Media Planner 2025'),
+        'cf_customer_order_line_item_campaign_reference_2' => sanitize_text_field($_POST['cf_customer_order_line_item_campaign_reference_2'] ?? 'CAMP-41496'),
+        'cf_customer_order_line_item_delegate_type' => sanitize_text_field($_POST['cf_customer_order_line_item_delegate_type'] ?? 'Primary'),
+        'cf_customer_order_line_item_delegate_type_608' => sanitize_text_field($_POST['cf_customer_order_line_item_delegate_type_608'] ?? 'Delegate'),
+        'cf_customer_order_line_item_delegate_ticket_type' => sanitize_text_field($_POST['cf_customer_order_line_item_delegate_ticket_type'] ?? 'VIP'),
+        'cf_customer_order_line_item_attended' => sanitize_text_field($_POST['cf_customer_order_line_item_attended'] ?? 'No'),
+        'cf_customer_order_line_item_dinner' => sanitize_text_field($_POST['cf_customer_order_line_item_dinner'] ?? 'N/A'),
+        'assigned_to' => sanitize_text_field($_POST['assigned_to'] ?? 'Unassigned'),
+        'web_key' => sanitize_text_field($_POST['web_key'] ?? '663d4d9f011e521baf6fc92150976b453f3b0a72'),
+        'success_url' => sanitize_url($_POST['success_url'] ?? 'https://www.drugtargetreview.com'),
+        'failure_url' => sanitize_url($_POST['failure_url'] ?? 'https://www.drugtargetreview.com'),
+        'sales_lead_rating' => sanitize_text_field($_POST['sales_lead_rating'] ?? 'Warm'),
+        'lead_type' => sanitize_text_field($_POST['lead_type'] ?? 'Reader'),
+        'dtr_subscriber_type' => sanitize_text_field($_POST['dtr_subscriber_type'] ?? 'Prospect'),
+        'product_mix' => sanitize_text_field($_POST['product_mix'] ?? ''),
+        'name1' => sanitize_text_field($_POST['name1'] ?? ''),
+        'name2' => sanitize_text_field($_POST['name2'] ?? ''),
+        'org_lead_party_email' => sanitize_email($_POST['org_lead_party_email'] ?? ''),
+    ];
+
+    dtr_media_planner_log('Form data collected: ' . json_encode($form_data));
+    dtr_media_planner_log('Hidden data: ' . json_encode($hidden_data));
+
+    // Validate required fields
+    $required_fields = ['firstName', 'lastName', 'email', 'jobTitle', 'organisation', 'city', 'country', 'phone'];
+    foreach ($required_fields as $field) {
+        if (empty($form_data[$field])) {
+            dtr_media_planner_log("VALIDATION ERROR: Missing required field: $field");
+            wp_send_json_error(['message' => "Missing required field: $field"]);
+            return;
         }
-        $fields[$field] = sanitize_text_field(wp_unslash($_POST[$field]));
     }
-    $name = trim($fields['first_name'] . ' ' . $fields['last_name']);
-    if (empty($name)) $name = $fields['email_address'];
 
-    // Hardcoded campaign/event info for this form context
-    $parent_event_id = 472341;
-    $child_event_id = 5137;
-    $campaign_ref = 'CAMP-41496';
+    // Validate email
+    if (!is_email($form_data['email'])) {
+        dtr_media_planner_log('VALIDATION ERROR: Invalid email format');
+        wp_send_json_error(['message' => 'Invalid email format']);
+        return;
+    }
 
-    dtr_reg_log("🔍 Checking if person exists with email: {$fields['email_address']}");
+    // Validate consent
+    if ($form_data['consent'] !== '1') {
+        dtr_media_planner_log('VALIDATION ERROR: Consent not given');
+        wp_send_json_error(['message' => 'You must consent to data collection']);
+        return;
+    }
 
-    // Workbooks API
     try {
-        $workbooks = get_workbooks_instance();
-        if (!$workbooks) throw new Exception('No Workbooks API instance');
+        // Get Workbooks instance with clean logging for AJAX
+        $workbooks = dtr_get_clean_workbooks_instance();
+        if (!$workbooks) {
+            throw new Exception('Failed to get Workbooks instance');
+        }
+
+        dtr_media_planner_log('Workbooks instance obtained successfully');
+
+        // Create or find person in Workbooks
+        $person_result = dtr_create_or_find_person($workbooks, $form_data);
+        if (!$person_result['success']) {
+            throw new Exception('Failed to create/find person: ' . $person_result['message']);
+        }
+
+        $person_id = $person_result['person_id'];
+        dtr_media_planner_log("Person created/found with ID: $person_id");
+
+        // Create event registration (ticket) for EVENT-2571 (ID: 5137)
+        $ticket_result = dtr_create_event_ticket($workbooks, $person_id, $hidden_data);
+        if (!$ticket_result['success']) {
+            throw new Exception('Failed to create event ticket: ' . $ticket_result['message']);
+        }
+
+        dtr_media_planner_log('Event ticket created successfully: ' . json_encode($ticket_result));
+
+        // Success response
+        wp_send_json_success([
+            'message' => 'Media planner request processed successfully',
+            'person_id' => $person_id,
+            'ticket_id' => $ticket_result['ticket_id'],
+            'download_url' => $hidden_data['success_url'] // You can customize this
+        ]);
+
     } catch (Exception $e) {
-        dtr_reg_log("❌ Error instantiating Workbooks API: " . $e->getMessage());
-        wp_send_json_error("Could not connect to CRM");
+        dtr_media_planner_log('ERROR: ' . $e->getMessage());
+        dtr_media_planner_log('ERROR Trace: ' . $e->getTraceAsString());
+        wp_send_json_error(['message' => 'Failed to process request: ' . $e->getMessage()]);
     }
+}
 
-    // Step 1: Check if person exists by email
-    $person_id = null;
+/**
+ * Create or find person in Workbooks
+ */
+function dtr_create_or_find_person($workbooks, $form_data) {
+    dtr_media_planner_log('Creating/finding person in Workbooks');
+
     try {
-        $person_search = [
-            '_ff[]' => 'main_location[email]',
-            '_ft[]' => 'eq',
-            '_fc[]' => $fields['email_address'],
-            '_limit' => 1,
-            '_select_columns[]' => ['id','object_ref'],
+        // First, try to find existing person by email
+        $filter_limit_select = [
+            '_filter_json' => json_encode([
+                ['main_location[email]', 'eq', $form_data['email']]
+            ]),
+            '_limit' => 1
         ];
-        $search = $workbooks->assertGet('crm/people.api', $person_search);
-        if (!empty($search['data'][0]['id'])) {
-            $person_id = $search['data'][0]['id'];
-            dtr_reg_log("✅ Found existing person: ID $person_id");
-        }
-    } catch (Exception $e) {
-        dtr_reg_log("❌ ERROR: Person lookup failed: " . $e->getMessage());
-    }
 
-    // Step 2: Always create a Sales Lead (do not create person if not found)
-    dtr_reg_log("🎉 Creating event lead for campaign $campaign_ref");
-    try {
-        $queue_id = 1;
-        $lead_payload = [[
-            'assigned_to' => $queue_id,
-            'person_lead_party[name]' => $name,
-            'person_lead_party[person_first_name]' => $fields['first_name'],
-            'person_lead_party[person_last_name]' => $fields['last_name'],
-            'person_lead_party[email]' => $fields['email_address'],
-            'org_lead_party[name]' => $fields['organisation'],
-            'org_lead_party[main_location][town]' => $fields['town'],
-            'org_lead_party[main_location][country]' => $fields['country'],
-            'org_lead_party[main_location][telephone]' => $fields['telephone'],
-            'cf_lead_data_source_detail' => 'DTR-MEDIA-PLANNER-2025',
-            'cf_lead_campaign_reference' => $campaign_ref,
-        ]];
-        if ($person_id) {
-            $lead_payload[0]['person_id'] = $person_id;
-        }
-        $lead_created = $workbooks->assertCreate('crm/sales_leads.api', $lead_payload);
-        $lead_id = $lead_created['affected_objects'][0]['id'] ?? null;
-        if ($lead_id) {
-            dtr_reg_log("✅ Created lead for person $name {$fields['email_address']}");
+        $find_response = $workbooks->get('crm/people.api', $filter_limit_select);
+        dtr_media_planner_log('Person search response: ' . json_encode($find_response));
+
+        if (!$find_response['success'] || empty($find_response['data'])) {
+            // Person doesn't exist, create new one
+            dtr_media_planner_log('Person not found, creating new person');
+
+            $person_data = [
+                'name' => trim($form_data['firstName'] . ' ' . $form_data['lastName']),
+                'person_first_name' => $form_data['firstName'],
+                'person_last_name' => $form_data['lastName'],
+                'main_location[email]' => $form_data['email'],
+                'main_location[telephone]' => $form_data['phone'],
+                'person_job_title' => $form_data['jobTitle'],
+                'website' => '', // No website field in form
+                'main_location[country]' => $form_data['country'],
+                'main_location[town]' => $form_data['city'],
+                'person_type' => 'Contact',
+                'record_type' => 'Person',
+                'lead_source_type' => 'Event Registration',
+                'sales_lead_rating' => 'Warm',
+                'cf_person_dtr_subscriber_type' => 'Prospect',
+                'cf_person_lead_type' => 'Reader',
+                'cf_person_data_source_detail' => 'DTR-MEDIA-PLANNER-2025',
+            ];
+
+            // Add organisation if provided
+            if (!empty($form_data['organisation'])) {
+                $person_data['employer_name'] = $form_data['organisation'];
+                $person_data['cf_person_claimed_employer'] = $form_data['organisation'];
+            }
+
+            $create_response = $workbooks->create('crm/people.api', $person_data);
+            dtr_media_planner_log('Person creation response: ' . json_encode($create_response));
+
+            if (!$create_response['success']) {
+                return ['success' => false, 'message' => 'Failed to create person'];
+            }
+
+            $person_id = $create_response['affected_objects'][0]['id'];
+            dtr_media_planner_log("New person created with ID: $person_id");
+
         } else {
-            dtr_reg_log("❌ Lead creation failed, no ID returned.");
-            wp_send_json_error("Could not create CRM lead");
-        }
-    } catch (Exception $e) {
-        dtr_reg_log("❌ Lead create failed: " . $e->getMessage());
-        wp_send_json_error("Could not create CRM lead");
-    }
+            // Person exists, use existing ID
+            $person_id = $find_response['data'][0]['id'];
+            dtr_media_planner_log("Existing person found with ID: $person_id");
 
-    dtr_reg_log("🥳 MEDIA PLANNER LEAD SUBMISSION SUCCESSFUL");
-    wp_send_json_success("Submission received and sent to CRM! (Lead created)");
+            // Update person with any new information
+            $update_data = [
+                'id' => $person_id,
+                'lock_version' => $find_response['data'][0]['lock_version'],
+                'main_location[telephone]' => $form_data['phone'],
+                'person_job_title' => $form_data['jobTitle'],
+                'main_location[country]' => $form_data['country'],
+                'main_location[town]' => $form_data['city'],
+            ];
+
+            if (!empty($form_data['organisation'])) {
+                $update_data['employer_name'] = $form_data['organisation'];
+                $update_data['cf_person_claimed_employer'] = $form_data['organisation'];
+            }
+
+            $update_response = $workbooks->update('crm/people.api', $update_data);
+            dtr_media_planner_log('Person update response: ' . json_encode($update_response));
+        }
+
+        return ['success' => true, 'person_id' => $person_id];
+
+    } catch (Exception $e) {
+        dtr_media_planner_log('Error in person creation/finding: ' . $e->getMessage());
+        return ['success' => false, 'message' => $e->getMessage()];
+    }
+}
+
+/**
+ * Create event ticket for media planner download
+ */
+function dtr_create_event_ticket($workbooks, $person_id, $hidden_data) {
+    dtr_media_planner_log("Creating event ticket for person ID: $person_id");
+
+    try {
+        $event_id = 5137; // EVENT-2571 - DTR Media Planner 2025
+        
+        $ticket_data = [
+            'event_id' => $event_id,
+            'person_id' => $person_id,
+            'ticket_type' => 'Delegate',
+            'ticket_status' => 'Registered',
+            'registration_status' => 'Confirmed',
+            'ticket_price' => 0.00, // Free
+            'currency' => 'GBP',
+            'attended' => 'No',
+            'registration_method' => 'Website',
+            'data_source_reference' => $hidden_data['data_source_detail'],
+            'cf_customer_order_brand_for_pdf' => $hidden_data['cf_customer_order_brand_for_pdf'],
+            'cf_customer_order_line_item_brand' => $hidden_data['cf_customer_order_line_item_brand'],
+            'cf_customer_order_line_item_rp_product_delegate' => $hidden_data['cf_customer_order_line_item_rp_product_delegate'],
+            'cf_customer_order_line_item_subproduct_event' => $hidden_data['cf_customer_order_line_item_subproduct_event'],
+            'cf_customer_order_line_item_streams' => $hidden_data['cf_customer_order_line_item_streams'],
+            'cf_customer_order_line_item_campaign_delegate' => $hidden_data['cf_customer_order_line_item_campaign_delegate'],
+            'cf_customer_order_line_item_campaign_reference_2' => $hidden_data['cf_customer_order_line_item_campaign_reference_2'],
+            'cf_customer_order_line_item_delegate_type' => $hidden_data['cf_customer_order_line_item_delegate_type'],
+            'cf_customer_order_line_item_delegate_type_608' => $hidden_data['cf_customer_order_line_item_delegate_type_608'],
+            'cf_customer_order_line_item_delegate_ticket_type' => $hidden_data['cf_customer_order_line_item_delegate_ticket_type'],
+            'cf_customer_order_line_item_attended' => $hidden_data['cf_customer_order_line_item_attended'],
+            'cf_customer_order_line_item_dinner' => $hidden_data['cf_customer_order_line_item_dinner'],
+            'assigned_to_name' => $hidden_data['assigned_to'],
+        ];
+
+        dtr_media_planner_log('Creating ticket with data: ' . json_encode($ticket_data));
+
+        $response = $workbooks->create('event/tickets.api', $ticket_data);
+        dtr_media_planner_log('Event ticket creation response: ' . json_encode($response));
+
+        if (!$response['success']) {
+            return ['success' => false, 'message' => 'Failed to create event ticket'];
+        }
+
+        $ticket_id = $response['affected_objects'][0]['id'];
+        dtr_media_planner_log("Event ticket created successfully with ID: $ticket_id");
+
+        return [
+            'success' => true,
+            'ticket_id' => $ticket_id,
+            'response' => $response
+        ];
+
+    } catch (Exception $e) {
+        dtr_media_planner_log('Error creating event ticket: ' . $e->getMessage());
+        return ['success' => false, 'message' => $e->getMessage()];
+    }
 }

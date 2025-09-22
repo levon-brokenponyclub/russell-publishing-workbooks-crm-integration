@@ -362,15 +362,12 @@ add_shortcode('dtr_user_marketing_preferences', function() {
     ];
     // Handle form submission
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_marketing']) && isset($_POST['dtr_marketing_update_nonce']) && wp_verify_nonce($_POST['dtr_marketing_update_nonce'], 'dtr_marketing_update')) {
-        if (!dtr_at_least_one_checked($dtr_fields)) {
-            $msg = '<div class="error" id="dtr-marketing-checkbox-error">Please select at least one communication preference.</div>';
-        } else {
-            $values = [];
-            foreach ($dtr_fields as $field => $label) {
-                $v = !empty($_POST[$field]) ? 1 : 0;
-                update_user_meta($user_id, $field, $v);
-                $values[$field] = $v;
-            }
+        $values = [];
+        foreach ($dtr_fields as $field => $label) {
+            $v = !empty($_POST[$field]) ? 1 : 0;
+            update_user_meta($user_id, $field, $v);
+            $values[$field] = $v;
+        }
             // Update Workbooks
             if (function_exists('get_workbooks_instance')) {
                 $person_id = get_user_meta($user_id, 'workbooks_person_id', true);
@@ -391,7 +388,6 @@ add_shortcode('dtr_user_marketing_preferences', function() {
                 }
             }
             if (!$msg) $msg = '<div class="updated">Communication Preferences updated!</div>';
-        }
     }
     wp_enqueue_style('dtr-shortcodes-custom', plugin_dir_url(__FILE__) . '../assets/css/dtr-shortcodes-custom.css', [], null);
     
@@ -431,9 +427,9 @@ add_shortcode('dtr_user_marketing_preferences', function() {
       var submitInterval;
       
       function updateButtonState() {
-        var anyChecked = Array.from(checkboxes).some(cb => cb.checked);
-        btn.disabled = !anyChecked;
-        errorMsg.style.display = anyChecked ? 'none' : 'block';
+        // Remove validation - button is always enabled
+        btn.disabled = false;
+        errorMsg.style.display = 'none';
       }
 
       function animateSubmitting() {

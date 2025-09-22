@@ -204,6 +204,11 @@ class DTR_Workbooks_Integration {
         add_action('wp_ajax_dtr_get_submission_details', [$this, 'get_submission_details']);
         // Legacy genomics key cleanup (cf_person_genomics_3744 -> cf_person_genomics_3774)
         add_action('wp_ajax_dtr_cleanup_genomics_meta', [$this, 'cleanup_genomics_meta']);
+        
+        // HTML form nonce endpoint - authenticated users
+        add_action('wp_ajax_dtr_get_form_nonce', [$this, 'get_form_nonce']);
+        // HTML form nonce endpoint - non-authenticated users
+        add_action('wp_ajax_nopriv_dtr_get_form_nonce', [$this, 'get_form_nonce']);
 
         // Custom logging
         add_action('init', [$this, 'setup_custom_logging']);
@@ -229,6 +234,12 @@ class DTR_Workbooks_Integration {
             require_once $employer_sync_path; // safe to include twice later via load_includes (require_once)
         }
 
+        // Load AJAX handlers first (they don't depend on NF or ACF)
+        $this->load_ajax_handlers();
+
+        // Load shortcodes (they can work independently of other dependencies)
+        $this->load_shortcodes();
+
         // Check dependencies (Ninja Forms / ACF) for the rest of the plugin
         if (!$this->check_dependencies()) {
             // Still provide notice in admin but keep lightweight endpoints active
@@ -239,11 +250,41 @@ class DTR_Workbooks_Integration {
         // Load required files (now that dependencies satisfied)
         $this->load_includes();
 
-        // Load shortcodes
-        $this->load_shortcodes();
-
         // Initialize integrations
         $this->init_integrations();
+    }
+
+    /**
+     * Load AJAX handlers - these work independently of NF/ACF dependencies
+     *
+     * @return void
+     */
+    private function load_ajax_handlers() {
+        $ajax_file = DTR_WORKBOOKS_INCLUDES_DIR . 'ajax-employer-search.php';
+        if (file_exists($ajax_file)) {
+            require_once $ajax_file;
+            error_log('DTR Plugin: Successfully loaded ajax-employer-search.php');
+        } else {
+            error_log('DTR Plugin: FAILED to load ajax-employer-search.php - file not found at ' . $ajax_file);
+        }
+
+        // Load HTML form handler - works independently of NF/ACF dependencies
+        $html_form_file = DTR_WORKBOOKS_INCLUDES_DIR . 'form-handler-html-membership-registration.php';
+        if (file_exists($html_form_file)) {
+            require_once $html_form_file;
+            error_log('DTR Plugin: Successfully loaded form-handler-html-membership-registration.php');
+        } else {
+            error_log('DTR Plugin: FAILED to load form-handler-html-membership-registration.php - file not found at ' . $html_form_file);
+        }
+
+        // Load media planner form handler - works independently of NF/ACF dependencies
+        $media_planner_file = DTR_WORKBOOKS_INCLUDES_DIR . 'form-handler-media-planner.php';
+        if (file_exists($media_planner_file)) {
+            require_once $media_planner_file;
+            error_log('DTR Plugin: Successfully loaded form-handler-media-planner.php');
+        } else {
+            error_log('DTR Plugin: FAILED to load form-handler-media-planner.php - file not found at ' . $media_planner_file);
+        }
     }
 
     /**
@@ -291,6 +332,8 @@ class DTR_Workbooks_Integration {
             'form-handler-membership-registration.php',
             'form-handler-gated-content-reveal.php',
             'form-handler-media-planner.php',
+            // AJAX handlers
+            'ajax-employer-search.php',
             // Submission processors
             'form-submission-processors-submission-fix.php',
             'form-submission-processors-ninjaform-hooks.php',
@@ -305,8 +348,10 @@ class DTR_Workbooks_Integration {
             $file_path = DTR_WORKBOOKS_INCLUDES_DIR . $file;
             if (file_exists($file_path)) {
                 require_once $file_path;
+                error_log("DTR Plugin: Successfully loaded {$file}");
             } else {
                 $this->log_error("Failed to load include file: {$file}");
+                error_log("DTR Plugin: FAILED to load {$file} - file not found at {$file_path}");
             }
         }
     }
@@ -324,13 +369,17 @@ class DTR_Workbooks_Integration {
             'webinar-registration-shortcodes.php',
             'lead-generation-shortcodes.php',
             'workbooks-employer-select.php',
+            'membership-registration-shortcode.php',
+            'media-planner-registration.php',
         ];
 
         foreach ($shortcode_files as $file) {
             $file_path = DTR_WORKBOOKS_SHORTCODES_DIR . $file;
             if (file_exists($file_path)) {
                 require_once $file_path;
+                error_log('DTR: Loaded shortcode file: ' . $file);
             } else {
+                error_log('DTR: Shortcode file not found: ' . $file_path);
                 $this->log_error("Failed to load shortcode file: {$file}");
             }
         }
@@ -505,6 +554,10 @@ class DTR_Workbooks_Integration {
      * @return void
      */
     public function enqueue_scripts() {
+        $post_name = get_post_field('post_name');
+        $post_title = get_the_title();
+        $post_id = get_the_ID();
+        error_log('DTR TEST LOG: enqueue_scripts called on page: "' . $post_title . '" (slug: "' . $post_name . '", ID: ' . $post_id . ')');
         // Enqueue frontend styles
         wp_enqueue_style(
             'dtr-workbooks-frontend',
@@ -512,27 +565,32 @@ class DTR_Workbooks_Integration {
             [],
             DTR_WORKBOOKS_VERSION
         );
-        
-        // TEMPORARILY DISABLED: Frontend JS to allow PHP-based login state logging from theme template
-        /*
-        wp_enqueue_script(
-            'dtr-workbooks-frontend',
-            DTR_WORKBOOKS_ASSETS_URL . 'js/frontend.js',
-            ['jquery'],
-            DTR_WORKBOOKS_VERSION,
-            true
+        wp_enqueue_style(
+            'dtr-workbooks-buttons',
+            DTR_WORKBOOKS_ASSETS_URL . 'css/global-buttons.css',
+            [],
+            DTR_WORKBOOKS_VERSION
         );
         
+        // Frontend JS with file modification time for cache-busting
+        
+        /* 
         // Localize script for AJAX
         wp_localize_script('dtr-workbooks-frontend', 'dtr_workbooks_ajax', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('dtr_workbooks_nonce'),
             'debug_mode' => $this->debug_mode
-        ]);
-        */
+        ]); */
+        
 
-        // Conditional enqueue for employer select (registration form 15)
-        if (is_page(array('free-membership','membership','register')) || isset($_GET['dtr_reg_debug'])) {
+        // Conditional enqueue for employer select (registration forms)
+        // Check for membership pages or pages with gravity forms
+        $is_membership_page = is_page(array('free-membership','membership','register','membership-sign-up'));
+        $has_gravity_form = has_shortcode(get_post()->post_content ?? '', 'gravityform');
+        $should_enqueue = $is_membership_page || $has_gravity_form || isset($_GET['dtr_reg_debug']);
+        
+        error_log('DTR TEST LOG: Should enqueue scripts? ' . ($should_enqueue ? 'YES' : 'NO') . ' - Page check: ' . ($is_membership_page ? 'MATCH' : 'NO MATCH') . ', Has GF: ' . ($has_gravity_form ? 'YES' : 'NO'));
+        if ($should_enqueue) {
             // Ensure Select2 (try using WP core registered if available or fallback)
             if (!wp_script_is('select2', 'registered')) {
                 wp_register_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', ['jquery'], '4.1.0', true);
@@ -558,6 +616,28 @@ class DTR_Workbooks_Integration {
             wp_localize_script('dtr-nf-employers-field','workbooks_ajax',[
                 'ajax_url' => admin_url('admin-ajax.php'),
                 // Use the same nonce action string that server endpoints verify ('workbooks_nonce')
+                'nonce' => wp_create_nonce('workbooks_nonce'),
+                'plugin_url' => DTR_WORKBOOKS_PLUGIN_URL,
+                'debug_mode' => $this->debug_mode
+            ]);
+
+            // Gravity Forms employer field support
+            $gf_employers_js_path = DTR_WORKBOOKS_PLUGIN_DIR . 'js/gravityforms-employers-field.js';
+            $gf_employers_js_ver = file_exists($gf_employers_js_path) ? filemtime($gf_employers_js_path) : DTR_WORKBOOKS_VERSION;
+            if (isset($_GET['dtr_employers_debug'])) {
+                $gf_employers_js_ver = time();
+            }
+            error_log('DTR TEST LOG: Enqueuing Gravity Forms employer script - version: ' . $gf_employers_js_ver);
+            wp_enqueue_script(
+                'dtr-gf-employers-field',
+                DTR_WORKBOOKS_PLUGIN_URL . 'js/gravityforms-employers-field.js',
+                ['jquery'],
+                $gf_employers_js_ver,
+                true
+            );
+
+            wp_localize_script('dtr-gf-employers-field','workbooks_ajax',[
+                'ajax_url' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('workbooks_nonce'),
                 'plugin_url' => DTR_WORKBOOKS_PLUGIN_URL,
                 'debug_mode' => $this->debug_mode
@@ -1401,6 +1481,17 @@ class DTR_Workbooks_Integration {
             $role->add_cap('manage_dtr_workbooks');
             $role->add_cap('view_dtr_workbooks_logs');
         }
+    }
+    
+    /**
+     * AJAX handler for providing form nonce for HTML forms
+     *
+     * @return void
+     */
+    public function get_form_nonce() {
+        wp_send_json_success([
+            'nonce' => wp_create_nonce('dtr_html_form_submit')
+        ]);
     }
     
     /**
@@ -3505,8 +3596,8 @@ function dtr_update_workbooks_person($person_id, $lock_version, $data) {
         return ['success' => false, 'message' => $e->getMessage()];
     }
 }
-// --- Event Field Explorer (Improved) ---
 
+// --- Event Field Explorer (Improved) ---
 add_action('admin_menu', function() {
     add_submenu_page(
         'dtr-workbooks',
@@ -3522,24 +3613,155 @@ function dtr_workbooks_event_explorer_page() {
     ?>
     <div class="wrap plugin-admin-content">
         <h1><?php _e('Workbooks Event Field Explorer', 'dtr-workbooks'); ?></h1>
-        <p><?php _e('Select an event to view all field names and values from Workbooks CRM.', 'dtr-workbooks'); ?></p>
+        <p><?php _e('This tool discovers and explores event data in your Russell Publishing Workbooks CRM instance. It automatically detects the correct API endpoint structure and shows available object types.', 'dtr-workbooks'); ?></p>
         <div id="dtr-event-explorer-error" style="color:red;"></div>
-        <select id="dtr-workbooks-event-select" style="min-width:300px;">
-            <option value=""><?php _e('Loading events...', 'dtr-workbooks'); ?></option>
-        </select>
+        
+        <!-- Event Lookup Section -->
+        <div style="background: #f0f6fc; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <h3><?php _e('Direct Event Lookup', 'dtr-workbooks'); ?></h3>
+            <p><?php _e('Enter an event ID or reference (e.g., "2921" or "EVENT-2921") to fetch detailed information:', 'dtr-workbooks'); ?></p>
+            <input type="text" id="dtr-direct-event-lookup" placeholder="Enter Event ID or Reference (e.g., 2921, EVENT-2921)" style="min-width: 300px; padding: 8px;" />
+            <button id="dtr-fetch-event-details" class="button button-primary" style="margin-left: 10px;"><?php _e('Fetch Event Details', 'dtr-workbooks'); ?></button>
+        </div>
+        
+        <!-- Event Selection Dropdown -->
+        <div style="margin-bottom: 20px;">
+            <h3><?php _e('Browse Available Events', 'dtr-workbooks'); ?></h3>
+            <select id="dtr-workbooks-event-select" style="min-width:300px;">
+                <option value=""><?php _e('Loading events and discovering endpoints...', 'dtr-workbooks'); ?></option>
+            </select>
+        </div>
+        
         <div id="dtr-workbooks-event-fields-table" style="margin-top: 30px;"></div>
         <script>
         jQuery(function($){
             var $select = $('#dtr-workbooks-event-select');
             var $table = $('#dtr-workbooks-event-fields-table');
             var $error = $('#dtr-event-explorer-error');
+            var $directLookup = $('#dtr-direct-event-lookup');
+            var $fetchButton = $('#dtr-fetch-event-details');
+            
             $select.prop('disabled', true);
             $error.text('');
-            // Fetch events
+            
+            // Function to display event details in comprehensive format
+            function displayEventDetails(eventData, endpointUsed, isDirectLookup = false) {
+                var html = '';
+                
+                if (endpointUsed) {
+                    html += '<div style="margin-bottom: 15px; color: green; font-weight: bold;">✅ Event details loaded using endpoint: <code>' + endpointUsed + '</code></div>';
+                }
+                
+                if (isDirectLookup && eventData) {
+                    html += '<div style="margin-bottom: 15px; padding: 10px; background: #e7f3ff; border-left: 4px solid #0073aa;"><strong>📋 Event Found:</strong> ' + (eventData.name || 'Unnamed Event') + ' (ID: ' + (eventData.id || 'Unknown') + ')</div>';
+                }
+                
+                // Main event information table
+                html += '<h3>📊 Event Information</h3>';
+                html += '<table class="widefat striped"><thead><tr><th style="width: 200px;">Field</th><th>Value</th></tr></thead><tbody>';
+                
+                // Priority fields first
+                var priorityFields = ['id', 'object_ref', 'name', 'description', 'event_type', 'start_date', 'end_date', 'status', 'location', 'website_page', 'lead_source_reference'];
+                var remainingFields = {};
+                
+                // Show priority fields first
+                priorityFields.forEach(function(field) {
+                    if (eventData.hasOwnProperty(field)) {
+                        var value = eventData[field];
+                        if (typeof value === 'object') value = JSON.stringify(value, null, 2);
+                        html += '<tr><td><strong><code>' + field + '</code></strong></td><td>' + (value || '-') + '</td></tr>';
+                        delete eventData[field]; // Remove from remaining fields
+                    }
+                });
+                
+                // Show all remaining fields
+                Object.keys(eventData).sort().forEach(function(field) {
+                    var value = eventData[field];
+                    if (typeof value === 'object') value = '<pre style="white-space: pre-wrap; font-size: 11px; max-height: 200px; overflow-y: auto;">' + JSON.stringify(value, null, 2) + '</pre>';
+                    html += '<tr><td><code>' + field + '</code></td><td>' + (value || '-') + '</td></tr>';
+                });
+                
+                html += '</tbody></table>';
+                
+                // Add copy functionality
+                html += '<div style="margin-top: 15px;"><button id="copy-event-data" class="button button-secondary">📋 Copy All Event Data as JSON</button></div>';
+                
+                $table.html(html);
+                
+                // Add copy functionality
+                $('#copy-event-data').on('click', function() {
+                    var jsonData = JSON.stringify(eventData, null, 2);
+                    navigator.clipboard.writeText(jsonData).then(function() {
+                        $(this).text('✅ Copied!').prop('disabled', true);
+                        setTimeout(() => {
+                            $(this).text('📋 Copy All Event Data as JSON').prop('disabled', false);
+                        }, 2000);
+                    }).catch(function(err) {
+                        alert('Failed to copy to clipboard. Check console for JSON data.');
+                        console.log('Event Data JSON:', jsonData);
+                    });
+                });
+            }
+            
+            // Direct event lookup functionality
+            $fetchButton.on('click', function() {
+                var eventRef = $directLookup.val().trim();
+                if (!eventRef) {
+                    $error.html('<span style="color: orange;">⚠️ Please enter an event ID or reference</span>');
+                    return;
+                }
+                
+                // Extract numeric ID from reference like "EVENT-2921" or use as-is if already numeric
+                var eventId = eventRef.replace(/[^0-9]/g, '');
+                if (!eventId) {
+                    $error.html('<span style="color: orange;">⚠️ Could not extract numeric ID from: ' + eventRef + '</span>');
+                    return;
+                }
+                
+                $table.html('<div style="text-align: center; padding: 20px; color: #666;">🔍 Searching for event: <strong>' + eventRef + '</strong> (ID: ' + eventId + ')...</div>');
+                $error.html('');
+                $fetchButton.prop('disabled', true).text('Searching...');
+                
+                $.post(ajaxurl, {
+                    action: 'dtr_get_workbooks_event_fields',
+                    nonce: '<?php echo esc_js(wp_create_nonce('workbooks_nonce')); ?>',
+                    event_id: eventId
+                }, function(resp){
+                    console.log('Direct lookup response:', resp);
+                    if (resp.success && resp.data && resp.data.event) {
+                        displayEventDetails(resp.data.event, resp.data.endpoint_used, true);
+                        $error.html('<span style="color: green;">✅ Event found successfully!</span>');
+                    } else {
+                        $table.html('');
+                        var errorMsg = resp.data && resp.data.message ? resp.data.message : 'Event not found with ID: ' + eventId;
+                        $error.html('<span style="color: red;">❌ ' + errorMsg + '</span>');
+                        
+                        if (resp.data && resp.data.errors) {
+                            console.log('Direct lookup errors:', resp.data.errors);
+                        }
+                    }
+                }).fail(function(xhr, status, error){
+                    console.error('Direct lookup AJAX error:', xhr, status, error);
+                    $table.html('');
+                    $error.html('<span style="color: red;">❌ AJAX Error: ' + xhr.status + ' ' + xhr.statusText + '</span>');
+                }).always(function() {
+                    $fetchButton.prop('disabled', false).text('<?php echo esc_js(__('Fetch Event Details', 'dtr-workbooks')); ?>');
+                });
+            });
+            
+            // Allow Enter key to trigger search
+            $directLookup.on('keypress', function(e) {
+                if (e.which === 13) { // Enter key
+                    $fetchButton.click();
+                }
+            });
+            
+            // Fetch events for dropdown
             $.post(ajaxurl, {
                 action: 'dtr_list_workbooks_events',
                 nonce: '<?php echo esc_js(wp_create_nonce('workbooks_nonce')); ?>'
             }, function(resp){
+                console.log('Events response:', resp);
                 $select.empty();
                 if (resp.success && resp.data && resp.data.events && resp.data.events.length) {
                     $select.append('<option value=""><?php echo esc_js(__('Select an event...', 'dtr-workbooks')); ?></option>');
@@ -3548,41 +3770,128 @@ function dtr_workbooks_event_explorer_page() {
                         $select.append('<option value="' + event.id + '">' + label + '</option>');
                     });
                     $select.prop('disabled', false);
+                    
+                    // Show successful endpoint info
+                    if (resp.data.endpoint_used) {
+                        console.log('✅ Working endpoint found:', resp.data.endpoint_used);
+                        $error.html('<span style="color: green;">✅ Events loaded successfully using endpoint: <code>' + resp.data.endpoint_used + '</code></span>');
+                    }
                 } else {
                     $select.append('<option value=""><?php echo esc_js(__('No events found', 'dtr-workbooks')); ?></option>');
-                    $error.text(resp.data && resp.data.message ? resp.data.message : '<?php echo esc_js(__('No events loaded - check API connection and debug logs.', 'dtr-workbooks')); ?>');
+                    var errorMsg = resp.data && resp.data.message ? resp.data.message : '<?php echo esc_js(__('No events loaded - check API connection and debug logs.', 'dtr-workbooks')); ?>';
+                    $error.html('<span style="color: red;">' + errorMsg + '</span>');
+                    
+                    // Show diagnostic information
+                    if (resp.data) {
+                        console.log('Diagnostic information:', resp.data);
+                        
+                        // Show diagnostic information
+                        if (resp.data.diagnostic_info && resp.data.diagnostic_info.length > 0) {
+                            var diagnosticInfo = '<br><div style="margin-top: 10px; padding: 10px; background: #e7f3ff; border-radius: 4px; color: #0073aa;">';
+                            diagnosticInfo += '<strong>🔧 Diagnostic Info:</strong><br>';
+                            diagnosticInfo += resp.data.diagnostic_info.join('<br>');
+                            diagnosticInfo += '</div>';
+                            $error.append(diagnosticInfo);
+                        }
+                        
+                        // Show recommendations for Russell Publishing instances
+                        if (resp.data.recommendations && resp.data.recommendations.length > 0) {
+                            var recommendations = '<br><div style="margin-top: 10px; padding: 10px; background: #d1ecf1; border-radius: 4px; color: #0c5460;">';
+                            recommendations += '<strong>📋 Recommendations:</strong><br>';
+                            recommendations += '<ul style="margin: 5px 0 0 20px;">';
+                            $.each(resp.data.recommendations, function(i, rec) {
+                                recommendations += '<li>' + rec + '</li>';
+                            });
+                            recommendations += '</ul></div>';
+                            $error.append(recommendations);
+                        }
+                        
+                        // Show suggestion if available
+                        if (resp.data.suggestion) {
+                            var suggestionInfo = '<br><div style="margin-top: 10px; padding: 10px; background: #fff3cd; border-radius: 4px; color: #856404;">';
+                            suggestionInfo += '<strong>💡 Suggestion:</strong><br>' + resp.data.suggestion;
+                            suggestionInfo += '</div>';
+                            $error.append(suggestionInfo);
+                        }
+                        
+                        // Show detailed error information
+                        if (resp.data.errors) {
+                            console.log('Endpoint errors:', resp.data.errors);
+                            var errorDetails = '<br><details style="margin-top: 10px;"><summary style="cursor: pointer;">🔍 Technical Details (click to expand)</summary>';
+                            errorDetails += '<div style="margin-top: 10px; font-size: 12px; background: #f8f9fa; padding: 10px; border-radius: 4px;">';
+                            errorDetails += '<strong>Endpoints tested:</strong><br>';
+                            $.each(resp.data.errors, function(endpoint, error) {
+                                errorDetails += '<code>' + endpoint + '</code>: ' + error.substring(0, 100) + (error.length > 100 ? '...' : '') + '<br>';
+                            });
+                            errorDetails += '</div></details>';
+                            $error.append(errorDetails);
+                        }
+                    }
                 }
-            }).fail(function(xhr){
+            }).fail(function(xhr, status, error){
+                console.error('AJAX Error Details:', {
+                    status: xhr.status,
+                    statusText: xhr.statusText,
+                    responseText: xhr.responseText,
+                    error: status,
+                    errorThrown: error
+                });
                 $select.empty().append('<option value=""><?php echo esc_js(__('AJAX error', 'dtr-workbooks')); ?></option>');
-                $error.text('AJAX Error: ' + xhr.status + ' ' + xhr.statusText);
+                $error.text('AJAX Error: ' + xhr.status + ' ' + xhr.statusText + '. Check console for details.');
+                
+                // Try to show actual response for debugging
+                if (xhr.responseText) {
+                    console.log('Raw response text:', xhr.responseText);
+                    $error.append('<br><small>Raw response (check console): ' + xhr.responseText.substring(0, 200) + (xhr.responseText.length > 200 ? '...' : '') + '</small>');
+                }
             });
+            
             // On selection, fetch event fields
             $select.on('change', function(){
                 var event_id = $(this).val();
                 $table.html('');
                 $error.text('');
                 if (!event_id) return;
-                $table.html('<?php echo esc_js(__('Loading event details...', 'dtr-workbooks')); ?>');
+                
+                $table.html('<div style="text-align: center; padding: 20px; color: #666;">📋 Loading event details...</div>');
                 $.post(ajaxurl, {
                     action: 'dtr_get_workbooks_event_fields',
                     nonce: '<?php echo esc_js(wp_create_nonce('workbooks_nonce')); ?>',
                     event_id: event_id
                 }, function(resp){
+                    console.log('Event fields response:', resp);
                     if (resp.success && resp.data && resp.data.event) {
-                        var html = '<table class="widefat striped"><thead><tr><th><?php echo esc_js(__('Field', 'dtr-workbooks')); ?></th><th><?php echo esc_js(__('Value', 'dtr-workbooks')); ?></th></tr></thead><tbody>';
-                        $.each(resp.data.event, function(key, val){
-                            if (typeof val === 'object') val = JSON.stringify(val);
-                            html += '<tr><td><code>' + key + '</code></td><td>' + (val ? val : '-') + '</td></tr>';
-                        });
-                        html += '</tbody></table>';
-                        $table.html(html);
+                        displayEventDetails(resp.data.event, resp.data.endpoint_used, false);
                     } else {
                         $table.html('');
-                        $error.text(resp.data && resp.data.message ? resp.data.message : '<?php echo esc_js(__('Error fetching event details.', 'dtr-workbooks')); ?>');
+                        var errorMsg = resp.data && resp.data.message ? resp.data.message : '<?php echo esc_js(__('Error fetching event details.', 'dtr-workbooks')); ?>';
+                        $error.html('<span style="color: red;">' + errorMsg + '</span>');
+                        
+                        // Show detailed error information
+                        if (resp.data && resp.data.errors) {
+                            console.log('Endpoint errors for event fields:', resp.data.errors);
+                            var errorDetails = '<br><small>Endpoint errors:<br>';
+                            $.each(resp.data.errors, function(endpoint, error) {
+                                errorDetails += '<code>' + endpoint + '</code>: ' + error + '<br>';
+                            });
+                            errorDetails += '</small>';
+                            $error.append(errorDetails);
+                        }
                     }
-                }).fail(function(xhr){
+                }).fail(function(xhr, status, error){
+                    console.error('Event Fields AJAX Error:', {
+                        status: xhr.status,
+                        statusText: xhr.statusText,
+                        responseText: xhr.responseText,
+                        error: status,
+                        errorThrown: error
+                    });
                     $table.html('');
-                    $error.text('AJAX Error: ' + xhr.status + ' ' + xhr.statusText);
+                    $error.text('AJAX Error: ' + xhr.status + ' ' + xhr.statusText + '. Check console for details.');
+                    
+                    if (xhr.responseText) {
+                        console.log('Raw response text:', xhr.responseText);
+                    }
                 });
             });
         });
@@ -3594,42 +3903,307 @@ function dtr_workbooks_event_explorer_page() {
 // --- AJAX handlers (same as before, but with improved error returns) ---
 
 add_action('wp_ajax_dtr_list_workbooks_events', function() {
-    check_ajax_referer('workbooks_nonce', 'nonce');
-    $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
-    if (!$workbooks) wp_send_json_error(['message' => 'Workbooks API not available. Check API settings and debug log.']);
+    // Start output buffering to catch any unwanted output
+    ob_start();
+    
     try {
-        $events_result = $workbooks->assertGet('crm/events.api', [
-            '_start' => 0,
-            '_limit' => 50,
-            '_select_columns[]' => ['id', 'name'],
-            '_sort_column' => 'id',
-            '_sort_direction' => 'DESC'
-        ]);
-        $events = $events_result['data'] ?? [];
-        wp_send_json_success(['events' => $events]);
+        check_ajax_referer('workbooks_nonce', 'nonce');
+        
+        $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+        if (!$workbooks) {
+            ob_clean(); // Clean any buffered output
+            wp_send_json_error(['message' => 'Workbooks API not available. Check API settings and debug log.']);
+            return;
+        }
+        
+        // Russell Publishing Workbooks Instance - Special Handling
+        // All standard endpoints are returning 404, so we need a different approach
+        
+        $diagnostic_info = [];
+        $errors = [];
+        $working_endpoints = [];
+        $api_connection_test = false;
+        
+        // Test basic API connection using the actual working endpoints found in your form handlers
+        $working_endpoints = [];
+        $tested_endpoints = [];
+        
+        // These are the actual working endpoints found in your form handlers
+        $known_working_endpoints = [
+            'crm/people.api',           // Used in webinar and membership registrations
+            'event/events.api',         // Used in webinar registrations  
+            'email/mailing_list_entries.api', // Used in webinar registrations
+            'crm/people',               // Alternative format used in some handlers
+        ];
+        
+        foreach ($known_working_endpoints as $endpoint) {
+            try {
+                $test_result = $workbooks->get($endpoint, ['_start' => 0, '_limit' => 1]);
+                if ($test_result) {
+                    $working_endpoints[] = $endpoint;
+                }
+                $tested_endpoints[] = $endpoint . ' (tested)';
+            } catch (Exception $e) {
+                $tested_endpoints[] = $endpoint . ' (404: ' . $e->getMessage() . ')';
+            }
+        }
+        
+        if (empty($working_endpoints)) {
+            // No working endpoints found - API connection issue
+            ob_clean();
+            wp_send_json_error([
+                'message' => 'No working Workbooks API endpoints found',
+                'diagnostic_info' => [
+                    'Tested known working endpoints from your form handlers',
+                    'All endpoints returned 404 errors',
+                    'This suggests an API configuration or authentication issue'
+                ],
+                'tested_endpoints' => $tested_endpoints,
+                'recommendations' => [
+                    'Check your Workbooks API settings in WordPress admin',
+                    'Verify the API base URL is correct',
+                    'Test API credentials with your Workbooks administrator',
+                    'Your form handlers use these endpoints successfully: crm/people.api, event/events.api'
+                ]
+            ]);
+            return;
+        }
+        
+        // Now try event-specific endpoints using the working patterns
+        $event_endpoints_to_try = [
+            // Primary event endpoint used in your webinar handlers
+            'event/events.api',
+            // Alternative patterns based on your working endpoints  
+            'crm/events.api',
+            'event/activities.api',
+            'crm/activities.api',
+            // Fallback patterns without .api suffix
+            'event/events',
+            'crm/events', 
+            'activities',
+            'events'
+        ];
+        
+        $successful_endpoint = null;
+        $events_result = null;
+        
+        foreach ($event_endpoints_to_try as $endpoint) {
+            try {
+                // Use basic get() without assertGet to avoid exceptions
+                $test_result = $workbooks->get($endpoint, [
+                    '_start' => 0,
+                    '_limit' => 10,
+                    '_select_columns[]' => ['id', 'name'],
+                    '_sort_column' => 'id',
+                    '_sort_direction' => 'DESC'
+                ]);
+                
+                // Check if we got a valid response structure
+                if ($test_result && 
+                    (isset($test_result['data']) || isset($test_result['records']) || isset($test_result['items']))) {
+                    
+                    // Try to standardize the response format
+                    $data_key = 'data';
+                    if (isset($test_result['records'])) {
+                        $data_key = 'records';
+                    } elseif (isset($test_result['items'])) {
+                        $data_key = 'items';
+                    }
+                    
+                    if (is_array($test_result[$data_key])) {
+                        $successful_endpoint = $endpoint;
+                        $events_result = [
+                            'data' => $test_result[$data_key],
+                            'original_structure' => $data_key
+                        ];
+                        break;
+                    }
+                }
+            } catch (Exception $e) {
+                $errors[$endpoint] = $e->getMessage();
+                continue;
+            }
+        }
+        
+        if ($successful_endpoint && $events_result) {
+            $events = $events_result['data'] ?? [];
+            
+            // Clean any buffered output before sending JSON
+            ob_clean();
+            wp_send_json_success([
+                'events' => $events,
+                'endpoint_used' => $successful_endpoint,
+                'working_endpoints' => $working_endpoints,
+                'data_structure' => $events_result['original_structure'] ?? 'data',
+                'diagnostic_info' => [
+                    "Successfully found working event endpoint: {$successful_endpoint}",
+                    "Your Workbooks instance uses the .api suffix pattern",
+                    "Form handlers are working with: " . implode(', ', $working_endpoints)
+                ],
+                'debug' => 'Successfully found working endpoint: ' . $successful_endpoint,
+                'instance_info' => 'Your Workbooks instance - .api endpoint pattern detected'
+            ]);
+        } else {
+            // Clean any buffered output before sending error
+            ob_clean();
+            wp_send_json_error([
+                'message' => 'No event endpoints found, but your form handlers are working.',
+                'working_endpoints' => $working_endpoints,
+                'tried_endpoints' => array_keys($errors),
+                'errors' => $errors,
+                'diagnostic_info' => [
+                    'Your form handlers successfully use these endpoints: ' . implode(', ', $working_endpoints),
+                    'But no event-specific endpoints were found',
+                    'Events might be stored in activities or have a different structure'
+                ],
+                'recommendations' => [
+                    'Events might be stored as activities - check crm/activities.api',
+                    'Contact your Workbooks administrator to confirm event storage structure',  
+                    'Your webinar registrations work, so the API connection is functional'
+                ]
+            ]);
+        }
+        
     } catch (Exception $e) {
-        wp_send_json_error(['message' => 'Workbooks API error: ' . $e->getMessage()]);
+        // Clean any buffered output before sending error
+        ob_clean();
+        wp_send_json_error([
+            'message' => 'Workbooks API error: ' . $e->getMessage(),
+            'diagnostic_info' => ['Exception occurred during API testing'],
+            'recommendations' => ['Check API credentials, URL, and permissions for your Workbooks instance.']
+        ]);
     }
 });
 
 add_action('wp_ajax_dtr_get_workbooks_event_fields', function() {
-    check_ajax_referer('workbooks_nonce', 'nonce');
-    $event_id = intval($_POST['event_id'] ?? 0);
-    if (!$event_id) wp_send_json_error(['message' => 'Missing event ID']);
-    $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
-    if (!$workbooks) wp_send_json_error(['message' => 'Workbooks API not available']);
+    // Start output buffering to catch any unwanted output
+    ob_start();
+    
     try {
-        $result = $workbooks->assertGet('crm/events.api', [
-            '_start' => 0,
-            '_limit' => 1,
-            '_ff[]' => 'id',
-            '_ft[]' => 'eq',
-            '_fc[]' => $event_id,
-            '_select_columns[]' => '*'
-        ]);
-        if (empty($result['data'][0])) wp_send_json_error(['message' => 'Event not found (ID: ' . $event_id . ')']);
-        wp_send_json_success(['event' => $result['data'][0]]);
+        check_ajax_referer('workbooks_nonce', 'nonce');
+        
+        $event_id = intval($_POST['event_id'] ?? 0);
+        if (!$event_id) {
+            ob_clean();
+            wp_send_json_error(['message' => 'Missing event ID']);
+            return;
+        }
+        
+        $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+        if (!$workbooks) {
+            ob_clean();
+            wp_send_json_error(['message' => 'Workbooks API not available']);
+            return;
+        }
+        
+        // Try the same endpoint patterns that worked for event listing
+        $possible_endpoints = [
+            'event/events.api',      // This is working for event listing
+            'crm/events.api',        // Alternative .api pattern
+            'event/activities.api',  // In case events are stored as activities
+            'crm/activities.api',
+            // Fallback patterns without .api suffix
+            'event/events',
+            'events',
+            'crm/events', 
+            'crm/event',
+            'event',
+            'crm/marketing_events',
+            'marketing_events'
+        ];
+        
+        $result = null;
+        $successful_endpoint = null;
+        $errors = [];
+        
+        foreach ($possible_endpoints as $endpoint) {
+            try {
+                // Try with comprehensive field selection first
+                $result = $workbooks->assertGet($endpoint, [
+                    '_start' => 0,
+                    '_limit' => 1,
+                    '_ff[]' => 'id',
+                    '_ft[]' => 'eq', 
+                    '_fc[]' => $event_id,
+                    '_select_columns[]' => '*'  // Request all available columns
+                ]);
+                
+                if ($result && isset($result['data']) && !empty($result['data'][0])) {
+                    $successful_endpoint = $endpoint;
+                    break;
+                }
+                
+                // If that didn't work, try without column selection
+                $result = $workbooks->assertGet($endpoint, [
+                    '_start' => 0,
+                    '_limit' => 1,
+                    '_ff[]' => 'id',
+                    '_ft[]' => 'eq', 
+                    '_fc[]' => $event_id
+                ]);
+                
+                if ($result && isset($result['data']) && !empty($result['data'][0])) {
+                    $successful_endpoint = $endpoint;
+                    break;
+                }
+                
+            } catch (Exception $e) {
+                $errors[$endpoint] = $e->getMessage();
+                continue;
+            }
+        }
+        
+        if ($successful_endpoint && $result && !empty($result['data'][0])) {
+            $event_data = $result['data'][0];
+            
+            // Try to fetch additional related data if we have the event
+            $additional_data = [];
+            
+            // Try to get event registrations/attendees if available
+            if (!empty($event_data['id'])) {
+                try {
+                    $registrations = $workbooks->assertGet('crm/event_registrations', [
+                        '_ff[]' => 'event_id',
+                        '_ft[]' => 'eq',
+                        '_fc[]' => $event_data['id'],
+                        '_limit' => 5  // Get first few registrations as sample
+                    ]);
+                    if (!empty($registrations['data'])) {
+                        $additional_data['sample_registrations'] = $registrations['data'];
+                        $additional_data['registration_count_sample'] = count($registrations['data']);
+                    }
+                } catch (Exception $e) {
+                    // Registration data not available or different endpoint
+                    $additional_data['registration_error'] = 'Could not fetch registrations: ' . $e->getMessage();
+                }
+            }
+            
+            // Merge additional data into event data for comprehensive view
+            if (!empty($additional_data)) {
+                $event_data['_additional_data'] = $additional_data;
+            }
+            
+            // Clean any buffered output before sending JSON
+            ob_clean();
+            wp_send_json_success([
+                'event' => $event_data,
+                'endpoint_used' => $successful_endpoint,
+                'debug' => 'Successfully used endpoint: ' . $successful_endpoint,
+                'has_additional_data' => !empty($additional_data)
+            ]);
+        } else {
+            ob_clean();
+            wp_send_json_error([
+                'message' => 'Event not found (ID: ' . $event_id . ') - tried endpoints: ' . implode(', ', $possible_endpoints),
+                'errors' => $errors,
+                'debug_info' => 'No endpoint returned event data for ID: ' . $event_id,
+                'suggestion' => 'The event ID ' . $event_id . ' may not exist, or it might be stored in a different object type. Try checking the event list first.'
+            ]);
+        }
+        
     } catch (Exception $e) {
+        // Clean any buffered output before sending error
+        ob_clean();
         wp_send_json_error(['message' => 'Workbooks API error: ' . $e->getMessage()]);
     }
 });

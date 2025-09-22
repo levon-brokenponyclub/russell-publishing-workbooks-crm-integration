@@ -23,8 +23,10 @@ function workbooks_lead_generation_registration_shortcode($atts = []) {
     // Get file modification times for cache-busting
     $css_file = $plugin_path . 'assets/css/lead-generation-registration.css';
     $js_file = $plugin_path . 'assets/js/lead-generation-registration.js';
+    $frontend_js_file = $plugin_path . 'assets/js/frontend.js';
     $css_version = file_exists($css_file) ? filemtime($css_file) : '1.0.0';
     $js_version = file_exists($js_file) ? filemtime($js_file) : '1.0.0';
+    $frontend_js_version = file_exists($frontend_js_file) ? filemtime($frontend_js_file) : '1.0.0';
     
     // Only enqueue once per page load
     static $assets_enqueued = false;
@@ -43,6 +45,15 @@ function workbooks_lead_generation_registration_shortcode($atts = []) {
             $plugin_url . 'assets/js/lead-generation-registration.js',
             array('jquery'),
             $js_version,
+            true
+        );
+        
+        // Enqueue frontend.js with cache-busting to ensure our coordination fixes are loaded
+        wp_enqueue_script(
+            'dtr-frontend-js',
+            $plugin_url . 'assets/js/frontend.js',
+            array('jquery'),
+            $frontend_js_version,
             true
         );
         
@@ -194,31 +205,27 @@ function workbooks_lead_generation_registration_shortcode($atts = []) {
 
     if (!$user_is_logged_in) {
         // Not logged in: "Login or Register Now" (with link) + "Login or Register for this event"
-        $button_html = '<a href="/free-membership" class="event-register-button">Login or Register Now</a>';
+        $button_html = '<a href="/free-membership" class="ks-main-btn-global btn-blue shimmer-effect shimmer-slow text-left">Login or Register Now</a>';
         $reveal_text = '<div class="reveal-text">Login or Register for this event</div>';
     } elseif (!$has_completed_form) {
         // Logged in, no form submission: "Register Now" (no link, triggers form)
-        $button_html = '<button class="event-register-button not-registered" onclick="document.querySelector(\'.gated-lead-form-content\').scrollIntoView({behavior: \'smooth\'});">Register Now</button>';
+        $button_html = '<button class="ks-main-btn-global btn-blue shimmer-effect shimmer-slow not-registered text-left" onclick="document.querySelector(\'.gated-lead-form-content\').scrollIntoView({behavior: \'smooth\'});" disabled>Register Now</button>';
         $reveal_text = '';
     } elseif (!$saved_to_collection) {
         // Logged in, form submitted: "Save to Collection"
-        $button_html = '<button class="event-register-button save-to-collection" data-post-id="' . esc_attr($post_id) . '">Save to Collection</button>';
-        $reveal_text = '<div class="reveal-text">You have registered for this event</div>';
+        $button_html = '<button class="ks-main-btn-global btn-purple shimmer-effect shimmer-slow save-to-collection text-left" data-post-id="' . esc_attr($post_id) . '">Save to Collection</button>';
+        $reveal_text = '<div class="reveal-text">You are registered for this event</div>';
     } else {
         // Logged in, saved to collection: Split button with options
         $uid = 'ks' . uniqid(); // unique id for this instance
-        $button_html = '<div class="ks-split-btn">
-                <a href="/my-account/?page-view=my-collection" class="ks-main-btn" role="button">Saved to Collection</a>
-                <button type="button" class="ks-toggle-btn" aria-haspopup="true" aria-expanded="false" aria-controls="' . $uid . '-menu" title="Open menu">
-                    <i class="fa-solid fa-chevron-down"></i>
-                </button>
-
-                <ul id="' . $uid . '-menu" class="ks-menu" role="menu">
+        $button_html = '<div class="ks-split-btn btn-green" style="position: relative;">
+                <button type="button" class="ks-main-btn ks-main-btn-global btn-green shimmer-effect shimmer-slow is-toggle text-left" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="' . $uid . '-menu">Saved to Collection</button>
+                <ul id="' . $uid . '-menu" class="ks-menu" role="menu" style="z-index: 1002;">
                     <li role="none"><a role="menuitem" href="#" class="no-decoration remove-from-collection-btn">Remove</a></li>
                     <li role="none"><a role="menuitem" href="/my-account/?page-view=my-collection">View My Collection</a></li>
                 </ul>
             </div>';
-        $reveal_text = '<div class="reveal-text">Event has been saved to collection</div>';
+        $reveal_text = '<div class="reveal-text">Event has been saved to Collection</div>';
     }
 
     // Save to Collection functionality is handled in external JavaScript file
@@ -229,13 +236,10 @@ function workbooks_lead_generation_registration_shortcode($atts = []) {
         echo <<<HTML
         <div class="full-page vertical-half-margin event-registration lead-generation">
             <!-- split button -->
-            <div class="ks-split-btn">
-                <a href="/free-membership" class="ks-main-btn" role="button">Login or Register Now</a>
-                <button type="button" class="ks-toggle-btn" aria-haspopup="true" aria-expanded="false" aria-controls="{$uid}-menu" title="Open menu">
-                    <i class="fa-solid fa-chevron-down"></i>
-                </button>
+            <div class="ks-split-btn" style="position: relative;">
+                <button type="button" class="ks-main-btn ks-main-btn-global btn-blue shimmer-effect shimmer-slow is-toggle text-left" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="{$uid}-menu">Login or Register Now</button>
 
-                <ul id="{$uid}-menu" class="ks-menu" role="menu">
+                <ul id="{$uid}-menu" class="ks-menu" role="menu" style="z-index: 1002;">
                     <li role="none"><a role="menuitem" href="#" class="login-button" onclick="event.preventDefault(); openLoginModal();">Login</a></li>
                     <li role="none"><a role="menuitem" href="/free-membership">Become a Member</a></li>
                 </ul>

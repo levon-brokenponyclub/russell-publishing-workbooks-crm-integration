@@ -16,13 +16,6 @@ if (!function_exists('workbooks_crm_get_personal_titles')) {
     }
 }
 
-if (!function_exists('workbooks_crm_get_dtr_areas_of_interest')) {
-    function workbooks_crm_get_dtr_areas_of_interest() {
-        // Replace with actual Workbooks API call to fetch picklist (e.g., picklist_id=161)
-        return ['Technology', 'Finance', 'Healthcare', 'Education'];
-    }
-}
-
 // Get all TOI options for admin display
 if (!function_exists('dtr_get_all_toi_options')) {
     function dtr_get_all_toi_options() {
@@ -342,6 +335,216 @@ if (!function_exists('get_workbooks_instance')) {
             
             return false;
         }
+    }
+}
+
+// Dynamically populate the Title dropdown in Ninja Forms
+add_filter('ninja_forms_render_options', function($options, $field) {
+    // Check if the field is the Title dropdown (adjust field key or ID as needed)
+    if (isset($field['key']) && $field['key'] === 'nf-field-141') {
+        $titles = workbooks_crm_get_personal_titles();
+        $options = [];
+        foreach ($titles as $key => $value) {
+            $options[] = [
+                'label' => $value,
+                'value' => $key
+            ];
+        }
+    }
+    return $options;
+}, 10, 2);
+
+/**
+ * ===================================================================
+ * GRAVITY FORMS DYNAMIC POPULATION FUNCTIONS
+ * Functions to populate Gravity Forms dropdowns and checkboxes
+ * Based on sliding-form-layout.html structure
+ * ===================================================================
+ */
+
+/**
+ * Personal Titles for Gravity Forms
+ * Matches the sliding form dropdown options
+ */
+if (!function_exists('dtr_get_gravity_personal_titles')) {
+    function dtr_get_gravity_personal_titles() {
+        return [
+            'Dr.' => 'Dr.',
+            'Mr.' => 'Mr.',
+            'Mrs.' => 'Mrs.',
+            'Master' => 'Master',
+            'Miss' => 'Miss',
+            'Ms.' => 'Ms.',
+            'Prof.' => 'Prof.'
+        ];
+    }
+}
+
+/**
+ * Marketing Preferences for Gravity Forms
+ * With title and description for each option
+ * Matches the sliding form Step 2 structure
+ */
+if (!function_exists('dtr_get_gravity_marketing_options')) {
+    function dtr_get_gravity_marketing_options() {
+        return [
+            'cf_person_dtr_news' => [
+                'title' => 'Newsletter:',
+                'description' => 'News, articles and analysis by email',
+                'label' => 'Newsletter: News, articles and analysis by email'
+            ],
+            'cf_person_dtr_events' => [
+                'title' => 'Event:',
+                'description' => 'Information about events by email',
+                'label' => 'Event: Information about events by email'
+            ],
+            'cf_person_dtr_third_party' => [
+                'title' => 'Third party:',
+                'description' => 'Application notes, product developments and updates from our trusted partners by email',
+                'label' => 'Third party: Application notes, product developments and updates from our trusted partners by email'
+            ],
+            'cf_person_dtr_webinar' => [
+                'title' => 'Webinar:',
+                'description' => 'Information about webinars by email',
+                'label' => 'Webinar: Information about webinars by email'
+            ]
+        ];
+    }
+}
+
+/**
+ * Topics of Interest for Gravity Forms
+ * Matches the sliding form Step 3 structure
+ */
+if (!function_exists('dtr_get_gravity_topics_options')) {
+    function dtr_get_gravity_topics_options() {
+        return [
+            'cf_person_business' => 'Business',
+            'cf_person_diseases' => 'Diseases',
+            'cf_person_drugs_therapies' => 'Drugs & Therapies',
+            'cf_person_genomics_3774' => 'Genomics',
+            'cf_person_research_development' => 'Research & Development',
+            'cf_person_technology' => 'Technology',
+            'cf_person_tools_techniques' => 'Tools & Techniques'
+        ];
+    }
+}
+
+/**
+ * ===================================================================
+ * GRAVITY FORMS POPULATION HOOKS
+ * These hooks will automatically populate your Gravity Forms fields
+ * ===================================================================
+ */
+
+/**
+ * Populate Title dropdown in Gravity Forms
+ * Usage: Set field parameter name to 'populate_titles'
+ */
+add_filter('gform_pre_render', 'dtr_populate_gravity_titles');
+add_filter('gform_pre_validation', 'dtr_populate_gravity_titles');
+add_filter('gform_pre_submission_filter', 'dtr_populate_gravity_titles');
+add_filter('gform_admin_pre_render', 'dtr_populate_gravity_titles');
+
+if (!function_exists('dtr_populate_gravity_titles')) {
+    function dtr_populate_gravity_titles($form) {
+        foreach ($form['fields'] as &$field) {
+            // Check if field has parameter to populate titles
+            if ($field->type === 'select' && 
+                isset($field->allowsPrepopulate) && $field->allowsPrepopulate && 
+                isset($field->inputName) && $field->inputName === 'populate_titles') {
+                
+                $titles = dtr_get_gravity_personal_titles();
+                $choices = [];
+                
+                // Add empty option
+                $choices[] = array(
+                    'text' => '- Select Title -',
+                    'value' => ''
+                );
+                
+                // Add title options
+                foreach ($titles as $value => $label) {
+                    $choices[] = array(
+                        'text' => $label,
+                        'value' => $value
+                    );
+                }
+                
+                $field->choices = $choices;
+            }
+        }
+        return $form;
+    }
+}
+
+/**
+ * Populate Marketing Preferences checkboxes in Gravity Forms
+ * Usage: Set field parameter name to 'populate_marketing'
+ */
+add_filter('gform_pre_render', 'dtr_populate_gravity_marketing');
+add_filter('gform_pre_validation', 'dtr_populate_gravity_marketing');
+add_filter('gform_pre_submission_filter', 'dtr_populate_gravity_marketing');
+add_filter('gform_admin_pre_render', 'dtr_populate_gravity_marketing');
+
+if (!function_exists('dtr_populate_gravity_marketing')) {
+    function dtr_populate_gravity_marketing($form) {
+        foreach ($form['fields'] as &$field) {
+            // Check if field has parameter to populate marketing options
+            if ($field->type === 'checkbox' && 
+                isset($field->allowsPrepopulate) && $field->allowsPrepopulate && 
+                isset($field->inputName) && $field->inputName === 'populate_marketing') {
+                
+                $marketing_options = dtr_get_gravity_marketing_options();
+                $choices = [];
+                
+                // Add marketing preference options
+                foreach ($marketing_options as $value => $option) {
+                    $choices[] = array(
+                        'text' => '<strong>' . $option['title'] . '</strong><br>' . $option['description'],
+                        'value' => $value
+                    );
+                }
+                
+                $field->choices = $choices;
+            }
+        }
+        return $form;
+    }
+}
+
+/**
+ * Populate Topics of Interest checkboxes in Gravity Forms
+ * Usage: Set field parameter name to 'populate_topics'
+ */
+add_filter('gform_pre_render', 'dtr_populate_gravity_topics');
+add_filter('gform_pre_validation', 'dtr_populate_gravity_topics');
+add_filter('gform_pre_submission_filter', 'dtr_populate_gravity_topics');
+add_filter('gform_admin_pre_render', 'dtr_populate_gravity_topics');
+
+if (!function_exists('dtr_populate_gravity_topics')) {
+    function dtr_populate_gravity_topics($form) {
+        foreach ($form['fields'] as &$field) {
+            // Check if field has parameter to populate topics
+            if ($field->type === 'checkbox' && 
+                isset($field->allowsPrepopulate) && $field->allowsPrepopulate && 
+                isset($field->inputName) && $field->inputName === 'populate_topics') {
+                
+                $topics = dtr_get_gravity_topics_options();
+                $choices = [];
+                
+                // Add topic options
+                foreach ($topics as $value => $label) {
+                    $choices[] = array(
+                        'text' => $label,
+                        'value' => $value
+                    );
+                }
+                
+                $field->choices = $choices;
+            }
+        }
+        return $form;
     }
 }
 

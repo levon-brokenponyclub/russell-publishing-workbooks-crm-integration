@@ -340,47 +340,7 @@
   display: none !important;
 }
 
-/* --- Button Styling --- */
-#membership-form-container .nf-form-wrap .inline-buttons .nf-field-container {
-  display: flex !important;
-  justify-content: space-between !important;
-  gap: 10px !important;
-}
-
-#membership-form-container .nf-form-wrap .inline-buttons button {
-  display: inline-block !important;
-  width: auto !important;
-}
-
-#membership-form-container .submit-container {
-  float: right !important;
-  margin-top: 40px !important;
-  top: 100px !important;
-}
-
-#membership-form-container [type="button"],
-#membership-form-container [type="submit"],
-#membership-form-container button {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    height: 48px !important;
-    max-width: 130px;
-    min-width: 130px;
-    min-height: 48px;
-    line-height: normal !important;
-    padding: 0 1rem;
-    border-radius: 4px;
-    font-size: 15px;
-    font-weight: 700;
-    text-transform: none !important;
-}
-
-#membership-form-container [type="button"]:hover,
-#membership-form-container [type="submit"]:hover,
-#membership-form-container button:hover {
-  background: #871f80 !important;
-}
+/* --- Button Styling moved to global-buttons.css --- */
 
 /* --- Custom Checkbox Styling --- */
 #membership-form-container .field-wrap > div input[type="checkbox"] {
@@ -918,107 +878,8 @@ nf-field .nf-field-container.checkbox-container label {
 }
 
 /* ---------------------------------------------------------------
-    #7. Ninja Forms - Full-Width Submit Button
+    #7. Ninja Forms - Full-Width Submit Button styling moved to global-buttons.css
 --------------------------------------------------------------- */
-
-/* --- Submit Button Container --- */
-.nf-field-container.submit-container .nf-field-element,
-.nf-field-container.submit-container .field-wrap,
-.nf-field-container.submit-container input[type="submit"].form-button-element {
-  width: 100% !important;
-  min-width: 0 !important;
-  box-sizing: border-box !important;
-  display: flex !important;
-  flex: 1 1 0% !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-#nf-form-15-cont .nf-field-container.submit-container .field-wrap,
-#nf-form-15-cont .nf-field-container.submit-container .nf-field-element,
-#nf-form-15-cont .nf-field-container.submit-container input[type="submit"].form-button-element {
-  justify-content: flex-end !important;
-}
-
-.submit-container.form-button-container {
-  display: block !important;
-  width: 100% !important;
-  padding: 0 !important;
-  margin: 1.2rem 0 0 !important;
-}
-
-.submit-container.form-button-container .form-button-element {
-  width: 100% !important;
-  max-width: 100% !important;
-  display: block !important;
-}
-
-.submit-container .field-wrap,
-.submit-container .nf-field-element {
-  width: 100% !important;
-  display: flex !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-/* --- Button Styling --- */
-.submit-container .form-button-element,
-.dtr-input-button,
-.dtr-account-tab-content .dtr-input-button {
-  position: relative !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  box-sizing: border-box !important;
-  font-weight: bold !important;
-  font-size: 0.75rem !important;
-  cursor: pointer !important;
-  user-select: none !important;
-  color: #fff !important;
-  border: none !important;
-  background: #009fe3 !important;
-  transition: background 0.2s !important;
-  line-height: 2.5rem !important;
-  min-height: 2.5rem !important;
-  padding: 0 1em !important;
-  margin: 0 !important;
-  opacity:1 !important;
-  max-width:300px !important;
-  margin:20px auto !important;
-}
-
-.submit-container .form-button-element:hover,
-.dtr-account-tab-content .dtr-input-button:hover {
-  background:#871f80 !important;
-}
-
-.dtr-account-tab-content .dtr-input-button:disabled {
-    opacity:1 !important;
-    background:#871f80 !important;
-}
-
-.submit-container,
-.submit-container .nf-field,
-.submit-container .nf-field-element {
-  width: 100% !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-.submit-container .form-button-element,
-.submit-container .nf-field input[type="submit"] {
-    max-width: none !important;
-    width: 100% !important;
-    height: 48px !important;
-    line-height: normal !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
 
 /* ---------------------------------------------------------------
     #8. Gated Lead Forms & Webinars
@@ -1028,7 +889,7 @@ nf-field .nf-field-container.checkbox-container label {
 .gated-lead-form-content.webinars {
   margin-top: -45px !important;
   padding: 1.5rem !important;
-  padding-top: 2rem !important;
+  padding-top: 6rem !important;
   border-radius: 5px !important;
   background: #f2f2f2 !important;
   z-index: 0 !important;
@@ -1048,6 +909,7 @@ nf-field .nf-field-container.checkbox-container label {
   position: relative !important;
   width: 100% !important;
   font-family: "Titillium Web", Sans-serif !important;
+  margin-bottom:35px;
 }
 
 .gated-lead-form-content .nf-form-cont {
@@ -1187,50 +1049,7 @@ nf-field .nf-field-container.checkbox-container label {
   display: none !important;
 }
 
-/* --- Button Variations --- */
-.full-page.vertical-half-margin.event-registration.purple-button .event-register-button {
-  background-color: #871f80 !important;
-}
-
-.full-page.vertical-half-margin.event-registration.purple-button .event-register-button:hover {
-  background-color: #009fe3 !important;
-}
-
-#gated-content-signup-button,
-#member-sidebar-btn {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    height: 48px !important;
-    max-width: 200px;
-    min-width: 200px;
-    min-height: 48px;
-    line-height: normal !important;
-    padding: 0 1rem;
-    border-radius: 4px;
-    font-size: 15px;
-    font-weight: 700;
-    margin: 0 10px 0 0 !important;
-    text-transform: none !important;
-}
-
-#gated-content-signup-button::after,
-#member-sidebar-btn::after {
-    width: 40px !important;
-    height: 48px !important;
-    line-height: 48px !important;
-    padding: 0 !important;
-    right: 0 !important;
-}
-
-#gated-content-signup-button.purple-button:hover {
-    background-color: #009fe3 !important;
-}
-
-#member-sidebar-btn {
-  background-color: #009fe3 !important;
-  margin:20px 0 !important;
-}
+/* --- Button Variations moved to global-buttons.css --- */
 
 /* --- Content Containers --- */
 .image-only-hero-content.shifted-hero h1 {
@@ -1323,837 +1142,38 @@ nf-field .nf-field-container.checkbox-container label {
 
 /* ========================================
    UNIVERSAL BUTTON UTILITY CLASSES
-   Ready for frontend.css integration
+   Moved to global-buttons.css
    ======================================== */
-
-/* Wrapper full width */
-.ks-split-btn {
-    display: flex;
-    width: 100%;
-    position: relative;
-    font-size: 0.95rem;
-    line-height: 1.2;
-    min-height: 52px;
-}
-
-/* Main + toggle buttons */
-.ks-main-btn,
-.ks-toggle-btn {
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    padding: 0.6rem 0.95rem;
-    border: 0;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.ks-main-btn {
-    flex: 1;
-    border-radius: 3px 0 0 0;
-    text-decoration: none;
-}
-
-.ks-toggle-btn {
-    flex: 0 0 60px;
-    /* background: #6f1c6f; */
-    color: #fff;
-    border-radius: 0 3px 0 0;
-    justify-content: center;
-}
-
-.ks-toggle-btn i {
-    font-family: 'Font Awesome 6 Pro';
-    font-weight: 400;
-    content: '\f078'; /* Unicode for fa-chevron-down */
-}
-
-.ks-toggle-btn[aria-expanded="true"] i {
-    content: '\f077'; /* Unicode for fa-chevron-up */
-}
-
-/* Dropdown menu (hidden by default, animated slide) */
-.ks-menu {
-    position: absolute;
-    top: calc(100% + 0px);
-    left: 50%;
-    transform: translateX(-50%) translateY(-10px);
-    width: 100%;
-    /* border: 1px solid rgba(0,0,0,0.1); */
-    border-radius: 0 0 3px 3px !important;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    /* box-shadow: 0 6px 16px rgba(0,0,0,0.08); */
-    z-index: 9999;
-
-    display: flex;
-    justify-content: space-around;
-
-    /* transition for slide down effect */
-    opacity: 0;
-    visibility: hidden;
-    transform-origin: top center;
-    transition: opacity 0.25s ease, 
-                visibility 0.25s ease,
-                transform 0.25s ease;
-}
-
-/* Open state: slide down */
-.ks-menu.ks-open {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0);
-    width: 100%;
-    border-radius: 0 0 3px 3px !important;
-}
-
-.ks-menu li {
-    flex: 1;
-    text-align: center;
-    margin-bottom: 0;
-    list-style: none;
-}
-
-.ks-menu a {
-    display: block;
-    padding: 12px;
-    color: #fff;
-    text-decoration: none;
-    font-size: 0.75rem;
-    font-weight: bold;
-    border-radius: 0 0 3px 3px;
-}
-
-/* Base shimmer effect - required for all shimmer effects */
-.shimmer-effect {
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.shimmer-effect::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
-    z-index: 1;
-}
-
-.shimmer-effect:hover::before {
-    left: 100%;
-}
 
 /* ========================================
    UNIVERSAL BUTTON COLOR CLASSES
+   Moved to global-buttons.css
    ======================================== */
-
-/* Purple theme (brand color) */
-.btn-purple {
-    background: linear-gradient(135deg, #871f80 0%, #6e1a6e 100%);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-purple:hover {
-    background: linear-gradient(135deg, #6e1a6e 0%, #5a1557 100%);
-    
-    
-    color: #fff;
-    text-decoration: none;
-}
-
-/* Blue theme */
-.btn-blue {
-    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%) !important;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-blue:hover {
-    background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
-    color: #fff;
-    text-decoration: none;
-}
-
-/* Green theme */
-.btn-green {
-    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-green:hover {
-    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
-    color: #fff;
-    text-decoration: none;
-}
-
-/* Red theme */
-.btn-red {
-    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-red:hover {
-    background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
-    color: #fff;
-    text-decoration: none;
-}
-
-/* Orange theme */
-.btn-orange {
-    background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-orange:hover {
-    background: linear-gradient(135deg, #dd6b20 0%, #c05621 100%);
-    color: #fff;
-    text-decoration: none;
-}
-
-/* Teal theme */
-.btn-teal {
-    background: linear-gradient(135deg, #38b2ac 0%, #319795 100%);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-teal:hover {
-    background: linear-gradient(135deg, #319795 0%, #2c7a7b 100%);
-    color: #fff;
-    text-decoration: none;
-}
-
-/* Dark blue theme */
-.btn-dark-blue {
-    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-dark-blue:hover {
-    background: linear-gradient(135deg, #1a202c 0%, #171923 100%);
-    color: #fff;
-    text-decoration: none;
-}
-
-/* Gray theme */
-.btn-gray {
-    background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-gray:hover {
-    background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
-    color: #fff;
-    text-decoration: none;
-}
-
-/* Pink theme */
-.btn-pink {
-    background: linear-gradient(135deg, #ed64a6 0%, #d53f8c 100%);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-pink:hover {
-    background: linear-gradient(135deg, #d53f8c 0%, #b83280 100%);
-    color: #fff;
-    text-decoration: none;
-}
-
-/* Cyan theme */
-.btn-cyan {
-    background: linear-gradient(135deg, #0bc5ea 0%, #00b3d7 100%);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-cyan:hover {
-    background: linear-gradient(135deg, #00b3d7 0%, #0987a0 100%);
-    color: #fff;
-    text-decoration: none;
-}
-
-/* Indigo theme */
-.btn-indigo {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-indigo:hover {
-    background: linear-gradient(135deg, #764ba2 0%, #5b21b6 100%);
-    color: #fff;
-    text-decoration: none;
-}
-
-/* Gold theme */
-.btn-gold {
-    background: linear-gradient(135deg, #f6e05e 0%, #ecc94b 100%);
-    color: #2d3748;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-gold:hover {
-    background: linear-gradient(135deg, #ecc94b 0%, #d69e2e 100%);
-    color: #2d3748;
-    text-decoration: none;
-}
-
-/* White theme */
-.btn-white {
-    background: #ffffff;
-    color: #2d3748;
-    border: 2px solid #e2e8f0;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-white:hover {
-    background: #f7fafc;
-    color: #2d3748;
-    text-decoration: none;
-}
-
-/* Black theme */
-.btn-black {
-    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-black:hover {
-    background: linear-gradient(135deg, #1a202c 0%, #171923 100%);
-    color: #fff;
-    text-decoration: none;
-}
 
 /* ========================================
-   BUTTON SIZE VARIANTS
+   BUTTON SIZE, SHAPE & WIDTH VARIANTS
+   Moved to global-buttons.css
    ======================================== */
-
-.btn-xs {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-    min-height: 28px;
-    font-weight: 500;
-}
-
-.btn-small, .btn-sm {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-    min-height: 36px;
-    font-weight: 500;
-}
-
-.btn-medium, .btn-md {
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
-    min-height: 44px;
-    font-weight: 600;
-}
-
-.btn-large, .btn-lg {
-    padding: 0.8rem 1.5rem;
-    font-size: 1.1rem;
-    min-height: 56px;
-    font-weight: 600;
-}
-
-.btn-xl {
-    padding: 1rem 2rem;
-    font-size: 1.2rem;
-    min-height: 64px;
-    font-weight: 600;
-}
-
-.btn-2xl {
-    padding: 1.2rem 2.5rem;
-    font-size: 1.4rem;
-    min-height: 72px;
-    font-weight: 700;
-}
 
 /* ========================================
-   BUTTON SHAPE VARIANTS
+   ANIMATION VARIANTS & BUTTON STATE VARIANTS
+   Moved to global-buttons.css
    ======================================== */
-
-.btn-rounded {
-    border-radius: 6px;
-}
-
-.btn-rounded-md {
-    border-radius: 8px;
-}
-
-.btn-rounded-lg {
-    border-radius: 12px;
-}
-
-.btn-pill {
-    border-radius: 50px;
-}
-
-.btn-square {
-    border-radius: 0;
-}
-
-.btn-subtle {
-    border-radius: 4px;
-}
 
 /* ========================================
-   BUTTON WIDTH VARIANTS
+   TOGGLE SWITCH STYLING
+   Moved to global-buttons.css
    ======================================== */
-
-.btn-full {
-    width: 100%;
-    display: block;
-    text-align: center;
-}
-
-.btn-auto {
-    width: auto;
-    display: inline-block;
-}
-
-.btn-fit {
-    width: fit-content;
-    display: inline-block;
-}
-
-/* ========================================
-   ANIMATION VARIANTS
-   ======================================== */
-
-/* Shimmer speed variants */
-.shimmer-fast::before {
-    transition: left 0.3s ease;
-}
-
-.shimmer-slow::before {
-    transition: left 0.8s ease !important;
-}
-
-/* Shimmer intensity variants */
-.shimmer-subtle::before {
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-}
-
-.shimmer-strong::before {
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-}
-
-/* Gold shimmer variant */
-.btn-gold.shimmer-effect::before {
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-}
-
-/* Pulse effect */
-.btn-pulse {
-    animation: btn-pulse 2s infinite;
-}
-
-@keyframes btn-pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(135, 31, 128, 0.4);
-    }
-    70% {
-        box-shadow: 0 0 0 10px rgba(135, 31, 128, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(135, 31, 128, 0);
-    }
-}
-
-/* Bounce effect on hover */
-.btn-bounce:hover {
-    animation: btn-bounce 0.6s;
-}
-
-@keyframes btn-bounce {
-    0%, 20%, 60%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-10px);
-    }
-    80% {
-        transform: translateY(-5px);
-    }
-}
-
-/* Shake effect */
-.btn-shake:hover {
-    animation: btn-shake 0.5s;
-}
-
-@keyframes btn-shake {
-    0%, 100% {
-        transform: translateX(0);
-    }
-    10%, 30%, 50%, 70%, 90% {
-        transform: translateX(-2px);
-    }
-    20%, 40%, 60%, 80% {
-        transform: translateX(2px);
-    }
-}
-
-/* ========================================
-   BUTTON STATE VARIANTS
-   ======================================== */
-
-.btn-loading {
-    position: relative;
-    color: transparent;
-    pointer-events: none;
-}
-
-.btn-loading::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 16px;
-    height: 16px;
-    margin: -8px 0 0 -8px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: btn-spin 0.8s linear infinite;
-}
-
-@keyframes btn-spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.btn-disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-/* ========================================
-   OUTLINE BUTTON VARIANTS
-   ======================================== */
-
-.btn-outline-purple {
-    background: transparent;
-    color: #871f80;
-    border: 2px solid #871f80;
-    transition: all 0.3s ease;
-}
-
-.btn-outline-purple:hover {
-    background: #871f80;
-    color: #fff;
-}
-
-.btn-outline-blue {
-    background: transparent;
-    color: #4299e1;
-    border: 2px solid #4299e1;
-    transition: all 0.3s ease;
-}
-
-.btn-outline-blue:hover {
-    background: #4299e1;
-    color: #fff;
-}
-
-.btn-outline-green {
-    background: transparent;
-    color: #48bb78;
-    border: 2px solid #48bb78;
-    transition: all 0.3s ease;
-}
-
-.btn-outline-green:hover {
-    background: #48bb78;
-    color: #fff;
-}
-
-.btn-outline-red {
-    background: transparent;
-    color: #f56565;
-    border: 2px solid #f56565;
-    transition: all 0.3s ease;
-}
-
-.btn-outline-red:hover {
-    background: #f56565;
-    color: #fff;
-}
-
-/* ========================================
-   GHOST BUTTON VARIANTS
-   ======================================== */
-
-.btn-ghost {
-    background: transparent;
-    border: none;
-    color: inherit;
-    transition: all 0.3s ease;
-}
-
-.btn-ghost:hover {
-    background: rgba(0, 0, 0, 0.05);
-}
-
-.btn-ghost-purple {
-    background: transparent;
-    border: none;
-    color: #871f80;
-    transition: all 0.3s ease;
-}
-
-.btn-ghost-purple:hover {
-    background: rgba(135, 31, 128, 0.1);
-    color: #6e1a6e;
-    
-}
-
-/* ========================================
-   TOGGLE SWITCH STYLING (CodyHouse Style)
-   ======================================== */
-
-.swp-toggle {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.75rem !important;
-    cursor: pointer !important;
-    user-select: none !important;
-}
-
-.swp-toggle-checkbox {
-    position: absolute !important;
-    opacity: 0 !important;
-    width: 0 !important;
-    height: 0 !important;
-    pointer-events: none !important;
-}
-
-.swp-toggle-switch {
-    position: relative !important;
-    display: inline-block !important;
-    width: 48px !important;
-    height: 24px !important;
-    background: #e2e8f0 !important;
-    border-radius: 12px !important;
-    transition: all 0.3s ease !important;
-    cursor: pointer !important;
-    border: 2px solid #e2e8f0 !important;
-}
-
-.swp-toggle-switch--mini {
-    width: 40px !important;
-    height: 20px !important;
-    border-radius: 10px !important;
-}
-
-.swp-toggle-switch::before {
-    content: '' !important;
-    position: absolute !important;
-    top: 2px !important;
-    left: 2px !important;
-    width: 16px !important;
-    height: 16px !important;
-    background: #fff !important;
-    border-radius: 50% !important;
-    transition: all 0.3s ease !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-}
-
-.swp-toggle-switch--mini::before {
-    width: 12px !important;
-    height: 12px !important;
-}
-
-/* Active/Checked State */
-.swp-toggle-checkbox:checked + .swp-toggle-switch {
-    background: #48bb78 !important;
-    border-color: #48bb78 !important;
-}
-
-.swp-toggle-checkbox:checked + .swp-toggle-switch::before {
-    transform: translateX(24px) !important;
-}
-
-.swp-toggle-checkbox:checked + .swp-toggle-switch--mini::before {
-    transform: translateX(20px) !important;
-}
-
-/* Focus State */
-.swp-toggle-switch:focus,
-.swp-toggle-checkbox:focus + .swp-toggle-switch {
-    outline: 2px solid #48bb78 !important;
-    outline-offset: 2px !important;
-}
-
-/* Hover State */
-.swp-toggle:hover .swp-toggle-switch {
-    background: #cbd5e0 !important;
-    border-color: #cbd5e0 !important;
-}
-
-.swp-toggle:hover .swp-toggle-checkbox:checked + .swp-toggle-switch {
-    background: #48bb78 !important;
-    border-color: #48bb78 !important;
-}
-
-/* Text Styling */
-.swp-toggle .swp-p {
-    font-family: "Titillium Web", Sans-serif !important;
-    font-size: 16px !important;
-    font-weight: 500 !important;
-    color: #fff !important;
-    margin: 0 !important;
-}
-
-/* Disabled State */
-.swp-toggle-checkbox:disabled + .swp-toggle-switch {
-    opacity: 0.5 !important;
-    cursor: not-allowed !important;
-}
-
-.swp-toggle-checkbox:disabled + .swp-toggle-switch::before {
-    background: #f7fafc !important;
-}
-
-/* Accessibility improvements */
-.swp-toggle-switch[role="switch"][aria-checked="true"] {
-    background: #48bb78 !important;
-    border-color: #48bb78 !important;
-}
-
-.swp-toggle-switch[role="switch"][aria-checked="false"] {
-    background: #e2e8f036 !important;
-    border-color: #e2e8f0 !important;
-}
 
 form.searchwp-form .swp-flex--gap-md {
   row-gap: 1rem !important;
 }
 
-.homepage-hero .hero-image-carousel .carousel-cell .inner-container .button {
-    flex: 1 !important;
-    height:52px !important;
-    border-radius: 3px !important;
-    text-decoration: none !important;
-    font-size:18px !important;
-    font-weight:600 !important;
-    position: relative !important;
-    overflow: hidden !important;
-    transition: all 0.3s ease !important;
-    line-height:1.2rem !important;
-    min-width: 250px !important;
-    margin-top:35px !important
-}
-
-.button.large:after {
-  line-height:1.5rem !important;
-}
+/* Homepage hero carousel button styles moved to global-buttons.css */
 
 /* ========================================
-   USAGE EXAMPLES IN COMMENTS
+   BUTTON USAGE EXAMPLES moved to global-buttons.css
    ======================================== */
-
-/*
-USAGE EXAMPLES:
-
-Basic colored buttons:
-<button class="btn-purple">Purple Button</button>
-<button class="btn-blue">Blue Button</button>
-<a class="btn-green" href="#">Green Link</a>
-
-With sizes:
-<button class="btn-purple btn-small">Small Purple</button>
-<button class="btn-blue btn-large">Large Blue</button>
-<button class="btn-green btn-xl">XL Green</button>
-
-With shapes:
-<button class="btn-purple btn-pill">Pill Purple</button>
-<button class="btn-blue btn-rounded">Rounded Blue</button>
-
-With effects:
-<button class="btn-purple shimmer-effect">Shimmer Purple</button>
-<button class="btn-blue btn-pulse">Pulsing Blue</button>
-<button class="btn-green btn-bounce">Bouncy Green</button>
-
-Full width:
-<button class="btn-purple btn-full">Full Width</button>
-
-Outline variants:
-<button class="btn-outline-purple">Outline Purple</button>
-<button class="btn-outline-blue btn-large">Large Outline Blue</button>
-
-Ghost variants:
-<button class="btn-ghost-purple">Ghost Purple</button>
-
-Loading state:
-<button class="btn-purple btn-loading">Loading...</button>
-
-Combinations:
-<button class="btn-purple btn-large btn-pill shimmer-effect">Large Pill Purple with Shimmer</button>
-<a class="btn-blue btn-medium btn-rounded btn-full" href="#">Medium Rounded Full Width Blue Link</a>
-
-*/
 
 /* ========================================
    LOGIN MODAL FORM STYLING
@@ -2253,3 +1273,45 @@ Combinations:
     text-decoration: underline !important;
 }
 
+/* ============================
+   SearchWP Form Button Styles moved to global-buttons.css
+   ============================ */
+
+/* ---------------------------------------------------------------
+    #Clear All Saved Posts Button styling moved to global-buttons.css
+--------------------------------------------------------------- */
+
+.share-module {
+    color: #5c5c5c;
+    background: #f2f2f2;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.85rem 0 0;
+    transform: translateY(-0.2rem);
+    border-radius: 3px;
+    margin-bottom:25px;
+    overflow:hidden;
+}
+
+.share-module p {
+    margin: 0;
+    padding: 6px 10px;
+    line-height: 1.3rem;
+    font-family: "Titillium Web", Sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    background: #871f80 !important;
+    color:#fff;
+    position: relative;
+    margin-top:-0.3rem
+}
+
+.share-module ul.social-links li a {
+  background-color: #009fe3;
+  color:#fff;
+  border-radius:3px;
+}
+
+.share-module ul.social-links li a i::before {
+  color:#fff;
+  font-size:12px;
+}
