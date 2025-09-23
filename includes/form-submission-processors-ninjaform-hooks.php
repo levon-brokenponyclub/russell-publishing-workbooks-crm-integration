@@ -482,6 +482,31 @@ dtr_init_ninja_forms_hooks();
 // Add mapped registration data (Workbooks payload) to the Ninja Forms AJAX response for the webinar form (ID 2)
 add_filter('ninja_forms_submit_response', function($response, $form_id) {
     if ((int)$form_id === 2) {
+        // Log the original response structure for debugging
+        error_log('[DEBUG] Original Response Structure: ' . print_r($response, true));
+        
+        // Ensure errors structure exists to prevent JavaScript errors in submitError controller
+        if (!isset($response['errors'])) {
+            $response['errors'] = [
+                'form' => [],
+                'fields' => [],
+                'nonce' => [] // Empty nonce array prevents "Cannot read properties of undefined (reading 'nonce')" error
+            ];
+            error_log('[DEBUG] Added missing errors structure to response');
+        } else {
+            // Ensure nonce exists in existing errors structure
+            if (!isset($response['errors']['nonce'])) {
+                $response['errors']['nonce'] = [];
+                error_log('[DEBUG] Added missing nonce array to existing errors structure');
+            }
+            error_log('[DEBUG] Errors structure already exists: ' . print_r($response['errors'], true));
+        }
+        
+            // Log the final AJAX response structure before returning
+            error_log('[DEBUG] FINAL AJAX RESPONSE SENT TO BROWSER: ' . print_r($response, true));
+        // Log the final response structure
+        error_log('[DEBUG] Final Response Structure: ' . print_r($response, true));
+        
         // Try to get mapped registration data from global or static var set in dtr_process_webinar_registration
         global $dtr_last_webinar_registration_data, $dtr_webinar_registration_success;
         
@@ -503,32 +528,14 @@ add_filter('ninja_forms_submit_response', function($response, $form_id) {
         }
     }
     return $response;
-}, 20, 2);
+}, 5, 2); // Higher priority to run first
 
 // Console notification for successful loading (in footer)
 add_action('wp_footer', function() {
     ?>
     <script>
-        console.log('%c[DTR Ninja Forms Clean Hook] Successfully loaded unified form handler', 'color: green; font-weight: bold;');
-        // Display debug_message from Ninja Forms AJAX response for Webinar form (ID 2)
-        document.addEventListener('nfFormSubmitResponse', function(e, data) {
-            if (!data || !data.data || !data.data.form_id) return;
-            if (data.data.form_id !== 2) return; // Only for Webinar form
-            // Show debug_message if present
-            if (data.data.debug_message) {
-                var msg = document.createElement('div');
-                msg.className = 'nf-debug-message nf-webinar-debug-message';
-                msg.style = 'color: #155724; background: #d4edda; border: 1px solid #c3e6cb; padding: 10px; margin: 10px 0; font-weight: bold;';
-                msg.innerText = data.data.debug_message;
-                var form = document.getElementById('nf-form-2-cont');
-                if (form) {
-                    var msgArea = form.querySelector('.nf-response-msg') || form;
-                    msgArea.prepend(msg);
-                } else {
-                    document.body.prepend(msg);
-                }
-            }
-        });
+        console.log('%c[DTR] All JavaScript interference disabled - testing native Ninja Forms behavior', 'color: blue; font-weight: bold;');
+        // All custom form handling disabled to test if the issue is JavaScript interference
     </script>
     <?php
 });

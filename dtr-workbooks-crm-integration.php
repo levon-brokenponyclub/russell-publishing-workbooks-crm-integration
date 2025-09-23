@@ -83,7 +83,7 @@ if (!function_exists('dtr_custom_log')) {
 $shortcode_files = [
     'dtr-shortcodes.php',                       // User preference management shortcodes
     'dtr-my-account-details.php',               // Account management functionality
-    'dtr-forgot-password.php',                  // Password recovery handling
+    'login-forgot-password-shortcode.php',      // Login and password reset forms
     'webinar-registration-shortcodes.php',      // Webinar registration handling
     'lead-generation-shortcodes.php',           // Lead generation shortcodes (new)
     'workbooks-employer-select.php',            // Workbooks employer select shortcode
@@ -372,7 +372,7 @@ class DTR_Workbooks_Integration {
         $shortcode_files = [
             'dtr-shortcodes.php',
             'dtr-my-account-details.php',
-            'dtr-forgot-password.php',
+            'login-forgot-password-shortcode.php',
             'webinar-registration-shortcodes.php',
             'lead-generation-shortcodes.php',
             'workbooks-employer-select.php',
@@ -476,7 +476,8 @@ class DTR_Workbooks_Integration {
                 'api_url' => '',
                 'api_key' => '',
                 'debug_mode' => false,
-                'enabled_forms' => [2, 15, 31],
+                'enabled_forms' => [2, 15, 31, 'media_planner', 'membership_registration'],
+                'form_dev_modes' => [],
                 'api_timeout' => 30,
                 'retry_attempts' => 3,
                 'log_retention_days' => 30
@@ -1243,7 +1244,9 @@ class DTR_Workbooks_Integration {
      */
     public function admin_person_record_page() {
         $file = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/content-person-record.php';
-        echo '<div class="wrap plugin-admin-content"><h1>'.esc_html__('Person Record','dtr-workbooks').'</h1>';
+        echo '<div class="wrap plugin-admin-content">';
+        echo '<h1>'.esc_html__('Person Record','dtr-workbooks').'</h1>';
+        echo '<h2>View & Update any Registered Users WP Meta Data with Sync to Workbooks Functionality</h2>';
         if (file_exists($file)) {
             include $file;
         } else {
@@ -1295,15 +1298,18 @@ class DTR_Workbooks_Integration {
     }
 
     /**
-     * Gated Content page (placeholder / basic diagnostic until expanded)
+     * Gated Content page
      */
     public function admin_gated_content_page() {
-        echo '<div class="wrap plugin-admin-content"><h1>'.esc_html__('Gated Content','dtr-workbooks').'</h1>';
-        if (!function_exists('dtr_init_gated_content_hooks')) {
-            echo '<p>'.esc_html__('Gated content hooks not loaded (dependency missing or feature disabled).','dtr-workbooks').'</p></div>'; return; }
-        // Placeholder – future enhancement: list recent gated content access events / meta.
-        echo '<p>'.esc_html__('This section will provide analytics and recent access logs for gated content.','dtr-workbooks').'</p>';
-        echo '</div>';
+        $file = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/gated-content.php';
+        if (file_exists($file)) {
+            include $file;
+        } else {
+            echo '<div class="wrap plugin-admin-content">';
+            echo '<h1>'.esc_html__('Gated Content','dtr-workbooks').'</h1>';
+            echo '<p>'.esc_html__('The file admin/gated-content.php was not found.','dtr-workbooks').'</p>';
+            echo '</div>';
+        }
     }
 
     /**
@@ -1923,7 +1929,19 @@ class DTR_Workbooks_Integration {
         
         // Enabled forms validation
         if (isset($input['enabled_forms']) && is_array($input['enabled_forms'])) {
-            $validated['enabled_forms'] = array_map('intval', $input['enabled_forms']);
+            $validated['enabled_forms'] = array_map(function($form) {
+                // Handle both numeric and string form IDs
+                return is_numeric($form) ? intval($form) : sanitize_text_field($form);
+            }, $input['enabled_forms']);
+        }
+        
+        // Form dev modes validation
+        if (isset($input['form_dev_modes']) && is_array($input['form_dev_modes'])) {
+            $validated['form_dev_modes'] = [];
+            foreach ($input['form_dev_modes'] as $form_id => $dev_mode) {
+                $sanitized_form_id = is_numeric($form_id) ? intval($form_id) : sanitize_text_field($form_id);
+                $validated['form_dev_modes'][$sanitized_form_id] = !empty($dev_mode);
+            }
         }
         
         // API timeout validation
@@ -2333,12 +2351,72 @@ class DTR_Workbooks_Integration {
     }
     
     public function enabled_forms_field_callback() {
-        $enabled_forms = $this->options['enabled_forms'] ?? [2, 15, 31];
-        $available_forms = [2 => 'Webinar Form', 15 => 'Registration Form', 31 => 'Lead Gen Form'];
+        // Debug: Log that this function is being called
+        error_log('DTR: enabled_forms_field_callback called');
+        
+        $enabled_forms = $this->options['enabled_forms'] ?? [2, 15, 31, 'media_planner', 'membership_registration'];
+        $form_dev_modes = $this->options['form_dev_modes'] ?? [];
+        
+        // Debug: Log current options
+        error_log('DTR: enabled_forms = ' . print_r($enabled_forms, true));
+        error_log('DTR: form_dev_modes = ' . print_r($form_dev_modes, true));
+        
+        $available_forms = [
+            2 => 'Webinar Form', 
+            15 => 'Registration Form', 
+            31 => 'Lead Gen Form',
+            'media_planner' => 'Media Planner Form',
+            'membership_registration' => 'Membership Registration Form'
+        ];
+        
+        // Debug: Log available forms
+        error_log('DTR: available_forms = ' . print_r($available_forms, true));
+        
+        echo '<style>
+            .dtr-form-config { margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-left: 4px solid #0073aa; }
+            .dtr-form-config h4 { margin: 0 0 10px 0; color: #23282d; }
+            .dtr-form-toggle { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
+            .dtr-toggle-switch { position: relative; width: 60px; height: 30px; }
+            .dtr-toggle-switch input { opacity: 0; width: 0; height: 0; }
+            .dtr-toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 30px; }
+            .dtr-toggle-slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+            input:checked + .dtr-toggle-slider { background-color: #4CAF50; }
+            input:checked + .dtr-toggle-slider:before { transform: translateX(30px); }
+            .dtr-toggle-label { font-weight: bold; }
+            .dtr-toggle-status { font-size: 14px; padding: 4px 8px; border-radius: 4px; }
+            .dtr-toggle-status.live { background: #4CAF50; color: white; }
+            .dtr-toggle-status.dev { background: #ff9800; color: white; }
+            .dtr-dev-toggle { margin-left: 20px; opacity: 0.7; }
+        </style>';
+        
+        echo '<h3>Form Configuration</h3>';
+        echo '<p>Configure which forms should be processed by the integration.</p>';
         
         foreach ($available_forms as $form_id => $form_name) {
-            $checked = in_array($form_id, $enabled_forms) ? 'checked' : '';
-            echo '<label><input type="checkbox" name="dtr_workbooks_options[enabled_forms][]" value="' . $form_id . '" ' . $checked . ' /> ' . $form_name . '</label><br />';
+            $is_enabled = in_array($form_id, $enabled_forms);
+            $is_dev_mode = isset($form_dev_modes[$form_id]) && $form_dev_modes[$form_id];
+            
+            echo '<div class="dtr-form-config">';
+            echo '<h4>' . esc_html($form_name) . ' (ID: ' . esc_html($form_id) . ')</h4>';
+            
+            echo '<div class="dtr-form-toggle">';
+            echo '<label class="dtr-toggle-switch">';
+            echo '<input type="checkbox" name="dtr_workbooks_options[enabled_forms][]" value="' . esc_attr($form_id) . '" ' . ($is_enabled ? 'checked' : '') . ' />';
+            echo '<span class="dtr-toggle-slider"></span>';
+            echo '</label>';
+            echo '<span class="dtr-toggle-status ' . ($is_enabled ? 'live' : 'dev') . '">' . ($is_enabled ? 'Live' : 'Disabled') . '</span>';
+            echo '</div>';
+            
+            if ($is_enabled) {
+                echo '<div class="dtr-dev-toggle">';
+                echo '<label>';
+                echo '<input type="checkbox" name="dtr_workbooks_options[form_dev_modes][' . esc_attr($form_id) . ']" value="1" ' . ($is_dev_mode ? 'checked' : '') . ' /> ';
+                echo 'Enable Development Mode (shows debug tools and test functions)';
+                echo '</label>';
+                echo '</div>';
+            }
+            
+            echo '</div>';
         }
     }
     
@@ -2349,6 +2427,34 @@ class DTR_Workbooks_Integration {
     public function debug_mode_field_callback() {
         $checked = !empty($this->options['debug_mode']) ? 'checked' : '';
         echo '<label><input type="checkbox" name="dtr_workbooks_options[debug_mode]" value="1" ' . $checked . ' /> ' . __('Enable debug mode', 'dtr-workbooks') . '</label>';
+    }
+
+    /**
+     * Check if a form is enabled and get its dev mode status
+     * 
+     * @param string|int $form_id The form identifier
+     * @return array Array with 'enabled' and 'dev_mode' keys
+     */
+    public function get_form_config($form_id) {
+        $enabled_forms = $this->options['enabled_forms'] ?? [2, 15, 31, 'media_planner', 'membership_registration', 'forgot_password'];
+        $form_dev_modes = $this->options['form_dev_modes'] ?? [];
+        
+        return [
+            'enabled' => in_array($form_id, $enabled_forms),
+            'dev_mode' => isset($form_dev_modes[$form_id]) && $form_dev_modes[$form_id]
+        ];
+    }
+    
+    /**
+     * Get form configuration for shortcode use
+     * Static method that can be called from shortcodes
+     * 
+     * @param string|int $form_id The form identifier  
+     * @return array Array with 'enabled' and 'dev_mode' keys
+     */
+    public static function get_shortcode_form_config($form_id) {
+        $instance = self::get_instance();
+        return $instance->get_form_config($form_id);
     }
 
     /**

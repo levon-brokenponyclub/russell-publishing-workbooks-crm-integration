@@ -882,21 +882,21 @@ input:checked + .toggle-slider:before {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10000;
+    z-index: 2147483647; /* Maximum possible z-index value */
     backdrop-filter: blur(8px);
 }
 
 .loader-content {
     text-align: center;
     color: white;
-    max-width: 400px;
+    max-width: 520px;
     padding: 40px 20px;
 }
 
 .loader-content h2 {
     font-size: 2.2rem;
     margin-bottom: 50px;
-    font-weight: 300;
+    font-weight: 500;
     color: white;
     line-height: 1.2;
 }
@@ -955,10 +955,10 @@ input:checked + .toggle-slider:before {
 }
 
 .loader-content p {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: white;
     margin: 0;
-    font-weight: 400;
+    font-weight: 500;
     opacity: 0.9;
 }
 
@@ -980,27 +980,25 @@ input:checked + .toggle-slider:before {
 }
 
 .countdown-number {
-    font-size: 8rem;
-    font-weight: 900;
-    background: linear-gradient(45deg, #ffffff, #f0f8ff, #ffffff);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: gradientShift 1s ease-in-out infinite alternate, countdownPulse 1s ease-in-out;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-}
-
-.countdown-message {
-    font-size: 3rem;
+    font-size: 4rem;
     font-weight: 700;
     background: linear-gradient(45deg, #ffffff, #f0f8ff, #ffffff);
     background-size: 200% 200%;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    animation: gradientShift 1s ease-in-out infinite alternate, countdownPulse 1s ease-in-out;
+}
+
+.countdown-message {
+    font-size: 2rem;
+    font-weight: 600;
+    background: linear-gradient(45deg, #ffffff, #f0f8ff, #ffffff);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     animation: gradientShift 1.5s ease-in-out infinite alternate, messageSlideUp 0.8s ease-out;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
     line-height: 1.2;
 }
 

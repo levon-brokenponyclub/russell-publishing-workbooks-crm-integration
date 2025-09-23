@@ -4,10 +4,16 @@ if (!defined('ABSPATH')) exit;
 // Add shortcode for media planner registration form
 add_shortcode('dtr_media_planner_registration', 'dtr_media_planner_registration_shortcode');
 
-// Enqueue custom stylesheet for shortcodes
+// Enqueue custom stylesheet for shortcodes with high priority to override theme styles
 add_action('wp_enqueue_scripts', function() {
-    wp_enqueue_style('media-planner-registration-form', plugin_dir_url(__FILE__) . '../assets/css/membership-registration-form.css', [], null);
-});
+    wp_enqueue_style(
+        'dtr-dynamic-forms', 
+        plugin_dir_url(__FILE__) . '../assets/css/dynamic-forms.css', 
+        array(), // No dependencies - loads independently
+        filemtime(plugin_dir_path(__FILE__) . '../assets/css/dynamic-forms.css'), // Version based on file modification time
+        'all'
+    );
+}, 999); // High priority to ensure it loads after theme styles
 
 function dtr_media_planner_registration_shortcode($atts) {
     // Debug: Log that shortcode is being called
@@ -20,23 +26,54 @@ function dtr_media_planner_registration_shortcode($atts) {
         'development_mode' => 'false',
     ), $atts, 'dtr_media_planner_registration');
     
-    $development_mode = filter_var($atts['development_mode'], FILTER_VALIDATE_BOOLEAN);
+    // Get form configuration from plugin settings
+    $form_config = DTR_Workbooks_Integration::get_shortcode_form_config('media_planner');
+    $development_mode = $form_config['dev_mode'] ?? false;
+    
+    // Check if form is enabled
+    if (!$form_config['enabled']) {
+        return '<div class="dtr-form-disabled">Media Planner form is currently disabled in plugin settings.</div>';
+    }
+    
+    // Get current user data for pre-population if logged in
+    $user_data = array();
+    if (is_user_logged_in()) {
+        $current_user = wp_get_current_user();
+        $user_id = $current_user->ID;
+        
+        $user_data = array(
+            'first_name' => get_user_meta($user_id, 'first_name', true),
+            'last_name' => get_user_meta($user_id, 'last_name', true),
+            'email' => $current_user->user_email,
+            'job_title' => get_user_meta($user_id, 'job_title', true),
+            'organisation' => get_user_meta($user_id, 'employer_name', true),
+            'city' => get_user_meta($user_id, 'town', true),
+            'country' => get_user_meta($user_id, 'country', true),
+            'phone' => get_user_meta($user_id, 'telephone', true),
+        );
+        
+        // Debug log user data retrieval
+        error_log('DTR: Retrieved user data for pre-population: ' . print_r($user_data, true));
+    }
 
     ob_start();
     ?>
+    <?php if ($development_mode): ?>
     <!-- Development Mode Indicator -->
-    <div class="dev-mode-indicator" id="devModeIndicator">
+    <div class="dev-mode-indicator active" id="devModeIndicator">
         🛠️ DEVELOPMENT MODE - Form Submission Disabled
     </div>
+    <?php endif; ?>
 
     <div class="full-page form-container vertical-half-margin" id="media-planner-form">
         <h2><?php echo esc_html($atts['title']); ?></h2>
         
+        <?php if ($development_mode): ?>
         <!-- Development Mode Toggle -->
         <div class="dev-mode-toggle">
             <h4>🛠️ Development Mode</h4>
             <label class="toggle-switch">
-                <input type="checkbox" id="devModeToggle">
+                <input type="checkbox" id="devModeToggle" checked>
                 <span class="toggle-slider"></span>
             </label>
             <div class="toggle-labels">
@@ -45,19 +82,20 @@ function dtr_media_planner_registration_shortcode($atts) {
             </div>
             <button type="button" class="preview-loader-btn" onclick="previewLoader()">👁️ Preview Loader</button>
         </div>
+        <?php endif; ?>
         
         <div class="form-container media-planner-registration-form">
             <form id="mediaPlannerForm">
                 <!-- First Name -->
                 <div class="form-row">
                     <div class="form-field floating-label one-half first">
-                        <input type="text" id="firstName" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
+                        <input type="text" id="firstName" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" " value="<?php echo esc_attr($user_data['first_name'] ?? ''); ?>">
                         <label for="firstName">First Name <span class="required">*</span></label>
                     </div>
                     
                     <!-- Last Name -->
                     <div class="form-field floating-label one-half">
-                        <input type="text" id="lastName" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
+                        <input type="text" id="lastName" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" " value="<?php echo esc_attr($user_data['last_name'] ?? ''); ?>">
                         <label for="lastName">Last Name <span class="required">*</span></label>
                     </div>
                 </div>
@@ -65,13 +103,13 @@ function dtr_media_planner_registration_shortcode($atts) {
                 <!-- Email -->
                 <div class="form-row">
                     <div class="form-field floating-label one-half first">
-                        <input type="email" id="email" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
+                        <input type="email" id="email" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" " value="<?php echo esc_attr($user_data['email'] ?? ''); ?>">
                         <label for="email">Email <span class="required">*</span></label>
                     </div>
                     
                     <!-- Job Title -->
                     <div class="form-field floating-label one-half">
-                        <input type="text" id="jobTitle" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
+                        <input type="text" id="jobTitle" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" " value="<?php echo esc_attr($user_data['job_title'] ?? ''); ?>">
                         <label for="jobTitle">Job Title <span class="required">*</span></label>
                     </div>
                 </div>
@@ -79,13 +117,17 @@ function dtr_media_planner_registration_shortcode($atts) {
                 <!-- Organisation -->
                 <div class="form-row">
                     <div class="form-field floating-label one-half first">
-                        <input type="text" id="organisation" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
-                        <label for="organisation">Organisation <span class="required">*</span></label>
+                        <?php if (is_user_logged_in()): ?>
+                            <input type="text" id="organisation" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" " value="<?php echo esc_attr($user_data['organisation'] ?? ''); ?>">
+                            <label for="organisation">Organisation <span class="required">*</span></label>
+                        <?php else: ?>
+                            <?php echo do_shortcode('[workbooks_employer_select]'); ?>
+                        <?php endif; ?>
                     </div>
                     
                     <!-- Town/City -->
                     <div class="form-field floating-label one-half">
-                        <input type="text" id="city" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
+                        <input type="text" id="city" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" " value="<?php echo esc_attr($user_data['city'] ?? ''); ?>">
                         <label for="city">Town/City <span class="required">*</span></label>
                     </div>
                 </div>
@@ -93,268 +135,25 @@ function dtr_media_planner_registration_shortcode($atts) {
                 <!-- Country -->
                 <div class="form-row">
                     <div class="form-field floating-label one-half first">
-                        <select id="country" required uuid="<?php echo wp_generate_uuid4(); ?>">
-                            <option value="">- Select Country -</option>
-                            <option value="Afghanistan">Afghanistan</option>
-                            <option value="Åland Islands">Åland Islands</option>
-                            <option value="Albania">Albania</option>
-                            <option value="Algeria">Algeria</option>
-                            <option value="American Samoa">American Samoa</option>
-                            <option value="Andorra">Andorra</option>
-                            <option value="Angola">Angola</option>
-                            <option value="Anguilla">Anguilla</option>
-                            <option value="Antarctica">Antarctica</option>
-                            <option value="Antigua and Barbuda">Antigua and Barbuda</option>
-                            <option value="Argentina">Argentina</option>
-                            <option value="Armenia">Armenia</option>
-                            <option value="Aruba">Aruba</option>
-                            <option value="Australia">Australia</option>
-                            <option value="Austria">Austria</option>
-                            <option value="Azerbaijan">Azerbaijan</option>
-                            <option value="Bahamas">Bahamas</option>
-                            <option value="Bahrain">Bahrain</option>
-                            <option value="Bangladesh">Bangladesh</option>
-                            <option value="Barbados">Barbados</option>
-                            <option value="Belarus">Belarus</option>
-                            <option value="Belgium">Belgium</option>
-                            <option value="Belize">Belize</option>
-                            <option value="Benin">Benin</option>
-                            <option value="Bermuda">Bermuda</option>
-                            <option value="Bhutan">Bhutan</option>
-                            <option value="Bolivia (Plurinational State of)">Bolivia (Plurinational State of)</option>
-                            <option value="Bonaire, Sint Eustatius and Saba">Bonaire, Sint Eustatius and Saba</option>
-                            <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
-                            <option value="Botswana">Botswana</option>
-                            <option value="Bouvet Island">Bouvet Island</option>
-                            <option value="Brazil">Brazil</option>
-                            <option value="British Indian Ocean Territory">British Indian Ocean Territory</option>
-                            <option value="Brunei Darussalam">Brunei Darussalam</option>
-                            <option value="Bulgaria">Bulgaria</option>
-                            <option value="Burkina Faso">Burkina Faso</option>
-                            <option value="Burundi">Burundi</option>
-                            <option value="Cabo Verde">Cabo Verde</option>
-                            <option value="Cambodia">Cambodia</option>
-                            <option value="Cameroon">Cameroon</option>
-                            <option value="Canada">Canada</option>
-                            <option value="Cayman Islands">Cayman Islands</option>
-                            <option value="Central African Republic">Central African Republic</option>
-                            <option value="Chad">Chad</option>
-                            <option value="Chile">Chile</option>
-                            <option value="China">China</option>
-                            <option value="Christmas Island">Christmas Island</option>
-                            <option value="Cocos (Keeling) Islands">Cocos (Keeling) Islands</option>
-                            <option value="Colombia">Colombia</option>
-                            <option value="Comoros">Comoros</option>
-                            <option value="Congo">Congo</option>
-                            <option value="Congo (the Democratic Republic of the)">Congo (the Democratic Republic of the)</option>
-                            <option value="Cook Islands">Cook Islands</option>
-                            <option value="Costa Rica">Costa Rica</option>
-                            <option value="Côte d'Ivoire">Côte d'Ivoire</option>
-                            <option value="Croatia">Croatia</option>
-                            <option value="Cuba">Cuba</option>
-                            <option value="Curaçao">Curaçao</option>
-                            <option value="Cyprus">Cyprus</option>
-                            <option value="Czechia">Czechia</option>
-                            <option value="Denmark">Denmark</option>
-                            <option value="Djibouti">Djibouti</option>
-                            <option value="Dominica">Dominica</option>
-                            <option value="Dominican Republic">Dominican Republic</option>
-                            <option value="Ecuador">Ecuador</option>
-                            <option value="Egypt">Egypt</option>
-                            <option value="El Salvador">El Salvador</option>
-                            <option value="EN">England</option>
-                            <option value="Equatorial Guinea">Equatorial Guinea</option>
-                            <option value="Eritrea">Eritrea</option>
-                            <option value="Estonia">Estonia</option>
-                            <option value="Eswatini">Eswatini</option>
-                            <option value="Ethiopia">Ethiopia</option>
-                            <option value="Falkland Islands (Malvinas)">Falkland Islands (Malvinas)</option>
-                            <option value="Faroe Islands">Faroe Islands</option>
-                            <option value="Fiji">Fiji</option>
-                            <option value="Finland">Finland</option>
-                            <option value="France">France</option>
-                            <option value="FX">France, Metropolitan</option>
-                            <option value="French Guiana">French Guiana</option>
-                            <option value="French Polynesia">French Polynesia</option>
-                            <option value="French Southern Territories">French Southern Territories</option>
-                            <option value="Gabon">Gabon</option>
-                            <option value="Gambia">Gambia</option>
-                            <option value="Georgia">Georgia</option>
-                            <option value="Germany">Germany</option>
-                            <option value="Ghana">Ghana</option>
-                            <option value="Gibraltar">Gibraltar</option>
-                            <option value="Greece">Greece</option>
-                            <option value="Greenland">Greenland</option>
-                            <option value="Grenada">Grenada</option>
-                            <option value="Guadeloupe">Guadeloupe</option>
-                            <option value="Guam">Guam</option>
-                            <option value="Guatemala">Guatemala</option>
-                            <option value="Guinea">Guinea</option>
-                            <option value="Guinea-Bissau">Guinea-Bissau</option>
-                            <option value="Guyana">Guyana</option>
-                            <option value="Haiti">Haiti</option>
-                            <option value="Heard Island and McDonald Islands">Heard Island and McDonald Islands</option>
-                            <option value="Holy See">Holy See</option>
-                            <option value="Honduras">Honduras</option>
-                            <option value="Hong Kong">Hong Kong</option>
-                            <option value="Hungary">Hungary</option>
-                            <option value="Iceland">Iceland</option>
-                            <option value="India">India</option>
-                            <option value="Indonesia">Indonesia</option>
-                            <option value="Iran (Islamic Republic of)">Iran (Islamic Republic of)</option>
-                            <option value="Iraq">Iraq</option>
-                            <option value="Ireland">Ireland</option>
-                            <option value="Isle of Man">Isle of Man</option>
-                            <option value="Israel">Israel</option>
-                            <option value="Italy">Italy</option>
-                            <option value="Jamaica">Jamaica</option>
-                            <option value="Japan">Japan</option>
-                            <option value="Jersey">Jersey</option>
-                            <option value="Jordan">Jordan</option>
-                            <option value="Kazakhstan">Kazakhstan</option>
-                            <option value="Kenya">Kenya</option>
-                            <option value="Kiribati">Kiribati</option>
-                            <option value="Korea (the Democratic People's Republic of)">Korea (the Democratic People's Republic of)</option>
-                            <option value="Korea (the Republic of)">Korea (the Republic of)</option>
-                            <option value="Kuwait">Kuwait</option>
-                            <option value="Kyrgyzstan">Kyrgyzstan</option>
-                            <option value="Lao People's Democratic Republic">Lao People's Democratic Republic</option>
-                            <option value="Latvia">Latvia</option>
-                            <option value="Lebanon">Lebanon</option>
-                            <option value="Lesotho">Lesotho</option>
-                            <option value="Liberia">Liberia</option>
-                            <option value="Libya">Libya</option>
-                            <option value="Liechtenstein">Liechtenstein</option>
-                            <option value="Lithuania">Lithuania</option>
-                            <option value="Luxembourg">Luxembourg</option>
-                            <option value="Macao">Macao</option>
-                            <option value="Madagascar">Madagascar</option>
-                            <option value="Malawi">Malawi</option>
-                            <option value="Malaysia">Malaysia</option>
-                            <option value="Maldives">Maldives</option>
-                            <option value="Mali">Mali</option>
-                            <option value="Malta">Malta</option>
-                            <option value="Marshall Islands">Marshall Islands</option>
-                            <option value="Martinique">Martinique</option>
-                            <option value="Mauritania">Mauritania</option>
-                            <option value="Mauritius">Mauritius</option>
-                            <option value="Mayotte">Mayotte</option>
-                            <option value="Mexico">Mexico</option>
-                            <option value="Micronesia (Federated States of)">Micronesia (Federated States of)</option>
-                            <option value="Moldova (the Republic of)">Moldova (the Republic of)</option>
-                            <option value="Monaco">Monaco</option>
-                            <option value="Mongolia">Mongolia</option>
-                            <option value="Montenegro">Montenegro</option>
-                            <option value="Montserrat">Montserrat</option>
-                            <option value="Morocco">Morocco</option>
-                            <option value="Mozambique">Mozambique</option>
-                            <option value="Myanmar">Myanmar</option>
-                            <option value="Namibia">Namibia</option>
-                            <option value="Nauru">Nauru</option>
-                            <option value="Nepal">Nepal</option>
-                            <option value="Netherlands">Netherlands</option>
-                            <option value="AN">Netherlands Antilles</option>
-                            <option value="New Caledonia">New Caledonia</option>
-                            <option value="New Zealand">New Zealand</option>
-                            <option value="Nicaragua">Nicaragua</option>
-                            <option value="Niger">Niger</option>
-                            <option value="Nigeria">Nigeria</option>
-                            <option value="Niue">Niue</option>
-                            <option value="Norfolk Island">Norfolk Island</option>
-                            <option value="North Macedonia">North Macedonia</option>
-                            <option value="Northern Mariana Islands">Northern Mariana Islands</option>
-                            <option value="Norway">Norway</option>
-                            <option value="Oman">Oman</option>
-                            <option value="Pakistan">Pakistan</option>
-                            <option value="Palau">Palau</option>
-                            <option value="Palestine, State of">Palestine, State of</option>
-                            <option value="Panama">Panama</option>
-                            <option value="Papua New Guinea">Papua New Guinea</option>
-                            <option value="Paraguay">Paraguay</option>
-                            <option value="Peru">Peru</option>
-                            <option value="Philippines">Philippines</option>
-                            <option value="Pitcairn">Pitcairn</option>
-                            <option value="Poland">Poland</option>
-                            <option value="Portugal">Portugal</option>
-                            <option value="Puerto Rico">Puerto Rico</option>
-                            <option value="Qatar">Qatar</option>
-                            <option value="RK">Republic of Kosovo</option>
-                            <option value="Réunion">Réunion</option>
-                            <option value="Romania">Romania</option>
-                            <option value="Russian Federation">Russian Federation</option>
-                            <option value="Rwanda">Rwanda</option>
-                            <option value="Saint Martin (French part)">Saint Martin (French part)</option>
-                            <option value="Saint Barthélemy">Saint Barthélemy</option>
-                            <option value="Saint Helena, Ascension and Tristan da Cunha">Saint Helena, Ascension and Tristan da Cunha</option>
-                            <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
-                            <option value="Saint Lucia">Saint Lucia</option>
-                            <option value="Saint Pierre and Miquelon">Saint Pierre and Miquelon</option>
-                            <option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option>
-                            <option value="Samoa">Samoa</option>
-                            <option value="San Marino">San Marino</option>
-                            <option value="Sao Tome and Principe">Sao Tome and Principe</option>
-                            <option value="Saudi Arabia">Saudi Arabia</option>
-                            <option value="Senegal">Senegal</option>
-                            <option value="Serbia">Serbia</option>
-                            <option value="Seychelles">Seychelles</option>
-                            <option value="Sierra Leone">Sierra Leone</option>
-                            <option value="Singapore">Singapore</option>
-                            <option value="Sint Maarten (Dutch part)">Sint Maarten (Dutch part)</option>
-                            <option value="Slovakia">Slovakia</option>
-                            <option value="Slovenia">Slovenia</option>
-                            <option value="Solomon Islands">Solomon Islands</option>
-                            <option value="Somalia">Somalia</option>
-                            <option value="South Africa">South Africa</option>
-                            <option value="South Georgia and the South Sandwich Islands">South Georgia and the South Sandwich Islands</option>
-                            <option value="South Sudan">South Sudan</option>
-                            <option value="Spain">Spain</option>
-                            <option value="Sri Lanka">Sri Lanka</option>
-                            <option value="Sudan">Sudan</option>
-                            <option value="Suriname">Suriname</option>
-                            <option value="Svalbard and Jan Mayen">Svalbard and Jan Mayen</option>
-                            <option value="Sweden">Sweden</option>
-                            <option value="Switzerland">Switzerland</option>
-                            <option value="Syrian Arab Republic">Syrian Arab Republic</option>
-                            <option value="Taiwan, Province of China">Taiwan, Province of China</option>
-                            <option value="Tajikistan">Tajikistan</option>
-                            <option value="Tanzania, United Republic of">Tanzania, United Republic of</option>
-                            <option value="Thailand">Thailand</option>
-                            <option value="Timor-Leste">Timor-Leste</option>
-                            <option value="Timor-Leste">Timor-Leste</option>
-                            <option value="Togo">Togo</option>
-                            <option value="Tokelau">Tokelau</option>
-                            <option value="Tonga">Tonga</option>
-                            <option value="Trinidad and Tobago">Trinidad and Tobago</option>
-                            <option value="Tunisia">Tunisia</option>
-                            <option value="Türkiye">Türkiye</option>
-                            <option value="Turkmenistan">Turkmenistan</option>
-                            <option value="Turks and Caicos Islands">Turks and Caicos Islands</option>
-                            <option value="Tuvalu">Tuvalu</option>
-                            <option value="Uganda">Uganda</option>
-                            <option value="Ukraine">Ukraine</option>
-                            <option value="United Arab Emirates">United Arab Emirates</option>
-                            <option value="United Kingdom" selected="selected">United Kingdom</option>
-                            <option value="United States">United States</option>
-                            <option value="United States Minor Outlying Islands">United States Minor Outlying Islands</option>
-                            <option value="Uruguay">Uruguay</option>
-                            <option value="Uzbekistan">Uzbekistan</option>
-                            <option value="Vanuatu">Vanuatu</option>
-                            <option value="Venezuela (Bolivarian Republic of)">Venezuela (Bolivarian Republic of)</option>
-                            <option value="Viet Nam">Viet Nam</option>
-                            <option value="Virgin Islands (British)">Virgin Islands (British)</option>
-                            <option value="Virgin Islands (U.S.)">Virgin Islands (U.S.)</option>
-                            <option value="Wallis and Futuna">Wallis and Futuna</option>
-                            <option value="Western Sahara">Western Sahara</option>
-                            <option value="Yemen">Yemen</option>
-                            <option value="Zambia">Zambia</option>
-                            <option value="Zimbabwe">Zimbabwe</option>
-                        </select>
-                        <label for="country">Country <span class="required">*</span></label>
+                            <select id="country" required uuid="<?php echo wp_generate_uuid4(); ?>">
+                                <option value="">- Select Country -</option>
+                                <?php
+                                $countries = array(
+                                    "Afghanistan","Åland Islands","Albania","Algeria","American Samoa","Andorra","Angola","Anguilla","Antarctica","Antigua and Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia (Plurinational State of)","Bonaire, Sint Eustatius and Saba","Bosnia and Herzegovina","Botswana","Bouvet Island","Brazil","British Indian Ocean Territory","Brunei Darussalam","Bulgaria","Burkina Faso","Burundi","Cabo Verde","Cambodia","Cameroon","Canada","Cayman Islands","Central African Republic","Chad","Chile","China","Christmas Island","Cocos (Keeling) Islands","Colombia","Comoros","Congo","Congo (the Democratic Republic of the)","Cook Islands","Costa Rica","Côte d'Ivoire","Croatia","Cuba","Curaçao","Cyprus","Czechia","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","EN","Equatorial Guinea","Eritrea","Estonia","Eswatini","Ethiopia","Falkland Islands (Malvinas)","Faroe Islands","Fiji","Finland","France","FX","French Guiana","French Polynesia","French Southern Territories","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guadeloupe","Guam","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Heard Island and McDonald Islands","Holy See","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran (Islamic Republic of)","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Korea (the Democratic People's Republic of)","Korea (the Republic of)","Kuwait","Kyrgyzstan","Lao People's Democratic Republic","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macao","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Martinique","Mauritania","Mauritius","Mayotte","Mexico","Micronesia (Federated States of)","Moldova (the Republic of)","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","AN","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","Niue","Norfolk Island","North Macedonia","Northern Mariana Islands","Norway","Oman","Pakistan","Palau","Palestine, State of","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Pitcairn","Poland","Portugal","Puerto Rico","Qatar","RK","Réunion","Romania","Russian Federation","Rwanda","Saint Martin (French part)","Saint Barthélemy","Saint Helena, Ascension and Tristan da Cunha","Saint Kitts and Nevis","Saint Lucia","Saint Pierre and Miquelon","Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Sint Maarten (Dutch part)","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Georgia and the South Sandwich Islands","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Svalbard and Jan Mayen","Sweden","Switzerland","Syrian Arab Republic","Taiwan, Province of China","Tajikistan","Tanzania, United Republic of","Thailand","Timor-Leste","Timor-Leste","Togo","Tokelau","Tonga","Trinidad and Tobago","Tunisia","Türkiye","Turkmenistan","Turks and Caicos Islands","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","United States Minor Outlying Islands","Uruguay","Uzbekistan","Vanuatu","Venezuela (Bolivarian Republic of)","Viet Nam","Virgin Islands (British)","Virgin Islands (U.S.)","Wallis and Futuna","Western Sahara","Yemen","Zambia","Zimbabwe"
+                                );
+                                $selected_country = esc_attr($user_data['country'] ?? '');
+                                foreach ($countries as $country) {
+                                    $selected = ($country === $selected_country) ? 'selected="selected"' : '';
+                                    echo "<option value=\"$country\" $selected>$country</option>\n";
+                                }
+                                ?>
+                            </select>
+                            <label for="country">Country <span class="required">*</span></label>
                     </div>
                     
                     <!-- Phone Number -->
                     <div class="form-field floating-label one-half">
-                        <input type="tel" id="phone" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
+                        <input type="tel" id="phone" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" " value="<?php echo esc_attr($user_data['phone'] ?? ''); ?>">
                         <label for="phone">Phone Number <span class="required">*</span></label>
                     </div>
                 </div>
@@ -372,18 +171,18 @@ function dtr_media_planner_registration_shortcode($atts) {
                 </div>
 
                 <!-- Privacy Policy -->
-                <div class="form-row">
+                <!-- <div class="form-row">
                     <div class="form-field">
                         <p>By clicking download, you consent to Drug Target Review's <a href="<?php echo home_url('/terms-conditions'); ?>" target="_blank">terms and conditions</a> and <a href="<?php echo home_url('/privacy-policy'); ?>" target="_blank">privacy policy</a>. Your information will be processed in accordance with GDPR and you can unsubscribe at any time.</p>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Consent Checkbox -->
                 <div class="checkbox-group consent-group">
                     <div class="checkbox-item">
                         <input type="checkbox" id="consent" required uuid="<?php echo wp_generate_uuid4(); ?>">
                         <label for="consent" class="checkbox-label">
-                            I consent to Drug Target Review collecting my data. <span class="required">*</span>
+                            By clicking download, you consent to Drug Target Review's <a href="<?php echo home_url('/terms-conditions'); ?>" target="_blank">terms and conditions</a> and <a href="<?php echo home_url('/privacy-policy'); ?>" target="_blank">privacy policy</a>. Your information will be processed in accordance with GDPR and you can unsubscribe at any time. <span class="required">*</span>
                         </label>
                     </div>
                 </div>
@@ -426,6 +225,7 @@ function dtr_media_planner_registration_shortcode($atts) {
                     </div>
                 </div>
 
+                <?php if ($development_mode): ?>
                 <!-- Debug Test Buttons -->
                 <div style="margin-top: 15px; text-align: center;">
                     <button type="button" onclick="testAjaxEndpoint()" class="button" style="background: #ff6600; color: white; padding: 8px 16px; font-size: 12px; border-radius: 4px; margin-right: 10px;">
@@ -435,6 +235,7 @@ function dtr_media_planner_registration_shortcode($atts) {
                         📝 Fill Test Data
                     </button>
                 </div>
+                <?php endif; ?>
             </form>
         </div>
     </div>
@@ -458,14 +259,22 @@ function dtr_media_planner_registration_shortcode($atts) {
     </div>
 
     <script>
-        let devModeActive = false;
+        // Development mode is controlled by plugin settings
+        let devModeActive = <?php echo $development_mode ? 'true' : 'false'; ?>;
 
-        // Development mode toggle
+        <?php if ($development_mode): ?>
+        // Development mode toggle (only available in dev mode)
         function initDevModeToggle() {
             var toggle = document.getElementById('devModeToggle');
             var indicator = document.getElementById('devModeIndicator');
 
             if (toggle && indicator) {
+                // Start with dev mode active since we're in development mode
+                devModeActive = true;
+                toggle.checked = true;
+                indicator.classList.add('active');
+                removeRequiredFields();
+                
                 toggle.addEventListener('change', function() {
                     devModeActive = toggle.checked;
                     if (devModeActive) {
@@ -480,6 +289,14 @@ function dtr_media_planner_registration_shortcode($atts) {
                 });
             }
         }
+        <?php else: ?>
+        // No dev mode toggle available - always live mode
+        function initDevModeToggle() {
+            // Dev mode not available in live configuration
+            devModeActive = false;
+            console.log('🟢 Live Mode: Form configured for production use');
+        }
+        <?php endif; ?>
 
         // Store original required fields
         let originalRequiredFields = [];
@@ -541,6 +358,12 @@ function dtr_media_planner_registration_shortcode($atts) {
             if (loadingOverlay) {
                 loadingOverlay.style.display = 'flex';
                 
+                // Set header z-index to ensure overlay appears above it
+                const header = document.querySelector('header');
+                if (header) {
+                    header.style.zIndex = '1';
+                }
+                
                 // Reset progress
                 progressFill.className = 'progress-circle-fill progress-0';
                 statusText.textContent = 'Preparing your media planner...';
@@ -559,7 +382,7 @@ function dtr_media_planner_registration_shortcode($atts) {
                 { progress: 'progress-25', text: 'Validating your information...', delay: 2000 },
                 { progress: 'progress-50', text: 'Processing request...', delay: 2500 },
                 { progress: 'progress-75', text: 'Preparing media planner...', delay: 2000 },
-                { progress: 'progress-100', text: 'Almost done...', delay: 1500 }
+                { progress: 'progress-100', text: 'Submission Successful!', delay: 1500 }
             ];
             
             let currentStage = 0;
@@ -573,8 +396,8 @@ function dtr_media_planner_registration_shortcode($atts) {
                     
                     setTimeout(nextStage, stage.delay);
                 } else {
-                    // Start countdown before completion
-                    startCountdown();
+                    // Start countdown after completion
+                    setTimeout(() => startCountdown(), 500);
                 }
             }
             
@@ -589,26 +412,24 @@ function dtr_media_planner_registration_shortcode($atts) {
             const loaderIcon = document.querySelector('.loader-icon');
             
             // Hide the user icon and show countdown
-            loaderIcon.style.opacity = '0';
-            countdownContainer.classList.add('active');
+            if (loaderIcon) loaderIcon.style.opacity = '0';
+            if (countdownContainer) countdownContainer.classList.add('active');
             
             let count = 3;
             
             function showNextCount() {
                 if (count > 0) {
-                    countdownNumber.textContent = count;
-                    countdownMessage.textContent = '';
+                    if (countdownNumber) countdownNumber.textContent = count;
+                    if (countdownMessage) countdownMessage.textContent = '';
                     count--;
                     setTimeout(showNextCount, 1000);
                 } else {
                     // Show final message
-                    countdownNumber.textContent = '';
-                    countdownMessage.textContent = 'Download Ready!';
+                    if (countdownNumber) countdownNumber.textContent = '';
+                    if (countdownMessage) countdownMessage.textContent = 'Download Ready!';
                     
-                    // Hide loader after message is shown
-                    setTimeout(() => {
-                        hideProgressLoader();
-                    }, 1500);
+                    // Keep overlay visible - do not hide until redirect happens
+                    // The overlay will naturally disappear when the page redirects
                 }
             }
             
@@ -619,11 +440,66 @@ function dtr_media_planner_registration_shortcode($atts) {
             const loadingOverlay = document.getElementById('formLoaderOverlay');
             if (loadingOverlay) {
                 loadingOverlay.style.display = 'none';
+                
+                // Restore header z-index when hiding overlay
+                const header = document.querySelector('header');
+                if (header) {
+                    header.style.zIndex = '';  // Remove the inline style to restore original
+                }
+            }
+        }
+
+        // Real-time progress updater that matches actual submission stages
+        function updateFormProgress(stage, message) {
+            const progressFill = document.getElementById('progressCircleFill');
+            const statusText = document.getElementById('loaderStatusText');
+            
+            if (progressFill && statusText) {
+                progressFill.className = `progress-circle-fill progress-${stage}`;
+                statusText.textContent = message;
+                console.log(`🔄 Progress Update: ${stage}% - ${message}`);
             }
         }
 
         function previewLoader() {
-            showProgressLoader();
+            // Show overlay without triggering simulateFormProgress()
+            const loadingOverlay = document.getElementById('formLoaderOverlay');
+            const progressFill = document.getElementById('progressCircleFill');
+            const statusText = document.getElementById('loaderStatusText');
+            const countdownContainer = document.getElementById('countdownContainer');
+            
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'flex';
+                
+                // Set header z-index to ensure overlay appears above it
+                const header = document.querySelector('header');
+                if (header) {
+                    header.style.zIndex = '1';
+                }
+                
+                // Reset progress
+                progressFill.className = 'progress-circle-fill progress-0';
+                statusText.textContent = 'Preparing your media planner...';
+                countdownContainer.classList.remove('active');
+            }
+            
+            // Simulate the actual submission flow for preview using updateFormProgress
+            setTimeout(() => updateFormProgress(25, 'Validating security credentials...'), 500);
+            setTimeout(() => updateFormProgress(40, 'Security validation complete...'), 1500);
+            setTimeout(() => updateFormProgress(50, 'Preparing media planner request...'), 2000);
+            setTimeout(() => updateFormProgress(60, 'Submitting your information...'), 2500);
+            setTimeout(() => updateFormProgress(75, 'Processing your request...'), 3500);
+            setTimeout(() => updateFormProgress(90, 'Finalizing media planner...'), 4500);
+            setTimeout(() => {
+                updateFormProgress(100, 'Submission Successful!');
+                setTimeout(() => {
+                    startCountdown();
+                    // Add redirect after countdown completes (same timing as real submission)
+                    setTimeout(() => {
+                        window.location.href = '/download-media-planner/';
+                    }, 5000); // Redirect 5 seconds after countdown starts
+                }, 500);
+            }, 5000);
         }
 
         function submitMediaPlannerForm() {
@@ -654,7 +530,22 @@ function dtr_media_planner_registration_shortcode($atts) {
             formData.append('lastName', document.getElementById('lastName')?.value || '');
             formData.append('email', document.getElementById('email')?.value || '');
             formData.append('jobTitle', document.getElementById('jobTitle')?.value || '');
-            formData.append('organisation', document.getElementById('organisation')?.value || '');
+            
+            // Handle organisation field - either from input (logged in) or workbooks select (not logged in)
+            const organisationInput = document.getElementById('organisation');
+            const workbooksSelect = document.querySelector('select[name="employer_name"]');
+            let organisationValue = '';
+            
+            if (organisationInput) {
+                // Logged in - use text input value
+                organisationValue = organisationInput.value || '';
+            } else if (workbooksSelect) {
+                // Not logged in - use workbooks employer select text
+                const selectedOption = workbooksSelect.options[workbooksSelect.selectedIndex];
+                organisationValue = (selectedOption && selectedOption.text !== '- Select Employer -') ? selectedOption.text : '';
+            }
+            
+            formData.append('organisation', organisationValue);
             formData.append('city', document.getElementById('city')?.value || '');
             formData.append('country', document.getElementById('country')?.value || '');
             formData.append('phone', document.getElementById('phone')?.value || '');
@@ -731,16 +622,14 @@ function dtr_media_planner_registration_shortcode($atts) {
             })
             .then(data => {
                 if (data.success) {
-                    // Don't hide loader immediately - let countdown animation complete
+                    // Start countdown immediately after success
+                    startCountdown();
+                    
+                    // Keep overlay visible and redirect after countdown completes
                     setTimeout(() => {
-                        // Redirect to thank you page or download URL
-                        if (data.data && data.data.download_url) {
-                            window.location.href = data.data.download_url;
-                        } else {
-                            // Default redirect
-                            window.location.href = '/thank-you-media-planner/';
-                        }
-                    }, 12500); // Wait for countdown to complete
+                        // Redirect to media planner download page
+                        window.location.href = '/download-media-planner/';
+                    }, 5000); // Redirect 5 seconds after countdown starts (3s countdown + 2s for final message)
                 } else {
                     hideProgressLoader();
                     alert('Request failed: ' + (data.data ? data.data.message : data.message || 'Please check your details and try again.'));
@@ -814,6 +703,26 @@ function dtr_media_planner_registration_shortcode($atts) {
             });
         }
 
+        // Initialize workbooks employer select mapping
+        function initWorkbooksEmployerMapping() {
+            // For not logged in users, the workbooks employer select is shown instead of text input
+            const workbooksSelect = document.querySelector('select[name="employer_name"]');
+            const organisationInput = document.getElementById('organisation');
+            
+            if (workbooksSelect) {
+                // If there's an organisation input (logged in user), this shouldn't happen
+                if (organisationInput) {
+                    console.log('🏢 Both workbooks select and organisation input found - this should not happen');
+                } else {
+                    // If there's no organisation input (not logged in), we'll capture the employer from the select
+                    console.log('🏢 Workbooks employer select detected for non-logged-in user');
+                }
+            } else if (organisationInput) {
+                // Logged in user - just the text input, no mapping needed
+                console.log('🏢 Organisation text input detected for logged-in user');
+            }
+        }
+
         function updateFloatingLabel(field) {
             const fieldContainer = field.closest('.floating-label');
             if (!fieldContainer) return;
@@ -848,6 +757,7 @@ function dtr_media_planner_registration_shortcode($atts) {
         document.addEventListener('DOMContentLoaded', function() {
             initFloatingLabels();
             initDevModeToggle();
+            initWorkbooksEmployerMapping();
         });
 
         // Debug logging

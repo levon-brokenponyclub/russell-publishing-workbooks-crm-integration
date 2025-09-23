@@ -14,7 +14,7 @@ if (isset($_POST['direct_submit']) && current_user_can('manage_options')) {
         echo '<p style="color: green;">✅ Handler file exists</p>';
         require_once $handler_file;
         
-        if (function_exists('dtr_handle_live_webinar_registration')) {
+        if (function_exists('dtr_handle_admin_webinar_registration')) {
             echo '<p style="color: green;">✅ Handler function exists</p>';
         } else {
             echo '<p style="color: red;">❌ Handler function does NOT exist after including file</p>';
@@ -40,7 +40,7 @@ if (isset($_POST['direct_submit']) && current_user_can('manage_options')) {
             'cf_mailing_list_member_sponsor_1_optin' => !empty($_POST['cf_mailing_list_member_sponsor_1_optin']) ? 1 : 0
         ];
         
-        if (function_exists('dtr_handle_live_webinar_registration')) {
+        if (function_exists('dtr_handle_admin_webinar_registration')) {
             echo '<p style="color: green;">✅ Handler function exists</p>';
             
             try {
@@ -63,7 +63,7 @@ if (isset($_POST['direct_submit']) && current_user_can('manage_options')) {
                 ini_set('display_errors', 1);
                 
                 echo '<p>🔄 About to call handler function...</p>';
-                $result = dtr_handle_live_webinar_registration($registration_data);
+                $result = dtr_handle_admin_webinar_registration($registration_data);
                 echo '<p>✅ Handler function completed</p>';
                 
                 // Restore error reporting

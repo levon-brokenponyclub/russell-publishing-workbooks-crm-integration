@@ -281,9 +281,17 @@ function dtr_register_workbooks_lead(
     try {
         $lead_result = $workbooks->assertCreate('crm/sales_leads.api', $lead_payload);
         dtr_lead_debug("🔍 Lead result: " . json_encode($lead_result));
-        if (!empty($lead_result['data'][0]['id'])) {
+        
+        // Check for lead ID in the correct location - Workbooks returns it in affected_objects array
+        $created_lead_id = null;
+        if (!empty($lead_result['affected_objects'][0]['id'])) {
+            $created_lead_id = $lead_result['affected_objects'][0]['id'];
             $lead_step_success = true;
-            dtr_lead_debug("🔍 Lead ID created: " . $lead_result['data'][0]['id']);
+            dtr_lead_debug("🔍 Lead ID created: " . $created_lead_id);
+        } elseif (!empty($lead_result['data'][0]['id'])) {
+            $created_lead_id = $lead_result['data'][0]['id'];
+            $lead_step_success = true;
+            dtr_lead_debug("🔍 Lead ID created (fallback): " . $created_lead_id);
         } else {
             $lead_step_reason = 'No lead ID returned - ' . json_encode($lead_result);
         }
@@ -372,7 +380,7 @@ function dtr_register_workbooks_lead(
     dtr_lead_debug("\nRESULT INFORMATION:\n" . implode("\n", $result_lines));
     return [
         'success' => true,
-        'lead_id' => $lead_id,
+        'lead_id' => $created_lead_id ?? $lead_id, // Use created lead ID if available, fallback to reference lead ID
         'person_id' => $person_id,
         'debug_id' => $debug_id
     ];

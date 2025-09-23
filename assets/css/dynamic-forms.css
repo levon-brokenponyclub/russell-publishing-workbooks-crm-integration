@@ -1,0 +1,555 @@
+/* Dynamic Forms - Global Input and Label Styles */
+
+/* Global placeholder styling */
+::placeholder {
+    color: #333 !important;
+}
+
+/* Form row and field layout */
+.form-row {
+    display: flex !important;
+    gap: 1rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.form-field {
+    flex: 1 !important;
+}
+
+.form-field.full-width {
+    width: 100% !important;
+}
+
+.form-field.one-half {
+    flex: 1 !important;
+}
+
+.form-field.one-half.first {
+    margin-right: 0.5rem !important;
+}
+
+/* Basic label styling */
+.form-field label {
+    display: block !important;
+    margin-bottom: 0.5rem !important;
+    font-weight: bold !important;
+    color: #2d3748 !important;
+}
+
+/* Global input and select styling */
+.form-container input[type='text'], 
+.form-container input[type='password'], 
+.form-container input[type='email'], 
+.form-container input[type='number'], 
+.form-container input[type='tel'], 
+.form-container input[type='search'], 
+.form-container input[type='checkbox'], 
+.form-container input[type='radio'], 
+.form-container select, 
+.form-container textarea {
+    background-color: #f2f2f2a6 !important;
+    box-shadow: none !important;
+    border-radius: 5px !important;
+    font-family: "Titillium Web", Sans-serif !important;
+    min-height: 50px !important;
+    color: #333333 !important;
+    border-color: #99a2a899 !important;
+    font-size: 15px !important;
+}
+
+/* Standard form field inputs */
+.form-field input,
+.form-field select {
+    width: 100% !important;
+    padding: 0.75rem !important;
+    border: 1px solid #cbd5e0 !important;
+    border-radius: 4px !important;
+    font-size: 1rem !important;
+    transition: border-color 0.2s ease !important;
+    font-size:15px !important;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+    outline: none !important;
+    border-color: #4caf50 !important;
+}
+
+/* Floating Label Styles */
+.form-field.floating-label {
+    position: relative !important;
+}
+
+.form-field.floating-label label {
+    position: absolute !important;
+    left: 1rem !important;
+    top: 0.6rem !important;
+    margin-bottom: 0 !important;
+    padding: 0.10rem 0.2rem !important;
+    color: #333 !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    transition: all 0.2s ease-in-out !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+}
+
+.form-field.floating-label input,
+.form-field.floating-label select {
+    padding: 0.5rem 0.75rem 0.5rem 0.75rem !important;
+}
+
+.form-field.floating-label input:focus + label,
+.form-field.floating-label input:not(:placeholder-shown) + label,
+.form-field.floating-label input[value]:not([value=""]) + label,
+.form-field.floating-label select:focus + label,
+.form-field.floating-label select:not([value=""]) + label,
+.form-field.floating-label.floating-active label {
+    top: -0.6rem !important;
+    font-size: 0.6rem !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+    background: #4caf50 !important;
+    border-radius: 4px !important;
+    padding: 0.10rem 0.3rem !important;
+}
+
+/* Password field specific styles */
+.password-field {
+    position: relative !important;
+    width: 100% !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+}
+
+.password-toggle {
+    position: absolute !important;
+    right: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    cursor: pointer !important;
+    color: #4a5568 !important;
+    z-index: 2 !important;
+}
+
+/* Adjust password toggle for floating labels */
+.form-field.floating-label .password-field {
+    width: 100% !important;
+}
+
+.form-field.floating-label .password-field input:focus + .password-toggle,
+.form-field.floating-label .password-field input:not(:placeholder-shown) + .password-toggle {
+    top: calc(50% - 0.25rem) !important;
+}
+
+.form-field.floating-label .password-field input:focus ~ label,
+.form-field.floating-label .password-field input:not(:placeholder-shown) ~ label,
+.form-field.floating-label .password-field input[value]:not([value=""]) ~ label,
+.form-field.floating-label.floating-active .password-field + label {
+    top: -0.5rem !important;
+    font-size: 0.6rem !important;
+    color: #4caf50 !important;
+    font-weight: 600 !important;
+    color:#fff !important;
+}
+
+/* Required asterisk styling */
+.form-field.floating-label label .required,
+.required {
+    color: #e53e3e !important;
+}
+
+/* Checkbox group styling */
+.checkbox-group {
+    margin: 1rem 0 !important;
+}
+
+.checkbox-group.consent-group {
+    margin: 2rem 0 0 0 !important;
+    border-top: 2px solid #f2f2f2 !important;
+    padding-top: 1.5rem !important;
+}
+
+.checkbox-item {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+    margin-bottom: 1rem !important;
+    padding: 1rem !important;
+    border: 1px solid #e2e8f0 !important;
+    background-color: #f2f2f2 !important;
+    border-radius: 4px !important;
+    transition: background-color 0.2s ease !important;
+}
+
+.checkbox-item:hover {
+    background-color: #009fe3 !important;
+    border-color: #009fe3 !important;
+}
+
+.checkbox-item input[type="checkbox"] {
+    content: '' !important;
+    color: #fff !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+    display: inline-block !important;
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
+    text-align: center !important;
+    border-radius: 50% !important;
+    line-height: 26px !important;
+    background-image: none !important;
+    background-color: #fff !important;
+}
+
+.checkbox-label {
+    flex: 1 !important;
+    font-size: 0.7rem !important;
+    line-height: 1.3rem !important;
+    font-weight: 600 !important;
+}
+
+.checkbox-item:hover .checkbox-label {
+    color: #fff !important;
+}
+
+.checkbox-item input[type="checkbox"]::before {
+    background-color: #fff !important;
+}
+
+.checkbox-item input[type="checkbox"]:checked::before {
+    content: '\f00c' !important;
+    color: #4caf50 !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}
+
+.checkbox-item input[type='checkbox']:checked {
+    background-color: #fff !important;
+}
+
+.checkbox-item:has(input[type='checkbox']:checked) {
+    font-weight: 600 !important;
+    background-color: #fff !important;
+    color: #fff !important;
+    background-color: #68bc7b !important;
+    border: 1px solid #28a745 !important;
+}
+
+/* Workbooks checkboxes styling */
+.workbooks-checkboxes label {
+    background: #f5f5f5 !important;
+    border-radius: 5px !important;
+    padding: 14px 16px !important;
+    color: #333333 !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    position: relative !important;
+    transition: background 0.2s, color 0.2s !important;
+    gap: 5px !important;
+}
+
+.workbooks-checkboxes label strong {
+    display: contents !important;
+    font-size: 15px !important;
+    margin-bottom: 5px !important;
+}
+
+.workbooks-checkboxes label:hover {
+    background: #009fe3 !important;
+    color: #fff !important;
+}
+
+.workbooks-checkboxes label:hover:before {
+    color: #fff !important;
+    background-color: #fff !important;
+}
+
+.workbooks-checkboxes label:before {
+    content: '\f111' !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    background-color: #b0b0b0 !important;
+    color: #b0b0b0 !important;
+    margin-right: 4px !important;
+    font-size: 16px !important;
+    display: inline-block !important;
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    text-align: center !important;
+    border-radius: 50% !important;
+    line-height: 26px !important;
+}
+
+.workbooks-checkboxes input[type='checkbox'] {
+    display: none !important;
+}
+
+.workbooks-checkboxes label:has(input[type='checkbox']:checked),
+.workbooks-checkboxes input[type='checkbox']:checked + label {
+    background: #871f80 !important;
+    color: #fff !important;
+}
+
+.workbooks-checkboxes label:has(input[type='checkbox']:checked):before,
+.workbooks-checkboxes input[type='checkbox']:checked + label:before {
+    content: '\f00c' !important;
+    color: #fff !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    background-color: #4caf50 !important;
+    margin-right: 4px !important;
+    font-size: 14px !important;
+    display: inline-block !important;
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    text-align: center !important;
+    border-radius: 50% !important;
+    line-height: 26px !important;
+}
+
+/* Autocomplete styling */
+.autocomplete__list {
+    border-color: #4caf50 !important;
+    font-size: 15px !important;
+    border-radius: 0 0 4px 4px !important;
+    top: calc(100% - 2px) !important;
+}
+
+.autocomplete__item {
+    padding: 0.55rem 1rem !important;
+    cursor: pointer !important;
+    margin-bottom: 0 !important;
+    font-size: 15px !important;
+    border-bottom: 1px solid #f7fafc !important;
+    transition: background-color 0.15s ease !important;
+}
+
+.autocomplete__item:hover, 
+.autocomplete__item[aria-selected="true"] {
+    background-color: #f1f1f1 !important;
+    color: #333 !important;
+}
+
+/* Password strength meter */
+meter {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    margin: 0 auto 0 !important;
+    width: 100% !important;
+    height: 4px !important;
+    background-color: transparent !important;
+    margin-top: -4px !important;
+    padding: 0 !important;
+    position: relative !important;
+    border-radius: 0 0 4px 4px !important;
+    display: block !important;
+    line-height: 0 !important;
+}
+
+meter::-webkit-meter-bar {
+    background: none !important;
+    background-color: transparent !important;
+    height: 4px !important;
+}
+
+meter[value="0"]::-webkit-meter-optimum-value { background: red !important; }
+meter[value="1"]::-webkit-meter-optimum-value { background: red !important; }
+meter[value="2"]::-webkit-meter-optimum-value { background: orange !important; }
+meter[value="3"]::-webkit-meter-optimum-value { background: #4caf50 !important; }
+
+meter[value="0"]::-moz-meter-bar { background: red !important; }
+meter[value="1"]::-moz-meter-bar { background: red !important; }
+meter[value="2"]::-moz-meter-bar { background: orange !important; }
+meter[value="3"]::-moz-meter-bar { background: #4caf50 !important; }
+
+.feedback {
+    color: #9ab !important;
+    font-size: 90% !important;
+    padding: 0 .25em !important;
+    font-family: Courgette, cursive !important;
+    margin-top: 1em !important;
+}
+
+#password-strength-text {
+    font-size: 13px !important;
+    top: 7px !important;
+    position: relative !important;
+}
+
+/* Password Match Feedback */
+.password-match-feedback {
+    margin-top: 0.5rem !important;
+    font-size: 0.9rem !important;
+    padding: 0.5rem !important;
+    border-radius: 4px !important;
+    display: none !important;
+}
+
+.password-match-feedback.match {
+    background-color: #d4edda !important;
+    color: #155724 !important;
+    border: 1px solid #c3e6cb !important;
+    display: block !important;
+}
+
+.password-match-feedback.no-match {
+    background-color: #f8d7da !important;
+    color: #721c24 !important;
+    border: 1px solid #f5c6cb !important;
+    display: block !important;
+}
+
+/* Development Mode Toggle */
+.dev-mode-toggle {
+    margin: 1rem 0 !important;
+    padding: 1rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dev-mode-toggle h4 {
+    margin-bottom: 0.5rem !important;
+    font-size: 0.9rem !important;
+    color: #fff !important;
+}
+
+.toggle-switch {
+    position: relative !important;
+    display: inline-block !important;
+    width: 60px !important;
+    height: 30px !important;
+}
+
+.toggle-switch input {
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.toggle-slider {
+    position: absolute !important;
+    cursor: pointer !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background-color: #68bc7b !important;
+    transition: 0.4s !important;
+    border-radius: 30px !important;
+}
+
+.toggle-slider:before {
+    position: absolute !important;
+    content: "" !important;
+    height: 22px !important;
+    width: 22px !important;
+    left: 4px !important;
+    bottom: 4px !important;
+    background-color: white !important;
+    transition: 0.4s !important;
+    border-radius: 50% !important;
+}
+
+input:checked + .toggle-slider {
+    background-color: #ffc107 !important;
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(30px) !important;
+}
+
+.toggle-labels {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-top: 0.5rem !important;
+    font-size: 0.8rem !important;
+}
+
+.toggle-labels .live {
+    color: #28a745 !important;
+    font-weight: bold !important;
+}
+
+.toggle-labels .dev {
+    color: #ffc107 !important;
+    font-weight: bold !important;
+}
+
+/* Preview Loader Button */
+.preview-loader-btn {
+    margin-top: 0.75rem !important;
+    padding: 0.5rem 1rem !important;
+    background: rgba(0, 124, 186, 0.8) !important;
+    color: white !important;
+    border: 1px solid #007cba !important;
+    border-radius: 6px !important;
+    font-size: 0.85rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    display: block !important;
+    width: 100% !important;
+}
+
+.preview-loader-btn:hover {
+    background: #007cba !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(0, 124, 186, 0.3) !important;
+}
+
+.preview-loader-btn:active {
+    transform: translateY(0) !important;
+}
+
+.dev-mode-indicator {
+    position: fixed !important;
+    top: 10px !important;
+    right: 10px !important;
+    background: #ffc107 !important;
+    color: #000 !important;
+    padding: 5px 15px !important;
+    border-radius: 20px !important;
+    font-size: 0.8rem !important;
+    font-weight: bold !important;
+    z-index: 9999 !important;
+    display: none !important;
+}
+
+.dev-mode-indicator.active {
+    display: block !important;
+}
+
+/* Form disabled message */
+.dtr-form-disabled {
+    background: #f8d7da !important;
+    color: #721c24 !important;
+    padding: 15px 20px !important;
+    border: 1px solid #f5c6cb !important;
+    border-radius: 5px !important;
+    margin: 20px 0 !important;
+    text-align: center !important;
+    font-weight: bold !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column !important;
+    }
+    
+    .form-field.one-half.first {
+        margin-right: 0 !important;
+        margin-bottom: 1rem !important;
+    }
+}

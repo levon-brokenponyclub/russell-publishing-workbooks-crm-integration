@@ -64,6 +64,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
+    // Handle update workbooks action
+    if (isset($_POST['update_workbooks_user_id']) && current_user_can('edit_users')) {
+        $update_user_id = intval($_POST['update_workbooks_user_id']);
+        $user = get_userdata($update_user_id);
+        if ($user) {
+            $workbooks_person_id = get_user_meta($update_user_id, 'workbooks_person_id', true);
+            if ($workbooks_person_id) {
+                $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+                if ($workbooks) {
+                    try {
+                        // Gather current WP user meta data
+                        $wp_data = [
+                            'person_first_name' => get_user_meta($update_user_id, 'first_name', true),
+                            'person_last_name' => get_user_meta($update_user_id, 'last_name', true),
+                            'main_location[email]' => $user->user_email,
+                            'employer_name' => get_user_meta($update_user_id, 'employer_name', true),
+                            'cf_person_claimed_employer' => get_user_meta($update_user_id, 'employer_name', true), // Sync both fields
+                            'main_location[town]' => get_user_meta($update_user_id, 'town', true),
+                            'main_location[country]' => get_user_meta($update_user_id, 'country', true) ?: 'South Africa',
+                            'main_location[telephone]' => get_user_meta($update_user_id, 'telephone', true),
+                            'main_location[postcode]' => get_user_meta($update_user_id, 'postcode', true),
+                            'person_job_title' => get_user_meta($update_user_id, 'job_title', true),
+                            'person_personal_title' => get_user_meta($update_user_id, 'person_personal_title', true),
+                        ];
+
+                        // Get current Workbooks data for comparison
+                        $current_wb_data = $workbooks->assertGet('crm/people', [
+                            '_start' => 0,
+                            '_limit' => 1,
+                            '_ff[]' => 'id',
+                            '_ft[]' => 'eq',
+                            '_fc[]' => $workbooks_person_id
+                        ]);
+
+                        if (!empty($current_wb_data['data'][0])) {
+                            $wb_record = $current_wb_data['data'][0];
+                            $updates_needed = [];
+                            
+                            // Compare fields and build update payload only for changed values
+                            $field_mapping = [
+                                'person_first_name' => 'person_first_name',
+                                'person_last_name' => 'person_last_name', 
+                                'main_location[email]' => 'main_location_email',
+                                'employer_name' => 'employer_name',
+                                'cf_person_claimed_employer' => 'cf_person_claimed_employer',
+                                'main_location[town]' => 'main_location_town',
+                                'main_location[country]' => 'main_location_country',
+                                'main_location[telephone]' => 'main_location_telephone',
+                                'main_location[postcode]' => 'main_location_postcode',
+                                'person_job_title' => 'person_job_title',
+                                'person_personal_title' => 'person_personal_title',
+                            ];
+
+                            $update_payload = [];
+                            foreach ($field_mapping as $wp_field => $wb_field) {
+                                $wp_value = $wp_data[$wp_field] ?? '';
+                                $wb_value = $wb_record[$wb_field] ?? '';
+                                
+                                if ($wp_value !== $wb_value) {
+                                    $update_payload[$wp_field] = $wp_value;
+                                    $updates_needed[] = $wp_field . ': "' . $wb_value . '" → "' . $wp_value . '"';
+                                }
+                            }
+
+                            if (!empty($update_payload)) {
+                                // Add required fields for update
+                                $update_payload['id'] = $workbooks_person_id;
+                                $update_payload['lock_version'] = $wb_record['lock_version'] ?? 0;
+                                
+                                $result = $workbooks->assertUpdate('crm/people', [$update_payload]);
+                                
+                                if (!empty($result['affected_objects'][0]['id'])) {
+                                    echo '<div class="notice notice-success is-dismissible"><p><strong>Workbooks Updated for User ID ' . esc_html($update_user_id) . ':</strong><br>' . implode('<br>', $updates_needed) . '</p></div>';
+                                } else {
+                                    echo '<div class="notice notice-error is-dismissible"><p>Workbooks update failed for user ID ' . esc_html($update_user_id) . '.</p></div>';
+                                }
+                            } else {
+                                echo '<div class="notice notice-info is-dismissible"><p>No changes detected for User ID ' . esc_html($update_user_id) . '. Workbooks record is already up to date.</p></div>';
+                            }
+                        } else {
+                            echo '<div class="notice notice-error is-dismissible"><p>Could not fetch current Workbooks data for user ID ' . esc_html($update_user_id) . '.</p></div>';
+                        }
+                    } catch (Exception $e) {
+                        echo '<div class="notice notice-error is-dismissible"><p>Workbooks update error for user ID ' . esc_html($update_user_id) . ': ' . esc_html($e->getMessage()) . '</p></div>';
+                    }
+                } else {
+                    echo '<div class="notice notice-error is-dismissible"><p>Workbooks API not available.</p></div>';
+                }
+            } else {
+                echo '<div class="notice notice-error is-dismissible"><p>User ID ' . esc_html($update_user_id) . ' does not have a Workbooks Person ID.</p></div>';
+            }
+        }
+    }
+    
     // Handle refresh all users action
     if (isset($_POST['refresh_all_users']) && current_user_can('edit_users')) {
         $refresh_count = 0;
@@ -232,14 +326,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <div class="wrap">
     <div style="margin-bottom: 20px;">
-        <form method="post" style="display: inline-block;">
-            <?php wp_nonce_field('refresh_all_users_action'); ?>
-            <input type="submit" name="refresh_all_users" class="button button-secondary" value="Refresh All Users" onclick="return confirm('This will refresh Workbooks information for all form-created users. This may take a moment. Continue?');" />
-        </form>
         <p class="description">Refreshes Workbooks Person IDs and information for all users created via forms. Links existing users to Workbooks persons or creates new ones as needed.</p>
     </div>
-    
     <h2>Users Created from Form Submissions</h2>
+    <form method="post" style="display: inline-block;" style="margin-bottom:25px;">
+        <?php wp_nonce_field('refresh_all_users_action'); ?>
+        <input type="submit" name="refresh_all_users" class="button button-secondary" value="Refresh All Users" onclick="return confirm('This will refresh Workbooks information for all form-created users. This may take a moment. Continue?');" />
+    </form>
 <?php
 $args = [
     'meta_query' => [
@@ -333,6 +426,12 @@ if (empty($users)) {
         echo '<input type="hidden" name="workbooks_sync_user_id" value="' . esc_attr($user->ID) . '">';
         submit_button('Sync to Workbooks', 'button-primary', 'workbooks_sync_to_workbooks', false);
         echo '</form>';
+        if (!empty($workbooks_id)) {
+            echo '<form method="post" style="display:inline-block; margin-right:10px;">';
+            echo '<input type="hidden" name="update_workbooks_user_id" value="' . esc_attr($user->ID) . '">';
+            submit_button('Update Workbooks', 'button-secondary', 'update_workbooks', false);
+            echo '</form>';
+        }
         echo '<form method="post" style="display:inline-block; margin-right:10px;" onsubmit="return confirm(\'Are you sure you want to delete this user?\');">';
         echo '<input type="hidden" name="delete_user_id" value="' . esc_attr($user->ID) . '">';
         submit_button('Delete User', 'delete button-secondary', 'delete_user', false);
@@ -349,4 +448,3 @@ if (empty($users)) {
 }
 ?>
 </div>
-?>

@@ -171,16 +171,22 @@ function openLoginModal() {
         });
     }, 500);
 
-    // Listen for Ninja Forms submission responses
+    // Listen for Ninja Forms submission responses - ONLY handle Form ID 3 (login)
     if (typeof jQuery !== 'undefined') {
         jQuery(document).on('nfFormSubmitResponse', function(e, response, formId) {
-            console.log('Ninja Forms response received:', response, 'Form ID:', formId);
+            // ONLY handle login form (ID 3) - do not interfere with webinar form (ID 2)
+            if (formId != 3) {
+                console.log('Ninja Forms response for Form ID', formId, '- not login form, ignoring');
+                return; // Let other handlers process non-login forms
+            }
             
-            // Remove loading states
+            console.log('Ninja Forms LOGIN response received:', response, 'Form ID:', formId);
+            
+            // Remove loading states from login modal
             const submitButtons = themeModal.querySelectorAll('.submitting');
             submitButtons.forEach(button => button.classList.remove('submitting'));
             
-            if (formId == 3 && response && response.success) {
+            if (response && response.success) {
                 console.log('Login successful!');
                 
                 // Show success animation within the modal

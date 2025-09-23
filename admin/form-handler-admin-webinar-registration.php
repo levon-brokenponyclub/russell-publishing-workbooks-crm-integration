@@ -46,8 +46,8 @@ if (!function_exists('dtr_webinar_debug')) {
     }
 }
 
-// Main handler (called by Ninja Forms processor)
-function dtr_handle_live_webinar_registration($registration_data) {
+// Main handler (called by admin test pages ONLY - renamed to avoid conflict with live handler)
+function dtr_handle_admin_webinar_registration($registration_data) {
     dtr_webinar_debug("=== HANDLER START ===");
     dtr_webinar_debug("Input data: " . print_r($registration_data, true));
     
@@ -59,11 +59,11 @@ function dtr_handle_live_webinar_registration($registration_data) {
             dtr_webinar_debug("Set email from current user: " . $registration_data['email']);
         }
         if (empty($registration_data['first_name'])) {
-            $registration_data['first_name'] = $current_user->first_name ?: $current_user->display_name;
+            $registration_data['first_name'] = get_user_meta($current_user->ID, 'first_name', true) ?: $current_user->display_name;
             dtr_webinar_debug("Set first_name from current user: " . $registration_data['first_name']);
         }
         if (empty($registration_data['last_name'])) {
-            $registration_data['last_name'] = $current_user->last_name;
+            $registration_data['last_name'] = get_user_meta($current_user->ID, 'last_name', true);
             dtr_webinar_debug("Set last_name from current user: " . $registration_data['last_name']);
         }
         if (empty($registration_data['person_id'])) {

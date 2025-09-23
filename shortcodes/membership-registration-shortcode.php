@@ -7,9 +7,25 @@ add_shortcode('dtr_membership_registration', 'dtr_membership_registration_shortc
 // Add a simple test shortcode
 add_shortcode('dtr_test', 'dtr_test_shortcode');
 
-// Enqueue custom stylesheet for shortcodes
+// Enqueue custom stylesheet for shortcodes with high priority to override theme styles
 add_action('wp_enqueue_scripts', function() {
-    wp_enqueue_style('membership-registration-form', plugin_dir_url(__FILE__) . '../assets/css/membership-registration-form.css', [], null);
+    // Load the original membership form styles first
+    wp_enqueue_style(
+        'dtr-membership-registration-form', 
+        plugin_dir_url(__FILE__) . '../assets/css/membership-registration-form.css', 
+        array(), 
+        filemtime(plugin_dir_path(__FILE__) . '../assets/css/membership-registration-form.css'),
+        'all'
+    );
+    
+    // Load dynamic forms styles second to override/supplement the base styles
+    wp_enqueue_style(
+        'dtr-dynamic-forms', 
+        plugin_dir_url(__FILE__) . '../assets/css/dynamic-forms.css', 
+        array('dtr-membership-registration-form'), // Depends on base styles to load after
+        filemtime(plugin_dir_path(__FILE__) . '../assets/css/dynamic-forms.css'),
+        'all'
+    );
     
     // Enqueue the login modal script for the membership registration form
     wp_enqueue_script(
@@ -19,7 +35,7 @@ add_action('wp_enqueue_scripts', function() {
         filemtime(plugin_dir_path(__FILE__) . '../assets/js/lead-generation-registration.js'),
         true
     );
-});
+}, 999); // High priority to ensure it loads after theme styles
 
 function dtr_test_shortcode() {
     return '<div style="background: red; color: white; padding: 10px;">DTR TEST SHORTCODE WORKS!</div>';
@@ -36,14 +52,23 @@ function dtr_membership_registration_shortcode($atts) {
         'development_mode' => 'false',
     ), $atts, 'dtr_membership_registration');
     
-    $development_mode = filter_var($atts['development_mode'], FILTER_VALIDATE_BOOLEAN);
+    // Get form configuration from plugin settings
+    $form_config = DTR_Workbooks_Integration::get_shortcode_form_config('membership_registration');
+    $development_mode = $form_config['dev_mode'] ?? false;
+    
+    // Check if form is enabled
+    if (!$form_config['enabled']) {
+        return '<div class="dtr-form-disabled">Membership Registration form is currently disabled in plugin settings.</div>';
+    }
 
     ob_start();
     ?>
+    <?php if ($development_mode): ?>
     <!-- Development Mode Indicator -->
-    <div class="dev-mode-indicator" id="devModeIndicator">
+    <div class="dev-mode-indicator active" id="devModeIndicator">
         🛠️ DEVELOPMENT MODE - Form Submission Disabled
     </div>
+    <?php endif; ?>
 
     <div class="sign-up-container" id="html-form-test">
         <!-- Blue Container -->
@@ -62,7 +87,7 @@ function dtr_membership_registration_shortcode($atts) {
                 </div>
                 
                 <!-- Development Mode Toggle -->
-                <!-- <div class="dev-mode-toggle">
+                <div class="dev-mode-toggle">
                     <h4>🛠️ Development Mode</h4>
                     <label class="toggle-switch">
                         <input type="checkbox" id="devModeToggle">
@@ -73,7 +98,7 @@ function dtr_membership_registration_shortcode($atts) {
                         <span class="dev">Dev Mode</span>
                     </div>
                     <button type="button" class="preview-loader-btn" onclick="previewLoader()">👁️ Preview Loader</button>
-                </div> -->
+                </div>
                 
                 <div class="divider"></div>
                 <h3>Already a member?</h3>
@@ -287,6 +312,7 @@ function dtr_membership_registration_shortcode($atts) {
                         <button type="button" class="button border btn-small global btn-rounded btn-purple shimmer-effect shimmer-slow text-left chevron left" onclick="previousStep()">Previous</button>
                         <button type="button" class="button btn-small global btn-rounded btn-blue shimmer-effect shimmer-slow text-left chevron right" onclick="submitForm()">Get Started</button>
                         
+                        <?php if ($development_mode): ?>
                         <!-- Debug Test Button -->
                         <div style="margin-top: 15px; text-align: center;">
                             <button type="button" onclick="testAjaxEndpoint()" class="button" style="background: #ff6600; color: white; padding: 8px 16px; font-size: 12px; border-radius: 4px; margin-right: 10px;">
@@ -296,6 +322,7 @@ function dtr_membership_registration_shortcode($atts) {
                                 📝 Fill Test Data
                             </button>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -311,7 +338,7 @@ function dtr_membership_registration_shortcode($atts) {
     <!-- Loading Overlay -->
     <div class="form-loader-overlay" id="formLoaderOverlay" style="display: none;">
         <div class="loader-content">
-            <h2>Welcome to Drug Target Review</h2>
+            <h2>Registration in progress...</h2>
             <div class="loader-spinner">
                 <div class="progress-circle">
                     <div class="progress-circle-fill" id="progressCircleFill"></div>
@@ -329,7 +356,8 @@ function dtr_membership_registration_shortcode($atts) {
     <script>
         let currentStep = 1;
         const totalSteps = 3;
-        let devModeActive = false;
+        // Development mode is controlled by plugin settings
+        let devModeActive = <?php echo $development_mode ? 'true' : 'false'; ?>;
 
         // Password strength checker
         var strength = {
@@ -421,26 +449,22 @@ function dtr_membership_registration_shortcode($atts) {
             }
         }
 
-        // Development mode toggle
+        <?php if ($development_mode): ?>
+        // Development mode toggle (only available in dev mode)
         function initDevModeToggle() {
-            var toggle = document.getElementById('devModeToggle');
-            var indicator = document.getElementById('devModeIndicator');
-
-            if (toggle && indicator) {
-                toggle.addEventListener('change', function() {
-                    devModeActive = toggle.checked;
-                    if (devModeActive) {
-                        indicator.classList.add('active');
-                        removeRequiredFields();
-                        console.log('🛠️ Development Mode: ON - Form submissions disabled, required fields removed');
-                    } else {
-                        indicator.classList.remove('active');
-                        restoreRequiredFields();
-                        console.log('🟢 Live Mode: ON - Form submissions enabled, required fields restored');
-                    }
-                });
-            }
+            // Since we're in development mode, we always start in dev mode
+            devModeActive = true;
+            removeRequiredFields();
+            console.log('🛠️ Development Mode: ON - Form configured for testing');
         }
+        <?php else: ?>
+        // No dev mode toggle available - always live mode
+        function initDevModeToggle() {
+            // Dev mode not available in live configuration
+            devModeActive = false;
+            console.log('🟢 Live Mode: Form configured for production use');
+        }
+        <?php endif; ?>
 
         // Store original required fields
         let originalRequiredFields = [];
@@ -643,89 +667,103 @@ function dtr_membership_registration_shortcode($atts) {
             if (loadingOverlay) {
                 loadingOverlay.style.display = 'flex';
                 
+                // Set header z-index to ensure overlay appears above it
+                const header = document.querySelector('header');
+                if (header) {
+                    header.style.zIndex = '1';
+                }
+                
                 // Reset progress
                 progressFill.className = 'progress-circle-fill progress-0';
-                statusText.textContent = 'Creating your profile...';
+                statusText.textContent = 'Preparing submission...';
                 countdownContainer.classList.remove('active');
-                
-                // Start progress simulation
-                simulateFormProgress();
             }
         }
 
-        function simulateFormProgress() {
+        // Real-time progress updater that matches actual submission stages
+        function updateFormProgress(stage, message) {
             const progressFill = document.getElementById('progressCircleFill');
             const statusText = document.getElementById('loaderStatusText');
             
-            const stages = [
-                { progress: 'progress-25', text: 'Validating your information...', delay: 2000 },
-                { progress: 'progress-50', text: 'Creating account...', delay: 2500 },
-                { progress: 'progress-75', text: 'Setting up preferences...', delay: 2000 },
-                { progress: 'progress-100', text: 'Almost done...', delay: 1500 }
-            ];
-            
-            let currentStage = 0;
-            
-            function nextStage() {
-                if (currentStage < stages.length) {
-                    const stage = stages[currentStage];
-                    progressFill.className = `progress-circle-fill ${stage.progress}`;
-                    statusText.textContent = stage.text;
-                    currentStage++;
-                    
-                    setTimeout(nextStage, stage.delay);
-                } else {
-                    // Start countdown before completion
-                    startCountdown();
-                }
+            if (progressFill && statusText) {
+                progressFill.className = `progress-circle-fill progress-${stage}`;
+                statusText.textContent = message;
+                console.log(`🔄 Progress Update: ${stage}% - ${message}`);
             }
-            
-            // Start first stage
-            setTimeout(nextStage, 500);
         }
 
-        function startCountdown() {
+        // Start countdown after successful submission (called from success handler)
+        function startSubmissionCountdown() {
             const countdownContainer = document.getElementById('countdownContainer');
             const countdownNumber = document.getElementById('countdownNumber');
             const countdownMessage = document.getElementById('countdownMessage');
             const loaderIcon = document.querySelector('.loader-icon');
             
             // Hide the user icon and show countdown
-            loaderIcon.style.opacity = '0';
-            countdownContainer.classList.add('active');
+            if (loaderIcon) loaderIcon.style.opacity = '0';
+            if (countdownContainer) countdownContainer.classList.add('active');
             
             let count = 3;
             
             function showNextCount() {
                 if (count > 0) {
-                    countdownNumber.textContent = count;
-                    countdownMessage.textContent = '';
+                    if (countdownNumber) countdownNumber.textContent = count;
+                    if (countdownMessage) countdownMessage.textContent = '';
                     count--;
                     setTimeout(showNextCount, 1000);
                 } else {
                     // Show final message
-                    countdownNumber.textContent = '';
-                    countdownMessage.textContent = 'Profile Created!';
+                    if (countdownNumber) countdownNumber.textContent = '';
+                    if (countdownMessage) countdownMessage.textContent = 'Membership Activated!';
                     
-                    // Hide loader after message is shown
+                    // Keep overlay visible and redirect immediately after final message
                     setTimeout(() => {
-                        hideProgressLoader();
-                    }, 1500);
+                        window.location.href = '/thank-you-for-becoming-a-member-update/';
+                    }, 1000); // Redirect 1s after "Membership Activated!" shows - overlay stays visible
                 }
             }
             
             showNextCount();
         }
 
+        function simulateFormProgress() {
+            // This function is now deprecated - progress is handled by real-time updates
+            console.log('⚠️ simulateFormProgress is deprecated - using real-time progress tracking');
+        }
+
+        function startCountdown() {
+            // This function is now deprecated - use startSubmissionCountdown for real-time progress
+            console.log('⚠️ startCountdown is deprecated - use startSubmissionCountdown instead');
+            startSubmissionCountdown();
+        }
+
         function hideProgressLoader() {
             const loadingOverlay = document.getElementById('formLoaderOverlay');
             if (loadingOverlay) {
                 loadingOverlay.style.display = 'none';
+                
+                // Restore header z-index when hiding overlay
+                const header = document.querySelector('header');
+                if (header) {
+                    header.style.zIndex = '';  // Remove the inline style to restore original
+                }
             }
         }
 
         function previewLoader() {
             showProgressLoader();
+            
+            // Simulate the actual submission flow for preview
+            setTimeout(() => updateFormProgress(25, 'Validating security credentials...'), 500);
+            setTimeout(() => updateFormProgress(40, 'Security validation complete...'), 1500);
+            setTimeout(() => updateFormProgress(50, 'Preparing account creation...'), 2000);
+            setTimeout(() => updateFormProgress(60, 'Submitting your information...'), 2500);
+            setTimeout(() => updateFormProgress(75, 'Processing your registration...'), 3500);
+            setTimeout(() => updateFormProgress(90, 'Finalizing your account...'), 4500);
+            setTimeout(() => {
+                updateFormProgress(100, 'Account created successfully!');
+                setTimeout(() => startSubmissionCountdown(), 500);
+            }, 5000);
         }
 
         // Debug: Log current form state and values
@@ -913,11 +951,13 @@ function dtr_membership_registration_shortcode($atts) {
             console.log('Testing AJAX endpoint: <?php echo admin_url('admin-ajax.php'); ?>');
             
             // Get WordPress nonce first, then submit
+            updateFormProgress(25, 'Validating security credentials...');
             fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=dtr_get_form_nonce', {
                 method: 'GET'
             })
             .then(response => {
                 console.log('Nonce response status:', response.status);
+                updateFormProgress(40, 'Security validation complete...');
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
@@ -925,6 +965,7 @@ function dtr_membership_registration_shortcode($atts) {
             })
             .then(data => {
                 console.log('🔥 [DEBUG] Nonce data received:', data);
+                updateFormProgress(50, 'Preparing account creation...');
                 if (data.success && data.data && data.data.nonce) {
                     formData.append('nonce', data.data.nonce);
                 } else if (data.nonce) {
@@ -937,6 +978,7 @@ function dtr_membership_registration_shortcode($atts) {
                 console.log('🔥 [DEBUG] About to submit form data');
                 console.log('🔥 [DEBUG] FormData contents:', Array.from(formData.entries()));
                 
+                updateFormProgress(60, 'Submitting your information...');
                 // Submit form data
                 return fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
                     method: 'POST',
@@ -945,19 +987,21 @@ function dtr_membership_registration_shortcode($atts) {
             })
             .then(response => {
                 console.log('Form submission response status:', response.status);
+                updateFormProgress(75, 'Processing your registration...');
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
                 return response.json();
             })
             .then(data => {
+                updateFormProgress(90, 'Finalizing your account...');
                 if (data.success) {
-                    // Don't hide loader immediately - let countdown animation complete
-                    // The countdown will hide the loader and then redirect
+                    updateFormProgress(100, 'Account created successfully!');
+                    
+                    // Start countdown immediately after success
                     setTimeout(() => {
-                        // Redirect to the thank you page
-                        window.location.href = '/thank-you-for-becoming-a-member-update/';
-                    }, 12500); // Wait for countdown to complete (updated for 10+ second duration)
+                        startSubmissionCountdown();
+                    }, 500); // Brief delay to show 100% completion
                 } else {
                     // For errors, hide immediately
                     hideProgressLoader();

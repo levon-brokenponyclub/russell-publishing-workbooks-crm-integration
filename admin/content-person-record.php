@@ -1,6 +1,111 @@
 
-<h2><?php _e('Use these tools to test and synchronise your Workbooks integration features.<br/>The system will use your linked Workbooks Person ID: (ID: 4318866).', 'dtr-workbooks'); ?></h2>
 <?php
+// Handle regenerate record form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['regenerate_person_id']) && current_user_can('manage_options')) {
+    $regenerate_person_id = intval($_POST['regenerate_person_id']);
+    $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+    
+    if ($workbooks && $regenerate_person_id > 0) {
+        try {
+            // First, fetch the current record to get the current data
+            $current_record = $workbooks->assertGet('crm/people', [
+                '_start' => 0,
+                '_limit' => 1,
+                '_ff[]' => 'id',
+                '_ft[]' => 'eq',
+                '_fc[]' => $regenerate_person_id
+            ]);
+            
+            if (!empty($current_record['data'][0])) {
+                $person_data = $current_record['data'][0];
+                
+                // Determine which employer field has data
+                $employer_name = $person_data['employer_name'] ?? '';
+                $claimed_employer = $person_data['cf_person_claimed_employer'] ?? '';
+                
+                // Use whichever field has data, prioritizing claimed_employer
+                $final_employer = !empty($claimed_employer) ? $claimed_employer : $employer_name;
+                
+                if (!empty($final_employer)) {
+                    // Update both fields to have the same value
+                    $update_payload = [
+                        'id' => $regenerate_person_id,
+                        'lock_version' => $person_data['lock_version'] ?? 0,
+                        'employer_name' => $final_employer,
+                        'cf_person_claimed_employer' => $final_employer
+                    ];
+                    
+                    $result = $workbooks->assertUpdate('crm/people', [$update_payload]);
+                    
+                    if (!empty($result['affected_objects'][0]['id'])) {
+                        echo '<div class="notice notice-success is-dismissible"><p>✅ Record regenerated successfully! Both employer fields now synced to: <strong>' . esc_html($final_employer) . '</strong></p></div>';
+                        
+                        // Log the regeneration
+                        if (function_exists('dtr_admin_log')) {
+                            $log_entry = "[" . date('Y-m-d H:i:s') . "] [REGENERATE RECORD] Person ID: {$regenerate_person_id}\n";
+                            $log_entry .= "Final employer value: '{$final_employer}'\n";
+                            $log_entry .= "Previous employer_name: '{$employer_name}'\n";
+                            $log_entry .= "Previous cf_person_claimed_employer: '{$claimed_employer}'\n\n";
+                            dtr_admin_log($log_entry, 'regenerate-debug.log');
+                        }
+                        
+                        // Refresh lookup data to show updated values
+                        $lookup_person_id = $regenerate_person_id;
+                        $lookup_data = $person_data;
+                        $lookup_data['employer_name'] = $final_employer;
+                        $lookup_data['cf_person_claimed_employer'] = $final_employer;
+                    } else {
+                        echo '<div class="notice notice-error is-dismissible"><p>❌ No changes were made to the record.</p></div>';
+                    }
+                } else {
+                    echo '<div class="notice notice-warning is-dismissible"><p>⚠️ No employer data found in either field. Cannot regenerate.</p></div>';
+                }
+            } else {
+                echo '<div class="notice notice-error is-dismissible"><p>❌ Person record not found.</p></div>';
+            }
+        } catch (Exception $e) {
+            echo '<div class="notice notice-error is-dismissible"><p>❌ Error regenerating record: ' . esc_html($e->getMessage()) . '</p></div>';
+            
+            // Log the error
+            if (function_exists('dtr_admin_log')) {
+                $error_entry = "[" . date('Y-m-d H:i:s') . "] [REGENERATE ERROR] Person ID: {$regenerate_person_id}\n";
+                $error_entry .= "Error: " . $e->getMessage() . "\n\n";
+                dtr_admin_log($error_entry, 'regenerate-debug.log');
+            }
+        }
+    }
+}
+
+// Handle person lookup form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['lookup_person_id']) && current_user_can('manage_options')) {
+    $lookup_person_id = intval($_POST['lookup_person_id']);
+    $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+    $lookup_data = [];
+    
+    if ($workbooks && $lookup_person_id > 0) {
+        try {
+            $result = $workbooks->assertGet('crm/people', [
+                '_start' => 0,
+                '_limit' => 1,
+                '_ff[]' => 'id',
+                '_ft[]' => 'eq',
+                '_fc[]' => $lookup_person_id
+            ]);
+            if (!empty($result['data'][0])) {
+                $lookup_data = $result['data'][0];
+                
+                // Store the looked up data in a session or temporary variable for form population
+                set_transient('dtr_lookup_person_data_' . get_current_user_id(), $lookup_data, 300); // 5 minutes
+                set_transient('dtr_lookup_person_id_' . get_current_user_id(), $lookup_person_id, 300);
+                
+                echo '<div class="notice notice-success is-dismissible"><p>✅ Person record loaded! The form below has been populated with data from Workbooks Person ID <strong>' . esc_html($lookup_person_id) . '</strong>. Make any changes and click "Update Person Record" to save.</p></div>';
+            }
+        } catch (Exception $e) {
+            echo '<div class="notice notice-error is-dismissible"><p>Could not fetch Workbooks record for ID ' . esc_html($lookup_person_id) . ': ' . esc_html($e->getMessage()) . '</p></div>';
+        }
+    }
+}
+
 // Handle person record update form submission
 if (
     $_SERVER['REQUEST_METHOD'] === 'POST' &&
@@ -257,7 +362,7 @@ if ($workbooks && $workbooks_person_id) {
     }
 }
 echo '<div style="margin-bottom:10px;">';
-echo '<a href="#" id="toggle-workbooks-fields" style="display:inline-block;margin-bottom:8px;font-weight:bold;">Show Workbooks API Fields for this User</a>';
+echo '<a href="#" id="toggle-workbooks-fields" class="button btn-secondary">Show Workbooks API Fields for this User</a>';
 echo '<div id="workbooks-fields-table" style="display:none;">';
 if (!empty($workbooks_data)) {
     echo '<table class="widefat striped" style="margin-top:8px; max-width:900px;">';
@@ -274,11 +379,37 @@ echo '</div>';
 echo '</div>';
 // Manual Workbooks Person ID update form
 ?>
+<!-- Person Lookup Form -->
+<div style="background: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+    <h3>🔍 Lookup Any Person Record</h3>
+    <form method="post" style="margin-bottom: 15px;">
+        <label for="lookup_person_id"><strong>Enter Person ID to lookup:</strong></label><br>
+        <div style="display: flex; gap: 10px; align-items: flex-end; margin-top: 5px;">
+            <input type="number" name="lookup_person_id" id="lookup_person_id" min="1" step="1" value="<?php echo isset($_POST['lookup_person_id']) ? intval($_POST['lookup_person_id']) : ''; ?>" style="width:200px;height:36px;" placeholder="e.g. 4318866">
+            <button type="submit" class="button button-secondary">Lookup Person</button>
+        </div>
+    </form>
+    
+    <!-- Regenerate Record Form -->
+    <?php if (isset($lookup_person_id) && $lookup_person_id > 0): ?>
+    <form method="post" style="margin-bottom: 15px;">
+        <input type="hidden" name="regenerate_person_id" value="<?php echo intval($lookup_person_id); ?>">
+        <button type="submit" class="button button-primary" onclick="return confirm('This will sync the employer_name and cf_person_claimed_employer fields for Person ID <?php echo intval($lookup_person_id); ?>. Continue?')">
+            🔄 Regenerate Record (Sync Employer Fields)
+        </button>
+        <small style="display: block; margin-top: 5px; color: #666;">
+            This will ensure both employer_name and cf_person_claimed_employer fields have the same value.
+        </small>
+    </form>
+    <?php endif; ?>
+</div>
 <form id="workbooks_get_user_form" method="post" style="margin-bottom:20px;">
     <label for="manual_workbooks_person_id"><strong>Set/Update Workbooks Person ID for your account:</strong></label><br>
     <input type="number" name="manual_workbooks_person_id" id="manual_workbooks_person_id" min="1" step="1" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'workbooks_person_id', true)); ?>" style="width:200px;">
     <button type="submit" name="set_workbooks_person_id" class="button button-primary">Update ID</button>
 </form>
+
+
 <form id="workbooks_update_user_form" method="post">
     <?php wp_nonce_field('dtr_update_person', 'dtr_update_nonce'); ?>
     <input type="hidden" name="workbooks_update_user" value="1">
@@ -286,25 +417,50 @@ echo '</div>';
     $user_id = get_current_user_id();
     $user = get_userdata($user_id);
     $workbooks = get_workbooks_instance();
-    $dynamic_person_id = (int) get_user_meta($user_id, 'workbooks_person_id', true);
-    $is_fallback_record = false;
-    if (empty($dynamic_person_id)) { $dynamic_person_id = 4318866; $is_fallback_record = true; }
-    $existing = $workbooks->assertGet('crm/people.api', [
-        '_start' => 0,
-        '_limit' => 1,
-        '_ff[]' => 'id',
-        '_ft[]' => 'eq',
-        '_fc[]' => $dynamic_person_id,
-        '_select_columns[]' => [
-            'id', 'lock_version',
-            'person_title', 'person_first_name', 'person_last_name', 'person_job_title',
-            'main_location[email]', 'main_location[telephone]', 'main_location[country]',
-            'main_location[town]', 'main_location[postcode]', 'employer_name',
-            'cf_person_dtr_news','cf_person_dtr_events','cf_person_dtr_third_party','cf_person_dtr_webinar',
-            'cf_person_business','cf_person_diseases','cf_person_drugs_therapies','cf_person_genomics_3774','cf_person_genomics','cf_person_research_development','cf_person_technology','cf_person_tools_techniques'
-        ]
-    ]);
-    $person = $existing['data'][0] ?? [];
+    
+    // Check if we have looked-up person data
+    $lookup_person_data = get_transient('dtr_lookup_person_data_' . $user_id);
+    $lookup_person_id = get_transient('dtr_lookup_person_id_' . $user_id);
+    
+    if ($lookup_person_data && $lookup_person_id) {
+        // Use the looked-up person data
+        $dynamic_person_id = $lookup_person_id;
+        $person = $lookup_person_data;
+        $is_fallback_record = false;
+        echo '<div style="background: #e7f3ff; padding: 10px; border-left: 4px solid #0073aa; margin-bottom: 15px;">';
+        echo '<strong>📋 Editing Workbooks Person ID: ' . esc_html($dynamic_person_id) . '</strong><br>';
+        echo '<small>Form populated with data from the person lookup. Make changes and save to update this record.</small>';
+        echo '</div>';
+        
+        // Clear the transient after use
+        delete_transient('dtr_lookup_person_data_' . $user_id);
+        delete_transient('dtr_lookup_person_id_' . $user_id);
+    } else {
+        // Use current user's own record or fallback
+        $dynamic_person_id = (int) get_user_meta($user_id, 'workbooks_person_id', true);
+        $is_fallback_record = false;
+        if (empty($dynamic_person_id)) { 
+            $dynamic_person_id = 4318866; 
+            $is_fallback_record = true; 
+        }
+        $existing = $workbooks->assertGet('crm/people.api', [
+            '_start' => 0,
+            '_limit' => 1,
+            '_ff[]' => 'id',
+            '_ft[]' => 'eq',
+            '_fc[]' => $dynamic_person_id,
+            '_select_columns[]' => [
+                'id', 'lock_version',
+                'person_title', 'person_first_name', 'person_last_name', 'person_job_title',
+                'main_location[email]', 'main_location[telephone]', 'main_location[country]',
+                'main_location[town]', 'main_location[postcode]', 'employer_name',
+                'cf_person_dtr_news','cf_person_dtr_events','cf_person_dtr_third_party','cf_person_dtr_webinar',
+                'cf_person_business','cf_person_diseases','cf_person_drugs_therapies','cf_person_genomics_3774','cf_person_genomics','cf_person_research_development','cf_person_technology','cf_person_tools_techniques'
+            ]
+        ]);
+        $person = $existing['data'][0] ?? [];
+    }
+    
     function get_field_value($person, $field, $user_id, $meta_key = '') {
         if (!empty($person[$field])) {
             return esc_attr($person[$field]);
@@ -317,7 +473,7 @@ echo '</div>';
         echo '<input type="hidden" name="person_id" value="' . esc_attr($person['id']) . '">';
         echo '<input type="hidden" name="lock_version" value="' . esc_attr($person['lock_version']) . '">';
     }
-    if ($is_fallback_record) {
+    if ($is_fallback_record && !$lookup_person_data) {
         echo '<p style="margin:8px 0 16px 0;"><em>Using fallback fixed Workbooks record (ID 4318866). Set your own Workbooks Person ID above to mirror changes into your user meta automatically.</em></p>';
     }
     ?>
@@ -396,11 +552,12 @@ echo '</div>';
         <?php endforeach; ?>
     </fieldset>
     <p><label for="email">Email<br>
-        <input type="email" id="email" name="email" value="<?php echo esc_attr($user->user_email); ?>" class="regular-text" readonly></label>
-        <small>Email is read-only and taken from your WordPress user account.</small></p>
+        <input type="email" id="email" name="email" value="<?php echo esc_attr($person['main_location[email]'] ?? $user->user_email); ?>" class="regular-text" <?php echo $lookup_person_data ? '' : 'readonly'; ?>></label>
+        <small><?php echo $lookup_person_data ? 'Email from the looked-up person record. Make readonly if needed.' : 'Email is read-only and taken from your WordPress user account.'; ?></small></p>
     <p><label for="employer">Employer<br>
-        <input type="text" id="emplyer" name="employer" value="Supersonic Playground Ltd" class="regular-text" readonly></label>
-    </label></p>
+        <input type="text" id="employer" name="employer" value="<?php echo esc_attr($person['employer_name'] ?? ($person['cf_person_claimed_employer'] ?? 'Supersonic Playground Ltd')); ?>" class="regular-text" <?php echo $lookup_person_data ? '' : 'readonly'; ?>></label>
+        <?php if (!$lookup_person_data): ?><small>Default employer for your account.</small><?php endif; ?>
+    </p>
     <p><label for="telephone">Telephone<br>
         <input type="text" id="telephone" name="telephone" value="<?php echo get_field_value($person, 'main_location[telephone]', $user_id); ?>" class="regular-text"></label></p>
     <p><label for="country">Country<br>
@@ -415,5 +572,73 @@ echo '</div>';
         <span id="genomics-cleanup-result" style="color:#555;"></span>
     </p>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle Workbooks fields visibility (existing functionality)
+    const toggleWorkbooksFields = document.getElementById('toggle-workbooks-fields');
+    const workbooksFieldsTable = document.getElementById('workbooks-fields-table');
+    
+    if (toggleWorkbooksFields && workbooksFieldsTable) {
+        toggleWorkbooksFields.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (workbooksFieldsTable.style.display === 'none') {
+                workbooksFieldsTable.style.display = 'block';
+                this.textContent = 'Hide Workbooks API Fields for this User';
+            } else {
+                workbooksFieldsTable.style.display = 'none';
+                this.textContent = 'Show Workbooks API Fields for this User';
+            }
+        });
+    }
+    
+    // Toggle raw lookup data visibility (new functionality)
+    const toggleRawLookupData = document.getElementById('toggle-raw-lookup-data');
+    const rawLookupData = document.getElementById('raw-lookup-data');
+    
+    if (toggleRawLookupData && rawLookupData) {
+        toggleRawLookupData.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (rawLookupData.style.display === 'none') {
+                rawLookupData.style.display = 'block';
+                this.textContent = 'Hide Raw API Data';
+            } else {
+                rawLookupData.style.display = 'none';
+                this.textContent = 'Show Raw API Data';
+            }
+        });
+    }
+    
+    // Genomics cleanup button (existing functionality)
+    const genomicsButton = document.getElementById('run-genomics-cleanup');
+    const genomicsResult = document.getElementById('genomics-cleanup-result');
+    
+    if (genomicsButton && genomicsResult) {
+        genomicsButton.addEventListener('click', function() {
+            genomicsResult.textContent = 'Processing...';
+            
+            fetch(ajaxurl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'action=dtr_genomics_cleanup&nonce=' + encodeURIComponent('<?php echo wp_create_nonce("dtr_genomics_cleanup"); ?>')
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    genomicsResult.textContent = '✅ ' + data.data.message;
+                    genomicsResult.style.color = '#46b450';
+                } else {
+                    genomicsResult.textContent = '❌ ' + (data.data ? data.data.message : 'Error occurred');
+                    genomicsResult.style.color = '#dc3232';
+                }
+            })
+            .catch(error => {
+                genomicsResult.textContent = '❌ Error: ' + error.message;
+                genomicsResult.style.color = '#dc3232';
+            });
+        });
+    }
+});
+</script>
                 
             

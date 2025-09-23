@@ -478,11 +478,11 @@ function dtr_html_build_workbooks_payload($user_id, $data, $debug_id) {
         'main_location[country]' => $data['country'],
         'main_location[town]' => $data['town'],
         'main_location[postcode]' => $data['postcode'],
-        'employer_name' => $data['employer'],
-        'cf_person_claimed_employer' => $data['employer'],
+        'employer_name' => $data['claimed_employer'], // Use claimed_employer as source
+        'cf_person_claimed_employer' => $data['claimed_employer'], // Both fields from same source
         // Always keep employer_name and cf_person_claimed_employer in sync
         'cf_person_dtr_subscriber_type' => 'Prospect',
-        'cf_person_dtr_subscriber' => 1,
+        /* 'cf_person_dtr_subscriber' => 1, */
         'cf_person_dtr_web_member' => 1,
         'lead_source_type' => 'Online Registration',
         'cf_person_is_person_active_or_inactive' => 'Active',
@@ -508,6 +508,12 @@ function dtr_html_build_workbooks_payload($user_id, $data, $debug_id) {
             $payload[$wb_field] = $val;
         }
     }
+    
+    // Debug: Log employer field mappings
+    dtr_html_log("[{$debug_id}] [DEBUG] Workbooks payload employer_name: '{$payload['employer_name']}'");
+    dtr_html_log("[{$debug_id}] [DEBUG] Workbooks payload cf_person_claimed_employer: '{$payload['cf_person_claimed_employer']}'");
+    dtr_html_log("[{$debug_id}] [DEBUG] Source data employer: '{$data['employer']}'");
+    dtr_html_log("[{$debug_id}] [DEBUG] Source data claimed_employer: '{$data['claimed_employer']}'");
     
     return $payload;
 }
@@ -638,6 +644,7 @@ function dtr_html_membership_log_summary($user_id, $data, $test_mode = false) {
     dtr_html_log("Telephone Number: " . $data['telephone']);
     dtr_html_log("Job Title: " . $data['job_title']);
     dtr_html_log("Employer: " . $data['employer']);
+    dtr_html_log("Claimed Employer: " . $data['claimed_employer']);
     dtr_html_log("Country: " . $data['country']);
     dtr_html_log("Town: " . $data['town']);
     dtr_html_log("Post Code: " . $data['postcode']);

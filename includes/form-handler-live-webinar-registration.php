@@ -116,8 +116,8 @@ function dtr_handle_live_webinar_registration($registration_data) {
     if (is_user_logged_in()) {
         $current_user = wp_get_current_user();
         $email = $current_user->user_email;
-        $first_name = $current_user->user_firstname ?: $current_user->display_name;
-        $last_name = $current_user->user_lastname;
+        $first_name = get_user_meta($current_user->ID, 'first_name', true) ?: $current_user->display_name;
+        $last_name = get_user_meta($current_user->ID, 'last_name', true);
         $person_id = get_user_meta($current_user->ID, 'workbooks_person_id', true);
         
         dtr_webinar_debug("ℹ️ User is logged in - ID: {$current_user->ID}, Email: $email");
@@ -214,10 +214,10 @@ function dtr_register_workbooks_webinar(
             $email = $current_user->user_email;
         }
         if (empty($first_name)) {
-            $first_name = $current_user->user_firstname ?: $current_user->display_name;
+            $first_name = get_user_meta($current_user->ID, 'first_name', true) ?: $current_user->display_name;
         }
         if (empty($last_name)) {
-            $last_name = $current_user->user_lastname;
+            $last_name = get_user_meta($current_user->ID, 'last_name', true) ?: '';
         }
     }
     if (is_array($debug_report)) $debug_report['resolved_names'] = [$first_name, $last_name];
@@ -350,14 +350,21 @@ function dtr_register_workbooks_webinar(
     }
 
     // STEP 4: Ticket Created/Updated
+    $ticket_name = trim($first_name . ' ' . $last_name);
+    if (empty($ticket_name)) {
+        $ticket_name = $email ?: 'Anonymous User';
+    }
+    
     $ticket_payload = [[
         'event_id' => $event_id,
         'person_id' => $person_id,
-        'name' => trim(($first_name . ' ' . $last_name)) ?: $email,
+        'name' => $ticket_name,
         'status' => 'Registered',
         'speaker_question' => $merged_questions,
         'sponsor_1_optin' => (int)$cf_mailing_list_member_sponsor_1_optin
     ]];
+
+    dtr_webinar_debug("ℹ️ STEP 4: Creating ticket with name: '$ticket_name', person_id: $person_id, event_id: $event_id");
 
     $ticket_result = null;
     $ticket_step_success = false;
