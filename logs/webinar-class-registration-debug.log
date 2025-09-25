@@ -1,0 +1,175 @@
+[2025-09-24 04:31:47] 🧪 Test registration removed via class-based admin for post 162500
+[2025-09-24 04:38:16] 🧪 Test registration removed via class-based admin for post 162500
+[2025-09-24 04:46:34] 🧪 Test registration removed via class-based form for post 162500
+[2025-09-24 04:54:57] 📊 Registration check for user 28 on post 162500: REGISTERED
+[2025-09-24 04:57:38] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 04:57:38] 📄 Post ID: 162500, Post type: webinars
+[2025-09-24 04:57:38] 👤 User logged in: levon.gravett@supersonicplayground.com (ID: 28)
+[2025-09-24 04:57:38] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 04:57:38] 📊 Registration check for user 28 on post 162500: REGISTERED
+[2025-09-24 04:57:38] 📺 Rendering live form (user_is_registered: YES)
+[2025-09-24 04:59:07] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 04:59:07] 📄 Post ID: 162500, Post type: webinars
+[2025-09-24 04:59:07] 👤 User logged in: levon.gravett@supersonicplayground.com (ID: 28)
+[2025-09-24 04:59:07] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 04:59:07] 📊 Registration check for user 28 on post 162500: REGISTERED
+[2025-09-24 04:59:07] 📺 Rendering live form (user_is_registered: YES)
+[2025-09-24 04:59:12] 🧪 Test registration removed via class-based form for post 162500
+[2025-09-24 04:59:14] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 04:59:14] 📄 Post ID: 162500, Post type: webinars
+[2025-09-24 04:59:14] 👤 User logged in: levon.gravett@supersonicplayground.com (ID: 28)
+[2025-09-24 04:59:14] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 04:59:14] 📊 Registration check for user 28 on post 162500: REGISTERED
+[2025-09-24 04:59:14] 📺 Rendering live form (user_is_registered: YES)
+[2025-09-24 05:04:34] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 05:04:34] 📄 Post ID: 162500, Post type: webinars
+[2025-09-24 05:04:34] 👤 User logged in: levon.gravett@supersonicplayground.com (ID: 28)
+[2025-09-24 05:04:34] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 05:04:34] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:04:34] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:04:34] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 05:04:34] 📊 Registration check for user 28 on post 162500: REGISTERED
+[2025-09-24 05:04:34] 📺 Rendering live form (user_is_registered: YES)
+[2025-09-24 05:04:34] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 05:04:34] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:04:34] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:08:12] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 05:08:12] 📄 Post ID: 162500, Post type: webinars
+[2025-09-24 05:08:12] 👤 User logged in: levon.gravett@supersonicplayground.com (ID: 28)
+[2025-09-24 05:08:12] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 05:08:12] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:08:12] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:08:12] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 05:08:12] 📊 Registration check for user 28 on post 162500: REGISTERED
+[2025-09-24 05:08:12] 📺 Rendering live form (user_is_registered: YES)
+[2025-09-24 05:08:12] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 05:08:12] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:08:12] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:08:28] 🗑️ Starting deregistration for user 28 on post 162500
+[2025-09-24 05:08:28] 🗑️ User meta removal: FAILED/NOT_FOUND
+[2025-09-24 05:08:28] 🗑️ Found 4 total registrations in post meta
+[2025-09-24 05:08:28] 🗑️ Removed 0 registrations from post meta
+[2025-09-24 05:08:28] 🧪 Test registration removed via class-based form for post 162500
+[2025-09-24 05:08:30] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 05:08:30] 📄 Post ID: 162500, Post type: webinars
+[2025-09-24 05:08:30] 👤 User logged in: levon.gravett@supersonicplayground.com (ID: 28)
+[2025-09-24 05:08:30] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 05:08:30] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:08:30] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:08:30] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 05:08:30] 📊 Registration check for user 28 on post 162500: REGISTERED
+[2025-09-24 05:08:30] 📺 Rendering live form (user_is_registered: YES)
+[2025-09-24 05:08:30] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 05:08:30] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:08:30] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:08:56] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 05:08:56] 📄 Post ID: 162500, Post type: webinars
+[2025-09-24 05:08:56] 👤 User logged in: levon.gravett@supersonicplayground.com (ID: 28)
+[2025-09-24 05:08:56] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 05:08:56] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:08:56] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:08:56] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 05:08:56] 📊 Registration check for user 28 on post 162500: REGISTERED
+[2025-09-24 05:08:56] 📺 Rendering live form (user_is_registered: YES)
+[2025-09-24 05:08:56] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 05:08:56] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:08:56] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:22:22] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 05:22:22] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:22:22] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:22:45] 🔍 Checking user meta key 'webinar_registration_162501': NOT FOUND
+[2025-09-24 05:22:45] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:22:45] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:23:04] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 05:23:04] 📄 Post ID: 162501, Post type: webinars
+[2025-09-24 05:23:04] 👤 User logged in: levon.gravett@supersonicplayground.com (ID: 28)
+[2025-09-24 05:23:04] 🔍 Checking user meta key 'webinar_registration_162501': NOT FOUND
+[2025-09-24 05:23:04] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:23:04] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:23:04] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 05:23:04] 📊 Registration check for user 28 on post 162501: REGISTERED
+[2025-09-24 05:23:04] 📺 Rendering live form (user_is_registered: YES)
+[2025-09-24 05:23:04] 🔍 Checking user meta key 'webinar_registration_162501': NOT FOUND
+[2025-09-24 05:23:04] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:23:04] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:23:16] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 05:23:16] 📄 Post ID: 162501, Post type: webinars
+[2025-09-24 05:23:16] 👤 User logged in: levon.gravett@supersonicplayground.com (ID: 28)
+[2025-09-24 05:23:16] 🔍 Checking user meta key 'webinar_registration_162501': NOT FOUND
+[2025-09-24 05:23:16] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:23:16] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:23:16] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 05:23:16] 📊 Registration check for user 28 on post 162501: REGISTERED
+[2025-09-24 05:23:16] 📺 Rendering live form (user_is_registered: YES)
+[2025-09-24 05:23:16] 🔍 Checking user meta key 'webinar_registration_162501': NOT FOUND
+[2025-09-24 05:23:16] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:23:16] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:23:19] 🗑️ Starting deregistration for user 28 on post 162501
+[2025-09-24 05:23:19] 🗑️ User meta removal: FAILED/NOT_FOUND
+[2025-09-24 05:23:19] 🗑️ Found 4 total registrations in post meta
+[2025-09-24 05:23:19] 🗑️ Removed 0 registrations from post meta
+[2025-09-24 05:23:19] 🧪 Test registration removed via class-based form for post 162501
+[2025-09-24 05:23:20] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 05:23:20] 📄 Post ID: 162501, Post type: webinars
+[2025-09-24 05:23:20] 👤 User logged in: levon.gravett@supersonicplayground.com (ID: 28)
+[2025-09-24 05:23:20] 🔍 Checking user meta key 'webinar_registration_162501': NOT FOUND
+[2025-09-24 05:23:20] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:23:20] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:23:20] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 05:23:20] 📊 Registration check for user 28 on post 162501: REGISTERED
+[2025-09-24 05:23:20] 📺 Rendering live form (user_is_registered: YES)
+[2025-09-24 05:23:20] 🔍 Checking user meta key 'webinar_registration_162501': NOT FOUND
+[2025-09-24 05:23:20] 🔍 Checking post meta registrations: 4 total registrations
+[2025-09-24 05:23:20] ✅ Found registration in post meta - returning TRUE
+[2025-09-24 05:30:53] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 05:30:53] 📄 Post ID: 162500, Post type: webinars
+[2025-09-24 05:30:53] 👤 User logged in: levon.gravett@supersonicplayground.com (ID: 28)
+[2025-09-24 05:30:53] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 05:30:53] 🔍 Checking post meta registrations: 0 total registrations
+[2025-09-24 05:30:53] ❌ No registration found - returning FALSE
+[2025-09-24 05:30:53] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 05:30:53] 📊 Registration check for user 28 on post 162500: NOT REGISTERED
+[2025-09-24 05:30:53] 📺 Rendering live form (user_is_registered: NO)
+[2025-09-24 05:30:53] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 05:30:53] 🔍 Checking post meta registrations: 0 total registrations
+[2025-09-24 05:30:53] ❌ No registration found - returning FALSE
+[2025-09-24 05:31:03] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 05:31:03] 📄 Post ID: 162500, Post type: webinars
+[2025-09-24 05:31:03] 👤 User not logged in - showing guest registration form
+[2025-09-24 05:31:03] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 05:31:28] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 05:31:28] 📄 Post ID: 162500, Post type: webinars
+[2025-09-24 05:31:28] 👤 User not logged in - showing guest registration form
+[2025-09-24 05:31:28] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 05:34:05] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 05:34:05] 📄 Post ID: 162500, Post type: webinars
+[2025-09-24 05:34:05] 👤 User not logged in - showing guest registration form
+[2025-09-24 05:34:05] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 08:10:09] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 08:10:09] 📄 Post ID: 162500, Post type: webinars
+[2025-09-24 08:10:09] 👤 User logged in: levon.gravett@supersonicplayground.com (ID: 28)
+[2025-09-24 08:10:09] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 08:10:09] 🔍 Checking post meta registrations: 0 total registrations
+[2025-09-24 08:10:09] ❌ No registration found - returning FALSE
+[2025-09-24 08:10:09] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 08:10:09] 📊 Registration check for user 28 on post 162500: NOT REGISTERED
+[2025-09-24 08:10:09] 📺 Rendering live form (user_is_registered: NO)
+[2025-09-24 08:10:09] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 08:10:09] 🔍 Checking post meta registrations: 0 total registrations
+[2025-09-24 08:10:09] ❌ No registration found - returning FALSE
+[2025-09-24 08:10:19] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 08:10:19] 📄 Post ID: 162500, Post type: webinars
+[2025-09-24 08:10:19] 👤 User logged in: levon.gravett@supersonicplayground.com (ID: 28)
+[2025-09-24 08:10:19] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 08:10:19] 🔍 Checking post meta registrations: 0 total registrations
+[2025-09-24 08:10:19] ❌ No registration found - returning FALSE
+[2025-09-24 08:10:19] 🎥 Is on-demand: NO (registration_link: )
+[2025-09-24 08:10:19] 📊 Registration check for user 28 on post 162500: NOT REGISTERED
+[2025-09-24 08:10:19] 📺 Rendering live form (user_is_registered: NO)
+[2025-09-24 08:10:19] 🔍 Checking user meta key 'webinar_registration_162500': NOT FOUND
+[2025-09-24 08:10:19] 🔍 Checking post meta registrations: 0 total registrations
+[2025-09-24 08:10:19] ❌ No registration found - returning FALSE
+[2025-09-24 10:33:49] 🔍 Class-based shortcode render_shortcode() called
+[2025-09-24 10:33:49] 📄 Post ID: 161189, Post type: webinars
+[2025-09-24 10:33:49] 👤 User not logged in - showing guest registration form
+[2025-09-24 10:33:49] 🎥 Is on-demand: NO (registration_link: )

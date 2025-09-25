@@ -85,7 +85,6 @@ $shortcode_files = [
     'dtr-my-account-details.php',               // Account management functionality
     'login-forgot-password-shortcode.php',      // Login and password reset forms
     'webinar-registration-shortcodes.php',      // Webinar registration handling
-    'lead-generation-shortcodes.php',           // Lead generation shortcodes (new)
     'workbooks-employer-select.php',            // Workbooks employer select shortcode
 ];
 
@@ -97,6 +96,8 @@ foreach ($shortcode_files as $file) {
         error_log('[DTR Workbooks] Shortcode file not found: ' . $file_path);
     }
 }
+
+// Form handlers are included from includes directory
 
 /**
  * Main DTR Workbooks Integration Class
@@ -202,6 +203,10 @@ class DTR_Workbooks_Integration {
         add_action('wp_ajax_dtr_sync_test', [$this, 'sync_test']);
         add_action('wp_ajax_dtr_retry_submission', [$this, 'retry_submission']);
         add_action('wp_ajax_dtr_get_submission_details', [$this, 'get_submission_details']);
+        
+        // Webinar registration AJAX handlers
+        add_action('wp_ajax_dtr_submit_webinar', [$this, 'handle_webinar_submission']);
+        add_action('wp_ajax_nopriv_dtr_submit_webinar', [$this, 'handle_webinar_submission']);
         // Legacy genomics key cleanup (cf_person_genomics_3744 -> cf_person_genomics_3774)
         add_action('wp_ajax_dtr_cleanup_genomics_meta', [$this, 'cleanup_genomics_meta']);
         
@@ -209,6 +214,14 @@ class DTR_Workbooks_Integration {
         add_action('wp_ajax_dtr_get_form_nonce', [$this, 'get_form_nonce']);
         // HTML form nonce endpoint - non-authenticated users
         add_action('wp_ajax_nopriv_dtr_get_form_nonce', [$this, 'get_form_nonce']);
+
+        // Member Registration Test AJAX handlers
+        add_action('wp_ajax_dtr_test_member_registration', [$this, 'handle_test_member_registration']);
+        add_action('wp_ajax_dtr_sync_user_to_workbooks', [$this, 'handle_sync_user_to_workbooks']);
+        add_action('wp_ajax_dtr_search_test_users', [$this, 'handle_search_test_users']);
+        add_action('wp_ajax_dtr_load_user_meta', [$this, 'handle_load_user_meta']);
+        add_action('wp_ajax_dtr_get_workbooks_fields', [$this, 'handle_get_workbooks_fields']);
+        add_action('wp_ajax_dtr_regenerate_employer_data', [$this, 'handle_regenerate_employer_data']);
 
         // Custom logging
         add_action('init', [$this, 'setup_custom_logging']);
@@ -331,13 +344,10 @@ class DTR_Workbooks_Integration {
             'class-array-merge-safety.php',
             // Ninja Forms submission override layer
             'class-form-submission-override.php',
-            'class-lead-generation-registration.php',
             'class-webinar-registration.php',
             // Form handlers
-            'admin/form-handler-admin-webinar-registration.php',
             'form-handler-live-webinar-registration.php',
             'form-handler-membership-registration.php',
-            'form-handler-gated-content-reveal.php',
             'form-handler-media-planner.php',
             // AJAX handlers
             'ajax-employer-search.php',
@@ -348,7 +358,11 @@ class DTR_Workbooks_Integration {
             'class-acf-ninjaforms-merge.php',
             'class-employer-sync.php',
             'class-helper-functions.php',
-            'class-nf-country-converter.php', // retained naming (formerly nf-country-converter.php)
+            // Database storage helpers
+            'submission-storage-helpers.php',
+            // Custom Registration Form Classes
+            'class-webinar-registration-form-shortcode.php',
+            // Custom Registration Form Handlers
         ];
 
         foreach ($includes as $file) {
@@ -373,11 +387,10 @@ class DTR_Workbooks_Integration {
             'dtr-shortcodes.php',
             'dtr-my-account-details.php',
             'login-forgot-password-shortcode.php',
-            'webinar-registration-shortcodes.php',
-            'lead-generation-shortcodes.php',
             'workbooks-employer-select.php',
             'membership-registration-shortcode.php',
             'media-planner-registration.php',
+            'webinar-registration-form-shortcode.php',
         ];
 
         foreach ($shortcode_files as $file) {
@@ -565,7 +578,12 @@ class DTR_Workbooks_Integration {
         $post_name = get_post_field('post_name');
         $post_title = get_the_title();
         $post_id = get_the_ID();
-        error_log('DTR TEST LOG: enqueue_scripts called on page: "' . $post_title . '" (slug: "' . $post_name . '", ID: ' . $post_id . ')');
+        $post_type = get_post_type();
+        error_log('DTR TEST LOG: enqueue_scripts called on page: "' . $post_title . '" (slug: "' . $post_name . '", ID: ' . $post_id . ', type: ' . $post_type . ')');
+
+        // Check if this is a single webinar page
+        $is_single_webinar = is_singular('webinar') || $post_type === 'webinar' || has_shortcode(get_post()->post_content ?? '', 'webinar_registration');
+        
         // Enqueue frontend styles
         wp_enqueue_style(
             'dtr-workbooks-frontend',
@@ -579,6 +597,37 @@ class DTR_Workbooks_Integration {
             [],
             DTR_WORKBOOKS_VERSION
         );
+        
+        // Enqueue frontend.js for webinar pages and other relevant pages
+        if ($is_single_webinar || in_array($post_type, array('webinar', 'post', 'page'))) {
+            // Ensure Ninja Forms core dependencies are loaded first
+            if (defined('NINJA_FORMS_VERSION')) {
+                wp_enqueue_script('backbone');
+                wp_enqueue_script('underscore');
+                wp_enqueue_script('nf-front-end', 
+                    NINJA_FORMS_URL . 'assets/js/min/front-end.min.js',
+                    array('jquery', 'backbone', 'underscore', 'jquery-form'),
+                    NINJA_FORMS_VERSION
+                );
+            }
+
+            wp_enqueue_script(
+                'dtr-workbooks-frontend',
+                DTR_WORKBOOKS_ASSETS_URL . 'js/frontend.js',
+                array('jquery', 'backbone', 'underscore', 'nf-front-end'),
+                DTR_WORKBOOKS_VERSION,
+                true
+            );
+
+            // Localize script for webinar form AJAX
+            wp_localize_script('dtr-workbooks-frontend', 'dtrWebinarAjax', array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('dtr_webinar_nonce'),
+                'debug_mode' => $this->debug_mode,
+                'current_user_id' => get_current_user_id(),
+                'is_user_logged_in' => is_user_logged_in()
+            ));
+        }
         
         // Frontend JS with file modification time for cache-busting
         
@@ -812,6 +861,16 @@ class DTR_Workbooks_Integration {
             'manage_options',
             'dtr-workbooks-lead-generation-test',
             [$this, 'admin_lead_generation_test_page']
+        );
+
+        // Member Registration Test page
+        add_submenu_page(
+            'dtr-workbooks',
+            __('Member Registration Test', 'dtr-workbooks'),
+            __('Member Registration Test', 'dtr-workbooks'),
+            'manage_options',
+            'dtr-workbooks-member-test',
+            [$this, 'admin_member_registration_test_page']
         );
 
         // Registered Events page
@@ -1371,6 +1430,23 @@ class DTR_Workbooks_Integration {
             echo '</div>';
         }
     }
+
+    /**
+     * Member Registration Test page
+     *
+     * @return void
+     */
+    public function admin_member_registration_test_page() {
+        $test_page_file = DTR_WORKBOOKS_PLUGIN_DIR . 'admin/member-registration-test.php';
+        if (file_exists($test_page_file)) {
+            include $test_page_file;
+        } else {
+            echo '<div class="wrap">';
+            echo '<h1>'.esc_html__('Member Registration Test','dtr-workbooks').'</h1>';
+            echo '<p>'.esc_html__('Test content file missing (admin/member-registration-test.php).','dtr-workbooks').'</p>';
+            echo '</div>';
+        }
+    }
     
     /**
      * Logs page
@@ -1505,6 +1581,571 @@ class DTR_Workbooks_Integration {
         wp_send_json_success([
             'nonce' => wp_create_nonce('dtr_html_form_submit')
         ]);
+    }
+
+    /**
+     * AJAX handler for test member registration
+     *
+     * @return void
+     */
+    public function handle_test_member_registration() {
+        // Verify nonce and permissions
+        if (!wp_verify_nonce($_POST['nonce'] ?? '', 'dtr_member_test_nonce') || !current_user_can('manage_options')) {
+            wp_send_json_error(['message' => 'Security check failed']);
+            return;
+        }
+
+        // Simulate form data for test registration
+        $test_data = [
+            'action' => 'dtr_html_form_submit',
+            'title' => sanitize_text_field($_POST['title'] ?? 'Mr.'),
+            'firstName' => sanitize_text_field($_POST['firstName'] ?? 'Test'),
+            'lastName' => sanitize_text_field($_POST['lastName'] ?? 'User'),
+            'email' => sanitize_email($_POST['email'] ?? 'testuser' . time() . '@example.com'),
+            'password' => wp_generate_password(12, false),
+            'employer' => sanitize_text_field($_POST['employer'] ?? 'Test Company Ltd'),
+            'phone' => sanitize_text_field($_POST['phone'] ?? '123-456-7890'),
+            'jobTitle' => sanitize_text_field($_POST['jobTitle'] ?? 'Test Manager'),
+            'country' => sanitize_text_field($_POST['country'] ?? 'United Kingdom'),
+            'city' => sanitize_text_field($_POST['city'] ?? 'Test City'),
+            'postcode' => sanitize_text_field($_POST['postcode'] ?? 'TE5T 1NG'),
+            'newsletter' => '1',
+            'events' => '1',
+            'thirdParty' => '0',
+            'webinar' => '0',
+            'business' => '1',
+            'diseases' => '0',
+            'drugs' => '1',
+            'genomics' => '0',
+            'research' => '0',
+            'technology' => '1',
+            'tools' => '0',
+            'terms' => '1',
+            'nonce' => wp_create_nonce('dtr_html_form_submit')
+        ];
+
+        // Force test mode to skip Workbooks sync
+        $options = get_option('dtr_workbooks_options', []);
+        $original_test_mode = $options['test_mode_forms']['html'] ?? false;
+        $options['test_mode_forms']['html'] = 1;
+        update_option('dtr_workbooks_options', $options);
+
+        try {
+            // Process registration using existing handler
+            if (function_exists('dtr_html_membership_process')) {
+                $result = dtr_html_membership_process($test_data);
+                
+                // Restore original test mode
+                $options['test_mode_forms']['html'] = $original_test_mode;
+                update_option('dtr_workbooks_options', $options);
+                
+                if ($result) {
+                    // Find the created user
+                    $user = get_user_by('email', $test_data['email']);
+                    wp_send_json_success([
+                        'message' => 'Test user created successfully (WP only)',
+                        'user_id' => $user ? $user->ID : null,
+                        'email' => $test_data['email'],
+                        'password' => $test_data['password']
+                    ]);
+                } else {
+                    wp_send_json_error(['message' => 'Test registration failed']);
+                }
+            } else {
+                wp_send_json_error(['message' => 'Registration handler not available']);
+            }
+        } catch (Exception $e) {
+            // Restore original test mode on error
+            $options['test_mode_forms']['html'] = $original_test_mode;
+            update_option('dtr_workbooks_options', $options);
+            
+            wp_send_json_error(['message' => 'Error: ' . $e->getMessage()]);
+        }
+    }
+
+    /**
+     * AJAX handler for syncing user to Workbooks
+     *
+     * @return void
+     */
+    public function handle_sync_user_to_workbooks() {
+        // Verify nonce and permissions
+        if (!wp_verify_nonce($_POST['nonce'] ?? '', 'dtr_member_test_nonce') || !current_user_can('manage_options')) {
+            wp_send_json_error(['message' => 'Security check failed']);
+            return;
+        }
+
+        $user_id = intval($_POST['user_id'] ?? 0);
+        $user = get_user_by('ID', $user_id);
+        
+        if (!$user) {
+            wp_send_json_error(['message' => 'User not found']);
+            return;
+        }
+
+        // Check if user already has Workbooks ID
+        $existing_wb_id = get_user_meta($user_id, 'workbooks_person_id', true);
+        if ($existing_wb_id) {
+            wp_send_json_error(['message' => 'User already synced to Workbooks (ID: ' . $existing_wb_id . ')']);
+            return;
+        }
+
+        try {
+            // Get user data for sync
+            $data = [
+                'title' => get_user_meta($user_id, 'person_personal_title', true) ?: get_user_meta($user_id, 'title', true),
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'email' => $user->user_email,
+                'telephone' => get_user_meta($user_id, 'telephone', true),
+                'job_title' => get_user_meta($user_id, 'job_title', true),
+                'employer' => get_user_meta($user_id, 'employer_name', true),
+                'claimed_employer' => get_user_meta($user_id, 'cf_person_claimed_employer', true) ?: get_user_meta($user_id, 'employer_name', true),
+                'country' => get_user_meta($user_id, 'country', true),
+                'town' => get_user_meta($user_id, 'town', true),
+                'postcode' => get_user_meta($user_id, 'postcode', true),
+                'marketing_selected' => [],
+                'toi_selected' => []
+            ];
+
+            // Get marketing preferences
+            $marketing_fields = ['cf_person_dtr_news', 'cf_person_dtr_events', 'cf_person_dtr_third_party', 'cf_person_dtr_webinar'];
+            foreach ($marketing_fields as $field) {
+                if (get_user_meta($user_id, $field, true)) {
+                    $data['marketing_selected'][] = $field;
+                }
+            }
+
+            // Get TOI selections
+            $toi_fields = ['cf_person_business', 'cf_person_diseases', 'cf_person_drugs_therapies', 'cf_person_genomics_3774', 'cf_person_research_development', 'cf_person_technology', 'cf_person_tools_techniques'];
+            foreach ($toi_fields as $field) {
+                if (get_user_meta($user_id, $field, true)) {
+                    $data['toi_selected'][] = $field;
+                }
+            }
+
+            $debug_id = 'MANUAL-SYNC-' . uniqid();
+
+            // Use existing Workbooks sync functions
+            if (function_exists('dtr_html_build_workbooks_payload') && function_exists('dtr_html_workbooks_person_sync')) {
+                $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+                
+                if (!$workbooks) {
+                    wp_send_json_error(['message' => 'Workbooks connection not available']);
+                    return;
+                }
+
+                $payload = dtr_html_build_workbooks_payload($user_id, $data, $debug_id);
+                $payload = function_exists('dtr_html_maybe_attach_employer_org') ? 
+                          dtr_html_maybe_attach_employer_org($user_id, $payload, $data, $debug_id) : $payload;
+
+                $sync_result = dtr_html_workbooks_person_sync($workbooks, $user_id, $payload, $user->user_email, $debug_id);
+
+                if ($sync_result) {
+                    $wb_id = get_user_meta($user_id, 'workbooks_person_id', true);
+                    $wb_ref = get_user_meta($user_id, 'workbooks_object_ref', true);
+                    
+                    wp_send_json_success([
+                        'message' => 'User successfully synced to Workbooks',
+                        'workbooks_id' => $wb_id,
+                        'workbooks_ref' => $wb_ref
+                    ]);
+                } else {
+                    wp_send_json_error(['message' => 'Workbooks sync failed']);
+                }
+            } else {
+                wp_send_json_error(['message' => 'Sync functions not available']);
+            }
+        } catch (Exception $e) {
+            wp_send_json_error(['message' => 'Sync error: ' . $e->getMessage()]);
+        }
+    }
+
+    /**
+     * AJAX handler for searching test users
+     *
+     * @return void
+     */
+    public function handle_search_test_users() {
+        // Verify nonce and permissions
+        if (!wp_verify_nonce($_GET['nonce'] ?? '', 'dtr_member_test_nonce') || !current_user_can('manage_options')) {
+            wp_send_json_error(['message' => 'Security check failed']);
+            return;
+        }
+
+        $search = sanitize_text_field($_GET['search'] ?? '');
+        
+        $args = [
+            'number' => 50  // Increased limit to show more users
+        ];
+
+        if ($search) {
+            $args['search'] = '*' . $search . '*';
+            $args['search_columns'] = ['user_login', 'user_email', 'display_name'];
+        }
+
+        $users = get_users($args);
+        $results = [];
+
+        foreach ($users as $user) {
+            $wb_id = get_user_meta($user->ID, 'workbooks_person_id', true);
+            $wb_ref = get_user_meta($user->ID, 'workbooks_object_ref', true);
+            $created_via_form = get_user_meta($user->ID, 'created_via_html_form', true);
+            
+            $results[] = [
+                'ID' => $user->ID,
+                'display_name' => $user->display_name,
+                'email' => $user->user_email,
+                'registered' => $user->user_registered,
+                'workbooks_id' => $wb_id,
+                'workbooks_ref' => $wb_ref,
+                'created_via_form' => $created_via_form,
+                'synced' => !empty($wb_id)
+            ];
+        }
+
+        wp_send_json_success($results);
+    }
+    
+    /**
+     * AJAX handler for loading detailed user meta data
+     *
+     * @return void
+     */
+    public function handle_load_user_meta() {
+        // Check if required POST data exists
+        if (!isset($_POST['nonce']) || !isset($_POST['user_id'])) {
+            wp_send_json_error('Missing required data');
+            return;
+        }
+        
+        // Security check
+        if (!wp_verify_nonce($_POST['nonce'], 'dtr_test_nonce') || !current_user_can('manage_options')) {
+            wp_send_json_error('Security check failed');
+            return;
+        }
+
+        $user_id = intval($_POST['user_id']);
+        if (!$user_id) {
+            wp_send_json_error('Invalid user ID');
+            return;
+        }
+        
+        // Verify user exists
+        $user = get_user_by('id', $user_id);
+        if (!$user) {
+            wp_send_json_error('User not found');
+            return;
+        }
+
+        // Mapping of WordPress meta keys to Workbooks field IDs
+        $workbooks_field_ids = [
+            'person_personal_title' => 'person_personal_title',
+            'title' => 'person_personal_title',
+            'first_name' => 'person_first_name',
+            'last_name' => 'person_last_name',
+            'user_email' => 'main_location[email]',
+            'cf_person_email_address' => 'main_location[email]',
+            'telephone' => 'main_location[telephone]',
+            'cf_person_telephone_number' => 'main_location[telephone]',
+            'job_title' => 'person_job_title',
+            'cf_person_job_title' => 'person_job_title',
+            'employer_name' => 'cf_person_claimed_employer',
+            'cf_person_employer' => 'employer_name',
+            'town' => 'main_location[town]',
+            'cf_person_town_city' => 'main_location[town]',
+            'country' => 'main_location[country]',
+            'cf_person_country' => 'main_location[country]',
+            'postcode' => 'main_location[postcode]',
+            'cf_person_post_code' => 'main_location[postcode]',
+            'person_aoi_1' => 'cf_person_automotive',
+            'person_aoi_2' => 'cf_person_biomarkers',
+            'person_aoi_3' => 'cf_person_cancer',
+            'person_aoi_4' => 'cf_person_cardiology',
+            'person_aoi_5' => 'cf_person_central_nervous_system',
+            'person_aoi_6' => 'cf_person_clinical_trials',
+            'person_aoi_7' => 'cf_person_companion_diagnostics',
+            'person_aoi_8' => 'cf_person_drug_delivery',
+            'person_aoi_9' => 'cf_person_endocrinology',
+            'person_aoi_10' => 'cf_person_gastroenterology',
+            'person_aoi_11' => 'cf_person_hematology',
+            'person_aoi_12' => 'cf_person_immunology',
+            'person_aoi_13' => 'cf_person_infectious_diseases',
+            'person_aoi_14' => 'cf_person_inflammation',
+            'person_aoi_15' => 'cf_person_metabolic_disorders',
+            'person_aoi_16' => 'cf_person_nephrology',
+            'person_aoi_17' => 'cf_person_ophthalmology',
+            'person_aoi_18' => 'cf_person_orphan_drugs',
+            'person_aoi_19' => 'cf_person_respiratory',
+            'person_aoi_20' => 'cf_person_rheumatology',
+            'person_aoi_21' => 'cf_person_womens_health'
+        ];
+
+        // Get all meta fields that are actually stored by the form
+        $meta_fields = [
+            'person_personal_title' => 'Personal Title',
+            'title' => 'Personal Title (Alt)',
+            'first_name' => 'First Name',
+            'last_name' => 'Last Name',
+            'user_email' => 'Email Address (User)',
+            'cf_person_email_address' => 'Email Address',
+            'telephone' => 'Telephone',
+            'cf_person_telephone_number' => 'Telephone (Form)', 
+            'job_title' => 'Job Title',
+            'cf_person_job_title' => 'Job Title (Form)',
+            'employer_name' => 'Employer',
+            'cf_person_employer' => 'Employer (Form)',
+            // 'cf_person_claimed_employer' => 'Claimed Employer', // Commented out - using employer_name only
+            'town' => 'City',
+            'cf_person_town_city' => 'City (Form)',
+            'country' => 'Country',
+            'cf_person_country' => 'Country (Form)',
+            'postcode' => 'Postal Code',
+            'cf_person_post_code' => 'Postal Code (Form)',
+            'person_aoi_1' => 'AOI 1',
+            'person_aoi_2' => 'AOI 2',
+            'person_aoi_3' => 'AOI 3',
+            'person_aoi_4' => 'AOI 4',
+            'person_aoi_5' => 'AOI 5',
+            'person_aoi_6' => 'AOI 6',
+            'person_aoi_7' => 'AOI 7',
+            'person_aoi_8' => 'AOI 8',
+            'person_aoi_9' => 'AOI 9',
+            'person_aoi_10' => 'AOI 10',
+            'person_aoi_11' => 'AOI 11',
+            'person_aoi_12' => 'AOI 12',
+            'person_aoi_13' => 'AOI 13',
+            'person_aoi_14' => 'AOI 14',
+            'person_aoi_15' => 'AOI 15',
+            'person_aoi_16' => 'AOI 16',
+            'person_aoi_17' => 'AOI 17',
+            'person_aoi_18' => 'AOI 18',
+            'person_aoi_19' => 'AOI 19',
+            'person_aoi_20' => 'AOI 20',
+            'person_aoi_21' => 'AOI 21'
+        ];
+
+        // Check if user is synced to Workbooks
+        $workbooks_person_id = get_user_meta($user_id, 'workbooks_person_id', true);
+        $is_synced = !empty($workbooks_person_id);
+
+        $result_fields = [];
+        
+        try {
+            foreach ($meta_fields as $meta_key => $workbooks_field) {
+                // Handle special cases for non-meta fields
+                if ($meta_key === 'user_email') {
+                    $wp_value = $user->user_email;
+                } else {
+                    $wp_value = get_user_meta($user_id, $meta_key, true);
+                    
+                    // Convert arrays to strings for display
+                    if (is_array($wp_value)) {
+                        $wp_value = implode(', ', $wp_value);
+                    }
+                }
+                
+                // Ensure we have a string value
+                $wp_value = (string) $wp_value;
+                
+                // For now, just show sync status in Workbooks column
+                // TODO: Later we can add live Workbooks data fetching
+                $workbooks_status = $is_synced ? 'Synced to Workbooks' : 'Not synced';
+                
+                $result_fields[] = [
+                    'workbooks_field' => $workbooks_field,
+                    'workbooks_field_id' => $workbooks_field_ids[$meta_key] ?? $meta_key,
+                    'meta_key' => $meta_key,
+                    'wp_value' => $wp_value,
+                    'workbooks_value' => $workbooks_status,
+                    'is_synced' => $is_synced
+                ];
+            }
+            
+            error_log('DTR Load User Meta - Sending response with ' . count($result_fields) . ' fields');
+            wp_send_json_success(['meta_fields' => $result_fields, 'is_synced' => $is_synced]);
+            
+        } catch (Exception $e) {
+            error_log('DTR Load User Meta Error: ' . $e->getMessage());
+            wp_send_json_error('Error loading user meta data: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Handle AJAX request to get all Workbooks API fields for a user
+     */
+    public function handle_get_workbooks_fields() {
+        error_log('DTR Get Workbooks Fields - Handler called');
+        error_log('DTR Get Workbooks Fields - POST data: ' . print_r($_POST, true));
+        
+        // Check if required POST data exists
+        if (!isset($_POST['nonce']) || !isset($_POST['workbooks_id'])) {
+            error_log('DTR Get Workbooks Fields - Missing required data');
+            wp_send_json_error('Missing required data');
+            return;
+        }
+        
+        // Security check
+        if (!wp_verify_nonce($_POST['nonce'], 'dtr_test_nonce') || !current_user_can('manage_options')) {
+            wp_send_json_error('Security check failed');
+            return;
+        }
+
+        $workbooks_id = intval($_POST['workbooks_id']);
+        error_log('DTR Get Workbooks Fields - Workbooks ID: ' . $workbooks_id);
+        if (!$workbooks_id) {
+            error_log('DTR Get Workbooks Fields - Invalid Workbooks ID');
+            wp_send_json_error('Invalid Workbooks ID');
+            return;
+        }
+
+        try {
+            error_log('DTR Get Workbooks Fields - Starting API call');
+            
+            // Use the same method as content-person-record.php
+            $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+            
+            if (!$workbooks) {
+                error_log('DTR Get Workbooks Fields - Workbooks instance not available');
+                wp_send_json_error('Workbooks API not available');
+                return;
+            }
+
+            // Make API call using the same method as the working implementation
+            $result = $workbooks->assertGet('crm/people.api', [
+                '_start' => 0,
+                '_limit' => 1,
+                '_ff[]' => 'id',
+                '_ft[]' => 'eq',
+                '_fc[]' => $workbooks_id
+            ]);
+
+            if (empty($result['data'][0])) {
+                error_log('DTR Get Workbooks Fields - No person data found');
+                wp_send_json_error('No person data found');
+                return;
+            }
+
+            // Get the person record
+            $person_data = $result['data'][0];
+            error_log('DTR Get Workbooks Fields - Success, found ' . count($person_data) . ' fields');
+
+            wp_send_json_success([
+                'fields' => $person_data,
+                'workbooks_id' => $workbooks_id
+            ]);
+
+        } catch (Exception $e) {
+            error_log('DTR Get Workbooks Fields Error: ' . $e->getMessage());
+            wp_send_json_error('Error fetching Workbooks fields: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Handle AJAX request to regenerate employer data for a Workbooks person record
+     */
+    public function handle_regenerate_employer_data() {
+        // Check if required POST data exists
+        if (!isset($_POST['nonce']) || !isset($_POST['workbooks_id']) || !isset($_POST['user_id'])) {
+            wp_send_json_error('Missing required data');
+            return;
+        }
+        
+        // Security check
+        if (!wp_verify_nonce($_POST['nonce'], 'dtr_test_nonce') || !current_user_can('manage_options')) {
+            wp_send_json_error('Security check failed');
+            return;
+        }
+
+        $workbooks_id = intval($_POST['workbooks_id']);
+        $user_id = intval($_POST['user_id']);
+        
+        if (!$workbooks_id || !$user_id) {
+            wp_send_json_error('Invalid Workbooks ID or User ID');
+            return;
+        }
+
+        try {
+            error_log('DTR Regenerate Employer Data - Starting for Workbooks ID: ' . $workbooks_id);
+            
+            // Use the same method as content-person-record.php
+            $workbooks = function_exists('get_workbooks_instance') ? get_workbooks_instance() : null;
+            
+            if (!$workbooks) {
+                error_log('DTR Regenerate Employer Data - Workbooks instance not available');
+                wp_send_json_error('Workbooks API not available');
+                return;
+            }
+
+            // First, fetch the current record to get the current data
+            $current_record = $workbooks->assertGet('crm/people', [
+                '_start' => 0,
+                '_limit' => 1,
+                '_ff[]' => 'id',
+                '_ft[]' => 'eq',
+                '_fc[]' => $workbooks_id
+            ]);
+            
+            if (empty($current_record['data'][0])) {
+                wp_send_json_error('Person record not found in Workbooks');
+                return;
+            }
+
+            $person_data = $current_record['data'][0];
+            
+            // Get the employer name from cf_person_claimed_employer or WordPress meta
+            $claimed_employer = $person_data['cf_person_claimed_employer'] ?? '';
+            if (empty($claimed_employer)) {
+                $claimed_employer = get_user_meta($user_id, 'employer_name', true) ?: 'Supersonic Playground Ltd';
+            }
+
+            if (empty($claimed_employer)) {
+                wp_send_json_error('No employer information found to regenerate');
+                return;
+            }
+
+            // Get or create the organization ID
+            $org_id = null;
+            if (function_exists('workbooks_get_or_create_organisation_id')) {
+                $org_id = workbooks_get_or_create_organisation_id($claimed_employer);
+            }
+
+            // Prepare the update payload
+            $update_payload = [
+                'id' => $workbooks_id,
+                'lock_version' => $person_data['lock_version'] ?? 0,
+                'cf_person_claimed_employer' => $claimed_employer
+            ];
+
+            // Add employer_link if we have an organization ID
+            if ($org_id) {
+                $update_payload['employer_link'] = $org_id;
+                error_log('DTR Regenerate Employer Data - Adding employer_link: ' . $org_id);
+            }
+
+            // Update the record in Workbooks
+            $result = $workbooks->assertUpdate('crm/people', [$update_payload]);
+            
+            if (!empty($result['affected_objects']) && $result['affected_objects'] > 0) {
+                $message = "✅ Employer data regenerated successfully!\n\n";
+                $message .= "• cf_person_claimed_employer: {$claimed_employer}\n";
+                if ($org_id) {
+                    $message .= "• employer_link: {$org_id}\n";
+                    $message .= "• employer_name: Will be auto-populated by Workbooks";
+                } else {
+                    $message .= "• employer_link: Could not resolve organization ID";
+                }
+
+                error_log('DTR Regenerate Employer Data - Success for Person ID: ' . $workbooks_id);
+                wp_send_json_success(['message' => $message]);
+            } else {
+                wp_send_json_error('No changes were made to the record');
+            }
+
+        } catch (Exception $e) {
+            error_log('DTR Regenerate Employer Data Error: ' . $e->getMessage());
+            wp_send_json_error('Error regenerating employer data: ' . $e->getMessage());
+        }
     }
     
     /**
@@ -2220,15 +2861,7 @@ class DTR_Workbooks_Integration {
         $debug_entry = implode("\n", $debug_lines) . "\n";
         error_log($debug_entry, 3, $admin_log_file);
         
-        // Include the webinar handler
-        $handler_file = plugin_dir_path(__FILE__) . 'admin/form-handler-admin-webinar-registration.php';
-        if (!file_exists($handler_file)) {
-            echo '<h3>Handler File Not Found</h3>';
-            echo '<p>Expected: ' . esc_html($handler_file) . '</p>';
-            wp_die();
-        }
-        
-        require_once $handler_file;
+        // Admin test uses the live handler directly (no separate admin handler needed)
         
         // Process using existing handler
         if (function_exists('dtr_handle_live_webinar_registration')) {
@@ -3007,6 +3640,9 @@ class DTR_Workbooks_Integration {
         
         global $wpdb;
         
+        // Debug: Log that the admin page is being loaded
+        error_log("Admin Page Debug: admin_registered_events_page() called");
+        
         // Handle manual table creation request
         if (isset($_POST['create_tables'])) {
             check_admin_referer('create_tables', 'create_tables_nonce');
@@ -3014,7 +3650,38 @@ class DTR_Workbooks_Integration {
             echo '<div class="notice notice-success"><p>Database tables have been created/updated successfully.</p></div>';
         }
         
-        // Handle delete request for webinar registrations
+        // Handle request to recreate submissions table
+        if (isset($_POST['recreate_submissions_table'])) {
+            check_admin_referer('recreate_submissions_table', 'recreate_submissions_nonce');
+            
+            // Drop the table if it exists
+            $table_name = $wpdb->prefix . 'dtr_workbooks_submissions';
+            $wpdb->query("DROP TABLE IF EXISTS $table_name");
+            
+            // Create the table
+            $charset_collate = $wpdb->get_charset_collate();
+            $sql = "CREATE TABLE $table_name (
+                id bigint(20) NOT NULL AUTO_INCREMENT,
+                form_id int(11) NOT NULL,
+                post_id bigint(20) NULL,
+                status varchar(50) NOT NULL DEFAULT 'completed',
+                submission_data longtext NOT NULL,
+                created_at datetime NOT NULL,
+                updated_at datetime NULL,
+                PRIMARY KEY (id),
+                KEY form_id (form_id),
+                KEY post_id (post_id),
+                KEY status (status),
+                KEY created_at (created_at)
+            ) $charset_collate;";
+            
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            dbDelta($sql);
+            
+            echo '<div class="notice notice-success"><p>Submissions table has been recreated successfully.</p></div>';
+        }
+        
+        // Handle delete request for webinar registrations (function-based)
         if (isset($_POST['delete_registration']) && isset($_POST['user_id']) && isset($_POST['event_id'])) {
             check_admin_referer('delete_registration', 'delete_nonce');
             $user_id = intval($_POST['user_id']);
@@ -3024,7 +3691,51 @@ class DTR_Workbooks_Integration {
             if (is_array($registered_events) && in_array($event_id, $registered_events)) {
                 $registered_events = array_diff($registered_events, [$event_id]);
                 update_user_meta($user_id, 'registered_events', $registered_events);
-                echo '<div class="notice notice-success"><p>Webinar registration deleted successfully.</p></div>';
+                echo '<div class="notice notice-success"><p>Function-based webinar registration deleted successfully.</p></div>';
+            }
+        }
+        
+        // Handle delete request for class-based webinar registrations
+        if (isset($_POST['delete_class_registration']) && isset($_POST['user_id']) && isset($_POST['event_id']) && isset($_POST['registration_email'])) {
+            check_admin_referer('delete_class_registration', 'delete_class_nonce');
+            $user_id = intval($_POST['user_id']);
+            $event_id = intval($_POST['event_id']);
+            $registration_email = sanitize_email($_POST['registration_email']);
+            $registration_date = sanitize_text_field($_POST['registration_date'] ?? '');
+            
+            // Remove from user meta (if user exists)
+            if ($user_id > 0) {
+                $user_registration_key = 'webinar_registration_' . $event_id;
+                delete_user_meta($user_id, $user_registration_key);
+            }
+            
+            // Remove from post meta - match by email and optionally by registration_date for uniqueness
+            $all_registrations = get_post_meta($event_id, 'webinar_registrations', false);
+            $removed = false;
+            foreach ($all_registrations as $registration) {
+                $match = false;
+                
+                // Try to match by email and registration date if both are available
+                if (isset($registration['email']) && $registration['email'] === $registration_email) {
+                    if ($registration_date && isset($registration['registration_date'])) {
+                        $match = ($registration['registration_date'] === $registration_date);
+                    } else {
+                        $match = true; // Match by email only if no date provided
+                    }
+                }
+                
+                if ($match) {
+                    delete_post_meta($event_id, 'webinar_registrations', $registration);
+                    $removed = true;
+                    error_log("Admin Page Debug: Deleted class-based registration for email {$registration_email} from post {$event_id}");
+                    break; // Only delete the first match to avoid removing multiple registrations
+                }
+            }
+            
+            if ($removed) {
+                echo '<div class="notice notice-success"><p>Class-based webinar registration deleted successfully.</p></div>';
+            } else {
+                echo '<div class="notice notice-error"><p>Failed to delete class-based webinar registration.</p></div>';
             }
         }
         
@@ -3063,11 +3774,70 @@ class DTR_Workbooks_Integration {
             }
         }
         
-        // Get all users with registered events (webinars)
+        // Get all users with registered events (webinars) - Function-based system
         $users_with_events = get_users([
             'meta_key' => 'registered_events',
             'meta_compare' => 'EXISTS'
         ]);
+        
+        // Get all class-based webinar registrations from post meta
+        $class_based_registrations = [];
+        
+        // First, find all posts that have webinar_registrations meta using direct DB query
+        $posts_with_registrations = $wpdb->get_results("
+            SELECT DISTINCT post_id 
+            FROM {$wpdb->postmeta} 
+            WHERE meta_key = 'webinar_registrations'
+        ");
+        
+        error_log("Admin Page Debug: Direct DB query found " . count($posts_with_registrations) . " posts with webinar_registrations meta");
+        
+        $webinar_posts = [];
+        foreach ($posts_with_registrations as $result) {
+            $post = get_post($result->post_id);
+            if ($post && $post->post_status === 'publish') {
+                $webinar_posts[] = $post;
+                error_log("Admin Page Debug: Added post {$post->ID} ({$post->post_title}) to webinar_posts array");
+            }
+        }
+        
+        foreach ($webinar_posts as $post) {
+            $registrations = get_post_meta($post->ID, 'webinar_registrations', false);
+            // Debug: log what we're finding
+            error_log("Admin Page Debug: Found post {$post->ID} ({$post->post_title}) with " . count($registrations) . " registration entries");
+            foreach ($registrations as $registration) {
+                $user = null;
+                
+                // Try to find user by user_id first (for compatibility with old format)
+                if (isset($registration['user_id'])) {
+                    $user = get_user_by('ID', $registration['user_id']);
+                    if ($user) {
+                        error_log("Admin Page Debug: Found user by user_id {$registration['user_id']} - {$user->user_email}");
+                    }
+                }
+                
+                // If no user found by user_id, try to find by email (new class-based format)
+                if (!$user && isset($registration['email'])) {
+                    $user = get_user_by('email', $registration['email']);
+                    if ($user) {
+                        error_log("Admin Page Debug: Found user by email {$registration['email']} - User ID {$user->ID}");
+                    } else {
+                        error_log("Admin Page Debug: No WordPress user found for email {$registration['email']}");
+                    }
+                }
+                
+                if ($user) {
+                    error_log("Admin Page Debug: Adding registration for user {$user->user_email} (ID: {$user->ID}) on post {$post->ID}");
+                    $class_based_registrations[] = [
+                        'user' => $user,
+                        'post' => $post,
+                        'registration_data' => $registration
+                    ];
+                } else {
+                    error_log("Admin Page Debug: Could not identify user for registration: " . print_r($registration, true));
+                }
+            }
+        }
         
         // Get all lead generation submissions from database
         $submissions_table = $wpdb->prefix . 'dtr_workbooks_submissions';
@@ -3105,184 +3875,235 @@ class DTR_Workbooks_Integration {
         <div class="wrap plugin-admin-content">
             <h1>Registered Events & Lead Generation</h1>
             <h2>View and manage user registrations for webinars and lead generation submissions.</h2>
-
-            <div style="margin-bottom: 20px;">
-                <button type="button" class="button" onclick="toggleSection('webinar-section')">Toggle Webinar Registrations</button>
-                <button type="button" class="button" onclick="toggleSection('lead-section')">Toggle Lead Generation Submissions</button>
-            </div>
-
-            <script>
-            function toggleSection(sectionId) {
-                var section = document.getElementById(sectionId);
-                if (section.style.display === 'none') {
-                    section.style.display = 'block';
-                } else {
-                    section.style.display = 'none';
-                }
-            }
-            </script>
-
-            <!-- Webinar Registrations Section -->
-            <div id="webinar-section">
-                <h3>Webinar Registrations</h3>
-                <?php if (empty($users_with_events)): ?>
-                    <div class="notice notice-info">
-                        <p>No webinar registrations found.</p>
-                    </div>
-                <?php else: ?>
-                    <table class="wp-list-table widefat fixed striped">
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>User</th>
-                                <th>Email</th>
-                                <th>Event Title</th>
-                                <th>Event ID</th>
-                                <th>Registration Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($users_with_events as $user): ?>
-                                <?php 
-                                $registered_events = get_user_meta($user->ID, 'registered_events', true);
-                                $registered_events = is_array($registered_events) ? $registered_events : [];
-                                ?>
-                                <?php foreach ($registered_events as $event_id): ?>
-                                    <?php 
-                                    $post = get_post($event_id);
-                                    $event_title = $post ? $post->post_title : 'Event not found';
-                                    ?>
-                                    <tr>
-                                        <td><span class="badge" style="background: #0073aa; color: white; padding: 2px 6px; border-radius: 3px;">Webinar</span></td>
-                                        <td><?php echo esc_html($user->display_name); ?></td>
-                                        <td><?php echo esc_html($user->user_email); ?></td>
-                                        <td>
-                                            <?php if ($post): ?>
-                                                <a href="<?php echo get_edit_post_link($event_id); ?>" target="_blank">
-                                                    <?php echo esc_html($event_title); ?>
-                                                </a>
-                                            <?php else: ?>
-                                                <?php echo esc_html($event_title); ?>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td><?php echo esc_html($event_id); ?></td>
-                                        <td>
-                                            <?php 
-                                            // Try to get registration date from user meta or show N/A
-                                            $reg_date = get_user_meta($user->ID, 'event_' . $event_id . '_registration_date', true);
-                                            echo $reg_date ? esc_html(date('Y-m-d H:i:s', $reg_date)) : 'N/A';
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <form method="post" style="display: inline;">
-                                                <?php wp_nonce_field('delete_registration', 'delete_nonce'); ?>
-                                                <input type="hidden" name="user_id" value="<?php echo esc_attr($user->ID); ?>">
-                                                <input type="hidden" name="event_id" value="<?php echo esc_attr($event_id); ?>">
-                                                <input type="submit" name="delete_registration" value="Delete" 
-                                                       class="button button-secondary" 
-                                                       onclick="return confirm('Are you sure you want to delete this webinar registration?');">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+            
+            <!-- Debug Info -->
+            <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; border: 1px solid #ccc;">
+                <strong>Debug Info:</strong><br>
+                Function-based registrations: <?php echo count($users_with_events); ?><br>
+                Class-based registrations: <?php echo count($class_based_registrations); ?><br>
+                Lead submissions: <?php echo count($lead_submissions); ?><br>
+                Posts with webinar_registrations meta: <?php echo count($posts_with_registrations ?? []); ?><br>
+                Webinar posts (filtered): <?php echo count($webinar_posts ?? []); ?><br>
+                
+                <?php if (!empty($webinar_posts)): ?>
+                <br><strong>Webinar Posts Found:</strong><br>
+                <?php foreach ($webinar_posts as $post): ?>
+                    <?php 
+                    $registrations = get_post_meta($post->ID, 'webinar_registrations', false);
+                    ?>
+                    Post ID <?php echo $post->ID; ?>: "<?php echo esc_html($post->post_title); ?>" 
+                    (<?php echo count($registrations); ?> registration entries)<br>
+                    <?php if (!empty($registrations)): ?>
+                        <?php foreach ($registrations as $i => $reg): ?>
+                            &nbsp;&nbsp;Registration <?php echo $i; ?>: 
+                            <?php 
+                            $debug_user = null;
+                            if (isset($reg['user_id'])) {
+                                $debug_user = get_user_by('ID', $reg['user_id']);
+                            } elseif (isset($reg['email'])) {
+                                $debug_user = get_user_by('email', $reg['email']);
+                            }
+                            ?>
+                            
+                            <?php if ($debug_user): ?>
+                                User: <?php echo esc_html($debug_user->user_email); ?> (ID: <?php echo $debug_user->ID; ?>)
+                                <?php if (isset($reg['email'])): ?>
+                                    - Email: <?php echo esc_html($reg['email']); ?>
+                                <?php endif; ?>
+                            <?php elseif (isset($reg['email'])): ?>
+                                Email: <?php echo esc_html($reg['email']); ?> (No WP user found)
+                            <?php else: ?>
+                                No user identification - Contents: <?php echo esc_html(print_r($reg, true)); ?>
+                            <?php endif; ?>
+                            <br>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
                 <?php endif; ?>
             </div>
 
-            <br>
+            <div style="margin-bottom: 20px;">
+                <h3>Maintenance Tools</h3>
+                <form method="post" style="display: inline-block; margin-right: 10px;">
+                    <?php wp_nonce_field('recreate_submissions_table', 'recreate_submissions_nonce'); ?>
+                    <input type="submit" name="recreate_submissions_table" value="Recreate Submissions Table" class="button button-secondary" onclick="return confirm('This will delete all existing lead generation submission records and recreate the table. Are you sure?');">
+                </form>
+                
+                <p><small>Use these tools to fix database issues. The "Recreate Submissions Table" button will drop and recreate the lead generation submissions table.</small></p>
+            </div>
 
-            <!-- Lead Generation Submissions Section -->
-            <div id="lead-section">
-                <h3>Lead Generation Submissions</h3>
-                <?php if (empty($lead_submissions)): ?>
+            <!-- Combined Events & Lead Generation Section -->
+            <div>
+                <h3>All Registrations & Submissions</h3>
+                
+                <?php 
+                // Check if all arrays are empty
+                if (empty($users_with_events) && empty($class_based_registrations) && empty($lead_submissions)): 
+                ?>
                     <div class="notice notice-info">
-                        <p>No lead generation submissions found.</p>
+                        <p>No registrations or submissions found.</p>
                     </div>
                 <?php else: ?>
-                    <table class="wp-list-table widefat fixed striped">
-                        <thead>
+                
+                <table class="wp-list-table widefat fixed striped">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Event/Form Title</th>
+                            <th>ID</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        // First add function-based webinar registrations
+                        foreach ($users_with_events as $user): 
+                            $registered_events = get_user_meta($user->ID, 'registered_events', true);
+                            $registered_events = is_array($registered_events) ? $registered_events : [];
+                            
+                            foreach ($registered_events as $event_id): 
+                                $post = get_post($event_id);
+                                $event_title = $post ? $post->post_title : 'Event not found';
+                                $reg_date = get_user_meta($user->ID, 'event_' . $event_id . '_registration_date', true);
+                                $date_display = $reg_date ? date('Y-m-d H:i:s', $reg_date) : 'N/A';
+                        ?>
                             <tr>
-                                <th>Type</th>
-                                <th>User</th>
-                                <th>Email</th>
-                                <th>Form/Post</th>
-                                <th>Submission ID</th>
-                                <th>Status</th>
-                                <th>Submitted Date</th>
-                                <th>Actions</th>
+                                <td><span class="badge" style="background: #0073aa; color: white; padding: 2px 6px; border-radius: 3px;">Webinar (Function)</span></td>
+                                <td><?php echo esc_html($user->display_name); ?></td>
+                                <td><?php echo esc_html($user->user_email); ?></td>
+                                <td>
+                                    <?php if ($post): ?>
+                                        <a href="<?php echo get_edit_post_link($event_id); ?>" target="_blank">
+                                            <?php echo esc_html($event_title); ?>
+                                        </a>
+                                    <?php else: ?>
+                                        <?php echo esc_html($event_title); ?>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?php echo esc_html($event_id); ?></td>
+                                <td><span class="status-completed">Registered</span></td>
+                                <td><?php echo esc_html($date_display); ?></td>
+                                <td>
+                                    <form method="post" style="display: inline;">
+                                        <?php wp_nonce_field('delete_registration', 'delete_nonce'); ?>
+                                        <input type="hidden" name="user_id" value="<?php echo esc_attr($user->ID); ?>">
+                                        <input type="hidden" name="event_id" value="<?php echo esc_attr($event_id); ?>">
+                                        <input type="submit" name="delete_registration" value="Delete" 
+                                               class="button button-secondary" 
+                                               onclick="return confirm('Are you sure you want to delete this function-based registration?');">
+                                    </form>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($lead_submissions as $submission): ?>
-                                <?php
-                                $post_title = 'Unknown';
-                                if ($submission->post_id) {
-                                    $post = get_post($submission->post_id);
-                                    $post_title = $post ? $post->post_title : "Post ID {$submission->post_id} (not found)";
-                                }
-                                ?>
-                                <tr>
-                                    <td><span class="badge" style="background: #46b450; color: white; padding: 2px 6px; border-radius: 3px;">Lead Gen</span></td>
-                                    <td><?php echo esc_html($submission->display_name ?: 'Unknown User'); ?></td>
-                                    <td><?php echo esc_html($submission->user_email ?: 'Unknown Email'); ?></td>
-                                    <td>
-                                        <?php if ($submission->post_id && $post): ?>
-                                            <a href="<?php echo get_edit_post_link($submission->post_id); ?>" target="_blank">
-                                                <?php echo esc_html($post_title); ?>
-                                            </a>
-                                            <br><small>Form ID: <?php echo esc_html($submission->form_id); ?></small>
-                                        <?php else: ?>
+                        <?php 
+                            endforeach; 
+                        endforeach; 
+                        
+                        // Add class-based webinar registrations
+                        foreach ($class_based_registrations as $reg): 
+                            $user = $reg['user'];
+                            $post = $reg['post'];
+                            $registration_data = $reg['registration_data'];
+                            $date_display = isset($registration_data['registration_date']) ? $registration_data['registration_date'] : 'N/A';
+                        ?>
+                            <tr>
+                                <td><span class="badge" style="background: #28a745; color: white; padding: 2px 6px; border-radius: 3px;">Webinar (Class)</span></td>
+                                <td><?php echo esc_html($user->display_name); ?></td>
+                                <td><?php echo esc_html($user->user_email); ?></td>
+                                <td>
+                                    <a href="<?php echo get_edit_post_link($post->ID); ?>" target="_blank">
+                                        <?php echo esc_html($post->post_title); ?>
+                                    </a>
+                                </td>
+                                <td><?php echo esc_html($post->ID); ?></td>
+                                <td><span class="status-completed">Registered</span></td>
+                                <td><?php echo esc_html($date_display); ?></td>
+                                <td>
+                                    <form method="post" style="display: inline;">
+                                        <?php wp_nonce_field('delete_class_registration', 'delete_class_nonce'); ?>
+                                        <input type="hidden" name="user_id" value="<?php echo esc_attr($user->ID); ?>">
+                                        <input type="hidden" name="event_id" value="<?php echo esc_attr($post->ID); ?>">
+                                        <input type="hidden" name="registration_email" value="<?php echo esc_attr($registration_data['email'] ?? $user->user_email); ?>">
+                                        <input type="hidden" name="registration_date" value="<?php echo esc_attr($registration_data['registration_date'] ?? ''); ?>">
+                                        <input type="submit" name="delete_class_registration" value="Delete" 
+                                               class="button button-secondary" 
+                                               onclick="return confirm('Are you sure you want to delete this class-based registration?');">
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; 
+                        
+                        // Then add lead generation submissions
+                        foreach ($lead_submissions as $submission): 
+                            $post_title = 'Unknown';
+                            if ($submission->post_id) {
+                                $post = get_post($submission->post_id);
+                                $post_title = $post ? $post->post_title : "Post ID {$submission->post_id} (not found)";
+                            }
+                        ?>
+                            <tr>
+                                <td><span class="badge" style="background: #d58c2d; color: white; padding: 2px 6px; border-radius: 3px;">Lead Generation</span></td>
+                                <td><?php echo esc_html($submission->display_name ?: 'Unknown User'); ?></td>
+                                <td><?php echo esc_html($submission->user_email ?: 'Unknown Email'); ?></td>
+                                <td>
+                                    <?php if ($submission->post_id && $post): ?>
+                                        <a href="<?php echo get_edit_post_link($submission->post_id); ?>" target="_blank">
                                             <?php echo esc_html($post_title); ?>
-                                            <br><small>Form ID: <?php echo esc_html($submission->form_id); ?></small>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td><?php echo esc_html($submission->id); ?></td>
-                                    <td>
-                                        <span class="status-<?php echo esc_attr($submission->status); ?>"><?php echo esc_html(ucfirst($submission->status)); ?></span>
-                                    </td>
-                                    <td><?php echo esc_html($submission->created_at); ?></td>
-                                    <td>
-                                        <form method="post" style="display: inline;">
-                                            <?php wp_nonce_field('delete_lead_submission', 'delete_lead_nonce'); ?>
-                                            <input type="hidden" name="submission_id" value="<?php echo esc_attr($submission->id); ?>">
-                                            <input type="hidden" name="user_id" value="<?php echo esc_attr($submission->user_id); ?>">
-                                            <input type="hidden" name="form_id" value="<?php echo esc_attr($submission->form_id); ?>">
-                                            <input type="hidden" name="post_id" value="<?php echo esc_attr($submission->post_id); ?>">
-                                            <input type="submit" name="delete_lead_submission" value="Delete" 
-                                                   class="button button-secondary" 
-                                                   onclick="return confirm('Are you sure you want to delete this lead generation submission?');">
-                                        </form>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                                        </a>
+                                        <br><small>Form ID: <?php echo esc_html($submission->form_id); ?></small>
+                                    <?php else: ?>
+                                        <?php echo esc_html($post_title); ?>
+                                        <br><small>Form ID: <?php echo esc_html($submission->form_id); ?></small>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?php echo esc_html($submission->id); ?></td>
+                                <td>
+                                    <span class="status-<?php echo esc_attr($submission->status); ?>"><?php echo esc_html(ucfirst($submission->status)); ?></span>
+                                </td>
+                                <td><?php echo esc_html($submission->created_at); ?></td>
+                                <td>
+                                    <form method="post" style="display: inline;">
+                                        <?php wp_nonce_field('delete_lead_submission', 'delete_lead_nonce'); ?>
+                                        <input type="hidden" name="submission_id" value="<?php echo esc_attr($submission->id); ?>">
+                                        <input type="hidden" name="user_id" value="<?php echo esc_attr($submission->user_id); ?>">
+                                        <input type="hidden" name="form_id" value="<?php echo esc_attr($submission->form_id); ?>">
+                                        <input type="hidden" name="post_id" value="<?php echo esc_attr($submission->post_id); ?>">
+                                        <input type="submit" name="delete_lead_submission" value="Delete" 
+                                               class="button button-secondary" 
+                                               onclick="return confirm('Are you sure you want to delete this submission?');">
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
                 <?php endif; ?>
             </div>
             
             <br>
             <div class="card">
                 <h2>Usage Notes</h2>
-                <h4>Webinar Registrations</h4>
+                <h4>Types of Records</h4>
                 <ul>
-                    <li>Shows users who have successfully registered for webinars or events.</li>
-                    <li>Registrations are tracked in WordPress user meta under 'registered_events'.</li>
-                    <li>Synced with Workbooks CRM when registration occurs.</li>
+                    <li><span class="badge" style="background: #0073aa; color: white; padding: 2px 6px; border-radius: 3px;">Webinar (Function)</span> - Function-based webinar registrations using [dtr_webinar_registration]</li>
+                    <li><span class="badge" style="background: #28a745; color: white; padding: 2px 6px; border-radius: 3px;">Webinar (Class)</span> - Class-based webinar registrations using [dtr_webinar_registration_form]</li>
+                    <li><span class="badge" style="background: #d58c2d; color: white; padding: 2px 6px; border-radius: 3px;">Lead Generation</span> - Form submissions for lead generation campaigns</li>
                 </ul>
-                <h4>Lead Generation Submissions</h4>
+                <h4>Data Storage</h4>
                 <ul>
-                    <li>Shows all form submissions captured through the lead generation system.</li>
-                    <li>Data is stored in the custom database table 'dtr_workbooks_submissions'.</li>
-                    <li>Includes both successful and failed Workbooks CRM synchronizations.</li>
+                    <li>Function-based webinar registrations are tracked in WordPress user meta under 'registered_events'</li>
+                    <li>Class-based webinar registrations are stored in both user meta ('webinar_registration_{post_id}') and post meta ('webinar_registrations')</li>
+                    <li>Lead generation submissions are stored in the custom database table 'dtr_workbooks_submissions'</li>
+                    <li>All records are synced with Workbooks CRM when created</li>
                 </ul>
                 <h4>Important Notes</h4>
                 <ul>
-                    <li>Use the "Delete" button to remove records for testing purposes.</li>
-                    <li>Deleting records here only removes the local WordPress data - it does not affect Workbooks CRM records.</li>
-                    <li>Both sections can be toggled on/off using the buttons above.</li>
+                    <li>Use the "Delete" button to remove records for testing purposes</li>
+                    <li>Deleting records here only removes the local WordPress data - it does not affect Workbooks CRM records</li>
+                    <li>The status column indicates the sync status with Workbooks CRM</li>
                 </ul>
                 
                 <style>
@@ -3552,7 +4373,7 @@ function dtr_process_lead_generation($form_data, $form_id, $debug_id = '') {
 function dtr_process_webinar_registration($form_data, $form_id, $debug_id = '') {
     dtr_custom_log("Processing webinar registration form {$form_id}");
     
-    // Extract contact information
+    // Extract contact information from form data
     $contact_data = [
         'email' => $form_data['email'] ?? '',
         'first_name' => $form_data['first_name'] ?? '',
@@ -3561,6 +4382,28 @@ function dtr_process_webinar_registration($form_data, $form_id, $debug_id = '') 
         'phone' => $form_data['phone'] ?? '',
         'lead_source' => 'Webinar Registration'
     ];
+    
+    // Fill missing user info from logged-in WordPress user
+    if (is_user_logged_in()) {
+        $current_user = wp_get_current_user();
+        
+        if (empty($contact_data['email'])) {
+            $contact_data['email'] = $current_user->user_email;
+            dtr_custom_log("Filled email from logged-in user: " . $contact_data['email']);
+        }
+        
+        if (empty($contact_data['first_name'])) {
+            $contact_data['first_name'] = get_user_meta($current_user->ID, 'first_name', true) ?: $current_user->display_name;
+            dtr_custom_log("Filled first_name from logged-in user: " . $contact_data['first_name']);
+        }
+        
+        if (empty($contact_data['last_name'])) {
+            $contact_data['last_name'] = get_user_meta($current_user->ID, 'last_name', true);
+            dtr_custom_log("Filled last_name from logged-in user: " . $contact_data['last_name']);
+        }
+    } else {
+        dtr_custom_log("User not logged in - cannot fill missing contact data");
+    }
     
     // Create person in Workbooks
     $result = dtr_create_workbooks_person($contact_data, $debug_id);

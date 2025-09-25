@@ -155,13 +155,19 @@ function dtr_handle_media_planner_form_submit() {
     dtr_media_planner_log('Hidden data: ' . json_encode($hidden_data));
 
     // Validate required fields
-    $required_fields = ['firstName', 'lastName', 'email', 'jobTitle', 'organisation', 'city', 'country', 'phone'];
+    $required_fields = ['firstName', 'lastName', 'email', 'jobTitle', 'city', 'country', 'phone'];
     foreach ($required_fields as $field) {
         if (empty($form_data[$field])) {
             dtr_media_planner_log("VALIDATION ERROR: Missing required field: $field");
             wp_send_json_error(['message' => "Missing required field: $field"]);
             return;
         }
+    }
+    
+    // Set default value for organisation if empty
+    if (empty($form_data['organisation'])) {
+        $form_data['organisation'] = 'Unknown';
+        dtr_media_planner_log("Using default organisation value: 'Unknown'");
     }
 
     // Validate email
@@ -279,11 +285,15 @@ function dtr_create_or_find_person($workbooks, $form_data) {
             $create_response = $workbooks->assertCreate('crm/people.api', $person_data);
             dtr_media_planner_log('Person creation response: ' . json_encode($create_response));
 
-            if (empty($create_response['data'][0]['id'])) {
+            // Handle different response formats - Workbooks API might return different structures
+            if (!empty($create_response['data'][0]['id'])) {
+                $person_id = $create_response['data'][0]['id'];
+            } elseif (!empty($create_response['affected_objects'][0]['id'])) {
+                $person_id = $create_response['affected_objects'][0]['id'];
+            } else {
+                dtr_media_planner_log('ERROR: Could not find person ID in response structure: ' . print_r($create_response, true));
                 return ['success' => false, 'message' => 'Failed to create person - no ID returned'];
             }
-
-            $person_id = $create_response['data'][0]['id'];
             dtr_media_planner_log("New person created with ID: $person_id");
 
         } else {

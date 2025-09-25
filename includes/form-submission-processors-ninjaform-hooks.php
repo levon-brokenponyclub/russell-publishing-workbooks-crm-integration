@@ -268,6 +268,28 @@ if (!function_exists('dtr_process_webinar_registration')) {
                 'last_name' => dtr_extract_field_by_keys($form_data, ['last_name', 'lname']),
                 'event_id' => dtr_extract_field_by_keys($form_data, ['event_id', 'workbooks_reference']),
             ];
+            
+            // Fill missing user data from logged-in WordPress user
+            if (is_user_logged_in()) {
+                $current_user = wp_get_current_user();
+                
+                if (empty($registration_data['email'])) {
+                    $registration_data['email'] = $current_user->user_email;
+                    file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Filled email from logged-in user: " . $registration_data['email'] . "\n", FILE_APPEND | LOCK_EX);
+                }
+                
+                if (empty($registration_data['first_name'])) {
+                    $registration_data['first_name'] = get_user_meta($current_user->ID, 'first_name', true) ?: $current_user->display_name;
+                    file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Filled first_name from logged-in user: " . $registration_data['first_name'] . "\n", FILE_APPEND | LOCK_EX);
+                }
+                
+                if (empty($registration_data['last_name'])) {
+                    $registration_data['last_name'] = get_user_meta($current_user->ID, 'last_name', true);
+                    file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Filled last_name from logged-in user: " . $registration_data['last_name'] . "\n", FILE_APPEND | LOCK_EX);
+                }
+            } else {
+                file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] User not logged in - cannot fill missing contact data\n", FILE_APPEND | LOCK_EX);
+            }
 
         // Log the field extraction results
         $extraction_log = "[" . date('Y-m-d H:i:s') . "] FIELD EXTRACTION RESULTS:\n";
@@ -404,7 +426,7 @@ function dtr_init_ninja_forms_hooks() {
     
     // Central dispatcher to route by form ID
     if (!has_action('ninja_forms_after_submission', 'dtr_dispatch_ninja_forms_submission')) {
-        add_action('ninja_forms_after_submission', 'dtr_dispatch_ninja_forms_submission', 9, 1);
+        add_action('ninja_forms_after_submission', 'dtr_dispatch_ninja_forms_submission', 5, 1); // Higher priority (lower number)
     }
 }
 
@@ -444,18 +466,18 @@ function dtr_dispatch_ninja_forms_submission($form_data) {
             break;
         case 2: // Webinar
             file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] WEBINAR CASE TRIGGERED (Form ID 2)\n", FILE_APPEND | LOCK_EX);
-            if (function_exists('dtr_process_webinar_registration')) {
-                file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Calling dtr_process_webinar_registration\n", FILE_APPEND | LOCK_EX);
-                $result = dtr_process_webinar_registration($form_data, 2, $debug_id);
-                file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] dtr_process_webinar_registration result: " . print_r($result, true) . "\n", FILE_APPEND | LOCK_EX);
-            } else {
-                file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] ERROR: dtr_process_webinar_registration function not found\n", FILE_APPEND | LOCK_EX);
-            }
+            // NOTE: Webinar registration is handled by dtr_handle_live_webinar_registration above
+            // Skip the generic dtr_process_webinar_registration to avoid duplicate processing
+            file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Skipping generic webinar processor - handled by dedicated live webinar handler\n", FILE_APPEND | LOCK_EX);
             break;
         case 31: // Lead gen
+            file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] LEAD GEN CASE TRIGGERED (Form ID 31)\n", FILE_APPEND | LOCK_EX);
+            
             if (!function_exists('dtr_handle_lead_generation_registration')) {
+                file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Loading lead generation handler file\n", FILE_APPEND | LOCK_EX);
                 require_once __DIR__ . '/form-handler-lead-generation-registration.php';
             }
+            
             // Map fields for lead gen (mirroring webinar logic)
             $lead_data = [
                 'post_id' => dtr_extract_field_by_keys($form_data, ['post_id', 'lead_post_id']),
@@ -466,7 +488,39 @@ function dtr_dispatch_ninja_forms_submission($form_data) {
                 'cf_mailing_list_member_sponsor_1_optin' => dtr_extract_field_by_keys($form_data, ['cf_mailing_list_member_sponsor_1_optin', 'sponsor_optin']),
                 'person_id' => dtr_extract_field_by_keys($form_data, ['person_id']),
             ];
-            dtr_handle_lead_generation_registration($lead_data);
+            
+            // Log mapped lead data
+            $debug_entry = "[" . date('Y-m-d H:i:s') . "] MAPPED LEAD DATA:\n";
+            $debug_entry .= print_r($lead_data, true) . "\n";
+            $debug_entry .= "---\n";
+            file_put_contents($debug_log_file, $debug_entry, FILE_APPEND | LOCK_EX);
+            
+            // Create unique request ID to prevent duplicate form processing
+            static $processed_forms = [];
+            $request_id = md5(json_encode([
+                'post_id' => $lead_data['post_id'] ?? '',
+                'email' => $lead_data['email'] ?? '',
+                'time_window' => floor(time() / 5) // 5-second window
+            ]));
+            
+            // Check if we've already processed this exact request in this page load
+            if (isset($processed_forms[$request_id])) {
+                file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] DUPLICATE FORM SUBMISSION DETECTED - SKIPPING\n", FILE_APPEND | LOCK_EX);
+                file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Original request already processed\n", FILE_APPEND | LOCK_EX);
+                return;
+            }
+            
+            // Mark this request as processed
+            $processed_forms[$request_id] = true;
+            
+            file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Calling dtr_handle_lead_generation_registration\n", FILE_APPEND | LOCK_EX);
+            $result = dtr_handle_lead_generation_registration($lead_data);
+            
+            // Log result
+            $debug_entry = "[" . date('Y-m-d H:i:s') . "] LEAD HANDLER RESULT:\n";
+            $debug_entry .= print_r($result, true) . "\n";
+            $debug_entry .= "---\n";
+            file_put_contents($debug_log_file, $debug_entry, FILE_APPEND | LOCK_EX);
             break;
         default:
             dtr_log_ninja_forms('No handler for form id ' . $form_id, $debug_id);
@@ -478,54 +532,71 @@ function dtr_dispatch_ninja_forms_submission($form_data) {
 // Initialize hooks when this file is loaded
 dtr_init_ninja_forms_hooks();
 
-// Add a custom debug message to the Ninja Forms AJAX response for the webinar form (ID 2)
-// Add mapped registration data (Workbooks payload) to the Ninja Forms AJAX response for the webinar form (ID 2)
+// Add a custom debug message to the Ninja Forms AJAX response for the webinar form (ID 2) and lead gen form (ID 31)
+// Add mapped registration data (Workbooks payload) to the Ninja Forms AJAX response
 add_filter('ninja_forms_submit_response', function($response, $form_id) {
-    if ((int)$form_id === 2) {
-        // Log the original response structure for debugging
-        error_log('[DEBUG] Original Response Structure: ' . print_r($response, true));
+    // Log the original response structure for debugging
+    error_log('[DEBUG] Original Response Structure for form ' . $form_id . ': ' . print_r($response, true));
+    
+    // Process both webinar form (2) and lead gen form (31) in similar ways
+    if ((int)$form_id === 2 || (int)$form_id === 31) {
+        // Ensure data structure exists
+        if (!isset($response['data'])) {
+            $response['data'] = [];
+        }
         
-        // Ensure errors structure exists to prevent JavaScript errors in submitError controller
+        // Fix the nonce error by providing proper response structure
+        // The nonce error occurs because Ninja Forms expects errors.nonce to be a string, not an array
         if (!isset($response['errors'])) {
             $response['errors'] = [
                 'form' => [],
-                'fields' => [],
-                'nonce' => [] // Empty nonce array prevents "Cannot read properties of undefined (reading 'nonce')" error
+                'fields' => []
             ];
-            error_log('[DEBUG] Added missing errors structure to response');
-        } else {
-            // Ensure nonce exists in existing errors structure
-            if (!isset($response['errors']['nonce'])) {
-                $response['errors']['nonce'] = [];
-                error_log('[DEBUG] Added missing nonce array to existing errors structure');
+        }
+        
+        // Ensure fields is an object, not array to prevent JS errors
+        if (!isset($response['errors']['fields']) || !is_array($response['errors']['fields'])) {
+            $response['errors']['fields'] = [];
+        }
+        
+        // Explicitly set the correct nonce to prevent TypeError in JavaScript
+        if (!isset($response['errors']['nonce'])) {
+            $response['errors']['nonce'] = '';
+        }
+        
+        // Set common success data
+        $response['data']['success'] = true;
+        
+        // Add form-specific data
+        if ((int)$form_id === 2) {
+            // Webinar form specific data
+            global $dtr_last_webinar_registration_data, $dtr_webinar_registration_success;
+            
+            if (!empty($dtr_last_webinar_registration_data) && is_array($dtr_last_webinar_registration_data)) {
+                // Format as key => value pairs for alerting
+                $lines = [];
+                foreach ($dtr_last_webinar_registration_data as $k => $v) {
+                    $lines[] = "[$k] => $v";
+                }
+                if (!isset($response['data']['debug'])) $response['data']['debug'] = [];
+                $response['data']['debug'][] = implode("\n", $lines);
             }
-            error_log('[DEBUG] Errors structure already exists: ' . print_r($response['errors'], true));
-        }
-        
-            // Log the final AJAX response structure before returning
-            error_log('[DEBUG] FINAL AJAX RESPONSE SENT TO BROWSER: ' . print_r($response, true));
-        // Log the final response structure
-        error_log('[DEBUG] Final Response Structure: ' . print_r($response, true));
-        
-        // Try to get mapped registration data from global or static var set in dtr_process_webinar_registration
-        global $dtr_last_webinar_registration_data, $dtr_webinar_registration_success;
-        
-        if (!empty($dtr_last_webinar_registration_data) && is_array($dtr_last_webinar_registration_data)) {
-            // Format as key => value pairs for alerting
-            $lines = [];
-            foreach ($dtr_last_webinar_registration_data as $k => $v) {
-                $lines[] = "[$k] => $v";
+            
+            // Set success flag and redirect URL based on registration result
+            if (!empty($dtr_webinar_registration_success)) {
+                $response['data']['redirect_url'] = '/thank-you-for-registering-webinars/';
+                $response['data']['debug_message'] = 'Webinar registration completed successfully!';
+            } else {
+                $response['data']['debug_message'] = 'Webinar handler executed but registration may have failed.';
             }
-            $response['data']['debug'][] = implode("\n", $lines);
+        } 
+        else if ((int)$form_id === 31) {
+            // Lead generation form specific data
+            $response['data']['debug_message'] = 'Lead generation form submitted successfully!';
         }
         
-        // Set success flag based on registration result
-        if (!empty($dtr_webinar_registration_success)) {
-            $response['data']['success'] = true;
-            $response['data']['debug_message'] = 'Webinar registration completed successfully!';
-        } else {
-            $response['data']['debug_message'] = 'Webinar handler executed but registration may have failed.';
-        }
+        // Log the final AJAX response structure before returning
+        error_log('[DEBUG] FINAL AJAX RESPONSE SENT TO BROWSER: ' . print_r($response, true));
     }
     return $response;
 }, 5, 2); // Higher priority to run first

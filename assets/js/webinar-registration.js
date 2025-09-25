@@ -1,3 +1,19 @@
+// Log updated JS status and user info on load
+console.log('UPDATED JS: Active');
+if (window.dtr_workbooks_ajax && window.dtr_workbooks_ajax.current_user_first_name) {
+    console.log('First Name:', window.dtr_workbooks_ajax.current_user_first_name);
+    console.log('Last Name:', window.dtr_workbooks_ajax.current_user_last_name || 'Not available');
+} else {
+    // Try to get user info from global WordPress variables if available
+    if (typeof wp !== 'undefined' && wp.user && wp.user.data) {
+        console.log('First Name:', wp.user.data.display_name || 'Not available');
+        console.log('Last Name:', 'Not available from WP user data');
+    } else {
+        console.log('First Name: User not logged in or data not available');
+        console.log('Last Name: User not logged in or data not available');
+    }
+}
+
 // Single initialization function for toggle buttons
 function initializeToggleButtons() {
     console.log('Initializing webinar toggle buttons...');
@@ -262,3 +278,40 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// ===== WEBINAR REGISTRATION SUCCESS REDIRECT =====
+if (typeof jQuery !== 'undefined') {
+    jQuery(document).on('nfFormSubmitResponse', function(e, response, formId) {
+        console.log('Ninja Forms response received for Form ID', formId, ':', response);
+        
+        // Webinar registration form (ID 2)
+        if (formId == 2) {
+            console.log('Processing webinar form response...');
+            
+            // Check if registration was successful (from our debug processing)
+            if (response && response.data && response.data.success) {
+                console.log('Webinar registration successful, redirecting...');
+                // Use server-provided redirect_url if available, else default
+                var redirectUrl = response.data.redirect_url || "/thank-you-for-registering-webinars/";
+                console.log('Redirecting to:', redirectUrl);
+                window.location.href = redirectUrl;
+            } else {
+                // Check if the form completed successfully even without explicit success flag
+                // Ninja Forms considers it successful if no errors exist
+                var hasErrors = response && response.errors && (
+                    (response.errors.form && response.errors.form.length > 0) ||
+                    (response.errors.fields && Object.keys(response.errors.fields).length > 0)
+                );
+                
+                if (!hasErrors) {
+                    console.log('No errors detected, assuming success and redirecting...');
+                    var redirectUrl = "/thank-you-for-registering-webinars/";
+                    console.log('Redirecting to:', redirectUrl);
+                    window.location.href = redirectUrl;
+                } else {
+                    console.log('Form submission had errors, not redirecting');
+                }
+            }
+        }
+    });
+}

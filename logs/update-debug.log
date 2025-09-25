@@ -41284,3 +41284,57 @@ Array
 
 [2025-09-22 21:48:00] [UPDATE PERSON] user_id=28 target_person_id=4318866
 Exception: Unexpected response from Workbooks API
+[2025-09-25 16:29:27] [AOI MAP] Selected TOI: cf_person_tools_techniques
+Derived AOI set (first 10 shown): cf_person_analysis,cf_person_assays,cf_person_imaging,cf_person_artificial_intelligencemachine_learning,cf_person_informatics,cf_person_lab_automation,cf_person_molecular_diagnostics,cf_person_screening_sequencing
+Drugs therapies selected? no mapping count=8
+[2025-09-25 16:29:27] [UPDATE PERSON] user_id=28 target_person_id=4318866 fallback=no
+Payload:
+Array
+(
+    [id] => 4318866
+    [lock_version] => 0
+    [person_personal_title] => Mr.
+    [person_first_name] => John
+    [person_last_name] => Doe
+    [person_job_title] => Developer
+    [main_location[telephone]] => 123-456-7890
+    [main_location[country]] => United States
+    [main_location[town]] => Test City
+    [main_location[postcode]] => 12345
+    [cf_person_dtr_news] => 1
+    [cf_person_dtr_events] => 1
+    [cf_person_dtr_third_party] => 0
+    [cf_person_dtr_webinar] => 1
+    [cf_person_business] => 0
+    [cf_person_diseases] => 0
+    [cf_person_drugs_therapies] => 0
+    [cf_person_genomics_3774] => 0
+    [cf_person_genomics] => 0
+    [cf_person_genomics_3744] => 0
+    [cf_person_research_development] => 0
+    [cf_person_technology] => 0
+    [cf_person_tools_techniques] => 1
+    [cf_person_analysis] => 1
+    [cf_person_assays] => 1
+    [cf_person_biomarkers] => 0
+    [cf_person_clinical_trials] => 0
+    [cf_person_preclinical_research] => 0
+    [cf_person_drug_discovery_processes] => 0
+    [cf_person_hit_to_lead] => 0
+    [cf_person_imaging] => 1
+    [cf_person_toxicology] => 0
+    [cf_person_artificial_intelligencemachine_learning] => 1
+    [cf_person_cell_gene_therapy] => 0
+    [cf_person_informatics] => 1
+    [cf_person_lab_automation] => 1
+    [cf_person_molecular_diagnostics] => 1
+    [cf_person_personalised_medicine] => 0
+    [cf_person_screening_sequencing] => 1
+    [cf_person_stem_cells] => 0
+    [cf_person_targets] => 0
+    [cf_person_translational_science] => 0
+    [cf_person_protein_production] => 0
+)
+
+[2025-09-25 16:29:28] [UPDATE PERSON] user_id=28 target_person_id=4318866
+Exception: Unexpected response from Workbooks API

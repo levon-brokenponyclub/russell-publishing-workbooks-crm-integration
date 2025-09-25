@@ -1,5 +1,14 @@
 /* Dynamic Forms - Global Input and Label Styles */
 
+.dtr-reset-form-wrapper .dtr-reset-form.form-container {
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.15) !important;
+    padding:35px !important;
+}
+
+.dtr-login-form.form-container .form-field {
+    margin-bottom:0 !important;
+}
+
 /* Global placeholder styling */
 ::placeholder {
     color: #333 !important;
@@ -9,11 +18,12 @@
 .form-row {
     display: flex !important;
     gap: 1rem !important;
-    margin-bottom: 1.5rem !important;
+    margin-bottom: 0rem !important;
 }
 
 .form-field {
     flex: 1 !important;
+    margin-bottom: 1.5rem;
 }
 
 .form-field.full-width {
@@ -30,10 +40,15 @@
 
 /* Basic label styling */
 .form-field label {
-    display: block !important;
-    margin-bottom: 0.5rem !important;
-    font-weight: bold !important;
-    color: #2d3748 !important;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-field label .required {
+    color: #e32;
+    margin-left: 0.2rem;
 }
 
 /* Global input and select styling */
@@ -62,9 +77,9 @@
 .form-field select {
     width: 100% !important;
     padding: 0.75rem !important;
-    border: 1px solid #cbd5e0 !important;
-    border-radius: 4px !important;
-    font-size: 1rem !important;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
     transition: border-color 0.2s ease !important;
     font-size:15px !important;
 }

@@ -116,7 +116,6 @@ document.addEventListener('click', function(event) {
                 var t = document.querySelector('[aria-controls="' + m.id + '"]');
                 if (t) {
                     t.setAttribute('aria-expanded', 'false');
-                    // Remove toggle-open class from buttons when closing
                     if (t.classList.contains('is-toggle')) {
                         t.classList.remove('toggle-open');
                     }
@@ -125,29 +124,55 @@ document.addEventListener('click', function(event) {
         });
     }
 
+    function handleButtonClick(button, menu, isFromInitialize = false) {
+        if (!button || !menu) return;
+
+        // If this is from initialize and the button is already handled, skip
+        if (isFromInitialize && button.hasAttribute('data-toggle-initialized')) {
+            console.log('Button already initialized:', button);
+            return;
+        }
+
+        // Toggle menu state
+        const isOpen = menu.classList.contains('ks-open');
+        if (isOpen) {
+            menu.classList.remove('ks-open');
+            button.classList.remove('toggle-open');
+            button.setAttribute('aria-expanded', 'false');
+        } else {
+            closeAllExcept(menu);
+            menu.classList.add('ks-open');
+            button.classList.add('toggle-open');
+            button.setAttribute('aria-expanded', 'true');
+        }
+
+        // Mark as initialized
+        button.setAttribute('data-toggle-initialized', 'true');
+        console.log('Button clicked, menu state:', !isOpen, 'Button:', button, 'Menu:', menu);
+    }
+
     function initializeSplitButton() {
         document.querySelectorAll('.ks-split-btn').forEach(function (container) {
             var mainBtn = container.querySelector('.ks-main-btn, .ks-main-btn-global');
             var menu = container.querySelector('.ks-menu');
-            if (!menu) return;
+            if (!menu || !mainBtn) return;
 
-            // Handle main button clicks (if it has is-toggle class)
-            if (mainBtn && mainBtn.classList.contains('is-toggle') && !mainBtn.hasAttribute('data-initialized') && !mainBtn.hasAttribute('data-toggle-initialized')) {
-                mainBtn.setAttribute('data-initialized', 'true');
-                mainBtn.addEventListener('click', function (e) {
+            // Ensure menu has an ID
+            if (!menu.id) {
+                menu.id = 'ks-menu-' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            // Update button attributes
+            mainBtn.setAttribute('aria-controls', menu.id);
+            mainBtn.setAttribute('aria-haspopup', 'true');
+            mainBtn.setAttribute('aria-expanded', menu.classList.contains('ks-open') ? 'true' : 'false');
+
+            // Handle main button clicks
+            if (mainBtn.classList.contains('is-toggle')) {
+                mainBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
                     e.stopPropagation();
-                    var isOpen = menu.classList.toggle('ks-open');
-                    
-                    // Toggle the toggle-open class on the button
-                    if (isOpen) {
-                        mainBtn.classList.add('toggle-open');
-                    } else {
-                        mainBtn.classList.remove('toggle-open');
-                    }
-                    
-                    mainBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-                    closeAllExcept(isOpen ? menu : null);
-                    console.log('Main button clicked, menu classes:', menu.className, 'button classes:', mainBtn.className);
+                    handleButtonClick(mainBtn, menu, true);
                 });
             }
 
@@ -177,31 +202,15 @@ document.addEventListener('click', function(event) {
 
     // Global click handler for any .ks-main-btn or .ks-main-btn-global
     document.addEventListener('click', function(e) {
-        // Check if clicked element is a .ks-main-btn or .ks-main-btn-global
-        if (e.target.classList.contains('ks-main-btn') || e.target.classList.contains('ks-main-btn-global')) {
-            var button = e.target;
-            var container = button.closest('.ks-split-btn');
+        const button = e.target.closest('.ks-main-btn, .ks-main-btn-global');
+        if (button && button.classList.contains('is-toggle')) {
+            e.preventDefault();
+            e.stopPropagation();
+            const container = button.closest('.ks-split-btn');
             if (container) {
-                var menu = container.querySelector('.ks-menu');
-                
-                // Only handle toggle functionality if button has is-toggle class AND is not handled by another script
-                if (menu && button.classList.contains('is-toggle') && !button.hasAttribute('data-toggle-initialized')) {
-                    console.log('Frontend.js handling button - no data-toggle-initialized found');
-                    e.stopPropagation();
-                    var isOpen = menu.classList.toggle('ks-open');
-                    
-                    // Toggle the toggle-open class on the button
-                    if (isOpen) {
-                        button.classList.add('toggle-open');
-                    } else {
-                        button.classList.remove('toggle-open');
-                    }
-                    
-                    button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-                    closeAllExcept(isOpen ? menu : null);
-                    console.log('Global .ks-main-btn/.ks-main-btn-global.is-toggle clicked, menu classes:', menu.className, 'button classes:', button.className);
-                } else if (menu && button.classList.contains('is-toggle') && button.hasAttribute('data-toggle-initialized')) {
-                    console.log('Frontend.js SKIPPING button - data-toggle-initialized found:', button.getAttribute('data-toggle-initialized'));
+                const menu = container.querySelector('.ks-menu');
+                if (menu) {
+                    handleButtonClick(button, menu);
                 }
             }
         }

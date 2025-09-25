@@ -39,10 +39,14 @@ A comprehensive WordPress plugin enabling seamless integration between WordPress
 * **Login Integration**: Seamless integration with theme login modals and fallback authentication systems
 * **Form State Management**: Dynamic form states with loading animations, success/error feedback, and user guidance
 
-### 👤 Membership & My Account
-* My Account preference & AOI/TOI form synchronizes changes back to Workbooks
-* Admin updates mirror into user meta (bidirectional parity)
-* Optional WordPress user creation with stored Workbooks identifiers
+### 👤 **Enhanced Membership & My Account System**
+* **Comprehensive Account Details Management**: Complete user account interface with both display tables and update forms for personal information management
+* **Robust Field Mapping System**: Advanced fallback chains for user meta field retrieval supporting multiple field name variations (title, employer, contact information)
+* **Bidirectional CRM Synchronization**: My Account preference & AOI/TOI form synchronizes changes back to Workbooks with automatic WordPress meta updates
+* **User Meta Integrity**: Intelligent repair system for existing users with missing data, automatically updating WordPress meta with correct Workbooks CRM information
+* **Real-time Form Processing**: Seamless form submission with immediate display of updated values and comprehensive error handling
+* **Admin Integration**: Admin updates mirror into user meta for true bidirectional parity between WordPress and Workbooks CRM
+* **WordPress User Creation**: Optional automatic user creation with stored Workbooks identifiers and complete profile synchronization
 
 ### 🏢 Employer Management
 * Custom table `wp_workbooks_employers` + transient cache
@@ -54,6 +58,13 @@ A comprehensive WordPress plugin enabling seamless integration between WordPress
 * Exact > starts-with > contains ordering
 * Paginated results (page/limit) with minimal counting for performance
 * Graceful empty dataset on nonce failure (avoids UI break)
+
+### 🔧 **Account Management & Data Integrity**
+* **Field Mapping Reliability**: Comprehensive fallback systems for user meta field retrieval ensuring consistent data display across all account interfaces
+* **Data Collection Bug Fixes**: Resolved critical issues in HTML form handlers where missing field assignments caused incomplete user meta storage
+* **Automatic Data Repair**: Intelligent one-time repair functionality for existing users with incomplete account information
+* **Form State Management**: Enhanced form submission workflow with proper POST handling and immediate UI updates without manual refresh requirements
+* **CRM Synchronization**: Robust bidirectional sync between WordPress user meta and Workbooks CRM ensuring data consistency across platforms
 
 ### 🧪 Observability & Logging
 * Central `logs/` directory (daily rolling + specialized debug logs)
@@ -276,6 +287,17 @@ Disable afterward to reduce I/O.
 - **Extended User Management**: Enhanced user profile integration with bidirectional Workbooks CRM data synchronization and improved admin user management tools.
 - **Log Management Tools**: Advanced log viewer with filtering, search capabilities, automatic cleanup features, and specialized logging for HTML form submissions and membership registration flows.
 - **Security Enhancements**: Improved nonce handling, CSRF protection, and secure form processing with comprehensive validation and sanitization of all user inputs.
+
+### 2.1.2 (2025-09-25)
+- **Account Details System Overhaul**: Complete refactoring of WordPress account details display and update functionality with comprehensive field mapping improvements for Title and Employer fields across all user interfaces.
+- **Field Mapping Consistency**: Implemented robust fallback chains for user meta field retrieval, ensuring Title and Employer fields display correctly in both display tables and update forms with support for multiple field name variations (e.g., 'title', 'cf_person_personal_title', 'person_personal_title').
+- **HTML Form Handler Bug Fixes**: Resolved critical data collection issue in membership registration where employer field was missing from data array, causing empty employer meta storage despite correct Workbooks CRM synchronization.
+- **User Meta Repair System**: Added intelligent one-time repair functionality for existing users with missing employer data, automatically updating WordPress meta fields with correct information from Workbooks CRM when available.
+- **Dropdown Selection Enhancement**: Improved title dropdown selection logic in update forms to handle both "Mr" and "Mr." variations, ensuring proper selection state display across different data formats.
+- **Form Submission Workflow**: Streamlined form submission process with proper POST handling, automatic page refresh, and immediate display of updated values without requiring manual refresh.
+- **Data Integrity Improvements**: Enhanced data consistency between WordPress user meta storage and Workbooks CRM synchronization, ensuring both systems maintain accurate user information.
+- **Shortcode Reliability**: Strengthened `[dtr-my-account-details]` and `[dtr-my-account-details_table]` shortcodes with comprehensive error handling and improved field retrieval logic.
+- **Migration Towards Pure HTML Forms**: Laid groundwork for future transition from Ninja Forms to pure HTML forms with ACF-driven input generation, maintaining backward compatibility while preparing for enhanced form flexibility and performance.
 
 ### 2.1.0
 - Refactored both webinar and lead generation registration logic into dedicated, modular classes and handler files for maintainability and testability.

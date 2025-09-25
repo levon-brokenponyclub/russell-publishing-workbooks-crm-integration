@@ -508,4 +508,69 @@ jQuery(document).ready(function($) {
     }
 
     $(document).on('input', '#dtr-confirm-password', checkResetPasswordMatch);
+
+    // Change password form submission (for logged-in users)
+    $(document).on('submit', '#dtr-change-password-form', function(e) {
+        e.preventDefault();
+        
+        const form = $(this);
+        const submitBtn = $('#dtr-change-submit');
+        const currentPassword = $('#dtr-current-password').val();
+        const newPassword = $('#dtr-new-password').val();
+        const confirmPassword = $('#dtr-confirm-password').val();
+        
+        clearFormErrors(form);
+        clearMessages();
+        
+        // Client-side validation
+        if (!currentPassword) {
+            showMessage('Please enter your current password.', 'error', '#dtr-change-messages');
+            return;
+        }
+        
+        if (newPassword.length < 8) {
+            showMessage('New password must be at least 8 characters long.', 'error', '#dtr-change-messages');
+            return;
+        }
+        
+        if (newPassword !== confirmPassword) {
+            showMessage('New passwords do not match.', 'error', '#dtr-change-messages');
+            return;
+        }
+        
+        setButtonLoading(submitBtn, true);
+        
+        $.ajax({
+            url: dtr_login_ajax.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'dtr_change_password',
+                user_id: $('input[name="user_id"]').val(),
+                current_password: currentPassword,
+                new_password: newPassword,
+                confirm_password: confirmPassword,
+                dtr_change_password_nonce: $('input[name="dtr_change_password_nonce"]').val()
+            },
+            success: function(response) {
+                setButtonLoading(submitBtn, false);
+                
+                if (response.success) {
+                    showMessage(response.data.message, 'success', '#dtr-change-messages');
+                    form[0].reset();
+                    
+                    setTimeout(() => {
+                        if (response.data.redirect) {
+                            window.location.href = response.data.redirect;
+                        }
+                    }, 3000);
+                } else {
+                    showMessage(response.data.message, 'error', '#dtr-change-messages');
+                }
+            },
+            error: function() {
+                setButtonLoading(submitBtn, false);
+                showMessage('Something went wrong. Please try again.', 'error', '#dtr-change-messages');
+            }
+        });
+    });
 });

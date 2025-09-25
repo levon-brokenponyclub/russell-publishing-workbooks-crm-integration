@@ -141,6 +141,12 @@ function dtr_html_form_submit_handler() {
 function dtr_html_membership_process($post_data) {
     $debug_id = 'REG-' . uniqid();
     
+    // Validate post_data is an array
+    if (!is_array($post_data)) {
+        dtr_html_log("[ERROR] Invalid post_data received: " . gettype($post_data));
+        return false;
+    }
+    
     // Get plugin test mode setting
     $options = get_option('dtr_workbooks_options', []);
     $test_mode = !empty($options['test_mode_forms']['html']) && $options['test_mode_forms']['html'] == 1;
@@ -149,10 +155,19 @@ function dtr_html_membership_process($post_data) {
     dtr_html_log($header);
     dtr_html_log("[{$debug_id}] [ENTRY] Processing membership registration for HTML form");
     
-    // Collect and validate data
-    $data = dtr_html_collect_membership_data($post_data, $debug_id);
-    if (!$data) {
-        dtr_html_membership_log_failure('Validation or duplicate WP user', $post_data);
+    try {
+        // Log raw post data keys for debugging
+        dtr_html_log("[{$debug_id}] [DEBUG] Raw post data keys: " . implode(', ', array_keys($post_data)));
+        
+        // Collect and validate data
+        $data = dtr_html_collect_membership_data($post_data, $debug_id);
+        if (!$data) {
+            dtr_html_membership_log_failure('Validation or duplicate WP user', $post_data);
+            return false;
+        }
+    } catch (Throwable $t) {
+        dtr_html_log("[{$debug_id}] [ERROR] Exception in data collection: " . $t->getMessage());
+        dtr_html_membership_log_failure('Exception in data collection: ' . $t->getMessage(), $post_data);
         return false;
     }
 
@@ -164,18 +179,41 @@ function dtr_html_membership_process($post_data) {
     }
 
     // Create WordPress user and meta
-    $user_id = dtr_html_create_wp_user_and_meta($data, $debug_id);
-    if (!$user_id) {
-        dtr_html_membership_log_failure('WordPress user creation failed', $post_data, null, $data);
+    try {
+        $user_id = dtr_html_create_wp_user_and_meta($data, $debug_id);
+        if (!$user_id) {
+            dtr_html_membership_log_failure('WordPress user creation failed', $post_data, null, $data);
+            return false;
+        }
+        
+        // Store original form data as JSON for debugging purposes
+        update_user_meta($user_id, 'form_data_json', json_encode([
+            'form_fields' => array_keys($post_data),
+            'data_fields' => array_keys($data),
+            'timestamp' => current_time('mysql')
+        ]));
+    } catch (Throwable $t) {
+        dtr_html_log("[{$debug_id}] [ERROR] Exception in user creation: " . $t->getMessage());
+        dtr_html_membership_log_failure('Exception in user creation: ' . $t->getMessage(), $post_data, null, $data);
         return false;
     }
 
     // Apply marketing preferences and topics of interest
-    dtr_html_apply_marketing_and_interests($user_id, $data, $debug_id);
+    try {
+        dtr_html_apply_marketing_and_interests($user_id, $data, $debug_id);
+    } catch (Throwable $t) {
+        dtr_html_log("[{$debug_id}] [ERROR] Exception in marketing preferences: " . $t->getMessage());
+        // Continue despite errors in marketing preferences
+    }
 
     // Handle AOI mapping
-    if (!dtr_html_handle_aoi_mapping($user_id, $debug_id)) {
-        dtr_html_log("[{$debug_id}] [WARNING] AOI mapping failed but continuing");
+    try {
+        if (!dtr_html_handle_aoi_mapping($user_id, $debug_id)) {
+            dtr_html_log("[{$debug_id}] [WARNING] AOI mapping failed but continuing");
+        }
+    } catch (Throwable $t) {
+        dtr_html_log("[{$debug_id}] [ERROR] Exception in AOI mapping: " . $t->getMessage());
+        // Continue despite errors in AOI mapping
     }
 
     // Workbooks integration
@@ -259,11 +297,17 @@ function dtr_html_collect_membership_data($post_data, $debug_id) {
     $raw_title = sanitize_text_field($post_data['title'] ?? '');
     $title = function_exists('dtr_nf_normalize_title') ? dtr_nf_normalize_title($raw_title) : $raw_title;
     
-    // Debug form data processing
-    $raw_employer = sanitize_text_field($post_data['employer'] ?? '');
+    // Debug form data processing - use claimed_employer field
+    $raw_employer = sanitize_text_field($post_data['claimed_employer'] ?? '');
     dtr_html_log("[{$debug_id}] [DEBUG] Raw title from form: '{$raw_title}' -> normalized: '{$title}'");
     dtr_html_log("[{$debug_id}] [DEBUG] Raw employer from form: '{$raw_employer}'");
     dtr_html_log("[{$debug_id}] [DEBUG] Form data keys available: " . implode(', ', array_keys($post_data)));
+    dtr_html_log("[{$debug_id}] [DEBUG] Title: '{$title}', Claimed Employer: '{$raw_employer}'");
+    
+    // Fix field name inconsistencies between form submission and backend
+    $phone = isset($post_data['phone']) ? $post_data['phone'] : (isset($post_data['telephone']) ? $post_data['telephone'] : '');
+    $job_title = isset($post_data['jobTitle']) ? $post_data['jobTitle'] : (isset($post_data['job_title']) ? $post_data['job_title'] : '');
+    $city = isset($post_data['city']) ? $post_data['city'] : (isset($post_data['town']) ? $post_data['town'] : '');
     
     $data = [
         'title' => $title,
@@ -271,12 +315,12 @@ function dtr_html_collect_membership_data($post_data, $debug_id) {
         'last_name' => sanitize_text_field($post_data['lastName'] ?? ''),
         'email' => sanitize_email($post_data['email'] ?? ''),
         'password' => $post_data['password'] ?? '',
-        'employer' => $raw_employer,
-        'claimed_employer' => $raw_employer, // Sync both fields
-        'telephone' => sanitize_text_field($post_data['telephone'] ?? ''),
-        'job_title' => sanitize_text_field($post_data['jobTitle'] ?? ''),
+        'claimed_employer' => $raw_employer,
+        'employer' => $raw_employer,  // Add employer field for WordPress meta storage
+        'telephone' => sanitize_text_field($phone),
+        'job_title' => sanitize_text_field($job_title),
         'country' => sanitize_text_field($post_data['country'] ?? ''),
-        'town' => sanitize_text_field($post_data['town'] ?? ''),
+        'town' => sanitize_text_field($city),
         'postcode' => sanitize_text_field($post_data['postcode'] ?? ''),
         'marketing_selected' => [],
         'toi_selected' => []
@@ -343,26 +387,184 @@ function dtr_html_create_wp_user_and_meta($data, $debug_id) {
     
     dtr_html_log("[{$debug_id}] [SUCCESS] WP user created - ID {$user_id}");
     
+    // Ensure we have valid data before storing
+    $employer = !empty($data['employer']) ? $data['employer'] : '';
+    $claimed_employer = !empty($data['claimed_employer']) ? $data['claimed_employer'] : $employer;
+    $job_title = !empty($data['job_title']) ? $data['job_title'] : '';
+    $telephone = !empty($data['telephone']) ? $data['telephone'] : '';
+    $title = !empty($data['title']) ? $data['title'] : '';
+    $town = !empty($data['town']) ? $data['town'] : '';
+    $country = !empty($data['country']) ? $data['country'] : '';
+    $postcode = !empty($data['postcode']) ? $data['postcode'] : '';
+    
     $core_meta = [
+        // WordPress standard meta
         'first_name' => $data['first_name'],
         'last_name' => $data['last_name'],
-        'cf_person_personal_title' => $data['title'],
+        'nickname' => $data['first_name'] . ' ' . $data['last_name'],
+        'display_name' => $data['first_name'] . ' ' . $data['last_name'],
+        
+        // Workbooks field mappings - ensuring all required fields are stored
+        'cf_person_personal_title' => $title,
+        'person_personal_title' => $title, // Direct Workbooks field mapping
         'cf_person_first_name' => $data['first_name'],
         'cf_person_last_name' => $data['last_name'],
         'cf_person_email_address' => $data['email'],
-        'cf_person_telephone_number' => $data['telephone'],
-        'cf_person_job_title' => $data['job_title'],
-        'employer_name' => $data['employer'],  // Set employer_name for admin display
-        'cf_person_employer' => $data['employer'],
-        'cf_person_claimed_employer' => $data['claimed_employer'],
-        'cf_person_country' => $data['country'],
-        'cf_person_town_city' => $data['town'],
-        'cf_person_post_code' => $data['postcode'],
+        'cf_person_telephone_number' => $telephone,
+        'cf_person_job_title' => $job_title,
+        'cf_person_employer' => $employer,
+        // 'cf_person_claimed_employer' => $claimed_employer,
+        'cf_person_country' => $country,
+        'cf_person_town_city' => $town,
+        'cf_person_post_code' => $postcode,
+        
+        // Admin display fields - these are crucial for WordPress admin
+        'employer_name' => $employer,  // This is what WP admin typically shows
+        'job_title' => $job_title,    // Standard WP field
+        'telephone' => $telephone,    // Standard contact field
+        'title' => $title,           // Personal title (Mr, Ms, Dr, etc.)
+        'town' => $town,             // Location field
+        'country' => $country,       // Location field
+        'postcode' => $postcode,     // Location field
+        
+        // Store original form field values to preserve all data
+        'form_title' => $title,
+        'form_telephone' => $telephone, 
+        'form_job_title' => $job_title,
+        'form_employer' => $employer,
+        'form_country' => $country,
+        'form_town' => $town,
+        'form_postcode' => $postcode,
+        
+        // Additional backup fields to ensure data isn't lost
+        'user_employer' => $employer,
+        'user_job_title' => $job_title,
+        'user_telephone' => $telephone,
+        'user_title' => $title,
+        'user_town' => $town,
+        'user_country' => $country,
+        'user_postcode' => $postcode,
+        
         'created_via_html_form' => 1  // Track that this user was created via HTML form
     ];
     
+    // Log all meta fields being saved with console-style output
+    dtr_html_log("[{$debug_id}] [CONSOLE] ============ USER META STORAGE CONSOLE LOG ============");
+    dtr_html_log("[{$debug_id}] [CONSOLE] User ID: {$user_id}");
+    dtr_html_log("[{$debug_id}] [CONSOLE] Email: {$data['email']}");
+    dtr_html_log("[{$debug_id}] [CONSOLE] ");
+    dtr_html_log("[{$debug_id}] [CONSOLE] REQUIRED FIELDS BEING STORED:");
+    dtr_html_log("[{$debug_id}] [CONSOLE] ===================================");
+    dtr_html_log("[{$debug_id}] [CONSOLE] Employer: '{$employer}' -> Fields: employer_name, cf_person_employer, form_employer, user_employer");
+    dtr_html_log("[{$debug_id}] [CONSOLE] Job Title: '{$job_title}' -> Fields: job_title, cf_person_job_title, form_job_title, user_job_title");
+    dtr_html_log("[{$debug_id}] [CONSOLE] Telephone: '{$telephone}' -> Fields: telephone, cf_person_telephone_number, form_telephone, user_telephone");
+    dtr_html_log("[{$debug_id}] [CONSOLE] Title: '{$title}' -> Fields: title, cf_person_personal_title, person_personal_title, form_title, user_title");
+    dtr_html_log("[{$debug_id}] [CONSOLE] Town: '{$town}' -> Fields: town, cf_person_town_city, form_town, user_town");
+    dtr_html_log("[{$debug_id}] [CONSOLE] Country: '{$country}' -> Fields: country, cf_person_country, form_country, user_country");
+    dtr_html_log("[{$debug_id}] [CONSOLE] Post Code: '{$postcode}' -> Fields: postcode, cf_person_post_code, form_postcode, user_postcode");
+    dtr_html_log("[{$debug_id}] [CONSOLE] ");
+    dtr_html_log("[{$debug_id}] [CONSOLE] ALL META FIELDS BEING STORED:");
+    dtr_html_log("[{$debug_id}] [CONSOLE] ==============================");
+    
+    // Save each meta field individually and verify it was saved
+    $storage_results = [];
     foreach ($core_meta as $key => $value) {
-        update_user_meta($user_id, $key, $value);
+        $result = update_user_meta($user_id, $key, $value);
+        $verification = get_user_meta($user_id, $key, true);
+        $success = ($verification === $value || (!empty($value) && !empty($verification)));
+        
+        $storage_results[$key] = [
+            'value' => $value,
+            'result' => $result,
+            'verification' => $verification,
+            'success' => $success
+        ];
+        
+        $status = $success ? '✓ SUCCESS' : '✗ FAILED';
+        $display_value = is_array($value) ? json_encode($value) : $value;
+        dtr_html_log("[{$debug_id}] [CONSOLE] {$status} | {$key} = '{$display_value}' | Verified: '{$verification}'");
+        
+        // If critical field failed to save, log warning
+        if (!$success && in_array($key, ['employer_name', 'job_title', 'telephone', 'title', 'town', 'country', 'postcode'])) {
+            dtr_html_log("[{$debug_id}] [WARNING] Critical field {$key} may not have saved properly");
+        }
+    }
+    
+    // Double-check that the critical fields were saved by re-reading them
+    dtr_html_log("[{$debug_id}] [CONSOLE] ");
+    dtr_html_log("[{$debug_id}] [CONSOLE] CRITICAL FIELDS VERIFICATION:");
+    dtr_html_log("[{$debug_id}] [CONSOLE] =============================");
+    $critical_fields = ['employer_name', 'job_title', 'telephone', 'title', 'town', 'country', 'postcode'];
+    $verification_success = true;
+    
+    foreach ($critical_fields as $field) {
+        $saved_value = get_user_meta($user_id, $field, true);
+        $expected_value = $core_meta[$field] ?? '';
+        $is_valid = ($saved_value === $expected_value) && !empty($saved_value);
+        $status = $is_valid ? '✓ VERIFIED' : '✗ MISSING/FAILED';
+        
+        if (!$is_valid) {
+            $verification_success = false;
+        }
+        
+        dtr_html_log("[{$debug_id}] [CONSOLE] {$status} | {$field} = '{$saved_value}' (expected: '{$expected_value}')");
+    }
+    
+    // Summary of storage operation
+    $total_fields = count($core_meta);
+    $successful_fields = count(array_filter($storage_results, function($result) { return $result['success']; }));
+    $failed_fields = $total_fields - $successful_fields;
+    
+    dtr_html_log("[{$debug_id}] [CONSOLE] ");
+    dtr_html_log("[{$debug_id}] [CONSOLE] STORAGE SUMMARY:");
+    dtr_html_log("[{$debug_id}] [CONSOLE] ===============");
+    dtr_html_log("[{$debug_id}] [CONSOLE] Total Fields: {$total_fields}");
+    dtr_html_log("[{$debug_id}] [CONSOLE] Successfully Stored: {$successful_fields}");
+    dtr_html_log("[{$debug_id}] [CONSOLE] Failed: {$failed_fields}");
+    dtr_html_log("[{$debug_id}] [CONSOLE] Critical Fields Valid: " . ($verification_success ? 'YES' : 'NO'));
+    dtr_html_log("[{$debug_id}] [CONSOLE] =========== END USER META STORAGE CONSOLE LOG ===========");
+    
+    // Store debug data without relying on $post_data
+    try {
+        // Safely store debug info with error checking
+        $debug_data = [
+            'data_fields' => is_array($data) ? array_keys($data) : [],
+            'timestamp' => current_time('mysql'),
+            'debug_id' => $debug_id,
+            // Store selective sensitive data for debugging
+            'field_status' => [
+                'has_first_name' => !empty($data['first_name']),
+                'has_last_name' => !empty($data['last_name']),
+                'has_email' => !empty($data['email']),
+                'has_telephone' => !empty($data['telephone']),
+                'has_employer' => !empty($data['employer']),
+                'has_job_title' => !empty($data['job_title']),
+                'has_title' => !empty($data['title']),
+                'has_town' => !empty($data['town']),
+                'has_country' => !empty($data['country']),
+                'has_postcode' => !empty($data['postcode']),
+                'marketing_count' => count($data['marketing_selected'] ?? []),
+                'toi_count' => count($data['toi_selected'] ?? [])
+            ],
+            // Store the actual values for debugging (non-sensitive)
+            'stored_values' => [
+                'employer_name' => get_user_meta($user_id, 'employer_name', true),
+                'job_title' => get_user_meta($user_id, 'job_title', true),
+                'telephone' => get_user_meta($user_id, 'telephone', true),
+                'title' => get_user_meta($user_id, 'title', true),
+                'town' => get_user_meta($user_id, 'town', true),
+                'country' => get_user_meta($user_id, 'country', true),
+                'postcode' => get_user_meta($user_id, 'postcode', true)
+            ],
+            'storage_results' => $storage_results,
+            'verification_success' => $verification_success
+        ];
+        update_user_meta($user_id, 'html_form_debug_data', $debug_data);
+        
+        dtr_html_log("[{$debug_id}] [DEBUG] Form debug data stored successfully");
+    } catch (Throwable $t) {
+        dtr_html_log("[{$debug_id}] [ERROR] Failed to store debug data: " . $t->getMessage());
+        // Don't let debug storage failure prevent user creation
     }
     
     return $user_id;
@@ -478,9 +680,8 @@ function dtr_html_build_workbooks_payload($user_id, $data, $debug_id) {
         'main_location[country]' => $data['country'],
         'main_location[town]' => $data['town'],
         'main_location[postcode]' => $data['postcode'],
-        'employer_name' => $data['claimed_employer'], // Use claimed_employer as source
-        'cf_person_claimed_employer' => $data['claimed_employer'], // Both fields from same source
-        // Always keep employer_name and cf_person_claimed_employer in sync
+        'cf_person_claimed_employer' => $data['claimed_employer'], // Workbooks employer field (uncommented for Workbooks sync)
+        // Note: employer_name is used for WordPress meta, cf_person_claimed_employer for Workbooks API
         'cf_person_dtr_subscriber_type' => 'Prospect',
         /* 'cf_person_dtr_subscriber' => 1, */
         'cf_person_dtr_web_member' => 1,
@@ -500,6 +701,10 @@ function dtr_html_build_workbooks_payload($user_id, $data, $debug_id) {
         $payload[$tf] = (int) get_user_meta($user_id, $tf, true);
     }
     
+    // Debug employer field values
+    dtr_html_log("[{$debug_id}] [DEBUG] Workbooks payload cf_person_claimed_employer: '{$data['claimed_employer']}'");
+    dtr_html_log("[{$debug_id}] [DEBUG] Source data claimed_employer: '{$data['claimed_employer']}'");
+    
     // Add AOI fields if available
     if (function_exists('dtr_get_aoi_field_names')) {
         foreach (array_keys(dtr_get_aoi_field_names()) as $aoi_wp_field) {
@@ -511,7 +716,7 @@ function dtr_html_build_workbooks_payload($user_id, $data, $debug_id) {
     
     // Debug: Log employer field mappings
     dtr_html_log("[{$debug_id}] [DEBUG] Workbooks payload employer_name: '{$payload['employer_name']}'");
-    dtr_html_log("[{$debug_id}] [DEBUG] Workbooks payload cf_person_claimed_employer: '{$payload['cf_person_claimed_employer']}'");
+    // dtr_html_log("[{$debug_id}] [DEBUG] Workbooks payload cf_person_claimed_employer: '{$payload['cf_person_claimed_employer']}'");
     dtr_html_log("[{$debug_id}] [DEBUG] Source data employer: '{$data['employer']}'");
     dtr_html_log("[{$debug_id}] [DEBUG] Source data claimed_employer: '{$data['claimed_employer']}'");
     
@@ -523,13 +728,14 @@ function dtr_html_build_workbooks_payload($user_id, $data, $debug_id) {
  * Based on dtr_nf_maybe_attach_employer_org pattern
  * -------------------------------------------------------------------------- */
 function dtr_html_maybe_attach_employer_org($user_id, $payload, $data, $debug_id) {
-    if (!empty($data['employer']) && function_exists('workbooks_get_or_create_organisation_id')) {
-        $org_id = workbooks_get_or_create_organisation_id($data['employer']);
+    $employer_name = $data['claimed_employer'] ?? $data['employer'] ?? '';
+    if (!empty($employer_name) && function_exists('workbooks_get_or_create_organisation_id')) {
+        $org_id = workbooks_get_or_create_organisation_id($employer_name);
         if ($org_id) {
-            $payload['organisation_id'] = $org_id;
-            dtr_html_log("[{$debug_id}] [DEBUG] Attached employer organisation ID: {$org_id}");
+            $payload['employer_link'] = $org_id; // Use employer_link field as per Workbooks API
+            dtr_html_log("[{$debug_id}] [DEBUG] Attached employer_link: {$org_id} for employer: {$employer_name}");
         } else {
-            dtr_html_log("[{$debug_id}] [WARNING] Could not resolve employer organisation");
+            dtr_html_log("[{$debug_id}] [WARNING] Could not resolve employer organisation for: {$employer_name}");
         }
     }
     
@@ -638,13 +844,13 @@ function dtr_html_membership_log_summary($user_id, $data, $test_mode = false) {
     
     dtr_html_log("==== MEMBER REGISTRATION =====");
     dtr_html_log("User Details:");
+    dtr_html_log("Title: " . $data['title']);
     dtr_html_log("First Name: " . $data['first_name']);
     dtr_html_log("Last Name: " . $data['last_name']);
     dtr_html_log("Email Address: " . $data['email']);
     dtr_html_log("Telephone Number: " . $data['telephone']);
     dtr_html_log("Job Title: " . $data['job_title']);
-    dtr_html_log("Employer: " . $data['employer']);
-    dtr_html_log("Claimed Employer: " . $data['claimed_employer']);
+    dtr_html_log("Employer: " . $data['claimed_employer']);
     dtr_html_log("Country: " . $data['country']);
     dtr_html_log("Town: " . $data['town']);
     dtr_html_log("Post Code: " . $data['postcode']);
@@ -776,3 +982,49 @@ add_action('wp_ajax_dtr_get_form_nonce', function() {
 add_action('wp_ajax_nopriv_dtr_get_form_nonce', function() {
     wp_send_json_success(['nonce' => dtr_html_form_get_nonce()]);
 });
+
+/* --------------------------------------------------------------------------
+ * Diagnostic functions for troubleshooting
+ * -------------------------------------------------------------------------- */
+
+// Add a diagnostic endpoint to check user meta
+add_action('wp_ajax_dtr_check_user_meta', 'dtr_check_user_meta');
+add_action('wp_ajax_nopriv_dtr_check_user_meta', 'dtr_check_user_meta');
+
+function dtr_check_user_meta() {
+    // Security check
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error(['message' => 'Not authorized']);
+        return;
+    }
+    
+    $user_email = isset($_GET['email']) ? sanitize_email($_GET['email']) : '';
+    if (empty($user_email)) {
+        wp_send_json_error(['message' => 'Email required']);
+        return;
+    }
+    
+    $user = get_user_by('email', $user_email);
+    if (!$user) {
+        wp_send_json_error(['message' => 'User not found']);
+        return;
+    }
+    
+    // Get all user meta
+    $meta = get_user_meta($user->ID);
+    $filtered_meta = [];
+    
+    // Filter meta fields for security
+    foreach ($meta as $key => $values) {
+        if (strpos($key, 'cf_') === 0 || 
+            in_array($key, ['first_name', 'last_name', 'nickname', 'form_title', 'employer_name'])) {
+            $filtered_meta[$key] = $values[0] ?? '';
+        }
+    }
+    
+    wp_send_json_success([
+        'user_id' => $user->ID,
+        'user_email' => $user->user_email,
+        'user_meta' => $filtered_meta
+    ]);
+}

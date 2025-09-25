@@ -70,7 +70,7 @@ function dtr_media_planner_registration_shortcode($atts) {
         
         <?php if ($development_mode): ?>
         <!-- Development Mode Toggle -->
-        <div class="dev-mode-toggle">
+        <!-- <div class="dev-mode-toggle">
             <h4>🛠️ Development Mode</h4>
             <label class="toggle-switch">
                 <input type="checkbox" id="devModeToggle" checked>
@@ -81,7 +81,7 @@ function dtr_media_planner_registration_shortcode($atts) {
                 <span class="dev">Dev Mode</span>
             </div>
             <button type="button" class="preview-loader-btn" onclick="previewLoader()">👁️ Preview Loader</button>
-        </div>
+        </div> -->
         <?php endif; ?>
         
         <div class="form-container media-planner-registration-form">
@@ -117,12 +117,9 @@ function dtr_media_planner_registration_shortcode($atts) {
                 <!-- Organisation -->
                 <div class="form-row">
                     <div class="form-field floating-label one-half first">
-                        <?php if (is_user_logged_in()): ?>
+                    
                             <input type="text" id="organisation" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" " value="<?php echo esc_attr($user_data['organisation'] ?? ''); ?>">
                             <label for="organisation">Organisation <span class="required">*</span></label>
-                        <?php else: ?>
-                            <?php echo do_shortcode('[workbooks_employer_select]'); ?>
-                        <?php endif; ?>
                     </div>
                     
                     <!-- Town/City -->
@@ -227,14 +224,14 @@ function dtr_media_planner_registration_shortcode($atts) {
 
                 <?php if ($development_mode): ?>
                 <!-- Debug Test Buttons -->
-                <div style="margin-top: 15px; text-align: center;">
+                <!-- <div style="margin-top: 15px; text-align: center;">
                     <button type="button" onclick="testAjaxEndpoint()" class="button" style="background: #ff6600; color: white; padding: 8px 16px; font-size: 12px; border-radius: 4px; margin-right: 10px;">
                         🔧 Test AJAX Connection
                     </button>
                     <button type="button" onclick="fillTestDataMediaPlanner()" class="button" style="background: #28a745; color: white; padding: 8px 16px; font-size: 12px; border-radius: 4px;">
                         📝 Fill Test Data
                     </button>
-                </div>
+                </div> -->
                 <?php endif; ?>
             </form>
         </div>
@@ -369,40 +366,32 @@ function dtr_media_planner_registration_shortcode($atts) {
                 statusText.textContent = 'Preparing your media planner...';
                 countdownContainer.classList.remove('active');
                 
-                // Start progress simulation
-                simulateFormProgress();
+                // Don't start simulation here - actual progress will be driven by the API response
             }
         }
 
-        function simulateFormProgress() {
+        // Progressive steps for form submission process
+        function updateProgressStep(step) {
             const progressFill = document.getElementById('progressCircleFill');
             const statusText = document.getElementById('loaderStatusText');
             
-            const stages = [
-                { progress: 'progress-25', text: 'Validating your information...', delay: 2000 },
-                { progress: 'progress-50', text: 'Processing request...', delay: 2500 },
-                { progress: 'progress-75', text: 'Preparing media planner...', delay: 2000 },
-                { progress: 'progress-100', text: 'Submission Successful!', delay: 1500 }
-            ];
+            const steps = {
+                start: { progress: 'progress-10', text: 'Starting submission...' },
+                validation: { progress: 'progress-25', text: 'Validating your information...' },
+                processing: { progress: 'progress-50', text: 'Processing request...' },
+                preparing: { progress: 'progress-75', text: 'Preparing media planner...' },
+                completed: { progress: 'progress-100', text: 'Submission Successful!' }
+            };
             
-            let currentStage = 0;
+            const currentStep = steps[step] || steps.start;
             
-            function nextStage() {
-                if (currentStage < stages.length) {
-                    const stage = stages[currentStage];
-                    progressFill.className = `progress-circle-fill ${stage.progress}`;
-                    statusText.textContent = stage.text;
-                    currentStage++;
-                    
-                    setTimeout(nextStage, stage.delay);
-                } else {
-                    // Start countdown after completion
-                    setTimeout(() => startCountdown(), 500);
-                }
+            if (progressFill) {
+                progressFill.className = `progress-circle-fill ${currentStep.progress}`;
             }
             
-            // Start first stage
-            setTimeout(nextStage, 500);
+            if (statusText) {
+                statusText.textContent = currentStep.text;
+            }
         }
 
         function startCountdown() {
@@ -411,13 +400,22 @@ function dtr_media_planner_registration_shortcode($atts) {
             const countdownMessage = document.getElementById('countdownMessage');
             const loaderIcon = document.querySelector('.loader-icon');
             
+            // Prevent duplicate countdown
+            if (countdownContainer.classList.contains('active')) {
+                console.log('Countdown already active, not starting again');
+                return;
+            }
+            
             // Hide the user icon and show countdown
             if (loaderIcon) loaderIcon.style.opacity = '0';
             if (countdownContainer) countdownContainer.classList.add('active');
             
             let count = 3;
+            let countdownActive = true;
             
             function showNextCount() {
+                if (!countdownActive) return;
+                
                 if (count > 0) {
                     if (countdownNumber) countdownNumber.textContent = count;
                     if (countdownMessage) countdownMessage.textContent = '';
@@ -427,13 +425,18 @@ function dtr_media_planner_registration_shortcode($atts) {
                     // Show final message
                     if (countdownNumber) countdownNumber.textContent = '';
                     if (countdownMessage) countdownMessage.textContent = 'Download Ready!';
-                    
-                    // Keep overlay visible - do not hide until redirect happens
-                    // The overlay will naturally disappear when the page redirects
                 }
             }
             
             showNextCount();
+        }
+        
+        // Function to stop countdown if needed (e.g., on errors)
+        function stopCountdown() {
+            const countdownContainer = document.getElementById('countdownContainer');
+            if (countdownContainer) {
+                countdownContainer.classList.remove('active');
+            }
         }
 
         function hideProgressLoader() {
@@ -445,6 +448,18 @@ function dtr_media_planner_registration_shortcode($atts) {
                 const header = document.querySelector('header');
                 if (header) {
                     header.style.zIndex = '';  // Remove the inline style to restore original
+                }
+                
+                // Reset any active flags
+                window.submissionInProgress = false;
+                
+                // Reset countdown if active
+                stopCountdown();
+                
+                // Clear any pending timeouts from the preview function
+                if (window.previewTimeouts) {
+                    window.previewTimeouts.forEach(timeout => clearTimeout(timeout));
+                    window.previewTimeouts = [];
                 }
             }
         }
@@ -462,7 +477,7 @@ function dtr_media_planner_registration_shortcode($atts) {
         }
 
         function previewLoader() {
-            // Show overlay without triggering simulateFormProgress()
+            // Show overlay
             const loadingOverlay = document.getElementById('formLoaderOverlay');
             const progressFill = document.getElementById('progressCircleFill');
             const statusText = document.getElementById('loaderStatusText');
@@ -483,23 +498,36 @@ function dtr_media_planner_registration_shortcode($atts) {
                 countdownContainer.classList.remove('active');
             }
             
-            // Simulate the actual submission flow for preview using updateFormProgress
-            setTimeout(() => updateFormProgress(25, 'Validating security credentials...'), 500);
-            setTimeout(() => updateFormProgress(40, 'Security validation complete...'), 1500);
-            setTimeout(() => updateFormProgress(50, 'Preparing media planner request...'), 2000);
-            setTimeout(() => updateFormProgress(60, 'Submitting your information...'), 2500);
-            setTimeout(() => updateFormProgress(75, 'Processing your request...'), 3500);
-            setTimeout(() => updateFormProgress(90, 'Finalizing media planner...'), 4500);
-            setTimeout(() => {
+            // Clear any existing timeouts to prevent duplicate animations
+            if (window.previewTimeouts) {
+                window.previewTimeouts.forEach(timeout => clearTimeout(timeout));
+            }
+            window.previewTimeouts = [];
+            
+            // Simulate the actual submission flow for preview
+            const addTimeout = (fn, delay) => {
+                const id = setTimeout(fn, delay);
+                window.previewTimeouts.push(id);
+                return id;
+            };
+            
+            addTimeout(() => updateFormProgress(10, 'Starting submission...'), 500);
+            addTimeout(() => updateFormProgress(25, 'Validating your information...'), 1500);
+            addTimeout(() => updateFormProgress(50, 'Processing request...'), 3000);
+            addTimeout(() => updateFormProgress(75, 'Preparing media planner...'), 4500);
+            addTimeout(() => {
                 updateFormProgress(100, 'Submission Successful!');
-                setTimeout(() => {
+                
+                // Wait a moment before showing countdown
+                addTimeout(() => {
                     startCountdown();
-                    // Add redirect after countdown completes (same timing as real submission)
-                    setTimeout(() => {
+                    
+                    // Add redirect after countdown completes
+                    addTimeout(() => {
                         window.location.href = '/download-media-planner/';
-                    }, 5000); // Redirect 5 seconds after countdown starts
-                }, 500);
-            }, 5000);
+                    }, 4000); // Redirect 4 seconds after countdown starts (3s countdown + 1s for "Download Ready")
+                }, 1000);
+            }, 6000);
         }
 
         function submitMediaPlannerForm() {
@@ -518,11 +546,12 @@ function dtr_media_planner_registration_shortcode($atts) {
 
             // Show loading overlay with progress
             showProgressLoader();
+            updateProgressStep('start');
 
             // Collect form data
             const formData = new FormData();
             
-            // Add WordPress AJAX action (you'll need to create this handler)
+            // Add WordPress AJAX action
             formData.append('action', 'dtr_media_planner_form_submit');
             
             // Personal information
@@ -585,6 +614,16 @@ function dtr_media_planner_registration_shortcode($atts) {
             
             console.log('🔥 [DEBUG] About to submit form data');
             console.log('🔥 [DEBUG] FormData contents:', Array.from(formData.entries()));
+            
+            // Track submission to prevent duplicate attempts
+            if (window.submissionInProgress) {
+                console.log('Submission already in progress, ignoring duplicate attempt');
+                return;
+            }
+            window.submissionInProgress = true;
+
+            // Update to validation step
+            updateProgressStep('validation');
 
             // Get WordPress nonce first, then submit
             fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=dtr_get_form_nonce', {
@@ -607,6 +646,9 @@ function dtr_media_planner_registration_shortcode($atts) {
                     throw new Error('No nonce received from server');
                 }
                 
+                // Update to processing step
+                updateProgressStep('processing');
+                
                 // Submit form data
                 return fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
                     method: 'POST',
@@ -621,23 +663,38 @@ function dtr_media_planner_registration_shortcode($atts) {
                 return response.json();
             })
             .then(data => {
-                if (data.success) {
-                    // Start countdown immediately after success
-                    startCountdown();
-                    
-                    // Keep overlay visible and redirect after countdown completes
-                    setTimeout(() => {
-                        // Redirect to media planner download page
-                        window.location.href = '/download-media-planner/';
-                    }, 5000); // Redirect 5 seconds after countdown starts (3s countdown + 2s for final message)
-                } else {
-                    hideProgressLoader();
-                    alert('Request failed: ' + (data.data ? data.data.message : data.message || 'Please check your details and try again.'));
-                }
+                // Update to preparing step
+                updateProgressStep('preparing');
+                
+                setTimeout(() => {
+                    if (data.success) {
+                        // Show final success step
+                        updateProgressStep('completed');
+                        
+                        // Wait a moment before starting countdown
+                        setTimeout(() => {
+                            // Start countdown once
+                            startCountdown();
+                            
+                            // Redirect after countdown completes
+                            setTimeout(() => {
+                                // Redirect to media planner download page
+                                window.location.href = '/download-media-planner/';
+                            }, 4000); // Redirect 4 seconds after countdown starts (3s countdown + 1s for "Download Ready")
+                        }, 1000);
+                    } else {
+                        hideProgressLoader();
+                        stopCountdown();
+                        window.submissionInProgress = false;
+                        alert('Request failed: ' + (data.data ? data.data.message : data.message || 'Please check your details and try again.'));
+                    }
+                }, 1500); // Delay to show the preparing step
             })
             .catch(error => {
                 console.error('Form submission error:', error);
                 hideProgressLoader();
+                stopCountdown();
+                window.submissionInProgress = false;
                 alert('An error occurred. Please try again.');
             });
         }

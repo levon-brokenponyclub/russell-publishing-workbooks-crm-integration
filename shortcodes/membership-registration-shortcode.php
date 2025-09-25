@@ -27,14 +27,7 @@ add_action('wp_enqueue_scripts', function() {
         'all'
     );
     
-    // Enqueue the login modal script for the membership registration form
-    wp_enqueue_script(
-        'dtr-login-modal',
-        plugin_dir_url(__FILE__) . '../assets/js/lead-generation-registration.js',
-        ['jquery'],
-        filemtime(plugin_dir_path(__FILE__) . '../assets/js/lead-generation-registration.js'),
-        true
-    );
+    // Note: lead-generation-registration.js was removed - login modal functionality disabled
 }, 999); // High priority to ensure it loads after theme styles
 
 function dtr_test_shortcode() {
@@ -87,7 +80,7 @@ function dtr_membership_registration_shortcode($atts) {
                 </div>
                 
                 <!-- Development Mode Toggle -->
-                <div class="dev-mode-toggle">
+                <!-- <div class="dev-mode-toggle">
                     <h4>🛠️ Development Mode</h4>
                     <label class="toggle-switch">
                         <input type="checkbox" id="devModeToggle">
@@ -98,7 +91,7 @@ function dtr_membership_registration_shortcode($atts) {
                         <span class="dev">Dev Mode</span>
                     </div>
                     <button type="button" class="preview-loader-btn" onclick="previewLoader()">👁️ Preview Loader</button>
-                </div>
+                </div> -->
                 
                 <div class="divider"></div>
                 <h3>Already a member?</h3>
@@ -176,7 +169,7 @@ function dtr_membership_registration_shortcode($atts) {
 
                     <div class="form-row">
                         <div class="form-field floating-label">
-                            <select id="country" uuid="<?php echo wp_generate_uuid4(); ?>">
+                            <select id="country" class="country-validator" uuid="<?php echo wp_generate_uuid4(); ?>">
                                 <option value="">-</option>
                                 <?php 
                                 // Use the full country list function if available
@@ -204,7 +197,7 @@ function dtr_membership_registration_shortcode($atts) {
                             <label for="city">Town/City</label>
                         </div>
                         <div class="form-field floating-label">
-                            <input type="text" id="postcode" uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
+                            <input type="text" id="postcode" class="postcode-validator" uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
                             <label for="postcode">Postal/Zip Code</label>
                         </div>
                     </div>
@@ -312,9 +305,9 @@ function dtr_membership_registration_shortcode($atts) {
                         <button type="button" class="button border btn-small global btn-rounded btn-purple shimmer-effect shimmer-slow text-left chevron left" onclick="previousStep()">Previous</button>
                         <button type="button" class="button btn-small global btn-rounded btn-blue shimmer-effect shimmer-slow text-left chevron right" onclick="submitForm()">Get Started</button>
                         
-                        <?php if ($development_mode): ?>
+                       
                         <!-- Debug Test Button -->
-                        <div style="margin-top: 15px; text-align: center;">
+                        <div style="margin-top: 15px; text-align: center;position:absolute:top:100px;left:100px;width:100%;dsiplay:block;">
                             <button type="button" onclick="testAjaxEndpoint()" class="button" style="background: #ff6600; color: white; padding: 8px 16px; font-size: 12px; border-radius: 4px; margin-right: 10px;">
                                 🔧 Test AJAX Connection
                             </button>
@@ -322,7 +315,7 @@ function dtr_membership_registration_shortcode($atts) {
                                 📝 Fill Test Data
                             </button>
                         </div>
-                        <?php endif; ?>
+                       
                     </div>
                 </div>
 
@@ -860,7 +853,7 @@ function dtr_membership_registration_shortcode($atts) {
             formData.append('firstName', document.getElementById('firstName')?.value || '');
             formData.append('lastName', document.getElementById('lastName')?.value || '');
             formData.append('email', document.getElementById('email')?.value || '');
-            formData.append('employer', document.getElementById('employer')?.value || '');
+            formData.append('claimed_employer', document.getElementById('employer')?.value || '');
             formData.append('telephone', document.getElementById('phone')?.value || '');
             formData.append('jobTitle', document.getElementById('jobTitle')?.value || '');
             formData.append('country', document.getElementById('country')?.value || '');

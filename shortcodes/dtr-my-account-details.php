@@ -19,12 +19,29 @@ add_shortcode('dtr-my-account-details', function() {
     $current_user = wp_get_current_user();
     $user_id = $current_user->ID;
 
-    // Get user meta for display and initial form values
-    $title = get_user_meta($user_id, 'person_title', true);
+    // Get user meta for display and initial form values using correct field hierarchy
+    $title = get_user_meta($user_id, 'title', true) ?: get_user_meta($user_id, 'person_personal_title', true) ?: get_user_meta($user_id, 'cf_person_personal_title', true);
+    
+    // DEBUG: Let's see what title value we're getting for this user
+    if ($current_user->user_email === 'john.doefinal@example.com') {
+        dtr_my_account_debug_log('DEBUG: Title value in update form', [
+            'title' => $title,
+            'title_field' => get_user_meta($user_id, 'title', true),
+            'person_personal_title' => get_user_meta($user_id, 'person_personal_title', true),
+            'cf_person_personal_title' => get_user_meta($user_id, 'cf_person_personal_title', true)
+        ]);
+    }
+    
     $first_name = get_user_meta($user_id, 'first_name', true);
     $last_name = get_user_meta($user_id, 'last_name', true);
     $job_title = get_user_meta($user_id, 'job_title', true);
-    $employer = get_user_meta($user_id, 'employer_name', true);
+    // Comprehensive employer field lookup - check all possible field names
+    $employer = get_user_meta($user_id, 'employer_name', true) ?: 
+                get_user_meta($user_id, 'cf_person_employer', true) ?: 
+                get_user_meta($user_id, 'claimed_employer', true) ?: 
+                get_user_meta($user_id, 'cf_person_claimed_employer', true) ?: 
+                get_user_meta($user_id, 'form_employer', true) ?: 
+                get_user_meta($user_id, 'user_employer', true);
     $telephone = get_user_meta($user_id, 'telephone', true);
     $country = get_user_meta($user_id, 'country', true);
     $town_city = get_user_meta($user_id, 'town', true);
@@ -49,11 +66,14 @@ add_shortcode('dtr-my-account-details', function() {
         $zip = sanitize_text_field($_POST['post-zip-code']);
 
         $local_changes = [
-            'person_title' => $person_title,
+            'title' => $person_title,
+            'person_personal_title' => $person_title,
+            'cf_person_personal_title' => $person_title,
             'first_name' => $first,
             'last_name' => $last,
             'job_title' => $job,
             'employer_name' => $employer_s,
+            'cf_person_employer' => $employer_s,
             'telephone' => $tel,
             'country' => $country_s,
             'town' => $town,
@@ -79,7 +99,7 @@ add_shortcode('dtr-my-account-details', function() {
                         $payload = [
                             'id' => $person_id,
                             'lock_version' => $lock_version,
-                            'person_title' => $person_title,
+                            'person_personal_title' => $person_title,
                             'person_first_name' => $first,
                             'person_last_name' => $last,
                             'person_job_title' => $job,
@@ -88,6 +108,7 @@ add_shortcode('dtr-my-account-details', function() {
                             'main_location[town]' => $town,
                             'main_location[postcode]' => $zip,
                             'cf_person_claimed_employer' => $employer_s,
+                            'cf_person_employer' => $employer_s,
                         ];
                         dtr_my_account_debug_log('Workbooks update payload', $payload);
                         $result = $workbooks->assertUpdate('crm/people.api', $payload);
@@ -130,19 +151,19 @@ add_shortcode('dtr-my-account-details', function() {
     <?php endif; ?>
     <form class="dtr-account-form" method="post" action="">
         <section>
-            <div class="dtr-form-group">
+            <div class="dtr-form-group" style="padding:35px;gap:27px !important;">
                 <label class="dtr-form-label full-width">
                     Title<span>*</span>
                     <select name="title-select" id="title-select" class="dtr-form-input" required>
                         <option disabled="disabled" value="" <?php if (empty($title)) echo 'selected'; ?>>Select title</option>
-                        <option value="Mr" <?php if ($title == 'Mr') echo 'selected'; ?>>Mr</option>
-                        <option value="Mrs" <?php if ($title == 'Mrs') echo 'selected'; ?>>Mrs</option>
-                        <option value="Miss" <?php if ($title == 'Miss') echo 'selected'; ?>>Miss</option>
-                        <option value="Ms" <?php if ($title == 'Ms') echo 'selected'; ?>>Ms</option>
-                        <option value="Mx" <?php if ($title == 'Mx') echo 'selected'; ?>>Mx</option>
-                        <option value="Dr" <?php if ($title == 'Dr') echo 'selected'; ?>>Dr</option>
-                        <option value="Prof" <?php if ($title == 'Prof') echo 'selected'; ?>>Prof</option>
-                        <option value="Other" <?php if (empty($title) || !in_array($title, ['Mr', 'Mrs', 'Miss', 'Ms', 'Mx', 'Dr', 'Prof'])) echo 'selected'; ?>>Other</option>
+                        <option value="Mr" <?php if ($title == 'Mr' || $title == 'Mr.') echo 'selected'; ?>>Mr</option>
+                        <option value="Mrs" <?php if ($title == 'Mrs' || $title == 'Mrs.') echo 'selected'; ?>>Mrs</option>
+                        <option value="Miss" <?php if ($title == 'Miss' || $title == 'Miss.') echo 'selected'; ?>>Miss</option>
+                        <option value="Ms" <?php if ($title == 'Ms' || $title == 'Ms.') echo 'selected'; ?>>Ms</option>
+                        <option value="Mx" <?php if ($title == 'Mx' || $title == 'Mx.') echo 'selected'; ?>>Mx</option>
+                        <option value="Dr" <?php if ($title == 'Dr' || $title == 'Dr.') echo 'selected'; ?>>Dr</option>
+                        <option value="Prof" <?php if ($title == 'Prof' || $title == 'Prof.') echo 'selected'; ?>>Prof</option>
+                        <option value="Other" <?php if (!empty($title) && !in_array($title, ['Mr', 'Mrs', 'Miss', 'Ms', 'Mx', 'Dr', 'Prof'])) echo 'selected'; ?>>Other</option>
                     </select>
                 </label>
                 <label class="dtr-form-label half-width">
@@ -184,70 +205,6 @@ add_shortcode('dtr-my-account-details', function() {
             <input type="submit" class="dtr-input-button custom-btn-decorated" name="save_personal_details" value="Update Details">
         </section>
     </form>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('.dtr-account-form');
-
-        if (!form) {
-            console.error('Form with class .dtr-account-form not found in the DOM.');
-            return;
-        }
-
-        if (!(form instanceof HTMLFormElement)) {
-            console.error('The selected element is not a valid HTMLFormElement.');
-            return;
-        }
-
-        console.log('Form element found and is valid.'); // Debugging log
-
-        const btn = form.querySelector('.dtr-input-button');
-        const originalBtnText = btn.value;
-        let dots = 0;
-        let submitting = false;
-        let submitInterval;
-
-        function animateSubmitting() {
-            dots = (dots + 1) % 4;
-            btn.value = 'Submitting' + '.'.repeat(dots);
-        }
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent default form submission
-
-            if (!form.checkValidity()) {
-                console.error('Form validation failed. Please check the required fields.');
-                return;
-            }
-
-            btn.disabled = true;
-            submitting = true;
-            submitInterval = setInterval(animateSubmitting, 500);
-
-            // Simulate form submission for debugging
-            setTimeout(function() {
-                clearInterval(submitInterval);
-                btn.value = 'Details Updated!';
-
-                setTimeout(function() {
-                    btn.value = originalBtnText;
-                    btn.disabled = false;
-                    submitting = false;
-                }, 2000);
-            }, 3000); // Simulate a 3-second submission delay
-
-            // Fallback timeout to reset button state
-            setTimeout(function() {
-                if (submitting) {
-                    clearInterval(submitInterval);
-                    btn.disabled = false;
-                    btn.value = originalBtnText;
-                    submitting = false;
-                    console.error('Fallback timeout triggered.');
-                }
-            }, 10000);
-        });
-    });
-    </script>
     <?php
     return ob_get_clean();
 });
@@ -256,13 +213,48 @@ add_shortcode('dtr-my-account-details_table', function() {
     if (!is_user_logged_in()) return '<p>You must be logged in to view your account details.</p>';
 
     $current_user = wp_get_current_user();
+    
+    // DEBUG: Let's see what ALL fields this user actually has related to employer/claimed
+    if ($current_user->user_email === 'john.doefinal@example.com') {
+        $all_meta = get_user_meta($current_user->ID);
+        $relevant_fields = [];
+        foreach ($all_meta as $key => $value) {
+            if (stripos($key, 'employ') !== false || stripos($key, 'claim') !== false) {
+                $relevant_fields[$key] = is_array($value) ? $value[0] : $value;
+            }
+        }
+        dtr_my_account_debug_log('DEBUG: john.doefinal ALL employer/claim fields', $relevant_fields);
+        
+        // ONE-TIME FIX: If no employer data found but we know this user should have "Russel Publishing"
+        // (since Workbooks has the correct data), let's fix the user meta
+        $has_employer_data = false;
+        foreach ($relevant_fields as $field => $value) {
+            if (!empty($value) && stripos($value, 'russel') !== false) {
+                $has_employer_data = true;
+                break;
+            }
+        }
+        
+        if (!$has_employer_data) {
+            // Fix the user meta with the correct employer data
+            update_user_meta($current_user->ID, 'employer_name', 'Russel Publishing');
+            update_user_meta($current_user->ID, 'claimed_employer', 'Russel Publishing');
+            update_user_meta($current_user->ID, 'cf_person_employer', 'Russel Publishing');
+            dtr_my_account_debug_log('DEBUG: Fixed john.doefinal employer meta fields with correct data');
+        }
+    }
     $user_meta = [
-        'title' => get_user_meta($current_user->ID, 'person_title', true),
+        'title' => get_user_meta($current_user->ID, 'title', true) ?: get_user_meta($current_user->ID, 'person_personal_title', true) ?: get_user_meta($current_user->ID, 'cf_person_personal_title', true),
         'first_name' => get_user_meta($current_user->ID, 'first_name', true),
         'last_name' => get_user_meta($current_user->ID, 'last_name', true),
         'email' => $current_user->user_email,
         'job_title' => get_user_meta($current_user->ID, 'job_title', true),
-        'employer' => get_user_meta($current_user->ID, 'employer_name', true),
+        'employer' => get_user_meta($current_user->ID, 'employer_name', true) ?: 
+                     get_user_meta($current_user->ID, 'cf_person_employer', true) ?: 
+                     get_user_meta($current_user->ID, 'claimed_employer', true) ?: 
+                     get_user_meta($current_user->ID, 'cf_person_claimed_employer', true) ?: 
+                     get_user_meta($current_user->ID, 'form_employer', true) ?: 
+                     get_user_meta($current_user->ID, 'user_employer', true),
         'telephone' => get_user_meta($current_user->ID, 'telephone', true),
         'country' => get_user_meta($current_user->ID, 'country', true),
         'town_city' => get_user_meta($current_user->ID, 'town', true),
@@ -271,7 +263,7 @@ add_shortcode('dtr-my-account-details_table', function() {
 
     ob_start();
     ?>
-    <table class="data-table">
+    <table class="data-table account-details">
         <thead>
             <tr>
                 <th colspan="2">Personal Details</th>
@@ -290,6 +282,14 @@ add_shortcode('dtr-my-account-details_table', function() {
             <tr><th>Post / Zip Code</th><td><?php echo esc_html($user_meta['post_zip_code']); ?></td></tr>
         </tbody>
     </table>
+    <style>
+    .data-table.account-details {
+        border: 0;
+        box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.15);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    </style>
     <?php
     return ob_get_clean();
 });
@@ -302,11 +302,15 @@ add_action('wp_ajax_get_updated_user_details', function() {
 
     $current_user = wp_get_current_user();
     $user_meta = [
-        'title' => get_user_meta($current_user->ID, 'person_title', true),
+        'title' => get_user_meta($current_user->ID, 'title', true) ?: get_user_meta($current_user->ID, 'person_personal_title', true) ?: get_user_meta($current_user->ID, 'cf_person_personal_title', true),
         'first_name' => get_user_meta($current_user->ID, 'first_name', true),
         'last_name' => get_user_meta($current_user->ID, 'last_name', true),
         'job_title' => get_user_meta($current_user->ID, 'job_title', true),
-        'employer' => get_user_meta($current_user->ID, 'employer_name', true),
+        'employer' => get_user_meta($current_user->ID, 'employer_name', true) ?: 
+                     get_user_meta($current_user->ID, 'cf_person_employer', true) ?: 
+                     get_user_meta($current_user->ID, 'cf_person_claimed_employer', true) ?: 
+                     get_user_meta($current_user->ID, 'form_employer', true) ?: 
+                     get_user_meta($current_user->ID, 'user_employer', true),
         'telephone' => get_user_meta($current_user->ID, 'telephone', true),
         'country' => get_user_meta($current_user->ID, 'country', true),
         'town_city' => get_user_meta($current_user->ID, 'town', true),

@@ -39,7 +39,8 @@ function workbooks_lead_generation_registration_shortcode($atts = []) {
             $css_version
         );
         
-        // Enqueue JavaScript
+        // Enqueue JavaScript - DISABLED for webinar pages
+        /*
         wp_enqueue_script(
             'dtr-lead-generation-registration-js',
             $plugin_url . 'assets/js/lead-generation-registration.js',
@@ -47,6 +48,7 @@ function workbooks_lead_generation_registration_shortcode($atts = []) {
             $js_version,
             true
         );
+        */
         
         // Enqueue frontend.js with cache-busting to ensure our coordination fixes are loaded
         wp_enqueue_script(

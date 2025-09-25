@@ -23,6 +23,7 @@ class DTR_Login_Forgot_Password_Shortcode {
         add_action('wp_ajax_nopriv_dtr_user_login', array($this, 'handle_login'));
         add_action('wp_ajax_nopriv_dtr_forgot_password', array($this, 'handle_forgot_password'));
         add_action('wp_ajax_nopriv_dtr_reset_password', array($this, 'handle_reset_password'));
+        add_action('wp_ajax_dtr_change_password', array($this, 'handle_change_password'));
         
         // Override WordPress password reset email
         add_filter('retrieve_password_message', array($this, 'custom_reset_password_email'), 10, 4);
@@ -675,11 +676,16 @@ class DTR_Login_Forgot_Password_Shortcode {
      */
     public function render_reset_password_form($atts) {
         $atts = shortcode_atts(array(
-            'title' => 'Create New Password',
-            'subtitle' => 'Enter your new password below'
+            'title' => '',
+            'subtitle' => ''
         ), $atts, 'reset_password_form');
         
-        // Check if we have the required parameters
+        // Check if user is logged in (admin area usage)
+        if (is_user_logged_in()) {
+            return $this->render_change_password_form($atts);
+        }
+        
+        // Check if we have the required parameters for email reset
         $key = isset($_GET['key']) ? $_GET['key'] : '';
         $login = isset($_GET['login']) ? $_GET['login'] : '';
         
@@ -733,7 +739,7 @@ class DTR_Login_Forgot_Password_Shortcode {
                     </div>
                     
                     <button type="submit" class="dtr-reset-btn" id="dtr-reset-submit">
-                        <span class="button global btn-medium btn-rounded btn-purple shimmer-effect shimmer-slow is-toggle text-left chevron right" style="width:100% !important;line-height:1.6 !important;">Reset Password</span>
+                        <span class="button global btn-medium btn-rounded btn-blue shimmer-effect shimmer-slow is-toggle text-left chevron right" style="width:100% !important;line-height:1.6 !important;">Reset Password</span>
                     </button>
                 </form>
                 
@@ -743,6 +749,79 @@ class DTR_Login_Forgot_Password_Shortcode {
                     <p>Remember your password? <a href="<?php echo site_url('/login/'); ?>" class="dtr-login-link">Sign in here</a></p>
                     
                 </div>
+            </div>
+        </div>
+        
+        <style>
+        .dtr-reset-container {
+            max-width: 100%;
+        }
+        </style>
+        <?php
+        return ob_get_clean();
+    }
+    
+    /**
+     * Render Change Password Form for Logged-in Users
+     */
+    public function render_change_password_form($atts) {
+        $current_user = wp_get_current_user();
+        
+        ob_start();
+        ?>
+        <div class="dtr-reset-container">
+            <div class="dtr-reset-form-wrapper">
+                <div class="dtr-reset-header">
+                    <h1 class="dtr-reset-title"><?php echo esc_html($atts['title']); ?></h1>
+                    <p class="dtr-reset-subtitle"><?php echo esc_html($atts['subtitle']); ?></p>
+                </div>
+                
+                <form class="dtr-reset-form form-container" id="dtr-change-password-form" method="post">
+                    <?php wp_nonce_field('dtr_change_password_nonce', 'dtr_change_password_nonce'); ?>
+                    <input type="hidden" name="user_id" value="<?php echo esc_attr($current_user->ID); ?>">
+                    
+                    <div class="form-row">
+                        <div class="form-field floating-label">
+                            <div class="password-field">
+                                <input type="password" id="dtr-current-password" name="current_password" required placeholder=" ">
+                                <span class="password-toggle" onclick="toggleResetPassword('dtr-current-password')">👁</span>
+                            </div>
+                            <label for="dtr-current-password">Current Password <span class="required">*</span></label>
+                            <span class="dtr-form-error" id="current-password-error"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-field floating-label">
+                            <div class="password-field">
+                                <input type="password" id="dtr-new-password" name="new_password" required placeholder=" ">
+                                <span class="password-toggle" onclick="toggleResetPassword('dtr-new-password')">👁</span>
+                                <meter max="3" id="password-strength-meter"></meter>
+                            </div>
+                            <label for="dtr-new-password">New Password <span class="required">*</span></label>
+                            <div class="dtr-password-strength" id="dtr-password-strength"></div>
+                            <span class="dtr-form-error" id="new-password-error"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-field floating-label">
+                            <div class="password-field">
+                                <input type="password" id="dtr-confirm-password" name="confirm_password" required placeholder=" ">
+                                <span class="password-toggle" onclick="toggleResetPassword('dtr-confirm-password')">👁</span>
+                            </div>
+                            <label for="dtr-confirm-password">Confirm New Password <span class="required">*</span></label>
+                            <p id="password-match-text" class="password-match-feedback"></p>
+                            <span class="dtr-form-error" id="confirm-password-error"></span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="dtr-reset-btn" id="dtr-change-submit">
+                        <span class="button global btn-medium btn-rounded btn-purple shimmer-effect shimmer-slow is-toggle text-left chevron right" style="width:100% !important;line-height:1.6 !important;">Update Password</span>
+                    </button>
+                </form>
+                
+                <div class="dtr-form-messages" id="dtr-change-messages"></div>
             </div>
         </div>
         
@@ -857,6 +936,58 @@ class DTR_Login_Forgot_Password_Shortcode {
         
         wp_send_json_success(array(
             'message' => 'Password reset successful! You can now log in with your new password.',
+            'redirect' => site_url('/login/')
+        ));
+    }
+    
+    /**
+     * Handle Change Password AJAX Request (for logged-in users)
+     */
+    public function handle_change_password() {
+        if (!is_user_logged_in()) {
+            wp_send_json_error(array('message' => 'You must be logged in to change your password.'));
+        }
+        
+        if (!wp_verify_nonce($_POST['dtr_change_password_nonce'], 'dtr_change_password_nonce')) {
+            wp_die('Security check failed');
+        }
+        
+        $user_id = intval($_POST['user_id']);
+        $current_password = $_POST['current_password'];
+        $new_password = $_POST['new_password'];
+        $confirm_password = $_POST['confirm_password'];
+        
+        // Verify the user ID matches the current user
+        $current_user = wp_get_current_user();
+        if ($user_id !== $current_user->ID) {
+            wp_send_json_error(array('message' => 'Invalid user authentication.'));
+        }
+        
+        if (empty($current_password) || empty($new_password) || empty($confirm_password)) {
+            wp_send_json_error(array('message' => 'Please fill in all fields.'));
+        }
+        
+        if ($new_password !== $confirm_password) {
+            wp_send_json_error(array('message' => 'New passwords do not match.'));
+        }
+        
+        if (strlen($new_password) < 8) {
+            wp_send_json_error(array('message' => 'New password must be at least 8 characters long.'));
+        }
+        
+        // Verify current password
+        if (!wp_check_password($current_password, $current_user->user_pass, $current_user->ID)) {
+            wp_send_json_error(array('message' => 'Current password is incorrect.'));
+        }
+        
+        // Update the password
+        wp_set_password($new_password, $current_user->ID);
+        
+        // Log the user out (they'll need to log back in with new password)
+        wp_logout();
+        
+        wp_send_json_success(array(
+            'message' => 'Password updated successfully! You have been logged out for security. Please log in again with your new password.',
             'redirect' => site_url('/login/')
         ));
     }

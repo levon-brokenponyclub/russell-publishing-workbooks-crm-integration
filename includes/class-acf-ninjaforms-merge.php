@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
  * Initialize ACF questions hooks
  */
 function dtr_init_acf_questions_hooks() {
-    add_action('ninja_forms_after_submission', 'dtr_process_acf_questions_from_ninja_forms', 20, 1);
+    add_action('ninja_forms_after_submission', 'dtr_process_acf_questions_from_ninja_forms', 25, 1); // Lower priority
 }
 
 /**
@@ -45,8 +45,8 @@ function dtr_process_acf_questions_from_ninja_forms($form_data) {
         return;
     }
 
-    // Only process specific forms
-    $supported_forms = [2, 31]; // Webinar and Lead Gen forms
+    // Only process specific forms - SKIP Form ID 2 (handled by dedicated webinar processor)
+    $supported_forms = [31]; // Lead Gen forms only - Webinar (ID 2) handled elsewhere
     if (!in_array($form_id, $supported_forms)) {
         dtr_log_acf_questions("Form ID {$form_id} not supported for ACF questions", $debug_id);
         return;

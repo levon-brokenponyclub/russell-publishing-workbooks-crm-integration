@@ -174,7 +174,6 @@ function dtr_nf_collect_membership_data(array $flat, $debug_id) {
         'password'   => dtr_nf_pick($flat, ['password','221']),
         'first_name' => sanitize_text_field(dtr_nf_pick($flat, ['first_name','142'])),
         'last_name'  => sanitize_text_field(dtr_nf_pick($flat, ['last_name','143'])),
-        'employer'   => sanitize_text_field($raw_employer),
         'title'      => sanitize_text_field($title),
         'telephone'  => sanitize_text_field(dtr_nf_pick($flat, ['telephone','146'])),
         'country'    => sanitize_text_field(dtr_nf_pick($flat, ['country','148'],'South Africa')),
@@ -192,11 +191,10 @@ function dtr_nf_collect_membership_data(array $flat, $debug_id) {
         dtr_reg_log("[{$debug_id}] NF WARNING: User already exists (WP) for email {$data['email']}");
         return false;
     }
-    // Ensure both Employer and Claimed Employer fields are synchronized
+    // Use claimed_employer as the primary key for employer data (matches HTML handler)
     $employer_name = sanitize_text_field($raw_employer);
-    $data['employer'] = $employer_name;
     $data['claimed_employer'] = $employer_name;
-    dtr_reg_log("[{$debug_id}] NF DEBUG: Title: '{$title}', Employer Name: '{$employer_name}', Claimed Employer: '{$data['claimed_employer']}'");
+    dtr_reg_log("[{$debug_id}] NF DEBUG: Title: '{$title}', Claimed Employer: '{$data['claimed_employer']}'");
 
     return $data;
 }
@@ -212,10 +210,7 @@ function dtr_nf_create_wp_user_and_meta(array $data, $debug_id) {
         'created_via_ninja_form' => 1,
         'first_name' => $data['first_name'],
         'last_name' => $data['last_name'],
-        'employer' => $data['employer'],
-        'employer_name' => $data['employer'],
-        'cf_person_claimed_employer' => $data['employer'],
-        // Always keep employer_name and cf_person_claimed_employer in sync
+        'cf_person_claimed_employer' => $data['claimed_employer'],
         'person_personal_title' => $data['title'],
         'telephone' => $data['telephone'],
         'country' => $data['country'],
@@ -294,9 +289,7 @@ function dtr_nf_build_workbooks_payload($user_id, array $data, $debug_id) {
         'main_location[country]' => $data['country'],
         'main_location[town]' => $data['town'],
         'main_location[postcode]' => $data['postcode'],
-        'employer_name' => $data['employer'],
-        'cf_person_claimed_employer' => $data['employer'],
-        // Always keep employer_name and cf_person_claimed_employer in sync
+        'cf_person_claimed_employer' => $data['claimed_employer'],
         'cf_person_dtr_subscriber_type' => 'Prospect',
         'cf_person_dtr_subscriber' => 1,
         'cf_person_dtr_web_member' => 1,
@@ -323,14 +316,14 @@ function dtr_nf_build_workbooks_payload($user_id, array $data, $debug_id) {
  * Employer organisation attachment
  * -------------------------------------------------------------------------- */
 function dtr_nf_maybe_attach_employer_org($user_id, array $payload, array $data, $debug_id) {
-    if (!empty($data['employer']) && function_exists('workbooks_get_or_create_organisation_id')) {
-        $org_id = workbooks_get_or_create_organisation_id($data['employer']);
+    if (!empty($data['claimed_employer']) && function_exists('workbooks_get_or_create_organisation_id')) {
+        $org_id = workbooks_get_or_create_organisation_id($data['claimed_employer']);
         if ($org_id) {
-            $payload['main_employer'] = $org_id; $payload['employer_link'] = $org_id;
-            update_user_meta($user_id,'main_employer',$org_id); update_user_meta($user_id,'employer_link',$org_id);
-            dtr_reg_log("[{$debug_id}] NF DEBUG: Employer org ID resolved = {$org_id}");
+            $payload['employer_link'] = $org_id;
+            update_user_meta($user_id,'employer_link',$org_id);
+            dtr_reg_log("[{$debug_id}] NF DEBUG: Employer org ID resolved = {$org_id} for '{$data['claimed_employer']}'");
         } else {
-            dtr_reg_log("[{$debug_id}] NF WARNING: Employer org lookup failed for '{$data['employer']}'");
+            dtr_reg_log("[{$debug_id}] NF WARNING: Employer org lookup failed for '{$data['claimed_employer']}'");
         }
     }
     dtr_reg_log("[{$debug_id}] NF DEBUG: Prepared Workbooks payload");
@@ -467,7 +460,7 @@ if (!function_exists('dtr_nf_membership_log_summary')) {
         dtr_reg_log('Email Address: ' . ($data['email'] ?? ''));
         dtr_reg_log('Telephone Number: ' . ($data['telephone'] ?? ''));
         dtr_reg_log('Job Ttitle: ' . ($data['job_title'] ?? '')); // Intentionally retaining provided label spelling
-        dtr_reg_log('Employer: ' . ($data['employer'] ?? ''));
+        dtr_reg_log('Employer: ' . ($data['claimed_employer'] ?? ''));
         dtr_reg_log('Country: ' . ($data['country'] ?? ''));
         dtr_reg_log('Town: ' . ($data['town'] ?? ''));
         dtr_reg_log('Post Code: ' . ($data['postcode'] ?? ''));
