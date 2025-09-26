@@ -307,14 +307,14 @@ function dtr_membership_registration_shortcode($atts) {
                         
                        
                         <!-- Debug Test Button -->
-                        <div style="margin-top: 15px; text-align: center;position:absolute:top:100px;left:100px;width:100%;dsiplay:block;">
+                        <!-- <div style="margin-top: 15px; text-align: center;position:absolute:top:100px;left:100px;width:100%;dsiplay:block;">
                             <button type="button" onclick="testAjaxEndpoint()" class="button" style="background: #ff6600; color: white; padding: 8px 16px; font-size: 12px; border-radius: 4px; margin-right: 10px;">
                                 🔧 Test AJAX Connection
                             </button>
                             <button type="button" onclick="fillTestData()" class="button" style="background: #28a745; color: white; padding: 8px 16px; font-size: 12px; border-radius: 4px;">
                                 📝 Fill Test Data
                             </button>
-                        </div>
+                        </div> -->
                        
                     </div>
                 </div>

@@ -2,239 +2,67 @@
 /* --------------------------------------------------------------------------
  * Workbooks Webinar Registration Shortcode
  * 
- * DEBUGGING: File modified at 2025-09-24 - If changes don't appear, there may be caching
+ * DEBUGGING: File modified at 2025-09-26 - If changes don't appear, there may be caching
  * 
  * Shortcode: [dtr_webinar_registration]
- * Renders a webinar registration form with dynamic fields from ACF.
+ * Renders a webinar registration form with HTML/AJAX submission for logged-in users.
+ * Pure HTML form implementation (Ninja Forms removed).
  *
  * Usage: [dtr_webinar_registration]
  * The shortcode automatically pulls data from the current webinar post.
  *
  * Related Files:
  * 
- * Classes:
- * - class-helper-functions.php - Common utility functions
- * - class-webinar-registration-form-shortcode.php - Shortcode for webinar registration form
- * 
  * Form Handlers:
  * - webinar-registration-form-shortcode.php (this file) - Form rendering and AJAX handler
+ * - form-handler-live-webinar-registration.php - Core Workbooks CRM integration handler
+ * - form-submission-processors-ninjaform-hooks.php - Legacy form dispatcher (webinar forms disabled)
  * 
  * Assets:
  * CSS:
  * - assets/css/dynamic-forms.css - Base form styling
- * - assets/css/global-buttons.css - Button styles
+ * - assets/css/webinar-form.css - Webinar-specific form styles with loading overlay
  * 
  * JavaScript:
- * - assets/js/webinar-form.js - Form validation and submission
+ * - assets/js/frontend.js - Form submission handling and loading overlay management
+ * - assets/js/webinar-form.js - Form validation and AJAX submission logic
  *
  * Debugging:
- * - logs/form-handler-webinar-shortcode-registration-debug.log - Form submission logs
+ * - logs/webinar-registration-new-format-debug.log - Structured debug logs with sections
  * 
  * Features:
+ * - Logged-in users only (shows login/register button for guests)
+ * - Server-side user data extraction (no form fields for user info)
  * - Dynamic speaker questions (optional)
  * - Additional custom questions from ACF
- * - Tracking and analytics integration
+ * - Animated loading overlay with progress tracking
  * - Automated form submission to Workbooks CRM
- * - User data pre-population for logged-in users
- * - AJAX form submission with loading states
+ * - Registration status tracking and deregistration for admins
  * - Email confirmation system
+ * - Structured debug logging with emoji indicators
  *
  * Required ACF Fields:
  * - webinar_fields (Group)
- *   - workbooks_reference
- *   - add_speaker_question
- *   - add_additional_questions
- *   - add_questions (Repeater)
+ *   - workbooks_reference - Event ID for Workbooks CRM
+ *   - add_speaker_question - Enable/disable speaker question field
+ *   - add_additional_questions - Enable additional custom questions
+ *   - add_questions (Repeater) - Custom question fields
+ *   - redirect_url_after_form_submission - Thank you page redirect
+ *
+ * AJAX Handlers:
+ * - dtr_handle_webinar_submission - Main form submission handler for logged-in users
+ * - dtr_handle_webinar_shortcode_submission - Legacy handler (deprecated)
  *
  * Example: [dtr_webinar_registration title="Register Now" description="Join our webinar"]
  *
  * Note: This shortcode is part of the DTR Workbooks CRM Integration plugin
  * and requires the Advanced Custom Fields (ACF) plugin to be active.
+ * System now uses pure HTML form with AJAX submission - Ninja Forms dependency removed.
  * -------------------------------------------------------------------------- */
 
 if (!defined('ABSPATH')) exit;
 
-// Add actions to handle form submission
-add_action('wp_ajax_dtr_submit_webinar_shortcode', 'dtr_handle_webinar_shortcode_submission');
-add_action('wp_ajax_nopriv_dtr_submit_webinar_shortcode', 'dtr_handle_webinar_shortcode_submission');
-
-// Handle webinar shortcode form submission
-function dtr_handle_webinar_shortcode_submission() {
-    $timestamp = date('Y-m-d H:i:s');
-    $debug_log_file = DTR_WORKBOOKS_PLUGIN_DIR . 'logs/form-handler-webinar-shortcode-registration-debug.log';
-    
-    // Helper function to log debug messages
-    $log_debug = function($message) use ($debug_log_file, $timestamp) {
-        $formatted_message = "[{$timestamp}] {$message}" . PHP_EOL;
-        file_put_contents($debug_log_file, $formatted_message, FILE_APPEND | LOCK_EX);
-        error_log('[DTR Webinar] ' . $message);
-    };
-
-    try {
-        check_ajax_referer('dtr_webinar_nonce', '_wpnonce');
-
-        // Collect form data
-        $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
-        $first_name = sanitize_text_field(isset($_POST['first_name']) ? $_POST['first_name'] : '');
-        $last_name = sanitize_text_field(isset($_POST['last_name']) ? $_POST['last_name'] : '');
-        $email = sanitize_email(isset($_POST['email']) ? $_POST['email'] : '');
-        $person_id = sanitize_text_field(isset($_POST['person_id']) ? $_POST['person_id'] : '');
-        $workbooks_reference = sanitize_text_field(isset($_POST['workbooks_reference']) ? $_POST['workbooks_reference'] : '');
-        $speaker_question = sanitize_textarea_field(isset($_POST['speaker_question']) ? $_POST['speaker_question'] : '');
-        $optin = isset($_POST['cf_mailing_list_member_sponsor_1_optin']) && $_POST['cf_mailing_list_member_sponsor_1_optin'] === '1';
-
-        // If user is logged in, use their email if form email is empty
-        if (is_user_logged_in()) {
-            $current_user = wp_get_current_user();
-            if (empty($email)) {
-                $email = $current_user->user_email;
-            }
-            if (empty($first_name)) {
-                $first_name = $current_user->user_firstname ?: $current_user->display_name;
-            }
-            if (empty($last_name)) {
-                $last_name = $current_user->user_lastname;
-            }
-        }
-
-        $log_debug("✅ Using post_id: {$post_id}");
-        
-        // Debug: Log what we received from the form
-        $form_email = isset($_POST['email']) ? $_POST['email'] : 'empty';
-        $form_first = isset($_POST['first_name']) ? $_POST['first_name'] : 'empty';
-        $form_last = isset($_POST['last_name']) ? $_POST['last_name'] : 'empty';
-        $log_debug("ℹ️ Form data received - Email: '{$form_email}', First: '{$form_first}', Last: '{$form_last}'");
-        
-        // Check if user is logged in and show final values being used
-        if (is_user_logged_in()) {
-            $current_user = wp_get_current_user();
-            $user_person_id = get_user_meta($current_user->ID, 'workbooks_person_id', true);
-            $log_debug("ℹ️ User is logged in - ID: {$current_user->ID}, Using Email: {$email}");
-            $log_debug("ℹ️ User details - Using First: '{$first_name}', Last: '{$last_name}', Person ID: '{$user_person_id}'");
-        } else {
-            $user_person_id = $person_id; // Use form person_id for guests
-            $log_debug("ℹ️ User is not logged in - processing as guest registration");
-        }
-        
-        $log_debug("ℹ️ Form data - Speaker question: '{$speaker_question}', Sponsor optin: " . ($optin ? '1' : '0'));
-
-        // Validation
-        if (!$post_id || !$email) {
-            $log_debug("❌ VALIDATION ERROR: Required fields missing - post_id: {$post_id}, email: '{$email}'");
-            wp_send_json_error(array('message' => 'Required fields are missing'));
-            return;
-        }
-
-        $log_debug("✅ STEP 1: Processing Webinar Form (ID {$post_id})");
-
-        // Get webinar details and Workbooks reference
-        $post = get_post($post_id);
-        $webinar_title = $post ? $post->post_title : '';
-        
-        // Get Workbooks reference from ACF fields
-        $webinar_fields = get_field('webinar_fields', $post_id);
-        $event_id = '';
-        
-        if (!empty($webinar_fields['workbooks_reference'])) {
-            $event_id = preg_replace('/\D+/', '', $webinar_fields['workbooks_reference']);
-            $log_debug("ℹ️ STEP 2: Found Workbooks reference in webinar_fields group: {$event_id}");
-        } else {
-            $log_debug("⚠️ STEP 2: No Workbooks reference found in webinar_fields");
-        }
-
-        // Process with Workbooks if we have the integration
-        if ($event_id && function_exists('dtr_workbooks_api_request')) {
-            $log_debug("✅ STEP 3: Person found via user meta (ID: {$user_person_id})");
-            $log_debug("✅ STEP 3: Person created/updated");
-            
-            $full_name = trim($first_name . ' ' . $last_name);
-            $log_debug("ℹ️ STEP 4: Creating ticket with name: '{$full_name}', person_id: {$user_person_id}, event_id: {$event_id}");
-            $log_debug("✅ STEP 4: Ticket Created/Updated");
-            
-            $log_debug("ℹ️ Updating Mailing List Entry for event_id={$event_id}, person_id={$user_person_id}");
-            $log_debug("ℹ️ Mailing List Entry updated for {$email}");
-            $log_debug("✅ STEP 5: Added to Mailing List");
-        } else {
-            $log_debug("⚠️ STEP 3: Workbooks integration not available or no event ID");
-        }
-
-        // Log speaker question
-        if (!empty($speaker_question)) {
-            $log_debug("✅ STEP 6: Speaker Question = {$speaker_question}");
-        } else {
-            $log_debug("ℹ️ STEP 6: No speaker question provided");
-        }
-
-        // Log sponsor optin
-        $log_debug("✅ STEP 7: Sponsor Optin = " . ($optin ? 'Yes' : 'No'));
-
-        // Generate unique registration ID
-        $registration_id = wp_generate_uuid4();
-        
-        // Store registration in post meta
-        $registration_data = array(
-            'registration_id' => $registration_id,
-            'user_id' => is_user_logged_in() ? get_current_user_id() : null,
-            'first_name' => $first_name,
-            'last_name' => $last_name,
-            'email' => $email,
-            'person_id' => $user_person_id ?? $person_id,
-            'workbooks_reference' => $workbooks_reference,
-            'event_id' => $event_id,
-            'speaker_question' => $speaker_question,
-            'optin' => $optin,
-            'registration_date' => current_time('mysql'),
-            'post_id' => $post_id,
-            'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
-            'ip_address' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''
-        );
-
-        // Add registration to post meta
-        add_post_meta($post_id, 'webinar_registrations', $registration_data);
-        
-        // Also store a user-specific registration record for quick lookups
-        if (is_user_logged_in()) {
-            $user_registration_key = 'webinar_registration_' . $post_id;
-            update_user_meta(get_current_user_id(), $user_registration_key, array(
-                'registration_id' => $registration_id,
-                'post_id' => $post_id,
-                'registration_date' => current_time('mysql'),
-                'email' => $email
-            ));
-        }
-
-        // Send confirmation email
-        $to = $email;
-        $subject = sprintf('Registration Confirmation: %s', $webinar_title);
-        $message = sprintf(
-            "Thank you for registering for %s!\n\n" .
-            "Your registration details:\n" .
-            "Name: %s %s\n" .
-            "Email: %s\n\n" .
-            "We'll send you a reminder email before the webinar starts.",
-            $webinar_title,
-            $first_name,
-            $last_name,
-            $email
-        );
-        $headers = array('Content-Type: text/html; charset=UTF-8');
-        
-        wp_mail($to, $subject, nl2br($message), $headers);
-
-        $log_debug("🎉 FINAL RESULT: WEBINAR REGISTRATION SUCCESS!");
-
-        // Send success response
-        wp_send_json_success(array(
-            'message' => 'Registration successful',
-            'webinar_title' => $webinar_title,
-            'email_address' => $email
-        ));
-
-    } catch (Exception $e) {
-        $log_debug("❌ FATAL ERROR: " . $e->getMessage());
-        wp_send_json_error(array('message' => 'Registration failed: ' . $e->getMessage()));
-    }
-}
+// Legacy function removed - now using dtr_handle_webinar_submission() only
 
 // Add shortcode for webinar registration form
 add_shortcode('dtr_webinar_registration', 'dtr_webinar_registration_shortcode');
@@ -861,11 +689,20 @@ function dtr_register_webinar_scripts() {
         filemtime(plugin_dir_path(__FILE__) . '../assets/css/dynamic-forms.css')
     );
 
+    // Register frontend script
+    wp_register_script(
+        'dtr-frontend',
+        plugin_dir_url(__FILE__) . '../assets/js/frontend.js',
+        array('jquery'),
+        filemtime(plugin_dir_path(__FILE__) . '../assets/js/frontend.js'),
+        true
+    );
+
     // Register main script
     wp_register_script(
         'dtr-webinar-form',
         plugin_dir_url(__FILE__) . '../assets/js/webinar-form.js',
-        array('jquery', 'wp-util'),
+        array('jquery', 'wp-util', 'dtr-frontend'),
         filemtime(plugin_dir_path(__FILE__) . '../assets/js/webinar-form.js'),
         true
     );
@@ -922,6 +759,9 @@ function dtr_enqueue_webinar_scripts() {
 
     // Enqueue styles
     wp_enqueue_style('dtr-dynamic-forms');
+
+    // Enqueue frontend script
+    wp_enqueue_script('dtr-frontend');
 
     // Always try to localize the script, even with minimal data if needed
     $localize_data = !empty($dtr_webinar_form_data) ? $dtr_webinar_form_data : array(
@@ -994,9 +834,8 @@ function dtr_enqueue_webinar_scripts() {
             // Enhanced Progress Loader Functions
             function showProgressLoader() {
                 const loadingOverlay = document.getElementById('formLoaderOverlay');
-                const progressFill = document.getElementById('progressCircleFill');
-                const statusText = document.getElementById('loaderStatusText');
-                const countdownContainer = document.getElementById('countdownContainer');
+                const progressCircle = document.getElementById('progressCircle');
+                const progressValue = document.getElementById('progressValue');
                 
                 if (loadingOverlay) {
                     loadingOverlay.style.display = 'flex';
@@ -1008,68 +847,35 @@ function dtr_enqueue_webinar_scripts() {
                     }
                     
                     // Reset progress
-                    progressFill.className = 'progress-circle-fill progress-0';
-                    statusText.textContent = 'Preparing submission...';
-                    countdownContainer.classList.remove('active');
+                    if (progressCircle) {
+                        progressCircle.style.strokeDashoffset = '283'; // 0%
+                    }
+                    if (progressValue) {
+                        progressValue.textContent = '0%';
+                    }
+                    
+                    // Trigger fade-in animation
+                    setTimeout(() => {
+                        loadingOverlay.classList.add('show');
+                    }, 10);
                 }
             }
 
             // Real-time progress updater that matches actual submission stages
             function updateFormProgress(stage, message) {
-                const progressFill = document.getElementById('progressCircleFill');
-                const statusText = document.getElementById('loaderStatusText');
+                const progressCircle = document.getElementById('progressCircle');
+                const progressValue = document.getElementById('progressValue');
                 
-                if (progressFill && statusText) {
-                    progressFill.className = `progress-circle-fill progress-${stage}`;
-                    statusText.textContent = message;
+                if (progressCircle && progressValue) {
+                    // Calculate stroke offset (283 is full circle, 0 is 100%)
+                    const offset = 283 - (stage / 100) * 283;
+                    progressCircle.style.strokeDashoffset = offset.toString();
+                    progressValue.textContent = stage + '%';
                     console.log(`🔄 Progress Update: ${stage}% - ${message}`);
                 }
             }
 
-            // Start countdown after successful submission (called from success handler)
-            function startSubmissionCountdown() {
-                const countdownContainer = document.getElementById('countdownContainer');
-                const countdownNumber = document.getElementById('countdownNumber');
-                const countdownMessage = document.getElementById('countdownMessage');
-                const loaderIcon = document.querySelector('.loader-icon');
-                
-                // Hide the user icon and show countdown
-                if (loaderIcon) loaderIcon.style.opacity = '0';
-                if (countdownContainer) countdownContainer.classList.add('active');
-                
-                let count = 3;
-                
-                function showNextCount() {
-                    if (count > 0) {
-                        if (countdownNumber) countdownNumber.textContent = count;
-                        if (countdownMessage) countdownMessage.textContent = '';
-                        count--;
-                        setTimeout(showNextCount, 1000);
-                    } else {
-                        // Show final message
-                        if (countdownNumber) countdownNumber.textContent = '';
-                        if (countdownMessage) countdownMessage.textContent = 'Registration Complete!';
-                        
-                        // Keep overlay visible and redirect to thank you page after final message
-                        setTimeout(() => {
-                            window.location.href = '/thank-you-for-registering-webinars/';
-                        }, 1000); // Redirect 1s after "Registration Complete!" shows - overlay stays visible
-                    }
-                }
-                
-                showNextCount();
-            }
 
-            function simulateFormProgress() {
-                // This function is now deprecated - progress is handled by real-time updates
-                console.log('⚠️ simulateFormProgress is deprecated - using real-time progress tracking');
-            }
-
-            function startCountdown() {
-                // This function is now deprecated - use startSubmissionCountdown for real-time progress
-                console.log('⚠️ startCountdown is deprecated - use startSubmissionCountdown instead');
-                startSubmissionCountdown();
-            }
 
             function hideProgressLoader() {
                 const loadingOverlay = document.getElementById('formLoaderOverlay');
@@ -1084,27 +890,49 @@ function dtr_enqueue_webinar_scripts() {
                 }
             }
 
+            function slideOutLoader() {
+                const loadingOverlay = document.getElementById('formLoaderOverlay');
+                if (loadingOverlay) {
+                    loadingOverlay.classList.add('fade-out');
+                    
+                    // Hide completely after fade animation completes
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                        loadingOverlay.classList.remove('show', 'fade-out');
+                        
+                        // Restore header z-index
+                        const header = document.querySelector('header');
+                        if (header) {
+                            header.style.zIndex = '';
+                        }
+                    }, 500);
+                }
+            }
+
             function previewLoader() {
                 showProgressLoader();
                 
                 // Simulate the actual submission flow for preview
                 setTimeout(() => updateFormProgress(25, 'Validating security credentials...'), 500);
                 setTimeout(() => updateFormProgress(40, 'Security validation complete...'), 1500);
-                setTimeout(() => updateFormProgress(50, 'Preparing webinar registration...'), 2000);
-                setTimeout(() => updateFormProgress(60, 'Submitting your information...'), 2500);
-                setTimeout(() => updateFormProgress(75, 'Processing your registration...'), 3500);
-                setTimeout(() => updateFormProgress(90, 'Finalizing your registration...'), 4500);
+                setTimeout(() => updateFormProgress(60, 'Preparing webinar registration...'), 2000);
+                setTimeout(() => updateFormProgress(80, 'Submitting your information...'), 2500);
+                setTimeout(() => updateFormProgress(90, 'Processing your registration...'), 3500);
+                setTimeout(() => updateFormProgress(100, 'Registration Successful!'), 4500);
                 setTimeout(() => {
-                    updateFormProgress(100, 'Registration Successful!');
-                    setTimeout(() => startSubmissionCountdown(), 500);
-                }, 5000);
+                    // At 100%, fade out and simulate redirect
+                    slideOutLoader();
+                    setTimeout(() => {
+                        console.log('Simulating redirect...');
+                    }, 500);
+                }, 5500);
             }
 
             // Make functions globally available
             window.showProgressLoader = showProgressLoader;
             window.updateFormProgress = updateFormProgress;
-            window.startSubmissionCountdown = startSubmissionCountdown;
             window.hideProgressLoader = hideProgressLoader;
+            window.slideOutLoader = slideOutLoader;
             window.previewLoader = previewLoader;
 
         </script>
@@ -1128,12 +956,21 @@ function dtr_enqueue_webinar_scripts() {
 function dtr_webinar_registration_shortcode($atts) {
     // Only show form for logged-in users
     if (!is_user_logged_in()) {
-        return '<div class="webinar-login-required" style="text-align: center; padding: 40px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px;">
-            <h3 style="margin-bottom: 20px; color: #495057;">Login Required</h3>
-            <p style="margin-bottom: 25px; color: #6c757d; font-size: 16px;">Please log in to register for this webinar.</p>
-            <a href="/my-account/" class="button btn-small global btn-rounded btn-blue" style="text-decoration: none;">Login to Register</a>
+        return '
+        <div class="full-page vertical-half-margin event-registration">
+            <!-- split button -->
+            <div class="ks-split-btn" style="position: relative;">
+                <button type="button" class="ks-main-btn ks-main-btn-global btn-blue shimmer-effect shimmer-slow is-toggle text-left" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="ks68d5abd496cff-menu">Login or Register Now</button>
+
+                <ul id="ks68d5abd496cff-menu" class="ks-menu" role="menu" style="z-index: 1002;">
+                    <li role="none"><a role="menuitem" href="#" class="login-button dark-blue" onclick="event.preventDefault(); openLoginModal();">Login</a></li>
+                    <li role="none"><a role="menuitem" href="/free-membership">Become a Member</a></li>
+                </ul>
+            </div>
+            <div class="reveal-text">Login or Register for this event</div>
         </div>';
     }
+    
     
     // Handle deregistration request
     if (isset($_POST['deregister_webinar']) && isset($_POST['post_id']) && isset($_POST['deregister_nonce'])) {
@@ -1401,22 +1238,122 @@ function dtr_webinar_registration_shortcode($atts) {
     ?>
     
     <?php if (isset($_GET['deregistered']) && $_GET['deregistered'] == '1'): ?>
-    <div class="deregistration-success" style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
-        <strong>✅ Deregistration Successful!</strong> You have been removed from this webinar. You can register again using the form below.
+    <div id="toast-deregistered" class="toast-message toast-success">
+        <strong>✅ Deregistration Successful!</strong> You have been removed from this webinar.
     </div>
     <?php endif; ?>
     
     <?php if (isset($_GET['dtr_message']) && current_user_can('manage_options')): ?>
         <?php if ($_GET['dtr_message'] === 'deregistered'): ?>
-        <div class="admin-message" style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
+        <div id="toast-admin-deregistered" class="toast-message toast-success">
             <strong>🧪 Admin Test: Deregistration Successful!</strong> Registration removed via admin bar.
         </div>
         <?php elseif ($_GET['dtr_message'] === 'registered'): ?>
-        <div class="admin-message" style="background: #cce5ff; border: 1px solid #b3d9ff; color: #004085; padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
+        <div id="toast-admin-registered" class="toast-message toast-info">
             <strong>🧪 Admin Test: Registration Created!</strong> Test registration added via admin bar.
         </div>
         <?php endif; ?>
     <?php endif; ?>
+    
+    <style>
+    .toast-message {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        font-weight: 500;
+        max-width: 400px;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.3s ease-in-out;
+        animation: slideInRight 0.3s ease-out forwards, fadeOut 0.5s ease-in 4.5s forwards;
+    }
+    
+    .toast-success {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+    }
+    
+    .toast-info {
+        background: #cce5ff;
+        border: 1px solid #b3d9ff;
+        color: #004085;
+    }
+    
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .toast-message {
+            top: 10px;
+            right: 10px;
+            left: 10px;
+            max-width: none;
+            transform: translateY(-100%);
+            animation: slideInDown 0.3s ease-out forwards, fadeOutUp 0.5s ease-in 4.5s forwards;
+        }
+        
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeOutUp {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-100%);
+            }
+        }
+    }
+    </style>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-remove toast messages after animation completes
+        const toasts = document.querySelectorAll('.toast-message');
+        toasts.forEach(function(toast) {
+            setTimeout(function() {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 5000); // Remove after 5 seconds total
+        });
+    });
+    </script>
     
     <div class="full-page form-container vertical-half-margin" id="registration-form">
         <!-- Add tracking fields at the top of the form -->
@@ -1428,31 +1365,17 @@ function dtr_webinar_registration_shortcode($atts) {
         <input type="hidden" id="submitTime" name="submit_time" value="">
 
         <?php if (is_user_logged_in()): ?>
-        <!-- Hidden Fields for logged in user -->
-        <input type="hidden" id="firstName" name="first_name" value="<?php echo esc_attr($current_user->user_firstname); ?>">
-        <input type="hidden" id="lastName" name="last_name" value="<?php echo esc_attr($current_user->user_lastname); ?>">
+        <!-- Hidden Fields for logged in user (data will be fetched server-side in AJAX handler) -->
         <input type="hidden" id="personId" name="person_id" value="<?php echo esc_attr($person_id); ?>">
-        <input type="hidden" id="email" name="email" value="<?php echo esc_attr($current_user->user_email); ?>">
         <?php else: ?>
-        <!-- User Details Fields for Guest Users - These need to be visible and fillable -->
-        <div class="form-row">
-            <div class="form-field half-width">
-                <label for="firstName">First Name *</label>
-                <input type="text" id="firstName" name="first_name" required>
-            </div>
-            <div class="form-field half-width">
-                <label for="lastName">Last Name *</label>
-                <input type="text" id="lastName" name="last_name" required>
-            </div>
-        </div>
+        <!-- This form is only available to logged-in users -->
         <div class="form-row">
             <div class="form-field full-width">
-                <label for="email">Email Address *</label>
-                <input type="email" id="email" name="email" required>
+                <p style="color: #dc3545; text-align: center; padding: 20px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px;">
+                    <strong>Please log in to register for this webinar.</strong>
+                </p>
             </div>
         </div>
-        <!-- Hidden person ID for guest users -->
-        <input type="hidden" id="personId" name="person_id" value="">
         <?php endif; ?>
 
         <div class="form-container webinar-registration-form">
@@ -1567,30 +1490,268 @@ function dtr_webinar_registration_shortcode($atts) {
         </div>
     </div>
 
+    <!-- Loading Overlay -->
+    <div class="form-loader-overlay" id="formLoaderOverlay" style="display: none;">
+        <div class="progress-card">
+            <div class="progress-body">
+                <div class="circular-progress">
+                    <svg class="progress-svg" viewBox="0 0 100 100">
+                        <circle class="progress-track" cx="50" cy="50" r="45" />
+                        <circle class="progress-indicator" cx="50" cy="50" r="45" id="progressCircle" />
+                    </svg>
+                    <div class="progress-value" id="progressValue">0%</div>
+                </div>
+            </div>
+            <div class="progress-footer">
+                <div class="progress-chip">
+                    Registration processing...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay CSS Styles -->
+    <style>
+    .form-loader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        backdrop-filter: blur(8px);
+        opacity: 1;
+        transition: opacity 0.5s ease-in;
+        display:block;
+    }
+
+    .form-loader-overlay.show {
+        opacity: 1;
+    }
+
+    .form-loader-overlay.fade-out {
+        opacity: 0;
+        transition: opacity 0.5s ease-out;
+    }
+
+    .progress-card {
+        width: 320px;
+        height: 320px;
+        border-radius: 20px;
+        border: none;
+        display: flex;
+        flex-direction: column;
+        transform: scale(0.8);
+        opacity: 0;
+        transition: all 0.6s ease-out;
+    }
+
+    .form-loader-overlay.show .progress-card {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    .progress-body {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 0;
+    }
+
+    .circular-progress {
+        position: relative;
+        width: 144px;
+        height: 144px;
+    }
+
+    .progress-svg {
+        width: 144px;
+        height: 144px;
+        transform: rotate(-90deg);
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    }
+
+    .progress-track {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.1);
+        stroke-width: 4;
+    }
+
+    .progress-indicator {
+        fill: none;
+        stroke: white;
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-dasharray: 283; /* 2π × 45 */
+        stroke-dashoffset: 283;
+        transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .progress-value {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        font-weight: 600;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .progress-footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+        padding-top: 0;
+    }
+
+    .progress-chip {
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 12px;
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Fallback loader styles for when overlay isn't found */
+    .dtr-form-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .dtr-form-loader .loader-content {
+        text-align: center;
+        color: white;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+
+    .dtr-form-loader .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid #009fe3;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .dtr-form-loader .progress-text {
+        font-size: 16px;
+        margin-top: 10px;
+    }
+    </style>
     
     <?php
     return ob_get_clean();
 }
 
-// Add actions to handle form submission and tracking
-add_action('wp_ajax_dtr_submit_webinar_shortcode', 'dtr_handle_webinar_submission');
-add_action('wp_ajax_nopriv_dtr_submit_webinar_shortcode', 'dtr_handle_webinar_submission');
-add_action('wp_ajax_dtr_webinar_track_submission', 'dtr_webinar_track_submission');
-add_action('wp_ajax_nopriv_dtr_webinar_track_submission', 'dtr_webinar_track_submission');
+// Add actions to handle form submission and tracking (prevent multiple registrations)
+global $dtr_webinar_ajax_registered;
+if (!$dtr_webinar_ajax_registered) {
+    $dtr_webinar_ajax_registered = true;
+    
+    add_action('wp_ajax_dtr_submit_webinar_shortcode', 'dtr_handle_webinar_submission');
+    add_action('wp_ajax_nopriv_dtr_submit_webinar_shortcode', 'dtr_handle_webinar_submission');
+    error_log('[DTR Webinar] AJAX actions registered successfully - timestamp: ' . current_time('mysql'));
+} else {
+    error_log('[DTR Webinar] AJAX actions already registered - skipping duplicate registration');
+}
+
+if (!has_action('wp_ajax_dtr_webinar_track_submission', 'dtr_webinar_track_submission')) {
+    add_action('wp_ajax_dtr_webinar_track_submission', 'dtr_webinar_track_submission');
+    add_action('wp_ajax_nopriv_dtr_webinar_track_submission', 'dtr_webinar_track_submission');
+}
 
 // Handle webinar form submission
+if (!function_exists('dtr_handle_webinar_submission')) {
 function dtr_handle_webinar_submission() {
+    // Aggressive duplicate prevention with global variable + database lock
+    global $dtr_webinar_processing;
+    $user_id = get_current_user_id();
+    $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+    $unique_key = $user_id . '_' . $post_id;
+    
+    // First check - global variable (immediate)
+    if (isset($dtr_webinar_processing[$unique_key])) {
+        error_log('[DTR Webinar] GLOBAL BLOCK: Duplicate submission detected for User: ' . $user_id . ', Post: ' . $post_id);
+        wp_send_json_error(array('message' => 'Submission already in progress'));
+        return;
+    }
+    
+    // Set global processing flag immediately
+    $dtr_webinar_processing[$unique_key] = true;
+    
+    // Second check - database transient (persistent)
+    $submission_lock_key = 'dtr_webinar_lock_' . $unique_key;
+    if (get_transient($submission_lock_key)) {
+        error_log('[DTR Webinar] DATABASE BLOCK: Duplicate submission detected for User: ' . $user_id . ', Post: ' . $post_id);
+        unset($dtr_webinar_processing[$unique_key]); // Clean up global flag
+        wp_send_json_error(array('message' => 'Please wait before submitting again'));
+        return;
+    }
+    
+    // Set database lock for 30 seconds
+    set_transient($submission_lock_key, microtime(true), 30);
+    
+    error_log('[DTR Webinar] SUBMISSION ALLOWED: Processing for User: ' . $user_id . ', Post: ' . $post_id);
+    
     // Verify nonce
     check_ajax_referer('dtr_webinar_nonce', '_wpnonce');
+    
+    // Ensure user is logged in
+    if (!is_user_logged_in()) {
+        // Clean up processing flags before error
+        global $dtr_webinar_processing;
+        $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+        $unique_key = '0_' . $post_id; // No user ID for logged out users
+        unset($dtr_webinar_processing[$unique_key]);
+        delete_transient('dtr_webinar_lock_' . $unique_key);
+        
+        wp_send_json_error(array(
+            'message' => 'You must be logged in to register for webinars',
+            'error' => 'user_not_logged_in'
+        ));
+        return;
+    }
 
-    // Collect form data
-    $post_id = intval($_POST['post_id']);
-    $first_name = sanitize_text_field($_POST['first_name'] ?? '');
-    $last_name = sanitize_text_field($_POST['last_name'] ?? '');
-    $email = sanitize_email($_POST['email'] ?? '');
+    // Get current logged-in user details
+    $current_user = wp_get_current_user();
+    $email = $current_user->user_email;
+    $first_name = get_user_meta($current_user->ID, 'first_name', true) ?: $current_user->display_name;
+    $last_name = get_user_meta($current_user->ID, 'last_name', true) ?: '';
+    
+    // Debug logging
+    error_log("DTR WEBINAR AJAX: User ID {$current_user->ID}, Email: $email, Name: $first_name $last_name");
+
+    // Collect form data (only non-user fields)
+    $post_id = intval($_POST['post_id'] ?? 0);
     $speaker_question = sanitize_textarea_field($_POST['speaker_question'] ?? '');
     $workbooks_reference = sanitize_text_field($_POST['workbooks_reference'] ?? '');
-    $optin = isset($_POST['cf_mailing_list_member_sponsor_1_optin']) ? '1' : '0';
+    $optin = isset($_POST['cf_mailing_list_member_sponsor_1_optin']) ? 1 : 0;
 
     // Additional questions if any
     $additional_questions = [];
@@ -1602,25 +1763,62 @@ function dtr_handle_webinar_submission() {
         }
     }
 
-    // Store registration in WordPress
+    // Prepare registration data for Workbooks submission
     $registration_data = array(
         'first_name' => $first_name,
         'last_name' => $last_name,
         'email' => $email,
         'speaker_question' => $speaker_question,
+        'question_for_speaker' => $speaker_question, // Alternative key
         'workbooks_reference' => $workbooks_reference,
-        'optin' => $optin,
+        'cf_mailing_list_member_sponsor_1_optin' => $optin,
         'additional_questions' => $additional_questions,
         'registration_date' => current_time('mysql'),
         'post_id' => $post_id
     );
+    
+    // Submit to Workbooks using our live registration handler
+    $workbooks_result = false;
+    if (function_exists('dtr_handle_live_webinar_registration')) {
+        $workbooks_result = dtr_handle_live_webinar_registration($registration_data);
+    }
+    
+    // If Workbooks submission failed, return error
+    if (!$workbooks_result || (is_array($workbooks_result) && !$workbooks_result['success'])) {
+        // Clean up processing flags before error
+        global $dtr_webinar_processing;
+        $user_id = get_current_user_id();
+        $post_id = intval($_POST['post_id']);
+        $unique_key = $user_id . '_' . $post_id;
+        unset($dtr_webinar_processing[$unique_key]);
+        delete_transient('dtr_webinar_lock_' . $unique_key);
+        
+        wp_send_json_error(array(
+            'message' => 'Registration failed - please try again',
+            'error' => 'workbooks_submission_failed'
+        ));
+        return;
+    }
 
-    // Add registration to post meta
+    // Store registration in WordPress for backup/reference
     add_post_meta($post_id, 'webinar_registrations', $registration_data);
 
     // Get webinar title
     $post = get_post($post_id);
     $webinar_title = $post ? $post->post_title : '';
+
+    // Get redirect URL from ACF field
+    $webinar_fields = get_field('webinar_fields', $post_id);
+    $redirect_url = '';
+    
+    if ($webinar_fields && isset($webinar_fields['form_submission_redirect'])) {
+        $redirect_url = $webinar_fields['form_submission_redirect'];
+    }
+    
+    // Fallback to default thank you page if no redirect is set
+    if (empty($redirect_url)) {
+        $redirect_url = '/thank-you-for-registering-webinars/';
+    }
 
     // Send confirmation email
     $to = $email;
@@ -1640,15 +1838,25 @@ function dtr_handle_webinar_submission() {
     
     wp_mail($to, $subject, nl2br($message), $headers);
 
-    // Send success response
+    // Send success response with redirect URL
+    // Clean up processing flags
+    global $dtr_webinar_processing;
+    $user_id = get_current_user_id();
+    $post_id = intval($_POST['post_id']);
+    $unique_key = $user_id . '_' . $post_id;
+    unset($dtr_webinar_processing[$unique_key]);
+    delete_transient('dtr_webinar_lock_' . $unique_key);
+    
+    error_log('[DTR Webinar] SUBMISSION COMPLETE: Cleaned up locks for User: ' . $user_id . ', Post: ' . $post_id);
+    
     wp_send_json_success(array(
         'message' => 'Registration successful',
         'webinar_title' => $webinar_title,
         'email_address' => $email,
         'registration_id' => uniqid('reg_'),
-        // You can add a redirect URL if needed
-        // 'redirect_url' => get_permalink($post_id)
+        'redirect_url' => $redirect_url
     ));
+}
 }
 
 function dtr_webinar_track_submission() {

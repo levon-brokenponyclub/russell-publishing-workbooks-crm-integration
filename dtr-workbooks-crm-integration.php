@@ -78,26 +78,7 @@ if (!function_exists('dtr_custom_log')) {
     }
 }
 
-// Include core functionality files
-
-$shortcode_files = [
-    'dtr-shortcodes.php',                       // User preference management shortcodes
-    'dtr-my-account-details.php',               // Account management functionality
-    'login-forgot-password-shortcode.php',      // Login and password reset forms
-    'webinar-registration-shortcodes.php',      // Webinar registration handling
-    'workbooks-employer-select.php',            // Workbooks employer select shortcode
-];
-
-foreach ($shortcode_files as $file) {
-    $file_path = DTR_WORKBOOKS_SHORTCODES_DIR . $file;
-    if (file_exists($file_path)) {
-        require_once $file_path;
-    } else {
-        error_log('[DTR Workbooks] Shortcode file not found: ' . $file_path);
-    }
-}
-
-// Form handlers are included from includes directory
+// Legacy file loading removed - all files now loaded through proper plugin class methods
 
 /**
  * Main DTR Workbooks Integration Class
@@ -204,9 +185,7 @@ class DTR_Workbooks_Integration {
         add_action('wp_ajax_dtr_retry_submission', [$this, 'retry_submission']);
         add_action('wp_ajax_dtr_get_submission_details', [$this, 'get_submission_details']);
         
-        // Webinar registration AJAX handlers
-        add_action('wp_ajax_dtr_submit_webinar', [$this, 'handle_webinar_submission']);
-        add_action('wp_ajax_nopriv_dtr_submit_webinar', [$this, 'handle_webinar_submission']);
+        // Note: Webinar registration AJAX handlers are now managed by the shortcode file
         // Legacy genomics key cleanup (cf_person_genomics_3744 -> cf_person_genomics_3774)
         add_action('wp_ajax_dtr_cleanup_genomics_meta', [$this, 'cleanup_genomics_meta']);
         
@@ -344,8 +323,7 @@ class DTR_Workbooks_Integration {
             'class-array-merge-safety.php',
             // Ninja Forms submission override layer
             'class-form-submission-override.php',
-            'class-webinar-registration.php',
-            // Form handlers
+            // Form handlers (live webinar registration - new clean implementation)
             'form-handler-live-webinar-registration.php',
             'form-handler-membership-registration.php',
             'form-handler-media-planner.php',
@@ -360,9 +338,7 @@ class DTR_Workbooks_Integration {
             'class-helper-functions.php',
             // Database storage helpers
             'submission-storage-helpers.php',
-            // Custom Registration Form Classes
-            'class-webinar-registration-form-shortcode.php',
-            // Custom Registration Form Handlers
+            // Note: Webinar form shortcode is loaded from shortcodes directory
         ];
 
         foreach ($includes as $file) {

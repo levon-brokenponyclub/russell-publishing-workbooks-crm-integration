@@ -464,12 +464,9 @@ function dtr_dispatch_ninja_forms_submission($form_data) {
                 dtr_process_user_registration($form_data, 15); // enhanced handler
             }
             break;
-        case 2: // Webinar
-            file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] WEBINAR CASE TRIGGERED (Form ID 2)\n", FILE_APPEND | LOCK_EX);
-            // NOTE: Webinar registration is handled by dtr_handle_live_webinar_registration above
-            // Skip the generic dtr_process_webinar_registration to avoid duplicate processing
-            file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] Skipping generic webinar processor - handled by dedicated live webinar handler\n", FILE_APPEND | LOCK_EX);
-            break;
+        // case 2: // Webinar - REMOVED: Now using HTML form with AJAX submission
+        //     Webinar registration is now handled by dtr_handle_webinar_submission() AJAX action
+        //     Form ID 2 processing removed as requested
         case 31: // Lead gen
             file_put_contents($debug_log_file, "[" . date('Y-m-d H:i:s') . "] LEAD GEN CASE TRIGGERED (Form ID 31)\n", FILE_APPEND | LOCK_EX);
             
@@ -538,8 +535,8 @@ add_filter('ninja_forms_submit_response', function($response, $form_id) {
     // Log the original response structure for debugging
     error_log('[DEBUG] Original Response Structure for form ' . $form_id . ': ' . print_r($response, true));
     
-    // Process both webinar form (2) and lead gen form (31) in similar ways
-    if ((int)$form_id === 2 || (int)$form_id === 31) {
+    // Process lead gen form (31) only - webinar form (2) removed
+    if ((int)$form_id === 31) {
         // Ensure data structure exists
         if (!isset($response['data'])) {
             $response['data'] = [];
@@ -568,29 +565,7 @@ add_filter('ninja_forms_submit_response', function($response, $form_id) {
         $response['data']['success'] = true;
         
         // Add form-specific data
-        if ((int)$form_id === 2) {
-            // Webinar form specific data
-            global $dtr_last_webinar_registration_data, $dtr_webinar_registration_success;
-            
-            if (!empty($dtr_last_webinar_registration_data) && is_array($dtr_last_webinar_registration_data)) {
-                // Format as key => value pairs for alerting
-                $lines = [];
-                foreach ($dtr_last_webinar_registration_data as $k => $v) {
-                    $lines[] = "[$k] => $v";
-                }
-                if (!isset($response['data']['debug'])) $response['data']['debug'] = [];
-                $response['data']['debug'][] = implode("\n", $lines);
-            }
-            
-            // Set success flag and redirect URL based on registration result
-            if (!empty($dtr_webinar_registration_success)) {
-                $response['data']['redirect_url'] = '/thank-you-for-registering-webinars/';
-                $response['data']['debug_message'] = 'Webinar registration completed successfully!';
-            } else {
-                $response['data']['debug_message'] = 'Webinar handler executed but registration may have failed.';
-            }
-        } 
-        else if ((int)$form_id === 31) {
+        if ((int)$form_id === 31) {
             // Lead generation form specific data
             $response['data']['debug_message'] = 'Lead generation form submitted successfully!';
         }

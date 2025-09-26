@@ -125,6 +125,10 @@
     border-radius: 0 0 3px 3px !important;
 }
 
+.ks-menu a.dark-blue {
+    background:#1d3a86;
+}
+
 /* Base shimmer effect - required for all shimmer effects */
 .shimmer-effect {
     position: relative !important;

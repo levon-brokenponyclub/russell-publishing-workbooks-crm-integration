@@ -65,6 +65,10 @@
         showProgressLoader();
         updateProgressStep('start');
 
+        // Add progressive updates during submission
+        setTimeout(() => updateProgressStep('validating'), 1000);
+        setTimeout(() => updateProgressStep('submitting'), 2000);
+
         // Submit form
         fetch(dtrWebinarAjax.ajaxurl, {
             method: 'POST',
@@ -75,40 +79,31 @@
         .then(data => {
             if (data.success) {
                 updateProgressStep('completed');
-                // Show success message
-                const successMessage = document.createElement('div');
-                successMessage.className = 'webinar-success-message';
-                successMessage.innerHTML = `
-                    <h3>Registration Successful!</h3>
-                    <p>You have been registered for ${data.webinar_title}</p>
-                    <p>A confirmation email has been sent to ${data.email_address}</p>
-                `;
                 
-                // Replace form with success message
-                const form = document.getElementById('webinarForm');
-                if (form && form.parentNode) {
-                    form.parentNode.replaceChild(successMessage, form);
-                } else {
-                    console.error('[Webinar Form] Could not find webinarForm element or its parent');
-                    // Fallback: try to find any form in the page
-                    const anyForm = document.querySelector('form');
-                    if (anyForm && anyForm.parentNode) {
-                        anyForm.parentNode.replaceChild(successMessage, anyForm);
+                // At 100%, fade out and redirect
+                setTimeout(() => {
+                    if (typeof window.slideOutLoader === 'function') {
+                        window.slideOutLoader();
+                        
+                        // Redirect after fade animation completes (500ms)
+                        setTimeout(() => {
+                            if (data.redirect_url) {
+                                window.location.href = data.redirect_url;
+                            } else {
+                                // Default redirect to thank you page
+                                window.location.href = '/thank-you-for-registering-webinars/';
+                            }
+                        }, 500);
                     } else {
-                        // Last resort: append to body
-                        document.body.appendChild(successMessage);
+                        // Fallback if slideOutLoader not available
+                        if (data.redirect_url) {
+                            window.location.href = data.redirect_url;
+                        } else {
+                            window.location.href = '/thank-you-for-registering-webinars/';
+                        }
                     }
-                }
+                }, 500);
                 
-                // Hide loader after showing message
-                setTimeout(hideProgressLoader, 1000);
-                
-                // Redirect after delay if URL provided
-                if (data.redirect_url) {
-                    setTimeout(() => {
-                        window.location.href = data.redirect_url;
-                    }, 3000);
-                }
             } else {
                 hideProgressLoader();
                 alert(data.message || 'Registration failed. Please try again.');
@@ -141,38 +136,78 @@
         if (parts.length === 2) return parts.pop().split(';').shift();
     };
 
-    // Loading overlay helpers
+    // Loading overlay helpers - Use HeroUI-style overlay structure from shortcode
     window.showProgressLoader = function() {
-        const loader = document.createElement('div');
-        loader.id = 'dtr-form-loader';
-        loader.className = 'dtr-form-loader';
-        loader.innerHTML = '<div class="loader-content"><div class="spinner"></div><div class="progress-text">Processing...</div></div>';
-        document.body.appendChild(loader);
+        const loadingOverlay = document.getElementById('formLoaderOverlay');
+        if (loadingOverlay) {
+            loadingOverlay.style.display = 'flex';
+            
+            // Set header z-index to ensure overlay appears above it
+            const header = document.querySelector('header');
+            if (header) {
+                header.style.zIndex = '1';
+            }
+            
+            // Reset progress elements for new HeroUI design
+            const progressCircle = document.getElementById('progressCircle');
+            const progressValue = document.getElementById('progressValue');
+            
+            if (progressCircle) progressCircle.style.strokeDashoffset = '283'; // 0%
+            if (progressValue) progressValue.textContent = '0%';
+            
+            // Trigger fade-in animation
+            setTimeout(() => {
+                loadingOverlay.classList.add('show');
+            }, 10);
+        } else {
+            console.error('[Webinar Form] formLoaderOverlay not found');
+        }
     };
 
     window.hideProgressLoader = function() {
-        const loader = document.getElementById('dtr-form-loader');
-        if (loader) {
-            loader.remove();
+        const loadingOverlay = document.getElementById('formLoaderOverlay');
+        if (loadingOverlay) {
+            loadingOverlay.style.display = 'none';
+            loadingOverlay.classList.remove('show', 'fade-out');
+            
+            // Restore header z-index when hiding overlay
+            const header = document.querySelector('header');
+            if (header) {
+                header.style.zIndex = '';
+            }
         }
     };
 
     window.updateProgressStep = function(step) {
-        const loader = document.getElementById('dtr-form-loader');
-        if (!loader) return;
-
-        const progressText = loader.querySelector('.progress-text');
-        if (!progressText) return;
-
         switch(step) {
             case 'start':
-                progressText.textContent = 'Processing your registration...';
+                updateFormProgress(25, 'Processing your registration...');
+                break;
+            case 'validating':
+                updateFormProgress(50, 'Validating information...');
+                break;
+            case 'submitting':
+                updateFormProgress(75, 'Submitting to Workbooks...');
                 break;
             case 'completed':
-                progressText.textContent = 'Registration successful!';
+                updateFormProgress(100, 'Registration successful!');
                 break;
             default:
-                progressText.textContent = 'Processing...';
+                updateFormProgress(10, 'Processing...');
+        }
+    };
+
+    // Real-time progress updater that matches actual submission stages
+    window.updateFormProgress = function(stage, message) {
+        const progressCircle = document.getElementById('progressCircle');
+        const progressValue = document.getElementById('progressValue');
+        
+        if (progressCircle && progressValue) {
+            // Calculate stroke offset (283 is full circle, 0 is 100%)
+            const offset = 283 - (stage / 100) * 283;
+            progressCircle.style.strokeDashoffset = offset.toString();
+            progressValue.textContent = stage + '%';
+            console.log(`🔄 Progress Update: ${stage}% - ${message}`);
         }
     };
 

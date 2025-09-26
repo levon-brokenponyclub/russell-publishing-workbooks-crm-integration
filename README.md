@@ -4,7 +4,7 @@
 
 **Author**: Supersonic Playground / Levon Gravett  
 **Website**: https://www.supersonicplayground.com  
-**Version**: 2.1.1
+**Version**: 2.1.3
 
 A production-ready WordPress plugin that integrates WordPress with the DTR Workbooks CRM. V2 focuses on modular admin code, robust debugging that is gated for production, comprehensive gated-content and Ninja Forms integration (ACF-driven), and reliable Workbooks person/employer/ticket/lead creation and synchronization.
 
@@ -287,6 +287,16 @@ Disable afterward to reduce I/O.
 - **Extended User Management**: Enhanced user profile integration with bidirectional Workbooks CRM data synchronization and improved admin user management tools.
 - **Log Management Tools**: Advanced log viewer with filtering, search capabilities, automatic cleanup features, and specialized logging for HTML form submissions and membership registration flows.
 - **Security Enhancements**: Improved nonce handling, CSRF protection, and secure form processing with comprehensive validation and sanitization of all user inputs.
+
+### 2.1.3 (2025-09-26)
+- **Webinar Registration System Overhaul**: Complete redesign of webinar registration system to eliminate duplicate submissions and improve user experience with modern UI components.
+- **Duplicate Submission Prevention**: Resolved critical issue with multiple overlapping JavaScript event listeners causing duplicate webinar registrations by archiving problematic `gated-content-forms.php` and replacing with dedicated single-purpose components.
+- **Component Architecture**: Replaced complex multi-form handler with dedicated `webinar-registration.php` and `article-registration.php` components, providing cleaner separation of concerns and reduced complexity.
+- **HeroUI-Inspired Progress Loader**: Complete redesign of form submission overlay with modern circular progress indicator featuring violet-to-fuchsia gradient background, real-time progress tracking, and smooth fade animations.
+- **Enhanced Form Security**: Implemented aggressive duplicate prevention system using both global variables and database transients with 30-second submission locks to prevent multiple concurrent submissions.
+- **Streamlined Animation Flow**: Simplified overlay animations with clean fade-in (0.5s) and fade-out (0.5s) transitions, removing complex countdown systems for immediate redirect upon completion.
+- **Code Cleanup & Optimization**: Removed unused countdown functions, deprecated code, and streamlined JavaScript for better performance and maintainability.
+- **Component Documentation**: Added comprehensive documentation to archived files explaining reasons for replacement and architectural improvements for future reference.
 
 ### 2.1.2 (2025-09-25)
 - **Account Details System Overhaul**: Complete refactoring of WordPress account details display and update functionality with comprehensive field mapping improvements for Title and Employer fields across all user interfaces.
