@@ -80,12 +80,7 @@ function workbooks_lead_generation_registration_shortcode($atts = []) {
         $assets_enqueued = true;
     }
     
-    // Add hidden login form for modal use (only for non-logged-in users)
-    if (!is_user_logged_in()) {
-        echo '<div id="nf-login-modal-form" style="display:none;">';
-        echo do_shortcode('[ninja_form id=3]');
-        echo '</div>';
-    }
+    // NO NINJA FORMS - Using HTML forms only
     
     $control_content = filter_var($atts['control_content'], FILTER_VALIDATE_BOOLEAN);
 
@@ -309,7 +304,7 @@ HTML;
         if (!empty($extra_fields_markup)) {
             echo $extra_fields_markup;
         }
-        echo do_shortcode('[ninja_form id="' . esc_attr($lead_form['id']) . '"]');
+        // NO NINJA FORMS - Using HTML forms only (handled in shortcode template)
         echo '</div>'; // close .gated-lead-form-content
         
         // ACF integration and form success detection is handled in external JavaScript file

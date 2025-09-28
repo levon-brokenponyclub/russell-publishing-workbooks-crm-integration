@@ -7,6 +7,9 @@ add_shortcode('dtr_membership_registration', 'dtr_membership_registration_shortc
 // Add a simple test shortcode
 add_shortcode('dtr_test', 'dtr_test_shortcode');
 
+// Note: HTML form handler is now loaded by the main plugin in load_ajax_handlers()
+// No need to include it here as it causes function redeclaration conflicts
+
 // Enqueue custom stylesheet for shortcodes with high priority to override theme styles
 add_action('wp_enqueue_scripts', function() {
     // Load the original membership form styles first
@@ -307,14 +310,14 @@ function dtr_membership_registration_shortcode($atts) {
                         
                        
                         <!-- Debug Test Button -->
-                        <!-- <div style="margin-top: 15px; text-align: center;position:absolute:top:100px;left:100px;width:100%;dsiplay:block;">
+                        <div style="margin-top: 15px; text-align: center;position:absolute:top:100px;left:100px;width:100%;dsiplay:block;">
                             <button type="button" onclick="testAjaxEndpoint()" class="button" style="background: #ff6600; color: white; padding: 8px 16px; font-size: 12px; border-radius: 4px; margin-right: 10px;">
                                 🔧 Test AJAX Connection
                             </button>
                             <button type="button" onclick="fillTestData()" class="button" style="background: #28a745; color: white; padding: 8px 16px; font-size: 12px; border-radius: 4px;">
                                 📝 Fill Test Data
                             </button>
-                        </div> -->
+                        </div>
                        
                     </div>
                 </div>
@@ -330,19 +333,21 @@ function dtr_membership_registration_shortcode($atts) {
 
     <!-- Loading Overlay -->
     <div class="form-loader-overlay" id="formLoaderOverlay" style="display: none;">
-        <div class="loader-content">
-            <h2>Registration in progress...</h2>
-            <div class="loader-spinner">
-                <div class="progress-circle">
-                    <div class="progress-circle-fill" id="progressCircleFill"></div>
-                </div>
-                <div class="loader-icon"><i class="fa-light fa-user"></i></div>
-                <div class="countdown-container" id="countdownContainer">
-                    <div class="countdown-number" id="countdownNumber"></div>
-                    <div class="countdown-message" id="countdownMessage"></div>
+        <div class="progress-card">
+            <div class="progress-body">
+                <div class="circular-progress">
+                    <svg class="progress-svg" viewBox="0 0 100 100">
+                        <circle class="progress-track" cx="50" cy="50" r="45" />
+                        <circle class="progress-indicator" cx="50" cy="50" r="45" id="progressCircle" />
+                    </svg>
+                    <div class="progress-value" id="progressValue">0%</div>
                 </div>
             </div>
-            <p id="loaderStatusText">Creating your profile...</p>
+            <div class="progress-footer">
+                <div class="progress-chip">
+                    Registration processing...
+                </div>
+            </div>
         </div>
     </div>
 
@@ -653,9 +658,8 @@ function dtr_membership_registration_shortcode($atts) {
         // Enhanced Progress Loader Functions
         function showProgressLoader() {
             const loadingOverlay = document.getElementById('formLoaderOverlay');
-            const progressFill = document.getElementById('progressCircleFill');
-            const statusText = document.getElementById('loaderStatusText');
-            const countdownContainer = document.getElementById('countdownContainer');
+            const progressCircle = document.getElementById('progressCircle');
+            const progressValue = document.getElementById('progressValue');
             
             if (loadingOverlay) {
                 loadingOverlay.style.display = 'flex';
@@ -667,56 +671,42 @@ function dtr_membership_registration_shortcode($atts) {
                 }
                 
                 // Reset progress
-                progressFill.className = 'progress-circle-fill progress-0';
-                statusText.textContent = 'Preparing submission...';
-                countdownContainer.classList.remove('active');
+                if (progressCircle) {
+                    progressCircle.style.strokeDashoffset = '283'; // 0%
+                }
+                if (progressValue) {
+                    progressValue.textContent = '0%';
+                }
+                
+                // Trigger fade-in animation
+                setTimeout(() => {
+                    loadingOverlay.classList.add('show');
+                }, 10);
             }
         }
 
         // Real-time progress updater that matches actual submission stages
         function updateFormProgress(stage, message) {
-            const progressFill = document.getElementById('progressCircleFill');
-            const statusText = document.getElementById('loaderStatusText');
+            const progressCircle = document.getElementById('progressCircle');
+            const progressValue = document.getElementById('progressValue');
             
-            if (progressFill && statusText) {
-                progressFill.className = `progress-circle-fill progress-${stage}`;
-                statusText.textContent = message;
+            if (progressCircle && progressValue) {
+                // Calculate stroke offset (283 is full circle, 0 is 100%)
+                const offset = 283 - (stage / 100) * 283;
+                progressCircle.style.strokeDashoffset = offset.toString();
+                progressValue.textContent = stage + '%';
                 console.log(`🔄 Progress Update: ${stage}% - ${message}`);
             }
         }
 
         // Start countdown after successful submission (called from success handler)
         function startSubmissionCountdown() {
-            const countdownContainer = document.getElementById('countdownContainer');
-            const countdownNumber = document.getElementById('countdownNumber');
-            const countdownMessage = document.getElementById('countdownMessage');
-            const loaderIcon = document.querySelector('.loader-icon');
-            
-            // Hide the user icon and show countdown
-            if (loaderIcon) loaderIcon.style.opacity = '0';
-            if (countdownContainer) countdownContainer.classList.add('active');
-            
-            let count = 3;
-            
-            function showNextCount() {
-                if (count > 0) {
-                    if (countdownNumber) countdownNumber.textContent = count;
-                    if (countdownMessage) countdownMessage.textContent = '';
-                    count--;
-                    setTimeout(showNextCount, 1000);
-                } else {
-                    // Show final message
-                    if (countdownNumber) countdownNumber.textContent = '';
-                    if (countdownMessage) countdownMessage.textContent = 'Membership Activated!';
-                    
-                    // Keep overlay visible and redirect immediately after final message
-                    setTimeout(() => {
-                        window.location.href = '/thank-you-for-becoming-a-member-update/';
-                    }, 1000); // Redirect 1s after "Membership Activated!" shows - overlay stays visible
-                }
-            }
-            
-            showNextCount();
+            // Show wipe animation
+            slideOutLoader();
+            setTimeout(() => {
+                // Redirect to success page
+                window.location.href = '/thank-you-for-becoming-a-member-update/';
+            }, 1100);
         }
 
         function simulateFormProgress() {
@@ -740,6 +730,25 @@ function dtr_membership_registration_shortcode($atts) {
                 if (header) {
                     header.style.zIndex = '';  // Remove the inline style to restore original
                 }
+            }
+        }
+
+        function slideOutLoader() {
+            const loadingOverlay = document.getElementById('formLoaderOverlay');
+            if (loadingOverlay) {
+                loadingOverlay.classList.add('fade-out');
+                
+                // Hide completely after wipe animation completes (1s + 100ms buffer)
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                    loadingOverlay.classList.remove('show', 'fade-out');
+                    
+                    // Restore header z-index
+                    const header = document.querySelector('header');
+                    if (header) {
+                        header.style.zIndex = '';
+                    }
+                }, 1100);
             }
         }
 
@@ -1187,6 +1196,128 @@ function dtr_membership_registration_shortcode($atts) {
             console.log('✅ Login modal function defined');
         }
     </script>
+    
+    <style>
+    /* Overlay CSS Styles - Matching Lead Generation and Webinar Forms */
+    .form-loader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #871f80 0%, #4f074aff 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        backdrop-filter: blur(8px);
+        opacity: 1;
+        transition: opacity 0.5s ease-in;
+    }
+
+    .form-loader-overlay.show {
+        opacity: 1;
+    }
+
+    .form-loader-overlay.fade-out {
+        animation: wipeOut 1s ease-out forwards;
+    }
+    
+    @keyframes wipeOut {
+        0% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-100%);
+        }
+    }
+
+    .progress-card {
+        width: 320px;
+        height: 320px;
+        border-radius: 20px;
+        border: none;
+        display: flex;
+        flex-direction: column;
+        transform: scale(0.8);
+        opacity: 0;
+        transition: all 0.6s ease-out;
+    }
+
+    .form-loader-overlay.show .progress-card {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    .progress-body {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 0;
+    }
+
+    .circular-progress {
+        position: relative;
+        width: 144px;
+        height: 144px;
+    }
+
+    .progress-svg {
+        width: 144px;
+        height: 144px;
+        transform: rotate(-90deg);
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    }
+
+    .progress-track {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.1);
+        stroke-width: 4;
+    }
+
+    .progress-indicator {
+        fill: none;
+        stroke: white;
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-dasharray: 283; /* 2π × 45 */
+        stroke-dashoffset: 283;
+        transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .progress-value {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        font-weight: 600;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .progress-footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+        padding-top: 0;
+    }
+
+    .progress-chip {
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 12px;
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+    </style>
     <?php
     return ob_get_clean();
 }

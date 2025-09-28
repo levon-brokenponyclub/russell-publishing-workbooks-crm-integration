@@ -2,9 +2,19 @@
 (function($) {
     'use strict';
 
+    // Helper function to reset submit button
+    function resetSubmitButton() {
+        const $button = $('#submitWebinarBtn');
+        $button.prop('disabled', false)
+               .removeClass('submitting')
+               .text('Register');
+        console.log('[Webinar Form] 🔓 Button re-enabled');
+    }
+
     // Make submitWebinarForm globally accessible
     window.submitWebinarForm = function() {
         if (!validateWebinarForm()) {
+            resetSubmitButton();
             return;
         }
 
@@ -61,13 +71,26 @@
         console.log('- Post ID:', document.getElementById('postId')?.value);
         console.log('- Post Title:', document.getElementById('postTitle')?.value);
 
-        // Show loading overlay
-        showProgressLoader();
-        updateProgressStep('start');
+        // Show loading overlay - use the function from the shortcode
+        if (typeof window.showProgressLoader === 'function') {
+            console.log('[Webinar Form] 🎯 Calling showProgressLoader from shortcode');
+            window.showProgressLoader();
+        } else {
+            console.error('[Webinar Form] ❌ showProgressLoader function not available');
+        }
 
         // Add progressive updates during submission
-        setTimeout(() => updateProgressStep('validating'), 1000);
-        setTimeout(() => updateProgressStep('submitting'), 2000);
+        setTimeout(() => {
+            if (typeof window.updateFormProgress === 'function') {
+                window.updateFormProgress(25, 'Validating security credentials...');
+            }
+        }, 500);
+        
+        setTimeout(() => {
+            if (typeof window.updateFormProgress === 'function') {
+                window.updateFormProgress(60, 'Processing webinar registration...');
+            }
+        }, 1500);
 
         // Submit form
         fetch(dtrWebinarAjax.ajaxurl, {
@@ -78,7 +101,10 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                updateProgressStep('completed');
+                // Update progress to 100%
+                if (typeof window.updateFormProgress === 'function') {
+                    window.updateFormProgress(100, 'Registration successful!');
+                }
                 
                 // At 100%, fade out and redirect
                 setTimeout(() => {
@@ -105,13 +131,19 @@
                 }, 500);
                 
             } else {
-                hideProgressLoader();
+                if (typeof window.hideProgressLoader === 'function') {
+                    window.hideProgressLoader();
+                }
+                resetSubmitButton(); // Re-enable button on failure
                 alert(data.message || 'Registration failed. Please try again.');
             }
         })
         .catch(error => {
             console.error('Form submission error:', error);
-            hideProgressLoader();
+            if (typeof window.hideProgressLoader === 'function') {
+                window.hideProgressLoader();
+            }
+            resetSubmitButton(); // Re-enable button on error
             alert('An error occurred. Please try again.');
         });
     };
@@ -136,80 +168,7 @@
         if (parts.length === 2) return parts.pop().split(';').shift();
     };
 
-    // Loading overlay helpers - Use HeroUI-style overlay structure from shortcode
-    window.showProgressLoader = function() {
-        const loadingOverlay = document.getElementById('formLoaderOverlay');
-        if (loadingOverlay) {
-            loadingOverlay.style.display = 'flex';
-            
-            // Set header z-index to ensure overlay appears above it
-            const header = document.querySelector('header');
-            if (header) {
-                header.style.zIndex = '1';
-            }
-            
-            // Reset progress elements for new HeroUI design
-            const progressCircle = document.getElementById('progressCircle');
-            const progressValue = document.getElementById('progressValue');
-            
-            if (progressCircle) progressCircle.style.strokeDashoffset = '283'; // 0%
-            if (progressValue) progressValue.textContent = '0%';
-            
-            // Trigger fade-in animation
-            setTimeout(() => {
-                loadingOverlay.classList.add('show');
-            }, 10);
-        } else {
-            console.error('[Webinar Form] formLoaderOverlay not found');
-        }
-    };
-
-    window.hideProgressLoader = function() {
-        const loadingOverlay = document.getElementById('formLoaderOverlay');
-        if (loadingOverlay) {
-            loadingOverlay.style.display = 'none';
-            loadingOverlay.classList.remove('show', 'fade-out');
-            
-            // Restore header z-index when hiding overlay
-            const header = document.querySelector('header');
-            if (header) {
-                header.style.zIndex = '';
-            }
-        }
-    };
-
-    window.updateProgressStep = function(step) {
-        switch(step) {
-            case 'start':
-                updateFormProgress(25, 'Processing your registration...');
-                break;
-            case 'validating':
-                updateFormProgress(50, 'Validating information...');
-                break;
-            case 'submitting':
-                updateFormProgress(75, 'Submitting to Workbooks...');
-                break;
-            case 'completed':
-                updateFormProgress(100, 'Registration successful!');
-                break;
-            default:
-                updateFormProgress(10, 'Processing...');
-        }
-    };
-
-    // Real-time progress updater that matches actual submission stages
-    window.updateFormProgress = function(stage, message) {
-        const progressCircle = document.getElementById('progressCircle');
-        const progressValue = document.getElementById('progressValue');
-        
-        if (progressCircle && progressValue) {
-            // Calculate stroke offset (283 is full circle, 0 is 100%)
-            const offset = 283 - (stage / 100) * 283;
-            progressCircle.style.strokeDashoffset = offset.toString();
-            progressValue.textContent = stage + '%';
-            console.log(`🔄 Progress Update: ${stage}% - ${message}`);
-        }
-    };
+    // No duplicate loader functions - use the ones from the shortcode
 
     // Initialize when DOM is ready
     $(document).ready(function() {
@@ -226,10 +185,25 @@
             });
         }
 
-        // Attach submit handler
+        // Attach submit handler with double-click prevention
         $('#submitWebinarBtn').on('click', function(e) {
             console.log('[Webinar Form] Submit button clicked');
             e.preventDefault();
+            
+            const $button = $(this);
+            
+            // Prevent double submissions
+            if ($button.prop('disabled') || $button.hasClass('submitting')) {
+                console.log('[Webinar Form] ⚠️ Submission already in progress - ignoring click');
+                return false;
+            }
+            
+            // Disable button immediately
+            $button.prop('disabled', true)
+                   .addClass('submitting')
+                   .text('Submitting...');
+            
+            console.log('[Webinar Form] 🔒 Button disabled - calling submitWebinarForm()');
             submitWebinarForm();
         });
 

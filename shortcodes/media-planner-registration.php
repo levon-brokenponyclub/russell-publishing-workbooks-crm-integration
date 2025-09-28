@@ -239,19 +239,21 @@ function dtr_media_planner_registration_shortcode($atts) {
 
     <!-- Loading Overlay -->
     <div class="form-loader-overlay" id="formLoaderOverlay" style="display: none;">
-        <div class="loader-content">
-            <h2>Processing Your Request</h2>
-            <div class="loader-spinner">
-                <div class="progress-circle">
-                    <div class="progress-circle-fill" id="progressCircleFill"></div>
-                </div>
-                <div class="loader-icon"><i class="fa-light fa-user"></i></div>
-                <div class="countdown-container" id="countdownContainer">
-                    <div class="countdown-number" id="countdownNumber"></div>
-                    <div class="countdown-message" id="countdownMessage"></div>
+        <div class="progress-card">
+            <div class="progress-body">
+                <div class="circular-progress">
+                    <svg class="progress-svg" viewBox="0 0 100 100">
+                        <circle class="progress-track" cx="50" cy="50" r="45" />
+                        <circle class="progress-indicator" cx="50" cy="50" r="45" id="progressCircle" />
+                    </svg>
+                    <div class="progress-value" id="progressValue">0%</div>
                 </div>
             </div>
-            <p id="loaderStatusText">Preparing your media planner...</p>
+            <div class="progress-footer">
+                <div class="progress-chip">
+                    Processing your request...
+                </div>
+            </div>
         </div>
     </div>
 
@@ -347,12 +349,20 @@ function dtr_media_planner_registration_shortcode($atts) {
 
         // Enhanced Progress Loader Functions
         function showProgressLoader() {
+            console.log('🚀 showProgressLoader called');
+            
             const loadingOverlay = document.getElementById('formLoaderOverlay');
-            const progressFill = document.getElementById('progressCircleFill');
-            const statusText = document.getElementById('loaderStatusText');
-            const countdownContainer = document.getElementById('countdownContainer');
+            const progressCircle = document.getElementById('progressCircle');
+            const progressValue = document.getElementById('progressValue');
+            
+            console.log('Loader elements found:', {
+                loadingOverlay: !!loadingOverlay,
+                progressCircle: !!progressCircle,
+                progressValue: !!progressValue
+            });
             
             if (loadingOverlay) {
+                console.log('✅ Showing loading overlay');
                 loadingOverlay.style.display = 'flex';
                 
                 // Set header z-index to ensure overlay appears above it
@@ -362,81 +372,140 @@ function dtr_media_planner_registration_shortcode($atts) {
                 }
                 
                 // Reset progress
-                progressFill.className = 'progress-circle-fill progress-0';
-                statusText.textContent = 'Preparing your media planner...';
-                countdownContainer.classList.remove('active');
+                if (progressCircle) {
+                    progressCircle.style.strokeDashoffset = '283'; // 0%
+                    console.log('✅ Progress circle reset to 0%');
+                }
+                if (progressValue) {
+                    progressValue.textContent = '0%';
+                    console.log('✅ Progress value reset to 0%');
+                }
                 
-                // Don't start simulation here - actual progress will be driven by the API response
+                // Trigger fade-in animation
+                setTimeout(() => {
+                    loadingOverlay.classList.add('show');
+                    console.log('✅ Loading overlay show class added');
+                }, 10);
+            } else {
+                console.error('❌ Loading overlay element not found!');
             }
         }
 
-        // Progressive steps for form submission process
-        function updateProgressStep(step) {
-            const progressFill = document.getElementById('progressCircleFill');
-            const statusText = document.getElementById('loaderStatusText');
+        // Real-time progress updater that matches actual submission stages
+        function updateFormProgress(stage, message) {
+            console.log('🔄 updateFormProgress ENTRY:', stage, message);
             
+            const progressCircle = document.getElementById('progressCircle');
+            const progressValue = document.getElementById('progressValue');
+            
+            console.log('Elements found:', !!progressCircle, !!progressValue);
+            
+            if (progressCircle && progressValue) {
+                // Calculate stroke offset (283 is full circle, 0 is 100%)
+                const offset = 283 - (stage / 100) * 283;
+                console.log('Calculated offset:', offset, 'for', stage + '%');
+                
+                // Apply the changes
+                progressCircle.style.strokeDashoffset = offset.toString();
+                progressValue.textContent = stage + '%';
+                
+                console.log('✅ Progress updated to', stage + '%');
+            } else {
+                console.error('❌ Progress elements not found!');
+            }
+            
+            console.log('🔄 updateFormProgress EXIT');
+        }
+
+        // Make function globally accessible for debugging
+        window.updateFormProgress = updateFormProgress;
+        
+        // Create a simple test version to isolate issues
+        window.testUpdateProgress = function(stage, message) {
+            console.log('🧪 testUpdateProgress called:', stage, message);
+            
+            const progressCircle = document.getElementById('progressCircle');
+            const progressValue = document.getElementById('progressValue');
+            
+            if (progressCircle && progressValue) {
+                const offset = 283 - (stage / 100) * 283;
+                progressCircle.style.strokeDashoffset = offset.toString();
+                progressValue.textContent = stage + '%';
+                console.log('✅ Test function completed:', stage + '%');
+                return true;
+            } else {
+                console.error('❌ Test function: elements not found');
+                return false;
+            }
+        };
+        
+        // Create a minimal version of the original function for debugging
+        window.minimalUpdateProgress = function(stage, message) {
+            console.log('🔍 minimalUpdateProgress ENTRY:', stage, message);
+            
+            const progressCircle = document.getElementById('progressCircle');
+            const progressValue = document.getElementById('progressValue');
+            
+            console.log('🔍 Elements found:', !!progressCircle, !!progressValue);
+            
+            if (progressCircle && progressValue) {
+                const offset = 283 - (stage / 100) * 283;
+                console.log('🔍 Calculated offset:', offset);
+                
+                progressCircle.style.strokeDashoffset = offset.toString();
+                progressValue.textContent = stage + '%';
+                
+                console.log('🔍 Changes applied');
+            }
+            
+            console.log('🔍 minimalUpdateProgress EXIT');
+        };
+
+        // Progressive steps for form submission process (legacy support)
+        function updateProgressStep(step) {
             const steps = {
-                start: { progress: 'progress-10', text: 'Starting submission...' },
-                validation: { progress: 'progress-25', text: 'Validating your information...' },
-                processing: { progress: 'progress-50', text: 'Processing request...' },
-                preparing: { progress: 'progress-75', text: 'Preparing media planner...' },
-                completed: { progress: 'progress-100', text: 'Submission Successful!' }
+                start: { progress: 10, text: 'Starting submission...' },
+                validation: { progress: 25, text: 'Validating your information...' },
+                processing: { progress: 50, text: 'Processing request...' },
+                preparing: { progress: 75, text: 'Preparing media planner...' },
+                completed: { progress: 100, text: 'Submission Successful!' }
             };
             
             const currentStep = steps[step] || steps.start;
-            
-            if (progressFill) {
-                progressFill.className = `progress-circle-fill ${currentStep.progress}`;
-            }
-            
-            if (statusText) {
-                statusText.textContent = currentStep.text;
+            updateFormProgress(currentStep.progress, currentStep.text);
+        }
+
+        function slideOutLoader() {
+            const loadingOverlay = document.getElementById('formLoaderOverlay');
+            if (loadingOverlay) {
+                loadingOverlay.classList.add('fade-out');
+                
+                // Hide completely after wipe animation completes (1s + 100ms buffer)
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                    loadingOverlay.classList.remove('show', 'fade-out');
+                    
+                    // Restore header z-index
+                    const header = document.querySelector('header');
+                    if (header) {
+                        header.style.zIndex = '';
+                    }
+                }, 1100);
             }
         }
 
         function startCountdown() {
-            const countdownContainer = document.getElementById('countdownContainer');
-            const countdownNumber = document.getElementById('countdownNumber');
-            const countdownMessage = document.getElementById('countdownMessage');
-            const loaderIcon = document.querySelector('.loader-icon');
-            
-            // Prevent duplicate countdown
-            if (countdownContainer.classList.contains('active')) {
-                console.log('Countdown already active, not starting again');
-                return;
-            }
-            
-            // Hide the user icon and show countdown
-            if (loaderIcon) loaderIcon.style.opacity = '0';
-            if (countdownContainer) countdownContainer.classList.add('active');
-            
-            let count = 3;
-            let countdownActive = true;
-            
-            function showNextCount() {
-                if (!countdownActive) return;
-                
-                if (count > 0) {
-                    if (countdownNumber) countdownNumber.textContent = count;
-                    if (countdownMessage) countdownMessage.textContent = '';
-                    count--;
-                    setTimeout(showNextCount, 1000);
-                } else {
-                    // Show final message
-                    if (countdownNumber) countdownNumber.textContent = '';
-                    if (countdownMessage) countdownMessage.textContent = 'Download Ready!';
-                }
-            }
-            
-            showNextCount();
+            // Show wipe animation
+            slideOutLoader();
+            setTimeout(() => {
+                // Redirect to download page
+                window.location.href = '/download-media-planner/';
+            }, 1100);
         }
         
         // Function to stop countdown if needed (e.g., on errors)
         function stopCountdown() {
-            const countdownContainer = document.getElementById('countdownContainer');
-            if (countdownContainer) {
-                countdownContainer.classList.remove('active');
-            }
+            // Legacy function - no longer needed with new loader
         }
 
         function hideProgressLoader() {
@@ -453,9 +522,6 @@ function dtr_media_planner_registration_shortcode($atts) {
                 // Reset any active flags
                 window.submissionInProgress = false;
                 
-                // Reset countdown if active
-                stopCountdown();
-                
                 // Clear any pending timeouts from the preview function
                 if (window.previewTimeouts) {
                     window.previewTimeouts.forEach(timeout => clearTimeout(timeout));
@@ -464,39 +530,14 @@ function dtr_media_planner_registration_shortcode($atts) {
             }
         }
 
-        // Real-time progress updater that matches actual submission stages
-        function updateFormProgress(stage, message) {
-            const progressFill = document.getElementById('progressCircleFill');
-            const statusText = document.getElementById('loaderStatusText');
-            
-            if (progressFill && statusText) {
-                progressFill.className = `progress-circle-fill progress-${stage}`;
-                statusText.textContent = message;
-                console.log(`🔄 Progress Update: ${stage}% - ${message}`);
-            }
-        }
+        // Make all functions globally accessible for debugging
+        window.showProgressLoader = showProgressLoader;
+        window.hideProgressLoader = hideProgressLoader;
+
+
 
         function previewLoader() {
-            // Show overlay
-            const loadingOverlay = document.getElementById('formLoaderOverlay');
-            const progressFill = document.getElementById('progressCircleFill');
-            const statusText = document.getElementById('loaderStatusText');
-            const countdownContainer = document.getElementById('countdownContainer');
-            
-            if (loadingOverlay) {
-                loadingOverlay.style.display = 'flex';
-                
-                // Set header z-index to ensure overlay appears above it
-                const header = document.querySelector('header');
-                if (header) {
-                    header.style.zIndex = '1';
-                }
-                
-                // Reset progress
-                progressFill.className = 'progress-circle-fill progress-0';
-                statusText.textContent = 'Preparing your media planner...';
-                countdownContainer.classList.remove('active');
-            }
+            showProgressLoader();
             
             // Clear any existing timeouts to prevent duplicate animations
             if (window.previewTimeouts) {
@@ -511,23 +552,19 @@ function dtr_media_planner_registration_shortcode($atts) {
                 return id;
             };
             
-            addTimeout(() => updateFormProgress(10, 'Starting submission...'), 500);
-            addTimeout(() => updateFormProgress(25, 'Validating your information...'), 1500);
-            addTimeout(() => updateFormProgress(50, 'Processing request...'), 3000);
-            addTimeout(() => updateFormProgress(75, 'Preparing media planner...'), 4500);
+            addTimeout(() => updateFormProgress(25, 'Validating your information...'), 500);
+            addTimeout(() => updateFormProgress(40, 'Security validation complete...'), 1000);
+            addTimeout(() => updateFormProgress(60, 'Processing request...'), 1500);
+            addTimeout(() => updateFormProgress(75, 'Preparing media planner...'), 2500);
+            addTimeout(() => updateFormProgress(90, 'Finalizing download...'), 3500);
             addTimeout(() => {
                 updateFormProgress(100, 'Submission Successful!');
                 
-                // Wait a moment before showing countdown
+                // Wait a moment before starting countdown
                 addTimeout(() => {
                     startCountdown();
-                    
-                    // Add redirect after countdown completes
-                    addTimeout(() => {
-                        window.location.href = '/download-media-planner/';
-                    }, 4000); // Redirect 4 seconds after countdown starts (3s countdown + 1s for "Download Ready")
-                }, 1000);
-            }, 6000);
+                }, 500);
+            }, 4500);
         }
 
         function submitMediaPlannerForm() {
@@ -622,8 +659,8 @@ function dtr_media_planner_registration_shortcode($atts) {
             }
             window.submissionInProgress = true;
 
-            // Update to validation step
-            updateProgressStep('validation');
+            // Stage 1: Initial validation
+            setTimeout(() => updateFormProgress(25, 'Processing your request...'), 500);
 
             // Get WordPress nonce first, then submit
             fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=dtr_get_form_nonce', {
@@ -638,6 +675,9 @@ function dtr_media_planner_registration_shortcode($atts) {
             })
             .then(data => {
                 console.log('🔥 [DEBUG] Nonce data received:', data);
+                // Stage 2: Security validation complete
+                setTimeout(() => updateFormProgress(40, 'Processing your request...'), 1000);
+                
                 if (data.success && data.data && data.data.nonce) {
                     formData.append('nonce', data.data.nonce);
                 } else if (data.nonce) {
@@ -646,8 +686,8 @@ function dtr_media_planner_registration_shortcode($atts) {
                     throw new Error('No nonce received from server');
                 }
                 
-                // Update to processing step
-                updateProgressStep('processing');
+                // Stage 3: Processing request
+                setTimeout(() => updateFormProgress(60, 'Processing your request...'), 1500);
                 
                 // Submit form data
                 return fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
@@ -663,37 +703,33 @@ function dtr_media_planner_registration_shortcode($atts) {
                 return response.json();
             })
             .then(data => {
-                // Update to preparing step
-                updateProgressStep('preparing');
+                // Stage 4: Preparing download
+                updateFormProgress(75, 'Processing your request...');
                 
                 setTimeout(() => {
                     if (data.success) {
-                        // Show final success step
-                        updateProgressStep('completed');
+                        // Stage 5: Finalizing
+                        updateFormProgress(90, 'Processing your request...');
                         
-                        // Wait a moment before starting countdown
                         setTimeout(() => {
-                            // Start countdown once
-                            startCountdown();
+                            // Stage 6: Complete
+                            updateFormProgress(100, 'Processing your request...');
                             
-                            // Redirect after countdown completes
                             setTimeout(() => {
-                                // Redirect to media planner download page
-                                window.location.href = '/download-media-planner/';
-                            }, 4000); // Redirect 4 seconds after countdown starts (3s countdown + 1s for "Download Ready")
-                        }, 1000);
+                                // Start countdown (which now triggers wipe animation and redirect)
+                                startCountdown();
+                            }, 500);
+                        }, 500);
                     } else {
                         hideProgressLoader();
-                        stopCountdown();
                         window.submissionInProgress = false;
                         alert('Request failed: ' + (data.data ? data.data.message : data.message || 'Please check your details and try again.'));
                     }
-                }, 1500); // Delay to show the preparing step
+                }, 1000);
             })
             .catch(error => {
                 console.error('Form submission error:', error);
                 hideProgressLoader();
-                stopCountdown();
                 window.submissionInProgress = false;
                 alert('An error occurred. Please try again.');
             });
@@ -821,6 +857,130 @@ function dtr_media_planner_registration_shortcode($atts) {
         console.log('%cMedia Planner Registration System Ready', 'background: #4CAF50; color: white; padding: 8px 12px; border-radius: 4px; font-weight: bold;');
         
     </script>
+    
+    <style>
+    /* Overlay CSS Styles - Matching Lead Generation and Webinar Forms */
+    .form-loader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #871f80 0%, #4f074aff 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        backdrop-filter: blur(8px);
+        opacity: 1;
+        transition: opacity 0.5s ease-in;
+    }
+
+    .form-loader-overlay.show {
+        opacity: 1;
+    }
+
+    .form-loader-overlay.fade-out {
+        animation: wipeOut 1s ease-out forwards;
+    }
+    
+    @keyframes wipeOut {
+        0% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-100%);
+        }
+    }
+
+    .progress-card {
+        width: 320px;
+        height: 320px;
+        border-radius: 20px;
+        border: none;
+        display: flex;
+        flex-direction: column;
+        transform: scale(0.8);
+        opacity: 0;
+        transition: all 0.6s ease-out;
+    }
+
+    .form-loader-overlay.show .progress-card {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    .progress-body {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 0;
+    }
+
+    .circular-progress {
+        position: relative;
+        width: 144px;
+        height: 144px;
+    }
+
+    .progress-svg {
+        width: 144px;
+        height: 144px;
+        transform: rotate(-90deg);
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    }
+
+    .progress-track {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.1);
+        stroke-width: 4;
+    }
+
+    .progress-indicator {
+        fill: none;
+        stroke: white;
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-dasharray: 283; /* 2π × 45 */
+        stroke-dashoffset: 283; /* Initial state - will be overridden by JavaScript */
+        transition: stroke-dashoffset 0.5s ease;
+        transform-origin: center;
+        transform: rotate(-90deg); /* Start progress from top */
+    }
+
+    .progress-value {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        font-weight: 600;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .progress-footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+        padding-top: 0;
+    }
+
+    .progress-chip {
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 12px;
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+    </style>
     <?php
     return ob_get_clean();
 }

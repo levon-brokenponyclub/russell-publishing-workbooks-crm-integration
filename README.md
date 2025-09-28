@@ -4,7 +4,7 @@
 
 **Author**: Supersonic Playground / Levon Gravett  
 **Website**: https://www.supersonicplayground.com  
-**Version**: 2.1.3
+**Version**: 2.1.4
 
 A production-ready WordPress plugin that integrates WordPress with the DTR Workbooks CRM. V2 focuses on modular admin code, robust debugging that is gated for production, comprehensive gated-content and Ninja Forms integration (ACF-driven), and reliable Workbooks person/employer/ticket/lead creation and synchronization.
 
@@ -288,6 +288,16 @@ Disable afterward to reduce I/O.
 - **Log Management Tools**: Advanced log viewer with filtering, search capabilities, automatic cleanup features, and specialized logging for HTML form submissions and membership registration flows.
 - **Security Enhancements**: Improved nonce handling, CSRF protection, and secure form processing with comprehensive validation and sanitization of all user inputs.
 
+### 2.1.4 (2025-09-28)
+- **Unified Purple Circular Progress Loader**: Complete redesign and standardization of progress loading system across all forms with real-time SVG circle animation, percentage tracking, and consistent "Processing your request..." messaging for Media Planner, Lead Generation, Webinar Registration, and Save-to-Collection functionality.
+- **Enhanced Save-to-Collection System**: Implemented delegated event handling for dynamic content compatibility, added loading states with purple progress animation, enhanced split-button functionality with "Remove | View Collection" options, and improved button state management for seamless user experience.
+- **Advanced Form Submission Experience**: Streamlined form completion flow with faster redirect timing (300ms vs 1100ms), automatic page refresh to reveal full content, toast notifications on successful registration, and clean URL management removing temporary parameters.
+- **Interactive Admin Testing Tools**: Added comprehensive "Test Loader" button in WordPress admin bar for real-time progress animation testing, simulation of form submission progress with debugging capabilities, and enhanced developer experience for troubleshooting visual components.
+- **Cursor Following Interactive Elements**: Implemented advanced cursor-following components with smooth mouse tracking, customizable follow speed and sensitivity, and enhanced user engagement through modern interactive UI elements.
+- **Frontend Visual Enhancements**: Improved visual consistency across all form interactions, enhanced button animations and micro-interactions, better loading state feedback, and professional-grade user interface components matching modern web application standards.
+- **Debug System Improvements**: Enhanced progress loader debugging with detailed console logging, function availability detection, manual DOM manipulation testing capabilities, and comprehensive visual animation troubleshooting tools for developers.
+- **Seamless User Experience Flow**: Optimized complete user journey from form submission through progress indication to content reveal, with automatic toast notifications, smooth transitions, and elimination of manual page refresh requirements.
+
 ### 2.1.3 (2025-09-26)
 - **Webinar Registration System Overhaul**: Complete redesign of webinar registration system to eliminate duplicate submissions and improve user experience with modern UI components.
 - **Duplicate Submission Prevention**: Resolved critical issue with multiple overlapping JavaScript event listeners causing duplicate webinar registrations by archiving problematic `gated-content-forms.php` and replacing with dedicated single-purpose components.
@@ -404,11 +414,19 @@ Disable afterward to reduce I/O.
 - **Dynamic Questions**: Collect custom questions per event or content, as defined in ACF
 - **Sponsor Opt-in**: Configurable sponsor information opt-in on a per-content basis
 
-### 🎨 **Modern Admin Interface**
+### 🎨 **Modern Admin Interface & User Experience**
 - **Vertical Tab Layout**: Intuitive vertical tab navigation for better user experience
 - **Real-time Testing**: Built-in connection testing and validation tools
 - **User Management**: Comprehensive user listing with Workbooks ID management
 - **Debug Dashboard**: Centralized debugging and monitoring interface
+
+### 🚀 **Enhanced Frontend Experience & Visual Components**
+- **Unified Progress Loader System**: Beautiful purple circular progress loader with real-time percentage updates across all forms (Media Planner, Lead Generation, Webinar Registration, Save-to-Collection)
+- **Smooth Form Transitions**: Seamless form submission experience with automatic page transitions and content reveal
+- **Interactive Toast Notifications**: Professional success notifications with fade animations and auto-dismiss functionality
+- **Advanced Save-to-Collection**: Enhanced button states with delegated event handling, loading animations, and split-button functionality for collection management
+- **Admin Testing Tools**: Built-in "Test Loader" button in admin bar for real-time progress animation testing and debugging
+- **Cursor Following Elements**: Advanced interactive cursor-following components for enhanced user engagement and modern UI feel
 
 ---
 

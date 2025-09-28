@@ -689,6 +689,13 @@ function dtr_register_webinar_scripts() {
         filemtime(plugin_dir_path(__FILE__) . '../assets/css/dynamic-forms.css')
     );
 
+    wp_register_style(
+        'dtr-webinar-form', 
+        plugin_dir_url(__FILE__) . '../assets/css/webinar-form.css',
+        array(),
+        filemtime(plugin_dir_path(__FILE__) . '../assets/css/webinar-form.css')
+    );
+
     // Register frontend script
     wp_register_script(
         'dtr-frontend',
@@ -759,6 +766,7 @@ function dtr_enqueue_webinar_scripts() {
 
     // Enqueue styles
     wp_enqueue_style('dtr-dynamic-forms');
+    wp_enqueue_style('dtr-webinar-form');
 
     // Enqueue frontend script
     wp_enqueue_script('dtr-frontend');
@@ -913,12 +921,12 @@ function dtr_enqueue_webinar_scripts() {
                 showProgressLoader();
                 
                 // Simulate the actual submission flow for preview
-                setTimeout(() => updateFormProgress(25, 'Validating security credentials...'), 500);
-                setTimeout(() => updateFormProgress(40, 'Security validation complete...'), 1500);
-                setTimeout(() => updateFormProgress(60, 'Preparing webinar registration...'), 2000);
-                setTimeout(() => updateFormProgress(80, 'Submitting your information...'), 2500);
-                setTimeout(() => updateFormProgress(90, 'Processing your registration...'), 3500);
-                setTimeout(() => updateFormProgress(100, 'Registration Successful!'), 4500);
+                setTimeout(() => updateFormProgress(25, 'Processing your request...'), 500);
+                setTimeout(() => updateFormProgress(40, 'Processing your request...'), 1500);
+                setTimeout(() => updateFormProgress(60, 'Processing your request...'), 2000);
+                setTimeout(() => updateFormProgress(80, 'Processing your request...'), 2500);
+                setTimeout(() => updateFormProgress(90, 'Processing your request...'), 3500);
+                setTimeout(() => updateFormProgress(100, 'Processing your request...'), 4500);
                 setTimeout(() => {
                     // At 100%, fade out and simulate redirect
                     slideOutLoader();
@@ -1201,7 +1209,7 @@ function dtr_webinar_registration_shortcode($atts) {
             margin-top: 10px;
             font-size: 14px;
             color: #666;
-            text-align: center;
+            text-align: left;
         }
         /* JavaScript will handle menu toggle */
         </style>
@@ -1355,7 +1363,7 @@ function dtr_webinar_registration_shortcode($atts) {
     });
     </script>
     
-    <div class="full-page form-container vertical-half-margin" id="registration-form">
+    <div class="full-page vertical-half-margin" id="registration-form">
         <!-- Add tracking fields at the top of the form -->
         <input type="hidden" id="formTrackingId" name="form_tracking_id" value="<?php echo esc_attr($tracking_id); ?>">
         <input type="hidden" id="postType" name="post_type" value="<?php echo esc_attr($post_type); ?>">
@@ -1377,9 +1385,9 @@ function dtr_webinar_registration_shortcode($atts) {
             </div>
         </div>
         <?php endif; ?>
-
-        <div class="form-container webinar-registration-form">
-            <form id="webinarForm">
+        <button class="ks-main-btn-global btn-blue shimmer-effect shimmer-slow not-registered text-left" onclick="document.querySelector('.gated-lead-form-content').scrollIntoView({behavior: 'smooth'});" disabled="">Register Now!</button>
+        <div class="webinar-registration-form foorm-container">
+            <form id="webinarForm" class="gated-webinar-form-content">
                 <!-- Hidden Fields -->
                 <input type="hidden" id="postTitle" name="post_title" value="<?php echo esc_attr($post->post_title); ?>">
                 <input type="hidden" id="postId" name="post_id" value="<?php echo esc_attr($post->ID); ?>">
@@ -1483,7 +1491,7 @@ function dtr_webinar_registration_shortcode($atts) {
                 <!-- Submit Button -->
                 <div class="form-row">
                     <div class="form-field">
-                        <button type="button" id="submitWebinarBtn" class="button btn-small global btn-rounded btn-blue shimmer-effect shimmer-slow text-left chevron right">Register</button>
+                        <button type="button" id="submitWebinarBtn" class="button btn-small global btn-rounded btn-blue shimmer-effect shimmer-slow text-left chevron right full-width" style="margin:5px 0 10px 0">Register</button>
                     </div>
                 </div>
             </form>
@@ -1518,7 +1526,7 @@ function dtr_webinar_registration_shortcode($atts) {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+        background: linear-gradient(135deg, #871f80 0%, #4f074aff 100%);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -1526,7 +1534,6 @@ function dtr_webinar_registration_shortcode($atts) {
         backdrop-filter: blur(8px);
         opacity: 1;
         transition: opacity 0.5s ease-in;
-        display:block;
     }
 
     .form-loader-overlay.show {

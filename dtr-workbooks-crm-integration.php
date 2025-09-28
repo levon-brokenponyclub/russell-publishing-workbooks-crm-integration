@@ -367,6 +367,7 @@ class DTR_Workbooks_Integration {
             'membership-registration-shortcode.php',
             'media-planner-registration.php',
             'webinar-registration-form-shortcode.php',
+            'lead-generation-form-shortcode.php',
         ];
 
         foreach ($shortcode_files as $file) {
@@ -5396,4 +5397,139 @@ add_action('wp_ajax_dtr_get_workbooks_event_fields', function() {
     </script>
     <?php
 }); */
+
+/**
+ * Add Test Loader button to WordPress admin bar for administrators
+ */
+add_action('admin_bar_menu', 'dtr_add_test_loader_admin_bar', 100);
+
+function dtr_add_test_loader_admin_bar($wp_admin_bar) {
+    // Only show for administrators
+    if (!current_user_can('administrator')) {
+        return;
+    }
+    
+    // Add the menu item
+    $wp_admin_bar->add_menu(array(
+        'id'    => 'dtr-test-loader',
+        'title' => '🧪 Test Loader',
+        'href'  => '#',
+        'meta'  => array(
+            'onclick' => 'dtrTestLoader(); return false;',
+            'title' => 'Test the progress loader functionality'
+        )
+    ));
+}
+
+/**
+ * Add JavaScript for Test Loader functionality
+ */
+add_action('wp_footer', 'dtr_add_test_loader_script');
+add_action('admin_footer', 'dtr_add_test_loader_script');
+
+function dtr_add_test_loader_script() {
+    // Only show for administrators
+    if (!current_user_can('administrator')) {
+        return;
+    }
+    ?>
+    <script>
+    function dtrTestLoader() {
+        console.log('🧪 DTR Test Loader initiated');
+        
+        // Check if progress loader elements exist
+        const loadingOverlay = document.getElementById('formLoaderOverlay');
+        const progressCircle = document.getElementById('progressCircle');
+        const progressValue = document.getElementById('progressValue');
+        
+        if (!loadingOverlay || !progressCircle || !progressValue) {
+            alert('⚠️ Progress loader elements not found on this page.\n\nThe loader is only available on pages with forms that have the progress overlay.');
+            console.log('❌ Progress loader elements not found:', {
+                loadingOverlay: !!loadingOverlay,
+                progressCircle: !!progressCircle,
+                progressValue: !!progressValue
+            });
+            return;
+        }
+        
+        console.log('✅ All progress loader elements found, starting test...');
+        
+        // Debug: Check function availability
+        console.log('Function availability:', {
+            showProgressLoader: typeof showProgressLoader,
+            updateFormProgress: typeof updateFormProgress,
+            hideProgressLoader: typeof hideProgressLoader
+        });
+        
+        // Show the loader
+        if (typeof showProgressLoader === 'function') {
+            showProgressLoader();
+        } else {
+            // Manual loader display if function not available
+            loadingOverlay.style.display = 'flex';
+            setTimeout(() => loadingOverlay.classList.add('show'), 10);
+        }
+        
+        // Simulate progress updates
+        const progressSteps = [
+            { delay: 500, progress: 15, message: 'Testing progress...' },
+            { delay: 1000, progress: 35, message: 'Testing progress...' },
+            { delay: 1500, progress: 55, message: 'Testing progress...' },
+            { delay: 2000, progress: 75, message: 'Testing progress...' },
+            { delay: 2500, progress: 90, message: 'Testing progress...' },
+            { delay: 3000, progress: 100, message: 'Test complete!' }
+        ];
+        
+        progressSteps.forEach(step => {
+            setTimeout(() => {
+                console.log(`🔄 Test progress: ${step.progress}%`);
+                
+                if (typeof updateFormProgress === 'function') {
+                    console.log('📞 Calling updateFormProgress function');
+                    updateFormProgress(step.progress, step.message);
+                } else {
+                    console.log('📞 Using manual progress update fallback');
+                    // Manual progress update if function not available
+                    const offset = 283 - (step.progress / 100) * 283;
+                    
+                    console.log(`🔧 Manual update - calculated offset: ${offset}`);
+                    progressCircle.style.strokeDashoffset = offset.toString();
+                    progressValue.textContent = step.progress + '%';
+                    
+                    // Force a repaint
+                    progressCircle.style.display = 'none';
+                    progressCircle.offsetHeight; // Trigger reflow
+                    progressCircle.style.display = '';
+                    
+                    console.log(`� Applied values - strokeDashoffset: ${progressCircle.style.strokeDashoffset}, text: ${progressValue.textContent}`);
+                }
+            }, step.delay);
+        });
+        
+        // Hide loader after test completes
+        setTimeout(() => {
+            if (typeof hideProgressLoader === 'function') {
+                hideProgressLoader();
+            } else {
+                // Manual loader hide if function not available
+                loadingOverlay.classList.remove('show');
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                }, 300);
+            }
+            console.log('✅ Test loader completed');
+            
+            // Reset progress for next test
+            setTimeout(() => {
+                if (progressCircle && progressValue) {
+                    progressCircle.style.strokeDashoffset = '283'; // 0%
+                    progressValue.textContent = '0%';
+                }
+            }, 500);
+        }, 4000);
+    }
+    </script>
+    <?php
+}
+
 ?>

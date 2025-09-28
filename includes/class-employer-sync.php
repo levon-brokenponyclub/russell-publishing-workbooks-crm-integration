@@ -274,9 +274,10 @@ function workbooks_get_or_create_organisation_id($org_name) {
     
     // Create if not found
     try {
-        $create = $workbooks->assertCreate('crm/organisations.api', [[
+        $create_data = [[
             'name' => $org_name,
-        ]]);
+        ]];
+        $create = $workbooks->assertCreate('crm/organisations.api', $create_data);
         
         error_log("EMPLOYER DEBUG: Workbooks create response: " . print_r($create, true));
     } catch (Exception $e) {
