@@ -847,3 +847,700 @@
 [2025-10-17 14:58:32] [error] Failed to load include file: submission-storage-helpers.php
 [2025-10-17 15:00:31] [error] Failed to load include file: submission-storage-helpers.php
 [2025-10-17 15:00:32] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:06:50] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:06:51] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:06:52] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:06:52] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:07:29] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:07:31] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:07:31] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:07:32] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:07:37] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:09:09] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:09:11] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:09:12] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:09:18] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:09:27] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:09:28] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:09:28] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:09:47] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:09:50] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:09:54] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:10:01] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:10:02] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:10:04] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:01] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:03] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:03] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:07] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:11] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:15] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:16] [info] Ninja Forms submission data: Array
+(
+    [id] => 3
+    [fields] => Array
+        (
+            [4] => Array
+                (
+                    [value] => levongravett
+                    [id] => 4
+                    [key] => username_1488856177040
+                )
+
+            [5] => Array
+                (
+                    [value] => Smkrulz1@22
+                    [id] => 5
+                    [key] => password_1487972201036
+                )
+
+            [6] => Array
+                (
+                    [value] => 
+                    [id] => 6
+                    [key] => login_1725014359987
+                )
+
+            [7] => Array
+                (
+                    [value] => <a href="https://dtr-final-api-push.local/wp-login.php?action=lostpassword">Forgot your password?</a>
+                    [id] => 7
+                    [key] => lost_password_1729696942936
+                )
+
+            [26] => Array
+                (
+                    [value] => https://dtr-final-api-push.local/webinars/final-webinar-levon-august-2025/
+                    [id] => 26
+                    [key] => page_url_1732105345145
+                )
+
+        )
+
+    [settings] => Array
+        (
+            [objectType] => Form Setting
+            [editActive] => 1
+            [title] => Login Form
+            [created_at] => 2024-08-29 08:16:19
+            [form_title] => Login Form
+            [default_label_pos] => above
+            [show_title] => 0
+            [clear_complete] => 1
+            [hide_complete] => 1
+            [logged_in] => 0
+            [wrapper_class] => 
+            [element_class] => 
+            [key] => 
+            [add_submit] => 0
+            [currency] => 
+            [not_logged_in_msg] => 
+            [sub_limit_number] => 
+            [sub_limit_msg] => 
+            [calculations] => Array
+                (
+                )
+
+            [container_styles_background-color] => 
+            [container_styles_border] => 
+            [container_styles_border-style] => 
+            [container_styles_border-color] => 
+            [container_styles_color] => 
+            [container_styles_height] => 
+            [container_styles_width] => 
+            [container_styles_font-size] => 
+            [container_styles_margin] => 
+            [container_styles_padding] => 
+            [container_styles_display] => 
+            [container_styles_float] => 
+            [container_styles_show_advanced_css] => 0
+            [container_styles_advanced] => 
+            [title_styles_background-color] => 
+            [title_styles_border] => 
+            [title_styles_border-style] => 
+            [title_styles_border-color] => 
+            [title_styles_color] => 
+            [title_styles_height] => 
+            [title_styles_width] => 
+            [title_styles_font-size] => 
+            [title_styles_margin] => 
+            [title_styles_padding] => 
+            [title_styles_display] => 
+            [title_styles_float] => 
+            [title_styles_show_advanced_css] => 0
+            [title_styles_advanced] => 
+            [row_styles_background-color] => 
+            [row_styles_border] => 
+            [row_styles_border-style] => 
+            [row_styles_border-color] => 
+            [row_styles_color] => 
+            [row_styles_height] => 
+            [row_styles_width] => 
+            [row_styles_font-size] => 
+            [row_styles_margin] => 
+            [row_styles_padding] => 
+            [row_styles_display] => 
+            [row_styles_show_advanced_css] => 0
+            [row_styles_advanced] => 
+            [row-odd_styles_background-color] => 
+            [row-odd_styles_border] => 
+            [row-odd_styles_border-style] => 
+            [row-odd_styles_border-color] => 
+            [row-odd_styles_color] => 
+            [row-odd_styles_height] => 
+            [row-odd_styles_width] => 
+            [row-odd_styles_font-size] => 
+            [row-odd_styles_margin] => 
+            [row-odd_styles_padding] => 
+            [row-odd_styles_display] => 
+            [row-odd_styles_show_advanced_css] => 0
+            [row-odd_styles_advanced] => 
+            [success-msg_styles_background-color] => 
+            [success-msg_styles_border] => 
+            [success-msg_styles_border-style] => 
+            [success-msg_styles_border-color] => 
+            [success-msg_styles_color] => 
+            [success-msg_styles_height] => 
+            [success-msg_styles_width] => 
+            [success-msg_styles_font-size] => 
+            [success-msg_styles_margin] => 
+            [success-msg_styles_padding] => 
+            [success-msg_styles_display] => 
+            [success-msg_styles_show_advanced_css] => 0
+            [success-msg_styles_advanced] => 
+            [error_msg_styles_background-color] => 
+            [error_msg_styles_border] => 
+            [error_msg_styles_border-style] => 
+            [error_msg_styles_border-color] => 
+            [error_msg_styles_color] => 
+            [error_msg_styles_height] => 
+            [error_msg_styles_width] => 
+            [error_msg_styles_font-size] => 
+            [error_msg_styles_margin] => 
+            [error_msg_styles_padding] => 
+            [error_msg_styles_display] => 
+            [error_msg_styles_show_advanced_css] => 0
+            [error_msg_styles_advanced] => 
+            [conditions] => Array
+                (
+                )
+
+            [mp_breadcrumb] => 1
+            [mp_progress_bar] => 1
+            [mp_display_titles] => 0
+            [breadcrumb_container_styles_background-color] => 
+            [breadcrumb_container_styles_border] => 
+            [breadcrumb_container_styles_border-style] => 
+            [breadcrumb_container_styles_border-color] => 
+            [breadcrumb_container_styles_color] => 
+            [breadcrumb_container_styles_height] => 
+            [breadcrumb_container_styles_width] => 
+            [breadcrumb_container_styles_font-size] => 
+            [breadcrumb_container_styles_margin] => 
+            [breadcrumb_container_styles_padding] => 
+            [breadcrumb_container_styles_display] => 
+            [breadcrumb_container_styles_float] => 
+            [breadcrumb_container_styles_show_advanced_css] => 0
+            [breadcrumb_container_styles_advanced] => 
+            [breadcrumb_buttons_styles_background-color] => 
+            [breadcrumb_buttons_styles_border] => 
+            [breadcrumb_buttons_styles_border-style] => 
+            [breadcrumb_buttons_styles_border-color] => 
+            [breadcrumb_buttons_styles_color] => 
+            [breadcrumb_buttons_styles_height] => 
+            [breadcrumb_buttons_styles_width] => 
+            [breadcrumb_buttons_styles_font-size] => 
+            [breadcrumb_buttons_styles_margin] => 
+            [breadcrumb_buttons_styles_padding] => 
+            [breadcrumb_buttons_styles_display] => 
+            [breadcrumb_buttons_styles_float] => 
+            [breadcrumb_buttons_styles_show_advanced_css] => 0
+            [breadcrumb_buttons_styles_advanced] => 
+            [breadcrumb_button_hover_styles_background-color] => 
+            [breadcrumb_button_hover_styles_border] => 
+            [breadcrumb_button_hover_styles_border-style] => 
+            [breadcrumb_button_hover_styles_border-color] => 
+            [breadcrumb_button_hover_styles_color] => 
+            [breadcrumb_button_hover_styles_height] => 
+            [breadcrumb_button_hover_styles_width] => 
+            [breadcrumb_button_hover_styles_font-size] => 
+            [breadcrumb_button_hover_styles_margin] => 
+            [breadcrumb_button_hover_styles_padding] => 
+            [breadcrumb_button_hover_styles_display] => 
+            [breadcrumb_button_hover_styles_float] => 
+            [breadcrumb_button_hover_styles_show_advanced_css] => 0
+            [breadcrumb_button_hover_styles_advanced] => 
+            [breadcrumb_active_button_styles_background-color] => 
+            [breadcrumb_active_button_styles_border] => 
+            [breadcrumb_active_button_styles_border-style] => 
+            [breadcrumb_active_button_styles_border-color] => 
+            [breadcrumb_active_button_styles_color] => 
+            [breadcrumb_active_button_styles_height] => 
+            [breadcrumb_active_button_styles_width] => 
+            [breadcrumb_active_button_styles_font-size] => 
+            [breadcrumb_active_button_styles_margin] => 
+            [breadcrumb_active_button_styles_padding] => 
+            [breadcrumb_active_button_styles_display] => 
+            [breadcrumb_active_button_styles_float] => 
+            [breadcrumb_active_button_styles_show_advanced_css] => 0
+            [breadcrumb_active_button_styles_advanced] => 
+            [progress_bar_container_styles_background-color] => 
+            [progress_bar_container_styles_border] => 
+            [progress_bar_container_styles_border-style] => 
+            [progress_bar_container_styles_border-color] => 
+            [progress_bar_container_styles_color] => 
+            [progress_bar_container_styles_height] => 
+            [progress_bar_container_styles_width] => 
+            [progress_bar_container_styles_font-size] => 
+            [progress_bar_container_styles_margin] => 
+            [progress_bar_container_styles_padding] => 
+            [progress_bar_container_styles_display] => 
+            [progress_bar_container_styles_float] => 
+            [progress_bar_container_styles_show_advanced_css] => 0
+            [progress_bar_container_styles_advanced] => 
+            [progress_bar_fill_styles_background-color] => 
+            [progress_bar_fill_styles_border] => 
+            [progress_bar_fill_styles_border-style] => 
+            [progress_bar_fill_styles_border-color] => 
+            [progress_bar_fill_styles_color] => 
+            [progress_bar_fill_styles_height] => 
+            [progress_bar_fill_styles_width] => 
+            [progress_bar_fill_styles_font-size] => 
+            [progress_bar_fill_styles_margin] => 
+            [progress_bar_fill_styles_padding] => 
+            [progress_bar_fill_styles_display] => 
+            [progress_bar_fill_styles_float] => 
+            [progress_bar_fill_styles_show_advanced_css] => 0
+            [progress_bar_fill_styles_advanced] => 
+            [part_titles_styles_background-color] => 
+            [part_titles_styles_border] => 
+            [part_titles_styles_border-style] => 
+            [part_titles_styles_border-color] => 
+            [part_titles_styles_color] => 
+            [part_titles_styles_height] => 
+            [part_titles_styles_width] => 
+            [part_titles_styles_font-size] => 
+            [part_titles_styles_margin] => 
+            [part_titles_styles_padding] => 
+            [part_titles_styles_display] => 
+            [part_titles_styles_float] => 
+            [part_titles_styles_show_advanced_css] => 0
+            [part_titles_styles_advanced] => 
+            [navigation_container_styles_background-color] => 
+            [navigation_container_styles_border] => 
+            [navigation_container_styles_border-style] => 
+            [navigation_container_styles_border-color] => 
+            [navigation_container_styles_color] => 
+            [navigation_container_styles_height] => 
+            [navigation_container_styles_width] => 
+            [navigation_container_styles_font-size] => 
+            [navigation_container_styles_margin] => 
+            [navigation_container_styles_padding] => 
+            [navigation_container_styles_display] => 
+            [navigation_container_styles_float] => 
+            [navigation_container_styles_show_advanced_css] => 0
+            [navigation_container_styles_advanced] => 
+            [previous_button_styles_background-color] => 
+            [previous_button_styles_border] => 
+            [previous_button_styles_border-style] => 
+            [previous_button_styles_border-color] => 
+            [previous_button_styles_color] => 
+            [previous_button_styles_height] => 
+            [previous_button_styles_width] => 
+            [previous_button_styles_font-size] => 
+            [previous_button_styles_margin] => 
+            [previous_button_styles_padding] => 
+            [previous_button_styles_display] => 
+            [previous_button_styles_float] => 
+            [previous_button_styles_show_advanced_css] => 0
+            [previous_button_styles_advanced] => 
+            [next_button_styles_background-color] => 
+            [next_button_styles_border] => 
+            [next_button_styles_border-style] => 
+            [next_button_styles_border-color] => 
+            [next_button_styles_color] => 
+            [next_button_styles_height] => 
+            [next_button_styles_width] => 
+            [next_button_styles_font-size] => 
+            [next_button_styles_margin] => 
+            [next_button_styles_padding] => 
+            [next_button_styles_display] => 
+            [next_button_styles_float] => 
+            [next_button_styles_show_advanced_css] => 0
+            [next_button_styles_advanced] => 
+            [navigation_hover_styles_background-color] => 
+            [navigation_hover_styles_border] => 
+            [navigation_hover_styles_border-style] => 
+            [navigation_hover_styles_border-color] => 
+            [navigation_hover_styles_color] => 
+            [navigation_hover_styles_height] => 
+            [navigation_hover_styles_width] => 
+            [navigation_hover_styles_font-size] => 
+            [navigation_hover_styles_margin] => 
+            [navigation_hover_styles_padding] => 
+            [navigation_hover_styles_display] => 
+            [navigation_hover_styles_float] => 
+            [navigation_hover_styles_show_advanced_css] => 0
+            [navigation_hover_styles_advanced] => 
+            [allow_public_link] => 0
+            [embed_form] => 
+            [form_title_heading_level] => 3
+            [unique_field_error] => A form with this value has already been submitted.
+            [changeEmailErrorMsg] => Please enter a valid email address!
+            [changeDateErrorMsg] => Please enter a valid date!
+            [confirmFieldErrorMsg] => These fields must match!
+            [fieldNumberNumMinError] => Number Min Error
+            [fieldNumberNumMaxError] => Number Max Error
+            [fieldNumberIncrementBy] => Please increment by 
+            [formErrorsCorrectErrors] => Please correct errors before submitting this form.
+            [validateRequiredField] => This is a required field.
+            [honeypotHoneypotError] => Honeypot Error
+            [fieldsMarkedRequired] => Fields marked with an <span class="ninja-forms-req-symbol">*</span> are required
+            [objectDomain] => display
+            [drawerDisabled] => 
+            [ninjaForms] => Ninja Forms
+            [fieldTextareaRTEInsertLink] => Insert Link
+            [fieldTextareaRTEInsertMedia] => Insert Media
+            [fieldTextareaRTESelectAFile] => Select a file
+            [formHoneypot] => If you are a human seeing this field, please leave it empty.
+            [fileUploadOldCodeFileUploadInProgress] => File Upload in Progress.
+            [fileUploadOldCodeFileUpload] => FILE UPLOAD
+            [currencySymbol] => &#36;
+            [thousands_sep] => ,
+            [decimal_point] => .
+            [siteLocale] => en_GB
+            [dateFormat] => m/d/Y
+            [startOfWeek] => 1
+            [of] => of
+            [previousMonth] => Previous Month
+            [nextMonth] => Next Month
+            [months] => Array
+                (
+                    [0] => January
+                    [1] => February
+                    [2] => March
+                    [3] => April
+                    [4] => May
+                    [5] => June
+                    [6] => July
+                    [7] => August
+                    [8] => September
+                    [9] => October
+                    [10] => November
+                    [11] => December
+                )
+
+            [monthsShort] => Array
+                (
+                    [0] => Jan
+                    [1] => Feb
+                    [2] => Mar
+                    [3] => Apr
+                    [4] => May
+                    [5] => Jun
+                    [6] => Jul
+                    [7] => Aug
+                    [8] => Sep
+                    [9] => Oct
+                    [10] => Nov
+                    [11] => Dec
+                )
+
+            [weekdays] => Array
+                (
+                    [0] => Sunday
+                    [1] => Monday
+                    [2] => Tuesday
+                    [3] => Wednesday
+                    [4] => Thursday
+                    [5] => Friday
+                    [6] => Saturday
+                )
+
+            [weekdaysShort] => Array
+                (
+                    [0] => Sun
+                    [1] => Mon
+                    [2] => Tue
+                    [3] => Wed
+                    [4] => Thu
+                    [5] => Fri
+                    [6] => Sat
+                )
+
+            [weekdaysMin] => Array
+                (
+                    [0] => Su
+                    [1] => Mo
+                    [2] => Tu
+                    [3] => We
+                    [4] => Th
+                    [5] => Fr
+                    [6] => Sa
+                )
+
+            [recaptchaConsentMissing] => reCaptcha validation couldn&#039;t load.
+            [recaptchaMissingCookie] => reCaptcha v3 validation couldn&#039;t load the cookie needed to submit the form.
+            [recaptchaConsentEvent] => Accept reCaptcha cookies before sending the form.
+            [currency_symbol] => 
+            [beforeForm] => 
+            [beforeFields] => 
+            [afterFields] => 
+            [afterForm] => 
+        )
+
+    [extra] => Array
+        (
+        )
+
+)
+
+[2025-10-17 16:23:16] [info] 2025-10-17 17:23:16 [NF-68f26d74a6f46] Dispatch submission for form_id=3
+[2025-10-17 16:23:16] [info] 2025-10-17 17:23:16 [NF-68f26d74a6f46] No handler for form id 3
+[2025-10-17 16:23:16] [info] 2025-10-17 17:23:16 [ACF-Q-68f26d74aa414] Form ID 3 not supported for ACF questions
+[2025-10-17 16:23:16] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:16] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:25] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:26] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:28] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:29] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:29] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:30] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:30] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:31] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:35] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:36] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:44] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:45] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:51] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:52] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:23:59] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:24:00] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:24:02] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:24:14] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:24:14] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:24:20] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:24:20] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:25:01] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:25:03] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:25:56] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:25:58] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:25:58] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:26:03] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:26:09] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:26:14] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:27:02] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:27:04] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:28:46] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:28:47] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:28:51] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:28:52] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:28:59] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:29:02] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:29:03] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:29:13] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:29:44] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:29:45] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:29:46] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:31:04] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:31:05] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:31:21] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:31:21] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:31:22] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:31:22] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:31:23] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:31:23] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:06] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:09] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:11] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:12] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:12] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:13] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:13] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:14] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:14] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:27] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:29] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:30] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:31] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:33] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:34] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:34] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:35] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:35] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:49] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:53] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:53] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:54] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:54] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:55] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:55] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:32:56] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:33:05] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:33:06] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:34:47] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:35:07] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:35:16] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:35:19] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:35:23] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:35:25] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:36:10] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:36:12] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:36:17] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:37:07] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:37:08] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:39:08] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:39:11] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:41:09] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:41:10] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:51:56] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:51:58] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:51:59] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:52:06] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:52:10] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:52:23] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:52:24] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:53:56] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:53:57] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:54:57] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:54:58] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:55:02] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:55:03] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:55:12] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:55:16] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:55:18] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:55:21] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:55:23] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:55:28] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:55:29] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:55:57] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:56:48] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:56:49] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:56:53] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:57:58] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:57:59] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 16:59:59] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:00:00] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:02:00] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:02:01] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:06:40] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:06:41] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:06:43] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:06:44] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:06:56] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:07:02] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:07:11] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:07:40] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:07:41] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:07:45] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:07:53] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:08:00] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:08:04] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:09:45] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:09:46] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:11:46] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:11:47] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:13:47] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:13:49] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:15:48] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:15:49] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:24:54] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:24:56] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:25:21] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:25:54] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:25:55] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:25:56] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:25:56] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:25:57] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:26:21] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:27:45] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:27:47] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:28:47] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:28:48] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:30:02] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:30:05] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:30:47] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:30:49] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:30:54] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:31:40] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:31:43] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:31:53] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:31:57] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:32:14] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:32:48] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:32:50] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:35:16] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:35:19] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:36:11] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:36:14] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:36:29] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:36:30] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:37:29] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:37:30] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:38:34] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:38:36] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:38:38] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:39:30] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:39:32] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:41:31] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:41:33] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:44:37] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:44:41] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:50:30] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:50:33] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:50:48] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:50:52] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:51:14] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:51:32] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:51:33] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:51:34] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:51:52] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:51:54] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:52:54] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:52:55] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:53:40] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:53:42] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:53:42] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:53:47] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:53:47] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:53:55] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:53:55] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:53:57] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:53:58] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:55:00] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:55:04] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 17:55:38] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:06:58] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:07:02] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:11:50] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:11:55] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:12:01] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:12:03] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:12:06] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:12:14] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:12:15] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:12:17] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:12:28] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:12:35] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:13:35] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:13:37] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:15:35] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:15:36] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:17:35] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:17:36] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:19:35] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:19:36] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:21:35] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:21:37] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:23:36] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:23:38] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:25:37] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:25:38] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:27:38] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:27:40] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:29:39] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:29:40] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:31:40] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:31:42] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:33:09] [error] Failed to load include file: submission-storage-helpers.php
+[2025-10-17 18:33:13] [error] Failed to load include file: submission-storage-helpers.php

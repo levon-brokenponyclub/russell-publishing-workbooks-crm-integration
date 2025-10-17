@@ -206,6 +206,115 @@ if (!function_exists('dtr_map_toi_to_aoi')) {
     }
 }
 
+// Clean up user AOI fields to ensure they only come from TOI mappings
+if (!function_exists('dtr_cleanup_user_aoi_fields')) {
+    function dtr_cleanup_user_aoi_fields($user_id) {
+        if (!$user_id) return false;
+        
+        // Get all TOI fields that are currently selected
+        $toi_options = dtr_get_all_toi_options();
+        $selected_tois = [];
+        
+        foreach ($toi_options as $toi_field => $label) {
+            $value = get_user_meta($user_id, $toi_field, true);
+            if ($value == '1') {
+                $selected_tois[] = $toi_field;
+            }
+        }
+        
+        // Calculate what AOI fields should be based on TOI selections
+        $calculated_aoi_mapping = dtr_map_toi_to_aoi($selected_tois);
+        
+        // Get all AOI fields
+        $aoi_fields = array_keys(dtr_get_aoi_field_names());
+        
+        // Set all AOI fields based on calculated mapping (clear direct selections)
+        $changes_made = [];
+        foreach ($aoi_fields as $aoi_field) {
+            $should_be_selected = isset($calculated_aoi_mapping[$aoi_field]) && $calculated_aoi_mapping[$aoi_field] == 1;
+            $current_value = get_user_meta($user_id, $aoi_field, true);
+            $new_value = $should_be_selected ? '1' : '0';
+            
+            if ($current_value !== $new_value) {
+                update_user_meta($user_id, $aoi_field, $new_value);
+                $changes_made[] = [
+                    'field' => $aoi_field,
+                    'old_value' => $current_value,
+                    'new_value' => $new_value,
+                    'reason' => $should_be_selected ? 'Set by TOI mapping' : 'Cleared direct selection'
+                ];
+            }
+        }
+        
+        // Log changes for debugging
+        if (!empty($changes_made)) {
+            $log_message = sprintf(
+                "[%s] AOI Cleanup for User %d:\nSelected TOIs: %s\nChanges made:\n",
+                date('Y-m-d H:i:s'),
+                $user_id,
+                implode(', ', $selected_tois)
+            );
+            
+            foreach ($changes_made as $change) {
+                $log_message .= sprintf(
+                    "  - %s: %s → %s (%s)\n",
+                    $change['field'],
+                    $change['old_value'] ?: 'empty',
+                    $change['new_value'],
+                    $change['reason']
+                );
+            }
+            
+            dtr_admin_log($log_message, 'aoi-cleanup.log');
+        }
+        
+        return $changes_made;
+    }
+}
+
+// Automatically clean up AOI fields when user profile is saved
+add_action('profile_update', 'dtr_auto_cleanup_aoi_on_profile_save');
+add_action('user_register', 'dtr_auto_cleanup_aoi_on_profile_save');
+
+if (!function_exists('dtr_auto_cleanup_aoi_on_profile_save')) {
+    function dtr_auto_cleanup_aoi_on_profile_save($user_id) {
+        // Only run cleanup if we're updating TOI/AOI related fields
+        if (isset($_POST['cf_person_business']) || 
+            isset($_POST['cf_person_diseases']) || 
+            isset($_POST['cf_person_drugs_therapies']) || 
+            isset($_POST['cf_person_genomics_3774']) || 
+            isset($_POST['cf_person_research_development']) || 
+            isset($_POST['cf_person_technology']) || 
+            isset($_POST['cf_person_tools_techniques'])) {
+            
+            dtr_cleanup_user_aoi_fields($user_id);
+        }
+    }
+}
+
+// Manual cleanup function for immediate use
+if (!function_exists('dtr_manual_cleanup_user_aoi')) {
+    function dtr_manual_cleanup_user_aoi($user_id = null) {
+        // If no user ID provided, use current user
+        if (!$user_id) {
+            $user_id = get_current_user_id();
+        }
+        
+        if (!$user_id) {
+            return ['error' => 'No user ID provided'];
+        }
+        
+        $changes = dtr_cleanup_user_aoi_fields($user_id);
+        
+        return [
+            'success' => true,
+            'user_id' => $user_id,
+            'changes_made' => count($changes),
+            'details' => $changes
+        ];
+    }
+}
+
 // Convert Ninja Forms country codes to full names before submission
 add_filter( 'ninja_forms_submit_data', function( $form_data ) {
 

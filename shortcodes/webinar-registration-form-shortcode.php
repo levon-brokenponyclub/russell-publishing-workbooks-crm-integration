@@ -988,10 +988,10 @@ function dtr_enqueue_webinar_scripts() {
                 
                 // Simulate the actual submission flow for preview with enhanced messaging
                 updateFormProgress(0, 'Starting...');
-                setTimeout(() => updateFormProgress(25, 'Validating data...'), 500);
-                setTimeout(() => updateFormProgress(50, 'Processing registration...'), 1500);
-                setTimeout(() => updateFormProgress(75, 'Syncing with CRM...'), 2500);
-                setTimeout(() => updateFormProgress(90, 'Finalizing access...'), 3500);
+                setTimeout(() => updateFormProgress(25, 'Validating Data...'), 500);
+                setTimeout(() => updateFormProgress(50, 'Processing Registration...'), 1500);
+                setTimeout(() => updateFormProgress(75, 'Submission in Progress...'), 2500);
+                setTimeout(() => updateFormProgress(90, 'Finalising Access...'), 3500);
                 setTimeout(() => updateFormProgress(100, 'Complete!'), 4500);
                 setTimeout(() => {
                     // At 100%, fade out and simulate redirect
@@ -1631,9 +1631,9 @@ function dtr_webinar_registration_shortcode($atts) {
         showProgressLoader();
         updateFormProgress(0, 'Starting...');
         
-        setTimeout(() => updateFormProgress(25, 'Validating data...'), 500);
-        setTimeout(() => updateFormProgress(50, 'Processing registration...'), 1500);
-        setTimeout(() => updateFormProgress(75, 'Syncing with CRM...'), 2500);
+        setTimeout(() => updateFormProgress(25, 'Validating Data...'), 500);
+        setTimeout(() => updateFormProgress(50, 'Processing Registration...'), 1500);
+        setTimeout(() => updateFormProgress(75, 'Submission in Progress...'), 2500);
         setTimeout(() => updateFormProgress(100, 'Complete!'), 3500);
         setTimeout(() => hideProgressLoader(), 5000);
     }

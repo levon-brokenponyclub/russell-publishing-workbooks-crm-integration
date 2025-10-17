@@ -155,6 +155,7 @@ function dtr_membership_registration_shortcode($atts) {
                         <div class="form-field floating-label">
                             <input type="email" id="email" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
                             <label for="email">Email Address <span class="required">*</span></label>
+                            <div class="email-validation-status" id="emailValidationStatus"></div>
                         </div>
                         <div class="form-field floating-label">
                             <input type="tel" id="phone" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
@@ -419,6 +420,135 @@ function dtr_membership_registration_shortcode($atts) {
             }
         }
 
+        // Real-time email validation
+        let emailValidationTimer = null;
+        let lastCheckedEmail = '';
+        
+        function initEmailValidation() {
+            const emailField = document.getElementById('email');
+            const statusDiv = document.getElementById('emailValidationStatus');
+            
+            if (emailField && statusDiv) {
+                emailField.addEventListener('input', function() {
+                    const email = this.value.trim();
+                    
+                    // Clear previous timer
+                    if (emailValidationTimer) {
+                        clearTimeout(emailValidationTimer);
+                    }
+                    
+                    // Reset status if email is empty
+                    if (!email) {
+                        statusDiv.className = 'email-validation-status';
+                        statusDiv.innerHTML = '';
+                        return;
+                    }
+                    
+                    // Check basic email format first
+                    if (!isValidEmail(email)) {
+                        statusDiv.className = 'email-validation-status invalid-format';
+                        statusDiv.innerHTML = '<span class="status-icon">⚠️</span> Please enter a valid email address';
+                        return;
+                    }
+                    
+                    // Show checking status
+                    statusDiv.className = 'email-validation-status checking';
+                    statusDiv.innerHTML = '<span class="status-icon loading">🔍</span> Checking availability...';
+                    
+                    // Debounce the API call
+                    emailValidationTimer = setTimeout(() => {
+                        if (email === lastCheckedEmail) {
+                            return; // Don't check the same email twice
+                        }
+                        
+                        checkEmailAvailability(email);
+                        lastCheckedEmail = email;
+                    }, 500); // Wait 500ms after user stops typing
+                });
+                
+                // Also check on blur for immediate feedback
+                emailField.addEventListener('blur', function() {
+                    const email = this.value.trim();
+                    if (email && isValidEmail(email) && email !== lastCheckedEmail) {
+                        checkEmailAvailability(email);
+                        lastCheckedEmail = email;
+                    }
+                });
+            }
+        }
+        
+        function checkEmailAvailability(email) {
+            const statusDiv = document.getElementById('emailValidationStatus');
+            const emailField = document.getElementById('email');
+            
+            if (!statusDiv || !emailField) return;
+            
+            // Show loading state
+            statusDiv.className = 'email-validation-status checking';
+            statusDiv.innerHTML = '<span class="status-icon loading">🔍</span> Checking availability...';
+            emailField.classList.add('checking');
+            
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('action', 'dtr_check_email_exists');
+            formData.append('email', email);
+            
+            // Make AJAX request
+            fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Remove loading state
+                emailField.classList.remove('checking');
+                
+                if (data.success) {
+                    if (data.data.exists) {
+                        // Email already exists
+                        statusDiv.className = 'email-validation-status exists';
+                        statusDiv.innerHTML = '<span class="status-icon">❌</span> This email is already registered. <a href="#" onclick="openLoginModal(); return false;">Login instead?</a>';
+                        emailField.style.borderColor = '#dc3545';
+                    } else {
+                        // Email is available
+                        statusDiv.className = 'email-validation-status available';
+                        statusDiv.innerHTML = '<span class="status-icon">✅</span> Email is available';
+                        emailField.style.borderColor = '#28a745';
+                    }
+                } else {
+                    // Error occurred
+                    statusDiv.className = 'email-validation-status error';
+                    statusDiv.innerHTML = '<span class="status-icon">⚠️</span> Unable to verify email. Please try again.';
+                    emailField.style.borderColor = '#dc3545';
+                }
+                
+                // Clear border color after 3 seconds
+                setTimeout(() => {
+                    emailField.style.borderColor = '';
+                }, 3000);
+            })
+            .catch(error => {
+                console.error('Email validation error:', error);
+                
+                // Remove loading state
+                emailField.classList.remove('checking');
+                emailField.style.borderColor = '#dc3545';
+                
+                statusDiv.className = 'email-validation-status error';
+                statusDiv.innerHTML = '<span class="status-icon">⚠️</span> Unable to verify email. Please try again.';
+                
+                // Clear border color after 3 seconds
+                setTimeout(() => {
+                    emailField.style.borderColor = '';
+                }, 3000);
+            });
+        }
+
         // Password matching checker
         function initPasswordMatch() {
             var password = document.getElementById('password');
@@ -575,6 +705,33 @@ function dtr_membership_registration_shortcode($atts) {
                 }
             }
             
+            // Validate email format and availability (only on step 1)
+            if (currentStep === 1) {
+                const emailField = document.getElementById('email');
+                const emailStatus = document.getElementById('emailValidationStatus');
+                
+                if (emailField && emailField.value) {
+                    if (!isValidEmail(emailField.value)) {
+                        alert('Please enter a valid email address');
+                        emailField.focus();
+                        return false;
+                    }
+                    
+                    // Check if email validation shows email already exists
+                    if (emailStatus && emailStatus.classList.contains('exists')) {
+                        alert('This email address is already registered. Please use a different email or login to your existing account.');
+                        emailField.focus();
+                        return false;
+                    }
+                    
+                    // If email validation is still checking, wait
+                    if (emailStatus && emailStatus.classList.contains('checking')) {
+                        alert('Please wait while we verify your email address availability.');
+                        return false;
+                    }
+                }
+            }
+            
             // Validate password confirmation if both fields have values
             const passwordField = document.getElementById('password');
             const confirmPasswordField = document.getElementById('confirmPassword');
@@ -584,14 +741,6 @@ function dtr_membership_registration_shortcode($atts) {
                 passwordField.value !== confirmPasswordField.value) {
                 alert('Passwords do not match');
                 confirmPasswordField.focus();
-                return false;
-            }
-            
-            // Validate email format
-            const emailField = document.getElementById('email');
-            if (emailField && emailField.value && !isValidEmail(emailField.value)) {
-                alert('Please enter a valid email address');
-                emailField.focus();
                 return false;
             }
 
@@ -1144,6 +1293,7 @@ function dtr_membership_registration_shortcode($atts) {
         initFloatingLabels();
         initPasswordStrength();
         initPasswordMatch();
+        initEmailValidation();
         initDevModeToggle();
 
         // Debug logging
@@ -1319,6 +1469,103 @@ function dtr_membership_registration_shortcode($atts) {
         font-size: 12px;
         font-weight: 600;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Email Validation Status Styles */
+    .email-validation-status {
+        margin-top: 8px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .email-validation-status:empty {
+        display: none;
+    }
+
+    .email-validation-status.checking {
+        background-color: #f0f8ff;
+        border: 1px solid #b3d9ff;
+        color: #0066cc;
+    }
+
+    .email-validation-status.available {
+        background-color: #f0f9f0;
+        border: 1px solid #90ee90;
+        color: #006400;
+    }
+
+    .email-validation-status.exists {
+        background-color: #fff5f5;
+        border: 1px solid #ffb3ba;
+        color: #cc0000;
+    }
+
+    .email-validation-status.invalid-format {
+        background-color: #fff8e1;
+        border: 1px solid #ffcc80;
+        color: #e65100;
+    }
+
+    .email-validation-status.error {
+        background-color: #fff5f5;
+        border: 1px solid #ffb3ba;
+        color: #cc0000;
+    }
+
+    .email-validation-status .status-icon {
+        font-size: 14px;
+        line-height: 1;
+    }
+
+    .email-validation-status .status-icon.loading {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .email-validation-status a {
+        color: inherit;
+        text-decoration: underline;
+        font-weight: 600;
+    }
+
+    .email-validation-status a:hover {
+        text-decoration: none;
+    }
+
+    /* Update floating label container to accommodate validation status */
+    .floating-label {
+        position: relative;
+        margin-bottom: 8px;
+    }
+
+    .floating-label:has(.email-validation-status:not(:empty)) {
+        margin-bottom: 16px;
+    }
+
+    /* Add loading state to email input */
+    #email.checking {
+        background-image: linear-gradient(90deg, transparent 40%, rgba(0, 102, 204, 0.1) 50%, transparent 60%);
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
+    .form-row {
+        margin-bottom:0.8rem !important;
     }
     </style>
     <?php

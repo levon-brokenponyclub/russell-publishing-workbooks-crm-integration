@@ -1513,9 +1513,9 @@ function dtr_add_lead_generation_javascript() {
             showProgressLoader();
             updateFormProgress(0, 'Starting...');
             
-            setTimeout(() => updateFormProgress(25, 'Validating data...'), 500);
-            setTimeout(() => updateFormProgress(50, 'Processing registration...'), 1500);
-            setTimeout(() => updateFormProgress(75, 'Syncing with CRM...'), 2500);
+            setTimeout(() => updateFormProgress(25, 'Validating Data...'), 500);
+            setTimeout(() => updateFormProgress(50, 'Processing Registration...'), 1500);
+            setTimeout(() => updateFormProgress(75, 'Submission in Progress...'), 2500);
             setTimeout(() => updateFormProgress(100, 'Complete!'), 3500);
             setTimeout(() => hideProgressLoader(), 5000);
         }
@@ -1641,13 +1641,13 @@ function dtr_add_lead_generation_javascript() {
             }, 200);
             
             // Stage 1: Initial validation
-            setTimeout(() => updateFormProgress(25, 'Validating data...'), 500);
+            setTimeout(() => updateFormProgress(25, 'Validating Data...'), 500);
             
             // Stage 2: Security validation complete
-            setTimeout(() => updateFormProgress(40, 'Processing registration...'), 1000);
+            setTimeout(() => updateFormProgress(40, 'Processing Registration...'), 1000);
             
             // Stage 3: Processing with CRM
-            setTimeout(() => updateFormProgress(60, 'Syncing with CRM...'), 1500);
+            setTimeout(() => updateFormProgress(60, 'Submission in Progress...'), 1500);
             
             // Submit form via AJAX
             $.ajax({
@@ -1660,7 +1660,7 @@ function dtr_add_lead_generation_javascript() {
                     
                     if (response.success) {
                         // Stage 4: Finalizing access
-                        updateFormProgress(90, 'Finalizing access...');
+                        updateFormProgress(90, 'Finalising access...');
                         
                         setTimeout(() => {
                             // Stage 5: Complete

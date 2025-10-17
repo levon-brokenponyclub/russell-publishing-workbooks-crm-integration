@@ -2667,3 +2667,125 @@ RESULT INFORMATION:
 [event_id] => 5832
 [success] => 1
 
+[2025-10-17 16:24:15] === WEBINAR REGISTRATION HANDLER START ===
+[2025-10-17 16:24:15] === WEBINAR REGISTRATION HANDLER START ===
+[2025-10-17 16:24:15] 
+===== WEBINAR DETAILS =====
+[2025-10-17 16:24:15] 
+===== WEBINAR DETAILS =====
+[2025-10-17 16:24:15] ℹ️ Post ID: 161189
+[2025-10-17 16:24:15] ℹ️ Post ID: 161189
+[2025-10-17 16:24:15] ℹ️ Workbooks Reference: 5832
+[2025-10-17 16:24:15] ℹ️ Workbooks Reference: 5832
+[2025-10-17 16:24:15] ℹ️ User Logged In: ID: 28
+[2025-10-17 16:24:15] ℹ️ User Logged In: ID: 28
+[2025-10-17 16:24:15] ℹ️ Form Submission Tracking: WR-20251017-162415-602c6c
+[2025-10-17 16:24:15] ℹ️ Form Submission Tracking: WR-20251017-162415-59da80
+[2025-10-17 16:24:15] 
+===== USER DETAILS =====
+[2025-10-17 16:24:15] 
+===== USER DETAILS =====
+[2025-10-17 16:24:15] ✅ Email Address: levon.gravett@supersonicplayground.com
+[2025-10-17 16:24:15] ✅ Email Address: levon.gravett@supersonicplayground.com
+[2025-10-17 16:24:15] ✅ First Name: Levon
+[2025-10-17 16:24:15] ✅ First Name: Levon
+[2025-10-17 16:24:15] ✅ Last Name: Gravett
+[2025-10-17 16:24:15] ✅ Last Name: Gravett
+[2025-10-17 16:24:15] ✅ Person ID: 4318866
+[2025-10-17 16:24:15] ✅ Person ID: 4318866
+[2025-10-17 16:24:15] 
+===== FORM DATA =====
+[2025-10-17 16:24:15] 
+===== FORM DATA =====
+[2025-10-17 16:24:15] Speaker Question: Test Please Work
+[2025-10-17 16:24:15] Speaker Question: Test Please Work
+[2025-10-17 16:24:15] Sponsor Optin: Yes
+[2025-10-17 16:24:15] Sponsor Optin: Yes
+[2025-10-17 16:24:15] 
+===== REGISTRATION SUBMISSION =====
+[2025-10-17 16:24:15] 
+===== REGISTRATION SUBMISSION =====
+[2025-10-17 16:24:15] ℹ️ STEP 1: Processing Webinar Form (ID 161189)
+[2025-10-17 16:24:15] ℹ️ STEP 1: Processing Webinar Form (ID 161189)
+[2025-10-17 16:24:15] ℹ️ STEP : Found Workbooks reference in webinar_fields group: 5832
+[2025-10-17 16:24:15] ℹ️ STEP : Found Workbooks reference in webinar_fields group: 5832
+[2025-10-17 16:24:15] ℹ️ STEP 1: Workbooks process for Reference: 5832
+[2025-10-17 16:24:15] ℹ️ STEP 1: Workbooks process for Reference: 5832
+[2025-10-17 16:24:15] ✅ STEP 2: Person found via user meta (ID: 4318866)
+[2025-10-17 16:24:15] ✅ STEP 2: Person Created/Updated Successfully
+[2025-10-17 16:24:15] ✅ STEP 2: Person found via user meta (ID: 4318866)
+[2025-10-17 16:24:15] ✅ STEP 3: Creating Ticket
+[2025-10-17 16:24:15] ✅ STEP 2: Person Created/Updated Successfully
+[2025-10-17 16:24:15] ✅ STEP 3: Creating Ticket
+[2025-10-17 16:24:16] ✅ STEP 3: Ticket Created/Updated
+[2025-10-17 16:24:16] ✅ STEP 4: Updating Mailing List Entry
+[2025-10-17 16:24:16] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-10-17 16:24:17] ✅ STEP 3: Ticket Created/Updated
+[2025-10-17 16:24:17] ✅ STEP 4: Updating Mailing List Entry
+[2025-10-17 16:24:17] ℹ️ Updating Mailing List Entry for event_id=5832, person_id=4318866
+[2025-10-17 16:24:18] ✅ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-10-17 16:24:18] ✅ STEP 4: Added to Mailing List
+[2025-10-17 16:24:18] ✅ STEP 5: Speaker Question = Test Please Work
+[2025-10-17 16:24:18] ✅ STEP 6: Sponsor Optin = Yes
+[2025-10-17 16:24:18] 
+===== FINAL RESULT =====
+[2025-10-17 16:24:18] 🎉 WEBINAR REGISTRATION SUCCESS!
+[2025-10-17 16:24:18] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test Please Work
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 833498
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-10-17 16:24:18] ⚠️ STEP 7: User already registered in WordPress user meta (or error occurred)
+[2025-10-17 16:24:18] ✅ STEP 8: Registration saved to post meta for admin visibility
+[2025-10-17 16:24:18] ✅ STEP 8: User-specific webinar registration meta saved
+[2025-10-17 16:24:18] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test Please Work
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 833498
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+
+[2025-10-17 16:24:19] ✅ Mailing List Entry updated for levon.gravett@supersonicplayground.com
+[2025-10-17 16:24:19] ✅ STEP 4: Added to Mailing List
+[2025-10-17 16:24:19] ✅ STEP 5: Speaker Question = Test Please Work
+[2025-10-17 16:24:19] ✅ STEP 6: Sponsor Optin = Yes
+[2025-10-17 16:24:19] 
+===== FINAL RESULT =====
+[2025-10-17 16:24:19] 🎉 WEBINAR REGISTRATION SUCCESS!
+[2025-10-17 16:24:19] 
+RESULT INFORMATION:
+[webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test Please Work
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 833500
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+[2025-10-17 16:24:19] ⚠️ STEP 7: User already registered in WordPress user meta (or error occurred)
+[2025-10-17 16:24:19] ✅ STEP 8: Registration saved to post meta for admin visibility
+[2025-10-17 16:24:19] ✅ STEP 8: User-specific webinar registration meta saved
+[2025-10-17 16:24:19] [webinar_title] => 
+[post_id] => 161189
+[email_address] => levon.gravett@supersonicplayground.com
+[question_for_speaker] => Test Please Work
+[add_questions] => 
+[cf_mailing_list_member_sponsor_1_optin] => 1
+[ticket_id] => 833500
+[person_id] => 4318866
+[event_id] => 5832
+[success] => 1
+

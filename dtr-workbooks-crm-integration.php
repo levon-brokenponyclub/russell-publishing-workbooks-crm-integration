@@ -194,6 +194,13 @@ class DTR_Workbooks_Integration {
         // HTML form nonce endpoint - non-authenticated users
         add_action('wp_ajax_nopriv_dtr_get_form_nonce', [$this, 'get_form_nonce']);
 
+        // Email validation endpoint - for checking if email exists during registration
+        add_action('wp_ajax_dtr_check_email_exists', [$this, 'check_email_exists']);
+        add_action('wp_ajax_nopriv_dtr_check_email_exists', [$this, 'check_email_exists']);
+
+        // AOI cleanup endpoint - for fixing user AOI fields based on TOI mappings
+        add_action('wp_ajax_dtr_cleanup_user_aoi', [$this, 'handle_cleanup_user_aoi']);
+
         // Member Registration Test AJAX handlers
         add_action('wp_ajax_dtr_test_member_registration', [$this, 'handle_test_member_registration']);
         add_action('wp_ajax_dtr_sync_user_to_workbooks', [$this, 'handle_sync_user_to_workbooks']);
@@ -1571,6 +1578,39 @@ class DTR_Workbooks_Integration {
     public function get_form_nonce() {
         wp_send_json_success([
             'nonce' => wp_create_nonce('dtr_html_form_submit')
+        ]);
+    }
+
+    /**
+     * AJAX handler for checking if an email address already exists in WordPress
+     * Used for real-time validation during membership registration
+     *
+     * @return void
+     */
+    public function check_email_exists() {
+        // Get and sanitize the email parameter
+        $email = sanitize_email($_POST['email'] ?? '');
+        
+        // Validate email format
+        if (empty($email) || !is_email($email)) {
+            wp_send_json_error([
+                'message' => 'Invalid email address format',
+                'exists' => false
+            ]);
+            return;
+        }
+
+        // Check if email exists in WordPress users
+        $user_exists = email_exists($email);
+        
+        // Log the check for debugging purposes
+        error_log("DTR Email Check: Email '{$email}' " . ($user_exists ? 'EXISTS' : 'AVAILABLE') . " (User ID: " . ($user_exists ?: 'N/A') . ")");
+
+        // Return the result
+        wp_send_json_success([
+            'exists' => (bool) $user_exists,
+            'email' => $email,
+            'message' => $user_exists ? 'Email is already registered' : 'Email is available'
         ]);
     }
 
@@ -4548,6 +4588,43 @@ class DTR_Workbooks_Integration {
             }
         }
     }
+
+    /**
+     * AJAX handler for cleaning up user AOI fields based on TOI mappings
+     *
+     * @return void
+     */
+    public function handle_cleanup_user_aoi() {
+        // Check if user is logged in
+        if (!is_user_logged_in()) {
+            wp_send_json_error(['message' => 'User not logged in']);
+            return;
+        }
+
+        $user_id = get_current_user_id();
+        
+        // Include helper functions if not already loaded
+        if (!function_exists('dtr_manual_cleanup_user_aoi')) {
+            require_once plugin_dir_path(__FILE__) . 'includes/class-helper-functions.php';
+        }
+        
+        try {
+            // Run the cleanup function
+            $result = dtr_manual_cleanup_user_aoi($user_id);
+            
+            wp_send_json_success([
+                'message' => 'AOI fields cleaned up successfully',
+                'cleared_fields' => $result['cleared_fields'],
+                'current_toi_fields' => $result['current_toi_fields'],
+                'mapped_aoi_fields' => $result['mapped_aoi_fields']
+            ]);
+            
+        } catch (Exception $e) {
+            wp_send_json_error([
+                'message' => 'Error during cleanup: ' . $e->getMessage()
+            ]);
+        }
+    }
 }
 
 // Initialize the plugin
@@ -5985,5 +6062,3 @@ function dtr_add_test_loader_script() {
     </script>
     <?php
 }
-
-?>
