@@ -223,12 +223,12 @@
 
 .checkbox-label {
     flex: 1 !important;
-    font-size: 0.7rem !important;
+    font-size: 0.8rem !important;
     line-height: 1.3rem !important;
     font-weight: 600 !important;
 }
 
-.checkbox-item:hover .checkbox-label {
+.checkbox-item:hover .checkbox-label a {
     color: #fff !important;
 }
 
@@ -264,7 +264,7 @@
     cursor: pointer !important;
     display: flex !important;
     align-items: center !important;
-    font-size: 14px !important;
+    font-size: 16px !important;
     font-weight: 500 !important;
     position: relative !important;
     transition: background 0.2s, color 0.2s !important;
@@ -273,7 +273,7 @@
 
 .workbooks-checkboxes label strong {
     display: contents !important;
-    font-size: 15px !important;
+    font-size: 16px !important;
     margin-bottom: 5px !important;
 }
 

@@ -10,6 +10,17 @@
  *
  * SYSTEM STATES:
  * 
+ * UNRESTRICTED CONTENT (restrict_post = false):
+ * 1. NOT LOGGED IN:
+ *    - Shows login/register split button (matching webinar design)
+ *    - Uses gated-content.php template pattern for content control
+ * 
+ * 2. LOGGED IN:
+ *    - Shows unrestricted content (no form needed)
+ *    - Sidebar form is hidden completely
+ *    - Uses main-content.php template for content control
+ * 
+ * RESTRICTED CONTENT (restrict_post = true):
  * 1. NOT LOGGED IN:
  *    - Shows preview content with post feature image
  *    - Login/Register split button (matching webinar design)
@@ -206,14 +217,14 @@ function dtr_lead_gen_test_registration_page() {
         $current_user_id = get_current_user_id();
         
         // Add to user's collection
-        $user_collections = get_user_meta($current_user_id, 'user_content_collection', true);
+        $user_collections = get_user_meta($current_user_id, 'saved_collection', true);
         if (!is_array($user_collections)) {
             $user_collections = array();
         }
         
         if (!in_array($post_id, $user_collections)) {
             $user_collections[] = $post_id;
-            update_user_meta($current_user_id, 'user_content_collection', $user_collections);
+            update_user_meta($current_user_id, 'saved_collection', $user_collections);
             echo '<div class="notice notice-success"><p>Content added to collection successfully!</p></div>';
         } else {
             echo '<div class="notice notice-info"><p>Content is already in your collection.</p></div>';
@@ -226,12 +237,12 @@ function dtr_lead_gen_test_registration_page() {
         $current_user_id = get_current_user_id();
         
         // Remove from user's collection
-        $user_collections = get_user_meta($current_user_id, 'user_content_collection', true);
+        $user_collections = get_user_meta($current_user_id, 'saved_collection', true);
         if (is_array($user_collections)) {
             $key = array_search($post_id, $user_collections);
             if ($key !== false) {
                 unset($user_collections[$key]);
-                update_user_meta($current_user_id, 'user_content_collection', array_values($user_collections));
+                update_user_meta($current_user_id, 'saved_collection', array_values($user_collections));
                 echo '<div class="notice notice-success"><p>Content removed from collection successfully!</p></div>';
             } else {
                 echo '<div class="notice notice-info"><p>Content was not in your collection.</p></div>';
@@ -267,7 +278,7 @@ function dtr_lead_gen_test_registration_page() {
         }
         
         $current_user_id = get_current_user_id();
-        $user_collections = get_user_meta($current_user_id, 'user_content_collection', true);
+        $user_collections = get_user_meta($current_user_id, 'saved_collection', true);
         if (!is_array($user_collections)) {
             $user_collections = array();
         }
@@ -453,14 +464,140 @@ function dtr_lead_generation_registration_shortcode($atts) {
     // Check if this post has restricted content enabled
     $restrict_post = get_field('restrict_post', $post->ID);
     if (!$restrict_post) {
-        // If content control is requested but post isn't restricted, show the normal content 
-        if ($control_content) {
-            ob_start();
-            get_template_part('components/global/main-content');
-            return ob_get_clean();
+        // Content is NOT restricted
+        if (!$is_logged_in) {
+            // User not logged in: Show main content when controlling content, login sidebar when not
+            if ($control_content) {
+                // When controlling content, show the actual main content from ACF (like webinars)
+                ob_start();
+                
+                // Check for ACF main content first, then fallback to WordPress content
+                $acf_main_content = get_field('main_content', $post->ID);
+                $acf_stand_first = get_field('stand_first', $post->ID);
+                $wp_content = get_the_content();
+                
+                // Display Stand First if available
+                if (!empty(trim($acf_stand_first))) {
+                    echo '<div class="standfirst">';
+                    echo $acf_stand_first;
+                    echo '</div>';
+                }
+                
+                // Display Main Content if available
+                if (!empty(trim($acf_main_content))) {
+                    echo $acf_main_content;
+                } elseif (!empty(trim($wp_content))) {
+                    // Fallback to WordPress content
+                    the_content();
+                } else {
+                    // Show placeholder if no content found
+                    echo '<div class="content-placeholder">';
+                    echo '<h2>Content Coming Soon</h2>';
+                    echo '<p>This content is being prepared. Please check back soon.</p>';
+                    echo '</div>';
+                }
+                
+                return ob_get_clean();
+            } else {
+                // Sidebar: Show login/register prompt (unchanged)
+                $uid = 'leadgen' . uniqid();
+                return '
+                <div class="full-page vertical-half-margin event-registration" style="margin-top:0;">
+                    <div class="ks-split-btn" style="position: relative;">
+                        <button type="button" class="ks-main-btn ks-main-btn-global btn-blue shimmer-effect shimmer-slow is-toggle text-left" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="' . $uid . '-menu">Login or Register Now</button>
+                        <ul id="' . $uid . '-menu" class="ks-menu" role="menu" style="z-index: 1002;">
+                            <li role="none"><a role="menuitem" href="#" class="login-button dark-blue">Login</a></li>
+                            <li role="none"><a role="menuitem" href="/free-membership">Become a Member</a></li>
+                        </ul>
+                    </div>
+                    <div class="reveal-text">Login or Register for this content</div>
+                </div>';
+            }
+        } else {
+            // User is logged in AND content is not restricted: Hide form completely
+            if ($control_content) {
+                // Show the normal content since it's not restricted
+                ob_start();
+                
+                // Check for ACF main content first, then fallback to WordPress content
+                $acf_main_content = get_field('main_content', $post->ID);
+                $acf_stand_first = get_field('stand_first', $post->ID);
+                $wp_content = get_the_content();
+                
+                // Display Stand First if available
+                if (!empty(trim($acf_stand_first))) {
+                    echo '<div class="standfirst">';
+                    echo $acf_stand_first;
+                    echo '</div>';
+                }
+                
+                // Display Main Content if available
+                if (!empty(trim($acf_main_content))) {
+                    echo $acf_main_content;
+                } elseif (!empty(trim($wp_content))) {
+                    // Fallback to WordPress content
+                    the_content();
+                } else {
+                    // Show placeholder if no content found
+                    echo '<div class="content-placeholder">';
+                    echo '<h2>Content Coming Soon</h2>';
+                    echo '<p>This content is being prepared. Please check back soon.</p>';
+                    echo '</div>';
+                }
+                
+                return ob_get_clean();
+            } else {
+                // Sidebar: Show save to collection functionality for logged-in users on unrestricted content
+                // Check collection status
+                $user_collections = get_user_meta($user_id, 'saved_collection', true);
+                if (!is_array($user_collections)) {
+                    $user_collections = array();
+                }
+                $in_collection = in_array($post->ID, $user_collections);
+                
+                // Render collection management interface
+                $uid = 'ks' . uniqid();
+                
+                ob_start();
+                ?>
+                <div class="full-page vertical-half-margin lead-gen-registration" style="margin-top:0;">
+                    <?php if (!$in_collection): ?>
+                        <!-- Save to Collection Button -->
+                        <div class="ks-split-btn btn-blue" style="position: relative;">
+                            <button type="button" class="ks-main-btn ks-main-btn-global btn-blue shimmer-effect shimmer-slow save-to-collection" 
+                                    data-post-id="<?php echo $post->ID; ?>" role="button">
+                                Save to Collection
+                            </button>
+                        </div>
+                        <div class="reveal-text">Save this content for later reading</div>
+                    <?php else: ?>
+                        <!-- Saved to Collection - Split Button -->
+                        <div class="ks-split-btn btn-green" style="position: relative;">
+                            <button type="button" class="ks-main-btn ks-main-btn-global btn-green shimmer-effect shimmer-slow is-toggle text-left" 
+                                    role="button" aria-haspopup="true" aria-expanded="false" aria-controls="<?php echo $uid; ?>-menu">
+                                Saved to Collection
+                            </button>
+                            <ul id="<?php echo $uid; ?>-menu" class="ks-menu ks-open" role="menu" style="z-index: 1002;">
+                                <li role="none">
+                                    <a role="menuitem" href="/my-account/?page-view=my-collection" class="no-decoration">
+                                        View Collection
+                                    </a>
+                                </li>
+                                <li role="none">
+                                    <button type="button" role="menuitem" class="remove-from-collection-btn" 
+                                            data-post-id="<?php echo $post->ID; ?>">
+                                        Remove
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="reveal-text">Content saved in your collection</div>
+                    <?php endif; ?>
+                </div>
+                <?php
+                return ob_get_clean();
+            }
         }
-        // Otherwise show a basic registration sidebar
-        return dtr_render_lead_gen_sidebar_form($post, $atts);
     }
     
     // Get restricted content fields
@@ -519,7 +656,7 @@ function dtr_lead_generation_registration_shortcode($atts) {
         }
         
         // Check collection status
-        $user_collections = get_user_meta($user_id, 'user_content_collection', true);
+        $user_collections = get_user_meta($user_id, 'saved_collection', true);
         if (!is_array($user_collections)) {
             $user_collections = array();
         }
@@ -620,7 +757,7 @@ function dtr_render_not_logged_in_state($post, $restricted_fields, $control_cont
         // This is a sidebar - show registration prompt with unique ID
         $uid = 'leadgen' . uniqid();
         return '
-        <div class="full-page vertical-half-margin event-registration">
+        <div class="full-page vertical-half-margin event-registration" style="margin-top:0;">
             <!-- split button -->
             <div class="ks-split-btn" style="position: relative;">
                 <button type="button" class="ks-main-btn ks-main-btn-global btn-blue shimmer-effect shimmer-slow is-toggle text-left" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="' . $uid . '-menu">Login or Register Now</button>
@@ -665,7 +802,7 @@ function dtr_render_logged_in_registered_state($post, $restricted_fields, $in_co
         
         ob_start();
         ?>
-        <div class="full-page vertical-half-margin lead-gen-registration">
+        <div class="full-page vertical-half-margin lead-gen-registration" style="margin-top:0;">
             <?php if (!$in_collection): ?>
                 <!-- Save to Collection Button -->
                 <div class="ks-split-btn btn-blue" style="position: relative;">
@@ -832,25 +969,7 @@ function dtr_render_lead_gen_html_form($post, $restricted_fields) {
         </div>
     </div>
     
-    <!-- Loading Overlay -->
-    <div class="form-loader-overlay" id="formLoaderOverlay" style="display: none;">
-        <div class="progress-card">
-            <div class="progress-body">
-                <div class="circular-progress">
-                    <svg class="progress-svg" viewBox="0 0 100 100">
-                        <circle class="progress-track" cx="50" cy="50" r="45" />
-                        <circle class="progress-indicator" cx="50" cy="50" r="45" id="progressCircle" />
-                    </svg>
-                    <div class="progress-value" id="progressValue">0%</div>
-                </div>
-            </div>
-            <div class="progress-footer">
-                <div class="progress-chip">
-                    Registration processing...
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Loader will be created dynamically and appended to body -->
     
     <?php
     return ob_get_clean();
@@ -1065,7 +1184,7 @@ function dtr_handle_save_to_collection_ajax() {
     }
     
     // Get user's collection
-    $user_collections = get_user_meta($current_user_id, 'user_content_collection', true);
+    $user_collections = get_user_meta($current_user_id, 'saved_collection', true);
     if (!is_array($user_collections)) {
         $user_collections = array();
     }
@@ -1073,7 +1192,7 @@ function dtr_handle_save_to_collection_ajax() {
     // Add to collection if not already there
     if (!in_array($post_id, $user_collections)) {
         $user_collections[] = $post_id;
-        update_user_meta($current_user_id, 'user_content_collection', $user_collections);
+        update_user_meta($current_user_id, 'saved_collection', $user_collections);
         
         error_log('[DTR Collection] Content ' . $post_id . ' added to collection for user ' . $current_user_id);
         
@@ -1108,7 +1227,7 @@ function dtr_handle_remove_from_collection_ajax() {
     }
     
     // Get user's collection
-    $user_collections = get_user_meta($current_user_id, 'user_content_collection', true);
+    $user_collections = get_user_meta($current_user_id, 'saved_collection', true);
     if (!is_array($user_collections)) {
         $user_collections = array();
     }
@@ -1117,7 +1236,7 @@ function dtr_handle_remove_from_collection_ajax() {
     $key = array_search($post_id, $user_collections);
     if ($key !== false) {
         unset($user_collections[$key]);
-        update_user_meta($current_user_id, 'user_content_collection', array_values($user_collections));
+        update_user_meta($current_user_id, 'saved_collection', array_values($user_collections));
         
         error_log('[DTR Collection] Content ' . $post_id . ' removed from collection for user ' . $current_user_id);
         
@@ -1251,79 +1370,154 @@ function dtr_add_lead_generation_javascript() {
             }, 500);
         }
         
+        // Create full-page overlay and append to body
+        createProgressOverlay();
+        
+        // Create the progress overlay and append to body
+        function createProgressOverlay() {
+            // Remove existing overlay if it exists
+            const existingOverlay = document.getElementById('formLoaderOverlay');
+            if (existingOverlay) {
+                existingOverlay.remove();
+            }
+            
+            // Create overlay HTML
+            const overlayHTML = `
+                <div class="form-loader-overlay" id="formLoaderOverlay" style="display: none;">
+                    <div class="progress-card">
+                        <div class="progress-body">
+                            <div class="circular-progress">
+                                <svg class="progress-svg" viewBox="0 0 100 100">
+                                    <circle class="progress-track" cx="50" cy="50" r="45" />
+                                    <circle class="progress-indicator" cx="50" cy="50" r="45" id="progressCircle" />
+                                </svg>
+                                <div class="progress-value" id="progressValue">0%</div>
+                            </div>
+                        </div>
+                        <div class="progress-footer">
+                            <div class="progress-chip">
+                                Registration processing...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Append to body
+            document.body.insertAdjacentHTML('beforeend', overlayHTML);
+        }
+
         // Enhanced Progress Loader Functions
         function showProgressLoader() {
-            const loadingOverlay = document.getElementById('formLoaderOverlay');
-            const progressCircle = document.getElementById('progressCircle');
-            const progressValue = document.getElementById('progressValue');
+            let overlay = document.getElementById('formLoaderOverlay');
             
-            if (loadingOverlay) {
-                loadingOverlay.style.display = 'flex';
+            // Create overlay if it doesn't exist
+            if (!overlay) {
+                createProgressOverlay();
+                overlay = document.getElementById('formLoaderOverlay');
+            }
+            
+            if (overlay) {
+                // Force styles to ensure visibility
+                overlay.style.display = 'flex';
+                overlay.style.opacity = '1';
+                overlay.style.visibility = 'visible';
+                overlay.style.position = 'fixed';
+                overlay.style.top = '0';
+                overlay.style.left = '0';
+                overlay.style.width = '100vw';
+                overlay.style.height = '100vh';
+                overlay.style.zIndex = '999999';
+                overlay.classList.add('show');
+                overlay.classList.remove('fade-out');
                 
                 // Set header z-index to ensure overlay appears above it
                 const header = document.querySelector('header');
                 if (header) {
-                    header.style.zIndex = '1';
+                    header.style.zIndex = '999';
                 }
                 
                 // Reset progress
+                const progressCircle = document.getElementById('progressCircle');
+                const progressValue = document.getElementById('progressValue');
                 if (progressCircle) {
                     progressCircle.style.strokeDashoffset = '283'; // 0%
                 }
                 if (progressValue) {
                     progressValue.textContent = '0%';
                 }
-                
-                // Trigger fade-in animation
-                setTimeout(() => {
-                    loadingOverlay.classList.add('show');
-                }, 10);
             }
         }
 
         // Real-time progress updater that matches actual submission stages
-        function updateFormProgress(stage, message) {
-            const progressCircle = document.getElementById('progressCircle');
+        function updateFormProgress(percentage, message) {
             const progressValue = document.getElementById('progressValue');
+            const progressCircle = document.getElementById('progressCircle');
+            const progressChip = document.querySelector('.progress-chip');
             
-            if (progressCircle && progressValue) {
-                // Calculate stroke offset (283 is full circle, 0 is 100%)
-                const offset = 283 - (stage / 100) * 283;
-                progressCircle.style.strokeDashoffset = offset.toString();
-                progressValue.textContent = stage + '%';
+            if (progressValue) {
+                progressValue.textContent = percentage + '%';
+            }
+            
+            if (progressCircle) {
+                const circumference = 2 * Math.PI * 45;
+                const offset = circumference - (percentage / 100) * circumference;
+                progressCircle.style.strokeDashoffset = offset;
+            }
+            
+            if (progressChip && message) {
+                progressChip.textContent = message;
             }
         }
 
         function hideProgressLoader() {
-            const loadingOverlay = document.getElementById('formLoaderOverlay');
-            if (loadingOverlay) {
-                loadingOverlay.style.display = 'none';
+            const overlay = document.getElementById('formLoaderOverlay');
+            if (overlay) {
+                overlay.classList.add('fade-out');
+                overlay.classList.remove('show');
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    overlay.style.opacity = '0';
+                    overlay.style.visibility = 'hidden';
+                }, 500);
                 
                 // Restore header z-index when hiding overlay
                 const header = document.querySelector('header');
                 if (header) {
-                    header.style.zIndex = '';  // Remove the inline style to restore original
+                    header.style.zIndex = '';
                 }
             }
         }
 
         function slideOutLoader() {
-            const loadingOverlay = document.getElementById('formLoaderOverlay');
-            if (loadingOverlay) {
-                loadingOverlay.classList.add('fade-out');
+            const overlay = document.getElementById('formLoaderOverlay');
+            if (overlay) {
+                overlay.classList.add('fade-out');
+                overlay.classList.remove('show');
                 
-                // Hide completely after wipe animation completes (1s + 100ms buffer)
+                // Hide completely after fade animation completes
                 setTimeout(() => {
-                    loadingOverlay.style.display = 'none';
-                    loadingOverlay.classList.remove('show', 'fade-out');
+                    overlay.style.display = 'none';
+                    overlay.classList.remove('show', 'fade-out');
                     
                     // Restore header z-index
                     const header = document.querySelector('header');
                     if (header) {
                         header.style.zIndex = '';
                     }
-                }, 1100);
+                }, 500);
             }
+        }
+        
+        function previewLoader() {
+            showProgressLoader();
+            updateFormProgress(0, 'Starting...');
+            
+            setTimeout(() => updateFormProgress(25, 'Validating data...'), 500);
+            setTimeout(() => updateFormProgress(50, 'Processing registration...'), 1500);
+            setTimeout(() => updateFormProgress(75, 'Syncing with CRM...'), 2500);
+            setTimeout(() => updateFormProgress(100, 'Complete!'), 3500);
+            setTimeout(() => hideProgressLoader(), 5000);
         }
 
         // Function to show content unlocked toast notification
@@ -1447,13 +1641,13 @@ function dtr_add_lead_generation_javascript() {
             }, 200);
             
             // Stage 1: Initial validation
-            setTimeout(() => updateFormProgress(25, 'Processing your request...'), 500);
+            setTimeout(() => updateFormProgress(25, 'Validating data...'), 500);
             
             // Stage 2: Security validation complete
-            setTimeout(() => updateFormProgress(40, 'Processing your request...'), 1000);
+            setTimeout(() => updateFormProgress(40, 'Processing registration...'), 1000);
             
             // Stage 3: Processing with CRM
-            setTimeout(() => updateFormProgress(60, 'Processing your request...'), 1500);
+            setTimeout(() => updateFormProgress(60, 'Syncing with CRM...'), 1500);
             
             // Submit form via AJAX
             $.ajax({
@@ -1466,11 +1660,11 @@ function dtr_add_lead_generation_javascript() {
                     
                     if (response.success) {
                         // Stage 4: Finalizing access
-                        updateFormProgress(90, 'Processing your request...');
+                        updateFormProgress(90, 'Finalizing access...');
                         
                         setTimeout(() => {
                             // Stage 5: Complete
-                            updateFormProgress(100, 'Processing your request...');
+                            updateFormProgress(100, 'Complete!');
                             
                             setTimeout(() => {
                                 if (response.data.redirect) {
@@ -1489,13 +1683,13 @@ function dtr_add_lead_generation_javascript() {
                         }, 500);
                     } else {
                         // Show error state
-                        updateFormProgress(0, 'Processing your request...');
+                        updateFormProgress(0, 'Error occurred...');
                         
                         setTimeout(() => {
                             slideOutLoader();
                             setTimeout(() => {
                                 submitButton.prop('disabled', false);
-                                submitButton.text('Access Content');
+                                submitButton.text('Register');
                                 alert(response.data.message || 'Registration failed. Please try again.');
                             }, 500);
                         }, 2000);
@@ -1505,13 +1699,13 @@ function dtr_add_lead_generation_javascript() {
                     console.error('[DTR Lead Gen] AJAX error:', status, error);
                     
                     // Show error state
-                    updateFormProgress(0, 'Processing your request...');
+                    updateFormProgress(0, 'Connection error...');
                     
                     setTimeout(() => {
                         slideOutLoader();
                         setTimeout(() => {
                             submitButton.prop('disabled', false);
-                            submitButton.text('Access Content');
+                            submitButton.text('Register');
                             alert('Connection error. Please check your connection and try again.');
                         }, 500);
                     }, 2000);
@@ -1590,6 +1784,9 @@ function dtr_add_lead_generation_javascript() {
                             </div>
                             <div class="reveal-text">This has been saved to your collection</div>
                         `);
+                        
+                        // Show toast notification for content added to collection
+                        showToast('Content added to Collection', 'success');
                     } else {
                         // Reset on error
                         button.removeClass('btn-loading btn-green');
@@ -1659,9 +1856,16 @@ function dtr_add_lead_generation_javascript() {
                 
                 console.log('[DTR Collection] Removing content ' + postId + ' from collection');
                 
+                // Find the main "Saved to Collection" button and change its text
+                var mainButton = button.closest('.ks-split-btn').find('.ks-main-btn');
+                var originalText = mainButton.text();
+                
                 // Disable button and show loading
                 button.prop('disabled', true);
                 button.text('Removing...');
+                mainButton.prop('disabled', true);
+                mainButton.text('Removing...');
+                mainButton.addClass('btn-loading');
                 
                 $.ajax({
                     url: '<?php echo admin_url('admin-ajax.php'); ?>',
@@ -1692,14 +1896,24 @@ function dtr_add_lead_generation_javascript() {
                             showToast('Content removed from your collection', 'success');
                         } else {
                             alert(response.data.message || 'Failed to remove content from collection.');
+                            // Restore original button states on error
                             button.prop('disabled', false);
                             button.text('Remove');
+                            var mainButton = button.closest('.ks-split-btn').find('.ks-main-btn');
+                            mainButton.prop('disabled', false);
+                            mainButton.text('Saved to Collection');
+                            mainButton.removeClass('btn-loading');
                         }
                     },
                     error: function() {
                         alert('Connection error. Please try again.');
+                        // Restore original button states on error
                         button.prop('disabled', false);
                         button.text('Remove');
+                        var mainButton = button.closest('.ks-split-btn').find('.ks-main-btn');
+                        mainButton.prop('disabled', false);
+                        mainButton.text('Saved to Collection');
+                        mainButton.removeClass('btn-loading');
                     }
                 });
             });
@@ -1907,38 +2121,31 @@ function dtr_add_lead_generation_javascript() {
     <style>
     /* Overlay CSS Styles - Matching Webinar Form */
     .form-loader-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #871f80 0%, #4f074aff 100%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        backdrop-filter: blur(8px);
-        opacity: 1;
-        transition: opacity 0.5s ease-in;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: linear-gradient(135deg, #871f80 0%, #4f074aff 100%) !important;
+        display: none !important;
+        justify-content: center !important;
+        align-items: center !important;
+        z-index: 999999 !important;
+        backdrop-filter: blur(8px) !important;
+        opacity: 0 !important;
+        transition: opacity 0.5s ease-in !important;
+        pointer-events: auto !important;
     }
 
     .form-loader-overlay.show {
-        opacity: 1;
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
     .form-loader-overlay.fade-out {
-        animation: wipeOut 1s ease-out forwards;
-    }
-    
-    @keyframes wipeOut {
-        0% {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        100% {
-            opacity: 0;
-            transform: translateY(-100%);
-        }
+        opacity: 0 !important;
+        transition: opacity 0.5s ease-out !important;
     }
 
     .progress-card {
@@ -2094,6 +2301,137 @@ function dtr_add_lead_generation_javascript() {
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
+    }
+    
+    /* CodyHouse Modal Dialog Styles - Matching my-collection.php */
+    .cd-dialog {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 999999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .cd-dialog--visible {
+        display: flex !important;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .cd-dialog__container {
+        background: white;
+        border-radius: 8px;
+        padding: 30px;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+    }
+
+    .cd-dialog--visible .cd-dialog__container {
+        transform: scale(1);
+    }
+
+    .cd-dialog__content h2 {
+        margin: 0 0 15px 0;
+        font-size: 1.4em;
+        color: #333;
+    }
+
+    .cd-dialog__content p {
+        margin: 0 0 25px 0;
+        color: #666;
+        line-height: 1.5;
+    }
+
+    .cd-dialog__buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: flex-end;
+    }
+
+    .cd-dialog__action {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        transition: background-color 0.2s;
+    }
+
+    .cd-dialog__action--secondary {
+        background: #f8f9fa;
+        color: #666;
+    }
+
+    .cd-dialog__action--secondary:hover {
+        background: #e9ecef;
+    }
+
+    .cd-dialog__action--primary {
+        background: #dc3545;
+        color: white;
+    }
+
+    .cd-dialog__action--primary:hover {
+        background: #c82333;
+    }
+
+    /* Toast Notification Styles - Matching my-collection.php */
+    .cd-toast {
+        position: fixed;
+        bottom: 35px;
+        left: 35px;
+        background: #28a745;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 9999;
+        max-width: 350px;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .cd-toast--visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .cd-toast__icon {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+    }
+
+    .cd-toast__icon svg {
+        width: 100%;
+        height: 100%;
+        fill: currentColor;
+    }
+
+    .cd-toast__content {
+        flex: 1;
+    }
+
+    .cd-toast__title {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
     }
     
     </style>

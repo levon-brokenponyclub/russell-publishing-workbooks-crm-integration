@@ -252,8 +252,8 @@ height:150px !important;
     top: 100%;
     left: 0;
     right: 0;
-    background: white;
-    border: 1px solid #ddd;
+    background: transparent;
+    border: 0;
     border-radius: 4px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     list-style: none;
@@ -263,7 +263,7 @@ height:150px !important;
 }
 
 .ks-menu li {
-    border-bottom: 1px solid #eee;
+    border-bottom: 0;
 }
 
 .ks-menu li:last-child {
@@ -872,20 +872,4 @@ height:150px !important;
     border-color: #cccccc !important;
 }
 
-#submitWebinarBtn.submitting {
-    position: relative;
-}
-
-#submitWebinarBtn.submitting::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 16px;
-    height: 16px;
-    margin: -8px 0 0 -8px;
-    border: 2px solid transparent;
-    border-top-color: #ffffff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
+/* Removed button's internal loading spinner - overlay loader is used instead */

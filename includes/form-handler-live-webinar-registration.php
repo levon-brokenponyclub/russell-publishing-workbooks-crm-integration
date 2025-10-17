@@ -179,6 +179,59 @@ function dtr_handle_live_webinar_registration($registration_data) {
         $debug_report
     );
     
+    // STEP 7: Update WordPress user meta for My Account display
+    if (!empty($result['success']) && $user_id > 0) {
+        // Use the existing register_user_for_event function to add the event to WordPress user meta
+        if (function_exists('register_user_for_event')) {
+            $wp_registration_success = register_user_for_event($user_id, $post_id);
+            if ($wp_registration_success) {
+                dtr_webinar_debug("✅ STEP 7: WordPress user meta updated for My Account display");
+            } else {
+                dtr_webinar_debug("⚠️ STEP 7: User already registered in WordPress user meta (or error occurred)");
+            }
+        } else {
+            dtr_webinar_debug("❌ STEP 7: register_user_for_event function not available");
+        }
+        
+        // STEP 8: Save to post meta for admin visibility (always save successful registrations)
+        $current_user = wp_get_current_user();
+        $registration_data = array(
+            'registration_id' => wp_generate_uuid4(),
+            'user_id' => $user_id,
+            'email' => $email_address,
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'person_id' => $result['person_id'] ?? '',
+            'ticket_id' => $result['ticket_id'] ?? '',
+            'event_id' => $result['event_id'] ?? '',
+            'speaker_question' => $question_for_speaker ?? '',
+            'sponsor_optin' => $cf_mailing_list_member_sponsor_1_optin ?? 0,
+            'registration_date' => current_time('mysql'),
+            'workbooks_reference' => $workbooks_reference,
+            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+            'ip_address' => $_SERVER['REMOTE_ADDR'] ?? '',
+            'tracking_id' => $tracking_id ?? ''
+        );
+        
+        add_post_meta($post_id, 'webinar_registrations', $registration_data);
+        dtr_webinar_debug("✅ STEP 8: Registration saved to post meta for admin visibility");
+        
+        // Also save user-specific registration for quick lookup (like lead gen system)
+        $user_registration_key = 'webinar_registration_' . $post_id;
+        update_user_meta($user_id, $user_registration_key, array(
+            'registration_id' => $registration_data['registration_id'],
+            'post_id' => $post_id,
+            'registration_date' => $registration_data['registration_date'],
+            'email' => $email_address,
+            'ticket_id' => $result['ticket_id'] ?? '',
+            'person_id' => $result['person_id'] ?? ''
+        ));
+        dtr_webinar_debug("✅ STEP 8: User-specific webinar registration meta saved");
+        
+    } else {
+        dtr_webinar_debug("⚠️ STEP 7: Skipping WordPress user meta update (registration failed or user not logged in)");
+    }
+
     // Compose the debug log in the admin handler format
     $result_info = [
         'webinar_title' => '',

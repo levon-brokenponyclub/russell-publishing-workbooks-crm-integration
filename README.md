@@ -4,7 +4,7 @@
 
 **Author**: Supersonic Playground / Levon Gravett  
 **Website**: https://www.supersonicplayground.com  
-**Version**: 2.1.4
+**Version**: 2.1.5
 
 A production-ready WordPress plugin that integrates WordPress with the DTR Workbooks CRM. V2 focuses on modular admin code, robust debugging that is gated for production, comprehensive gated-content and Ninja Forms integration (ACF-driven), and reliable Workbooks person/employer/ticket/lead creation and synchronization.
 
@@ -278,6 +278,17 @@ Disable afterward to reduce I/O.
 - Further optimization of AJAX handlers.
 - Additional UX/UI improvements based on user feedback.
 - Integration with more CRM features.
+
+### 2.1.5 (2025-10-17)
+- **Personalized Content Recommendation System**: Implemented comprehensive content personalization based on user's Topics of Interest (TOI) and Areas of Interest (AOI) selections with intelligent mapping between CRM preferences and WordPress taxonomies, dynamic content filtering, and graceful fallback to default content when personalized content is unavailable.
+- **Advanced User Preference Integration**: Enhanced user preference gathering system that combines TOI and AOI data from CRM fields with sophisticated mapping algorithms to create relevant content recommendations, including TOI-to-AOI automatic associations and comprehensive preference analytics for improved content targeting.
+- **Intelligent Content Curation**: Dynamic featured content system that analyzes user preferences to display personalized article, video, webinar, and publication recommendations while maintaining content diversity across post types and ensuring optimal user engagement through preference-based content filtering.
+- **Administrative Content Analytics**: Built comprehensive admin debug panel providing real-time insight into content personalization logic, user preference analysis, content filtering effectiveness, and side-by-side comparison between default and personalized content with detailed preference mapping visualization.
+- **Mega Menu Navigation Enhancements**: Fixed dropdown positioning gaps by implementing consistent CSS transform adjustments (translateY(-2px)) across all mega menu dropdown states, eliminating visual spacing issues and ensuring seamless navigation overlay alignment with header elements.
+- **Enhanced Membership Registration Form Validation**: Implemented comprehensive required field validation for all Step 1 form fields including Title, Phone, Employer, Job Title, Country, City, and Postcode with proper asterisk (*) indicators and client-side validation to improve form completion rates and data quality.
+- **Dedicated Reports Template Creation**: Created specialized `single-reports.php` template based on the publications template structure, providing optimized display and content gating specifically for report post types with mobile-responsive sidebar functionality and proper lead generation integration.
+- **Advanced Content Collection Management**: Enhanced save-to-collection functionality to provide consistent user experience for logged-in users across both restricted and unrestricted content, replacing empty sidebar states with full collection management interface including save/remove functionality and user note capabilities.
+- **User Experience Improvements**: Streamlined content interaction workflow ensuring logged-in users always have access to collection management tools regardless of content restriction status, maintaining consistent interface behavior and improving overall user engagement with platform content.
 
 ### 2.1.1
 - **HTML Form Builder & Registration System**: Complete custom HTML form implementation with dedicated AJAX handlers for membership registration, featuring advanced security with nonce-based validation and real-time processing with CRM integration.

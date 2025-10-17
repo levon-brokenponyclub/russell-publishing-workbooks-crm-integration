@@ -259,14 +259,20 @@ function dtr_webinar_test_registration_page() {
 }
 
 function dtr_add_admin_bar_deregister_button($wp_admin_bar) {
+    error_log('[DTR Admin Bar] Function called');
+    
     // Only show for administrators
     if (!current_user_can('manage_options')) {
+        error_log('[DTR Admin Bar] User cannot manage options, exiting');
         return;
     }
     
     // Only show on webinar pages
     global $post;
+    error_log('[DTR Admin Bar] Post check - ID: ' . ($post ? $post->ID : 'none') . ', Type: ' . ($post ? get_post_type($post) : 'none'));
+    
     if (!$post || get_post_type($post) !== 'webinars') {
+        error_log('[DTR Admin Bar] Not a webinar page, exiting');
         return;
     }
     
@@ -313,16 +319,18 @@ function dtr_add_admin_bar_deregister_button($wp_admin_bar) {
     error_log("[DTR Admin Bar] Is registered: " . ($is_registered ? 'YES' : 'NO'));
     
     if ($is_registered) {
-        // Generate the deregister URL
-        $deregister_url = wp_nonce_url(
-            add_query_arg(array(
-                'dtr_action' => 'deregister_webinar',
-                'post_id' => $post->ID
-            ), get_permalink($post->ID)),
-            'dtr_deregister_' . $post->ID
-        );
+        // Generate the deregister URL step by step for debugging
+        $base_url = get_permalink($post->ID);
+        $url_with_params = add_query_arg(array(
+            'dtr_action' => 'deregister_webinar',
+            'post_id' => $post->ID
+        ), $base_url);
+        $deregister_url = wp_nonce_url($url_with_params, 'dtr_deregister_' . $post->ID);
         
-        error_log('[DTR Admin Bar] Generated deregister URL: ' . $deregister_url);
+        error_log('[DTR Admin Bar] URL generation debug:');
+        error_log('[DTR Admin Bar] - Base URL: ' . $base_url);
+        error_log('[DTR Admin Bar] - URL with params: ' . $url_with_params);
+        error_log('[DTR Admin Bar] - Final deregister URL: ' . $deregister_url);
         
         // Add deregister button
         $wp_admin_bar->add_node(array(
@@ -354,18 +362,20 @@ function dtr_add_admin_bar_deregister_button($wp_admin_bar) {
     }
 }
 
-// Handle admin bar actions
-add_action('init', 'dtr_handle_admin_bar_actions');
+// Handle admin bar actions - use template_redirect to catch before page loads
+add_action('template_redirect', 'dtr_handle_admin_bar_actions');
 
 function dtr_handle_admin_bar_actions() {
     // Debug: Log all GET parameters
     error_log('[DTR Admin Bar Action] GET parameters: ' . print_r($_GET, true));
+    error_log('[DTR Admin Bar Action] Current URL: ' . $_SERVER['REQUEST_URI'] ?? 'unknown');
+    error_log('[DTR Admin Bar Action] User can manage options: ' . (current_user_can('manage_options') ? 'YES' : 'NO'));
     
     if (!current_user_can('manage_options') || !isset($_GET['dtr_action']) || !isset($_GET['post_id'])) {
-        error_log('[DTR Admin Bar Action] Permission check failed or missing parameters');
-        error_log('[DTR Admin Bar Action] Can manage options: ' . (current_user_can('manage_options') ? 'YES' : 'NO'));
-        error_log('[DTR Admin Bar Action] Has dtr_action: ' . (isset($_GET['dtr_action']) ? 'YES' : 'NO'));
-        error_log('[DTR Admin Bar Action] Has post_id: ' . (isset($_GET['post_id']) ? 'YES' : 'NO'));
+        // Only log if we have some parameters but not all
+        if (isset($_GET['dtr_action']) || isset($_GET['post_id'])) {
+            error_log('[DTR Admin Bar Action] Missing parameters - dtr_action: ' . (isset($_GET['dtr_action']) ? $_GET['dtr_action'] : 'missing') . ', post_id: ' . (isset($_GET['post_id']) ? $_GET['post_id'] : 'missing'));
+        }
         return;
     }
     
@@ -376,26 +386,45 @@ function dtr_handle_admin_bar_actions() {
     error_log('[DTR Admin Bar Action] Processing action: ' . $action . ' for post: ' . $post_id);
     
     if ($action === 'deregister_webinar') {
+        error_log('[DTR Admin Bar Action] Deregister action triggered');
+        
         // Verify nonce
-        if (!wp_verify_nonce($_GET['_wpnonce'], 'dtr_deregister_' . $post_id)) {
+        $nonce_action = 'dtr_deregister_' . $post_id;
+        $nonce_value = $_GET['_wpnonce'] ?? '';
+        error_log('[DTR Admin Bar Action] Nonce check - action: ' . $nonce_action . ', value: ' . $nonce_value);
+        
+        if (!wp_verify_nonce($nonce_value, $nonce_action)) {
+            error_log('[DTR Admin Bar Action] Nonce verification failed');
             wp_die('Security check failed');
         }
         
+        error_log('[DTR Admin Bar Action] Nonce verified, proceeding with deregistration');
+        
         // Remove from user meta
         $user_registration_key = 'webinar_registration_' . $post_id;
-        delete_user_meta($current_user_id, $user_registration_key);
+        $deleted_user_meta = delete_user_meta($current_user_id, $user_registration_key);
+        error_log('[DTR Admin Bar Action] User meta deletion result: ' . ($deleted_user_meta ? 'SUCCESS' : 'FAILED/NOT_FOUND'));
         
         // Remove from post meta
         $all_registrations = get_post_meta($post_id, 'webinar_registrations', false);
+        error_log('[DTR Admin Bar Action] Found ' . count($all_registrations) . ' registrations in post meta');
+        
+        $removed_count = 0;
         foreach ($all_registrations as $registration) {
             if (isset($registration['user_id']) && $registration['user_id'] == $current_user_id) {
-                delete_post_meta($post_id, 'webinar_registrations', $registration);
-                break;
+                $deleted_post_meta = delete_post_meta($post_id, 'webinar_registrations', $registration);
+                error_log('[DTR Admin Bar Action] Post meta deletion result: ' . ($deleted_post_meta ? 'SUCCESS' : 'FAILED'));
+                $removed_count++;
             }
         }
+        error_log('[DTR Admin Bar Action] Removed ' . $removed_count . ' registrations from post meta');
+        
+        // Build redirect URL
+        $redirect_url = add_query_arg('dtr_message', 'deregistered', get_permalink($post_id));
+        error_log('[DTR Admin Bar Action] Redirecting to: ' . $redirect_url);
         
         // Redirect with success message
-        wp_redirect(add_query_arg('dtr_message', 'deregistered', get_permalink($post_id)));
+        wp_redirect($redirect_url);
         exit;
         
     } elseif ($action === 'register_webinar') {
@@ -800,14 +829,14 @@ function dtr_enqueue_webinar_scripts() {
         <!-- DTR DEBUG: This should appear in page source if our changes are active -->
         <script>
             // URGENT DEBUG: Testing if our changes are active
-            console.log('[DTR DEBUG] *** OUR CHANGES ARE ACTIVE *** - File timestamp: <?php echo date("Y-m-d H:i:s"); ?>');
+//             console.log('[DTR DEBUG] *** OUR CHANGES ARE ACTIVE *** - File timestamp: <?php echo date("Y-m-d H:i:s"); ?>');
             
             // Debug information about localization
-            console.log('[DTR Debug] Localization debugging:');
+//             console.log('[DTR Debug] Localization debugging:');
             console.log('- Script should have been localized with:', <?php echo json_encode($localize_data); ?>);
             
             // Check script loading on page load
-            console.log('[DTR Debug] Initial script check:');
+//             console.log('[DTR Debug] Initial script check:');
             console.log('- jQuery loaded:', typeof jQuery !== 'undefined' ? 'YES' : 'NO');
             console.log('- dtrWebinarAjax defined:', typeof dtrWebinarAjax !== 'undefined' ? 'YES' : 'NO');
             
@@ -821,7 +850,7 @@ function dtr_enqueue_webinar_scripts() {
             // Check again after slight delay to catch async loading
             jQuery(document).ready(function($) {
                 setTimeout(function() {
-                    console.log('[DTR Debug] Delayed script check:');
+//                     console.log('[DTR Debug] Delayed script check:');
                     console.log('- jQuery loaded:', typeof jQuery !== 'undefined' ? 'YES' : 'NO');
                     console.log('- dtrWebinarAjax defined:', typeof dtrWebinarAjax !== 'undefined' ? 'YES' : 'NO');
                     if (typeof dtrWebinarAjax !== 'undefined') {
@@ -841,60 +870,97 @@ function dtr_enqueue_webinar_scripts() {
 
             // Enhanced Progress Loader Functions
             function showProgressLoader() {
+                console.log('🚀 showProgressLoader called');
                 const loadingOverlay = document.getElementById('formLoaderOverlay');
                 const progressCircle = document.getElementById('progressCircle');
                 const progressValue = document.getElementById('progressValue');
                 
+                console.log('🔍 Overlay element found:', !!loadingOverlay);
+                console.log('🔍 Progress circle found:', !!progressCircle);
+                console.log('🔍 Progress value found:', !!progressValue);
+                
                 if (loadingOverlay) {
+                    // Force display immediately with inline styles
                     loadingOverlay.style.display = 'flex';
+                    loadingOverlay.style.visibility = 'visible';
+                    loadingOverlay.style.opacity = '0';
+                    loadingOverlay.style.zIndex = '999999';
+                    loadingOverlay.style.position = 'fixed';
+                    loadingOverlay.style.top = '0';
+                    loadingOverlay.style.left = '0';
+                    loadingOverlay.style.width = '100vw';
+                    loadingOverlay.style.height = '100vh';
+                    loadingOverlay.style.background = 'linear-gradient(135deg, #871f80 0%, #4f074aff 100%)';
+                    
+                    console.log('✅ Overlay styles applied, display:', loadingOverlay.style.display);
                     
                     // Set header z-index to ensure overlay appears above it
                     const header = document.querySelector('header');
                     if (header) {
-                        header.style.zIndex = '1';
+                        header.style.zIndex = '999';
                     }
                     
                     // Reset progress
                     if (progressCircle) {
-                        progressCircle.style.strokeDashoffset = '283'; // 0%
+                        progressCircle.style.strokeDashoffset = '283';
                     }
                     if (progressValue) {
                         progressValue.textContent = '0%';
                     }
                     
-                    // Trigger fade-in animation
+                    // Add show class and force visibility
+                    loadingOverlay.classList.add('show');
+                    
+                    // Force opacity after brief delay
                     setTimeout(() => {
-                        loadingOverlay.classList.add('show');
-                    }, 10);
+                        loadingOverlay.style.opacity = '1';
+                        console.log('✅ Overlay should now be visible with opacity:', loadingOverlay.style.opacity);
+                    }, 50);
+                } else {
+                    console.error('❌ Loading overlay element not found!');
                 }
             }
 
-            // Real-time progress updater that matches actual submission stages
-            function updateFormProgress(stage, message) {
+            // Enhanced progress updater with professional messaging stages
+            function updateFormProgress(percentage, message) {
                 const progressCircle = document.getElementById('progressCircle');
                 const progressValue = document.getElementById('progressValue');
+                const progressChip = document.querySelector('.progress-chip');
                 
-                if (progressCircle && progressValue) {
-                    // Calculate stroke offset (283 is full circle, 0 is 100%)
-                    const offset = 283 - (stage / 100) * 283;
-                    progressCircle.style.strokeDashoffset = offset.toString();
-                    progressValue.textContent = stage + '%';
-                    console.log(`🔄 Progress Update: ${stage}% - ${message}`);
+                if (progressValue) {
+                    progressValue.textContent = percentage + '%';
                 }
+                
+                if (progressCircle) {
+                    // Calculate stroke offset (283 is full circle, 0 is 100%)
+                    const offset = 283 - (percentage / 100) * 283;
+                    progressCircle.style.strokeDashoffset = offset.toString();
+                }
+                
+                if (progressChip && message) {
+                    progressChip.textContent = message;
+                }
+                
+                console.log(`🔄 Progress Update: ${percentage}% - ${message}`);
             }
 
 
 
             function hideProgressLoader() {
+                console.log('🛑 hideProgressLoader called');
                 const loadingOverlay = document.getElementById('formLoaderOverlay');
                 if (loadingOverlay) {
                     loadingOverlay.style.display = 'none';
+                    loadingOverlay.style.visibility = 'hidden';
+                    loadingOverlay.style.opacity = '0';
+                    loadingOverlay.classList.remove('show', 'fade-out');
                     
                     // Restore header z-index when hiding overlay
                     const header = document.querySelector('header');
                     if (header) {
-                        header.style.zIndex = '';  // Remove the inline style to restore original
+                        header.style.zIndex = '';
                     }
+                    console.log('✅ Loader hidden successfully');
                 }
             }
 
@@ -920,13 +986,13 @@ function dtr_enqueue_webinar_scripts() {
             function previewLoader() {
                 showProgressLoader();
                 
-                // Simulate the actual submission flow for preview
-                setTimeout(() => updateFormProgress(25, 'Processing your request...'), 500);
-                setTimeout(() => updateFormProgress(40, 'Processing your request...'), 1500);
-                setTimeout(() => updateFormProgress(60, 'Processing your request...'), 2000);
-                setTimeout(() => updateFormProgress(80, 'Processing your request...'), 2500);
-                setTimeout(() => updateFormProgress(90, 'Processing your request...'), 3500);
-                setTimeout(() => updateFormProgress(100, 'Processing your request...'), 4500);
+                // Simulate the actual submission flow for preview with enhanced messaging
+                updateFormProgress(0, 'Starting...');
+                setTimeout(() => updateFormProgress(25, 'Validating data...'), 500);
+                setTimeout(() => updateFormProgress(50, 'Processing registration...'), 1500);
+                setTimeout(() => updateFormProgress(75, 'Syncing with CRM...'), 2500);
+                setTimeout(() => updateFormProgress(90, 'Finalizing access...'), 3500);
+                setTimeout(() => updateFormProgress(100, 'Complete!'), 4500);
                 setTimeout(() => {
                     // At 100%, fade out and simulate redirect
                     slideOutLoader();
@@ -936,14 +1002,98 @@ function dtr_enqueue_webinar_scripts() {
                 }, 5500);
             }
 
-            // Make functions globally available
-            window.showProgressLoader = showProgressLoader;
-            window.updateFormProgress = updateFormProgress;
-            window.hideProgressLoader = hideProgressLoader;
-            window.slideOutLoader = slideOutLoader;
-            window.previewLoader = previewLoader;
-
-        </script>
+        // Make functions globally available
+        window.showProgressLoader = showProgressLoader;
+        window.updateFormProgress = updateFormProgress;
+        window.hideProgressLoader = hideProgressLoader;
+        window.slideOutLoader = slideOutLoader;
+        window.previewLoader = previewLoader;
+        
+        // Fallback submitWebinarForm function in case webinar-form.js doesn't load
+        window.submitWebinarForm = function() {
+//             console.log('[DTR Debug] 🚀 Fallback submitWebinarForm called from shortcode');
+            
+            // Show progress loader immediately
+//             console.log('[DTR Debug] Showing progress loader...');
+            showProgressLoader();
+            updateFormProgress(25, 'Processing...');
+            
+            // Simple form validation
+            const form = document.getElementById('webinarForm');
+            if (!form) {
+                console.error('[DTR Debug] ❌ No webinar form found');
+                hideProgressLoader();
+                alert('Form not found. Please refresh the page and try again.');
+                return;
+            }
+            
+            // Get required fields
+            const requiredFields = form.querySelectorAll('[required]');
+            for (let field of requiredFields) {
+                if (!field.value.trim()) {
+                    hideProgressLoader();
+                    alert('Please fill in all required fields.');
+                    field.focus();
+                    return;
+                }
+            }
+            
+            // Prepare form data
+            const formData = new FormData(form);
+            formData.append('action', 'dtr_handle_webinar_submission');
+            formData.append('_wpnonce', '<?php echo wp_create_nonce('dtr_webinar_nonce'); ?>');
+            formData.append('submit_webinar_registration', '1');
+            
+            updateFormProgress(50, 'Submitting registration...');
+            
+            // Submit via fetch
+            fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin'
+            })
+            .then(response => response.json())
+            .then(data => {
+//                 console.log('[DTR Debug] Response:', data);
+                updateFormProgress(100, 'Complete!');
+                
+                setTimeout(() => {
+                    slideOutLoader();
+                    setTimeout(() => {
+                        if (data.success && data.redirect_url) {
+                            window.location.href = data.redirect_url;
+                        } else if (data.success) {
+                            window.location.href = '/thank-you-for-registering-webinars/';
+                        } else {
+                            alert(data.message || 'Registration failed. Please try again.');
+                        }
+                    }, 500);
+                }, 1000);
+                
+            })
+            .catch(error => {
+                console.error('[DTR Debug] Error:', error);
+                hideProgressLoader();
+                alert('An error occurred. Please try again.');
+            });
+        };
+        
+        // Add debug test button for troubleshooting - HIDDEN
+        <?php /* if (current_user_can('manage_options')): ?>
+//         console.log('[DTR Debug] Adding admin test buttons');
+        if (document.getElementById('registration-form')) {
+            const testButtons = document.createElement('div');
+            testButtons.innerHTML = `
+                <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; margin: 10px 0; border-radius: 4px;">
+                    <strong>🧪 Admin Debug Tools:</strong><br>
+                    <button onclick="window.previewLoader()" style="margin: 5px; padding: 5px 10px; background: #007cba; color: white; border: none; border-radius: 3px;">Test Progress Loader</button>
+                    <button onclick="window.submitWebinarForm()" style="margin: 5px; padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 3px;">Test Form Submission</button>
+                    <button onclick="console.log('Forms found:', document.querySelectorAll('#webinarForm').length); console.log('Buttons found:', document.querySelectorAll('#submitWebinarBtn').length);" style="margin: 5px; padding: 5px 10px; background: #28a745; color: white; border: none; border-radius: 3px;">Count Elements</button>
+                </div>
+            `;
+            document.getElementById('registration-form').insertBefore(testButtons, document.getElementById('registration-form').firstChild);
+        }
+        <?php endif; */ ?>        </script>
         <?php
     }, 999);
 
@@ -1084,6 +1234,11 @@ function dtr_webinar_registration_shortcode($atts) {
 
     ob_start();
     
+    // Check if webinar has video link to determine if it's On-Demand
+    $webinar_link = $webinar_fields['webinar_link'] ?? '';
+    $is_on_demand = !empty($webinar_link);
+    $webinar_type = $is_on_demand ? 'On-Demand' : 'Live';
+    
     // Show different content based on registration status
     if ($user_already_registered) {
         // User has already registered - show polished split button interface
@@ -1092,7 +1247,7 @@ function dtr_webinar_registration_shortcode($atts) {
         <div class="full-page vertical-half-margin event-registration">
             <div class="ks-split-btn btn-green" style="position: relative;">
                 <button type="button" class="ks-main-btn ks-main-btn-global btn-green shimmer-effect shimmer-slow is-toggle text-left" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="<?php echo $uid; ?>-menu">
-                    You are registered for this Live Webinar
+                    You are registered for this Webinar
                 </button>
                 <ul id="<?php echo $uid; ?>-menu" class="ks-menu" role="menu" style="z-index: 1002;">
                     <li role="none">
@@ -1105,18 +1260,6 @@ function dtr_webinar_registration_shortcode($atts) {
                             Events & Webinars
                         </a>
                     </li>
-                    <?php if (current_user_can('manage_options')): // Only show for administrators ?>
-                    <li role="none">
-                        <form method="post" style="margin: 0;">
-                            <input type="hidden" name="deregister_webinar" value="1">
-                            <input type="hidden" name="post_id" value="<?php echo $post->ID; ?>">
-                            <input type="hidden" name="deregister_nonce" value="<?php echo wp_create_nonce('deregister_webinar_' . $post->ID); ?>">
-                            <button type="submit" role="menuitem" class="deregister-btn" onclick="return confirm('Are you sure you want to remove your registration? This is for testing purposes only.');">
-                                🧪 Deregister (Testing)
-                            </button>
-                        </form>
-                    </li>
-                    <?php endif; ?>
                 </ul>
             </div>
             <div class="reveal-text">Webinar has been added to Events & Webinars</div>
@@ -1169,7 +1312,7 @@ function dtr_webinar_registration_shortcode($atts) {
             left: 0;
             right: 0;
             background: white;
-            border: 1px solid #ddd;
+            border: 0;
             border-radius: 4px;
             margin: 0;
             padding: 0;
@@ -1181,7 +1324,7 @@ function dtr_webinar_registration_shortcode($atts) {
         .ks-menu li {
             margin: 0;
             padding: 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 0;
         }
         .ks-menu li:last-child {
             border-bottom: none;
@@ -1360,7 +1503,140 @@ function dtr_webinar_registration_shortcode($atts) {
                 }
             }, 5000); // Remove after 5 seconds total
         });
+        
+        // Create full-page overlay and append to body
+        createProgressOverlay();
+        
+        // Add direct click handler for submit button as backup
+        const submitBtn = document.getElementById('submitWebinarBtn');
+        if (submitBtn) {
+//             console.log('[DTR Debug] 🎯 Adding direct click handler to submit button');
+            submitBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+//                 console.log('[DTR Debug] 🚀 Submit button clicked - calling submitWebinarForm');
+                
+                // Disable button to prevent double clicks
+                this.disabled = true;
+                this.textContent = 'Processing...';
+                
+                if (typeof window.submitWebinarForm === 'function') {
+                    window.submitWebinarForm();
+                } else {
+                    console.error('[DTR Debug] ❌ submitWebinarForm function not found');
+                    alert('Registration system not ready. Please refresh the page and try again.');
+                    this.disabled = false;
+                    this.textContent = 'Register';
+                }
+            });
+        } else {
+            console.error('[DTR Debug] ❌ Submit button not found');
+        }
     });
+    
+    // Create the progress overlay and append to body
+    function createProgressOverlay() {
+        // Remove existing overlay if it exists
+        const existingOverlay = document.getElementById('formLoaderOverlay');
+        if (existingOverlay) {
+            existingOverlay.remove();
+        }
+        
+        // Create overlay HTML
+        const overlayHTML = `
+            <div class="form-loader-overlay" id="formLoaderOverlay" style="display: none;">
+                <div class="progress-card">
+                    <div class="progress-body">
+                        <div class="circular-progress">
+                            <svg class="progress-svg" viewBox="0 0 100 100">
+                                <circle class="progress-track" cx="50" cy="50" r="45" />
+                                <circle class="progress-indicator" cx="50" cy="50" r="45" id="progressCircle" />
+                            </svg>
+                            <div class="progress-value" id="progressValue">0%</div>
+                        </div>
+                    </div>
+                    <div class="progress-footer">
+                        <div class="progress-chip">
+                            Registration processing...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Append to body
+        document.body.insertAdjacentHTML('beforeend', overlayHTML);
+    }
+
+    // Progress loader functions
+    function showProgressLoader() {
+        let overlay = document.getElementById('formLoaderOverlay');
+        
+        // Create overlay if it doesn't exist
+        if (!overlay) {
+            createProgressOverlay();
+            overlay = document.getElementById('formLoaderOverlay');
+        }
+        
+        if (overlay) {
+            // Force styles to ensure visibility
+            overlay.style.display = 'flex';
+            overlay.style.opacity = '1';
+            overlay.style.visibility = 'visible';
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.zIndex = '999999';
+            overlay.classList.add('show');
+            overlay.classList.remove('fade-out');
+        }
+    }
+    
+    function hideProgressLoader() {
+        const overlay = document.getElementById('formLoaderOverlay');
+        if (overlay) {
+            overlay.classList.add('fade-out');
+            overlay.classList.remove('show');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                overlay.style.opacity = '0';
+                overlay.style.visibility = 'hidden';
+            }, 500);
+        }
+    }
+    
+    function updateFormProgress(percentage, message) {
+        const progressValue = document.getElementById('progressValue');
+        const progressCircle = document.getElementById('progressCircle');
+        const progressChip = document.querySelector('.progress-chip');
+        
+        if (progressValue) {
+            progressValue.textContent = percentage + '%';
+        }
+        
+        if (progressCircle) {
+            const circumference = 2 * Math.PI * 45;
+            const offset = circumference - (percentage / 100) * circumference;
+            progressCircle.style.strokeDashoffset = offset;
+        }
+        
+        if (progressChip && message) {
+            progressChip.textContent = message;
+        }
+    }
+    
+    function previewLoader() {
+        showProgressLoader();
+        updateFormProgress(0, 'Starting...');
+        
+        setTimeout(() => updateFormProgress(25, 'Validating data...'), 500);
+        setTimeout(() => updateFormProgress(50, 'Processing registration...'), 1500);
+        setTimeout(() => updateFormProgress(75, 'Syncing with CRM...'), 2500);
+        setTimeout(() => updateFormProgress(100, 'Complete!'), 3500);
+        setTimeout(() => hideProgressLoader(), 5000);
+    }
     </script>
     
     <div class="full-page vertical-half-margin" id="registration-form">
@@ -1386,6 +1662,7 @@ function dtr_webinar_registration_shortcode($atts) {
         </div>
         <?php endif; ?>
         <button class="ks-main-btn-global btn-blue shimmer-effect shimmer-slow not-registered text-left" onclick="document.querySelector('.gated-lead-form-content').scrollIntoView({behavior: 'smooth'});" disabled="">Register Now!</button>
+        
         <div class="webinar-registration-form foorm-container">
             <form id="webinarForm" class="gated-webinar-form-content">
                 <!-- Hidden Fields -->
@@ -1498,51 +1775,36 @@ function dtr_webinar_registration_shortcode($atts) {
         </div>
     </div>
 
-    <!-- Loading Overlay -->
-    <div class="form-loader-overlay" id="formLoaderOverlay" style="display: none;">
-        <div class="progress-card">
-            <div class="progress-body">
-                <div class="circular-progress">
-                    <svg class="progress-svg" viewBox="0 0 100 100">
-                        <circle class="progress-track" cx="50" cy="50" r="45" />
-                        <circle class="progress-indicator" cx="50" cy="50" r="45" id="progressCircle" />
-                    </svg>
-                    <div class="progress-value" id="progressValue">0%</div>
-                </div>
-            </div>
-            <div class="progress-footer">
-                <div class="progress-chip">
-                    Registration processing...
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Loader will be created dynamically and appended to body -->
 
     <!-- Overlay CSS Styles -->
     <style>
     .form-loader-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #871f80 0%, #4f074aff 100%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        backdrop-filter: blur(8px);
-        opacity: 1;
-        transition: opacity 0.5s ease-in;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: linear-gradient(135deg, #871f80 0%, #4f074aff 100%) !important;
+        display: none !important;
+        justify-content: center !important;
+        align-items: center !important;
+        z-index: 999999 !important;
+        backdrop-filter: blur(8px) !important;
+        opacity: 0 !important;
+        transition: opacity 0.5s ease-in !important;
+        pointer-events: auto !important;
     }
 
     .form-loader-overlay.show {
-        opacity: 1;
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
     .form-loader-overlay.fade-out {
-        opacity: 0;
-        transition: opacity 0.5s ease-out;
+        opacity: 0 !important;
+        transition: opacity 0.5s ease-out !important;
     }
 
     .progress-card {
@@ -1681,8 +1943,11 @@ global $dtr_webinar_ajax_registered;
 if (!$dtr_webinar_ajax_registered) {
     $dtr_webinar_ajax_registered = true;
     
+    // Register both action names for compatibility
     add_action('wp_ajax_dtr_submit_webinar_shortcode', 'dtr_handle_webinar_submission');
     add_action('wp_ajax_nopriv_dtr_submit_webinar_shortcode', 'dtr_handle_webinar_submission');
+    add_action('wp_ajax_dtr_handle_webinar_submission', 'dtr_handle_webinar_submission');
+    add_action('wp_ajax_nopriv_dtr_handle_webinar_submission', 'dtr_handle_webinar_submission');
     error_log('[DTR Webinar] AJAX actions registered successfully - timestamp: ' . current_time('mysql'));
 } else {
     error_log('[DTR Webinar] AJAX actions already registered - skipping duplicate registration');

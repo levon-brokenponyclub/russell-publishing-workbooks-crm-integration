@@ -43,6 +43,7 @@ function workbooks_employer_select_shortcode($atts = array(), $content = null) {
                 data-nonce="<?php echo wp_create_nonce('workbooks_employer_search'); ?>"
                 data-uuid="<?php echo $uuid; ?>"
                 uuid="<?php echo $uuid; ?>"
+                required
             >
             
             <button type="button" class="autocomplete__btn js-autocomplete__btn" aria-label="Toggle autocomplete dropdown">

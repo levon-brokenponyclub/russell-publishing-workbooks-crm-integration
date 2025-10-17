@@ -74,12 +74,13 @@ function dtr_membership_registration_shortcode($atts) {
                 <h3>Unlock industry insights now for FREE</h3>
                 <div class="divider"></div>
                 <div class="policies-text">
-                    Please review and accept Drug Target Review's 
-                    <a href="<?php echo home_url('/privacy-policy'); ?>">privacy policy</a> and 
-                    <a href="<?php echo home_url('/terms-conditions'); ?>">terms and conditions</a>
+                    Keep up to date with the latest news and insight
+                  <!--   <a href="<?php echo home_url('/privacy-policy'); ?>">privacy policy</a> and 
+                    <a href="<?php echo home_url('/terms-conditions'); ?>">terms and conditions</a> -->
                 </div>
-                <div class="gdpr-text">
-                    By becoming a member of Drug Target Review you are agreeing to our terms and conditions and privacy policy. As part of your registration, and in compliance with GDPR, we will share your data with the specific sponsor(s)/partner(s) of this webinar who may wish to contact you. You may opt-out at any time by using the unsubscribe link in one of our, or our sponsor's, Communication emails, or by contacting admin@drugtargetreview.com
+               <div class="gdpr-text">
+                    Your information will be used to administer your membership account, which is automatically created when you sign up as a member or for newsletters. To provide the product and service you have requested we may use cookies as specified in our <a href="<?php echo home_url('/privacy-policy'); ?>" target="_blank">Privacy Policy</a>. Your information will also be stored in our Customer Relationship Management system. Your data will be stored and processed in accordance with our <a href="<?php echo home_url('/privacy-policy'); ?>" target="_blank">Privacy Policy</a>
+                    You can update your preferences at any time by signing into your membership account once it is set-up.
                 </div>
                 
                 <!-- Development Mode Toggle -->
@@ -125,7 +126,8 @@ function dtr_membership_registration_shortcode($atts) {
                 <div class="form-step active" id="step1">
                     <div class="form-row">
                         <div class="form-field floating-label">
-                            <select id="title">
+                            <select id="title" required>
+                                <option value="">Select Title</option>
                                 <option value="Dr">Dr.</option>
                                 <option value="Mr">Mr.</option>
                                 <option value="Mrs">Mrs.</option>
@@ -134,7 +136,7 @@ function dtr_membership_registration_shortcode($atts) {
                                 <option value="Ms">Ms.</option>
                                 <option value="Prof">Prof.</option>
                             </select>
-                            <label for="title">Title</label>
+                            <label for="title">Title <span class="required">*</span></label>
                         </div>
                     </div>
 
@@ -155,25 +157,26 @@ function dtr_membership_registration_shortcode($atts) {
                             <label for="email">Email Address <span class="required">*</span></label>
                         </div>
                         <div class="form-field floating-label">
-                            <input type="tel" id="phone" uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
-                            <label for="phone">Telephone Number</label>
+                            <input type="tel" id="phone" required uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
+                            <label for="phone">Telephone Number <span class="required">*</span></label>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-field">
+                            <!-- <label for="employer" class="field-label">Employer <span class="required">*</span></label> -->
                             <?php echo do_shortcode('[workbooks_employer_select]'); ?>
                         </div>
                         <div class="form-field floating-label">
-                            <input type="text" id="jobTitle" uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
-                            <label for="jobTitle">Job Title</label>
+                            <input type="text" id="jobTitle" uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" " required>
+                            <label for="jobTitle">Job Title <span class="required">*</span></label>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-field floating-label">
-                            <select id="country" class="country-validator" uuid="<?php echo wp_generate_uuid4(); ?>">
-                                <option value="">-</option>
+                            <select id="country" class="country-validator" uuid="<?php echo wp_generate_uuid4(); ?>" required>
+                                <option value="">Select Country</option>
                                 <?php 
                                 // Use the full country list function if available
                                 if (function_exists('nf_full_country_names_options')) {
@@ -190,18 +193,18 @@ function dtr_membership_registration_shortcode($atts) {
                                 }
                                 ?>
                             </select>
-                            <label for="country">Country</label>
+                            <label for="country">Country <span class="required">*</span></label>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-field floating-label ">
-                            <input type="text" id="city" uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
-                            <label for="city">Town/City</label>
+                            <input type="text" id="city" uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" " required>
+                            <label for="city">Town/City <span class="required">*</span></label>
                         </div>
                         <div class="form-field floating-label">
-                            <input type="text" id="postcode" class="postcode-validator" uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" ">
-                            <label for="postcode">Postal/Zip Code</label>
+                            <input type="text" id="postcode" class="postcode-validator" uuid="<?php echo wp_generate_uuid4(); ?>" placeholder=" " required>
+                            <label for="postcode">Postal/Zip Code <span class="required">*</span></label>
                         </div>
                     </div>
 
@@ -299,7 +302,7 @@ function dtr_membership_registration_shortcode($atts) {
                         <div class="checkbox-item">
                             <input type="checkbox" id="terms" required uuid="<?php echo wp_generate_uuid4(); ?>">
                             <label for="terms" class="checkbox-label">
-                                I confirm that by becoming a member of Drug Target Review I accept the terms and conditions and privacy policy
+                                By becoming a member of Drug Target Review you are agreeing to our <a href="<?php echo home_url('/terms-conditions'); ?>" target="_blank">Terms and Conditions</a> and <a href="<?php echo home_url('/privacy-policy'); ?>" target="_blank">Privacy Policy</a>.
                             </label>
                         </div>
                     </div>
@@ -310,14 +313,14 @@ function dtr_membership_registration_shortcode($atts) {
                         
                        
                         <!-- Debug Test Button -->
-                        <div style="margin-top: 15px; text-align: center;position:absolute:top:100px;left:100px;width:100%;dsiplay:block;">
+                        <!-- <div style="margin-top: 15px; text-align: center;position:absolute:top:100px;left:100px;width:100%;dsiplay:block;">
                             <button type="button" onclick="testAjaxEndpoint()" class="button" style="background: #ff6600; color: white; padding: 8px 16px; font-size: 12px; border-radius: 4px; margin-right: 10px;">
                                 🔧 Test AJAX Connection
                             </button>
                             <button type="button" onclick="fillTestData()" class="button" style="background: #28a745; color: white; padding: 8px 16px; font-size: 12px; border-radius: 4px;">
                                 📝 Fill Test Data
                             </button>
-                        </div>
+                        </div> -->
                        
                     </div>
                 </div>
